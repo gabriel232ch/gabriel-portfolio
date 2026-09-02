@@ -12,11 +12,26 @@
     button?.setAttribute('aria-pressed', String(theme === 'dark'));
   };
 
-  button?.addEventListener('click', () => {
+  const toggleTheme = () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
     localStorage.setItem('theme', next);
     syncLabel();
+  };
+
+  button?.addEventListener('click', () => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (
+      !reduceMotion &&
+      document.visibilityState === 'visible' &&
+      'startViewTransition' in document
+    ) {
+      document.startViewTransition(toggleTheme);
+      return;
+    }
+
+    toggleTheme();
   });
 
   syncLabel();

@@ -14,14 +14,12 @@ html {
 body {
   margin: 0;
   min-width: 20rem;
+  min-height: 100vh;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  transition:
-    background-color var(--motion-editorial) var(--ease-editorial),
-    color var(--motion-editorial) var(--ease-editorial);
 }
 
 main {
@@ -47,5 +45,18 @@ a {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 900ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 }
