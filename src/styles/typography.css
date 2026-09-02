@@ -1,8 +1,19 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/cormorant-garamond/wght.css';
+@import '@fontsource-variable/cormorant-garamond/wght-italic.css';
+@import '@fontsource/ibm-plex-mono';
+
 .display {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.045em;
-  line-height: 0.9;
+  font-weight: 200;
+  letter-spacing: 0.08em;
+  line-height: 0.96;
+}
+
+.editorial {
+  font-family: var(--font-editorial);
+  font-weight: 300;
+  line-height: 1.48;
 }
 
 .body-copy {

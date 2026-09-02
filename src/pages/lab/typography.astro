@@ -1,0 +1,276 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource/ibm-plex-mono';
+
+import '@fontsource/spectral/300.css';
+import '@fontsource/spectral/300-italic.css';
+
+import '@fontsource-variable/cormorant-garamond/wght.css';
+import '@fontsource-variable/cormorant-garamond/wght-italic.css';
+
+import '@fontsource-variable/newsreader/wght.css';
+import '@fontsource-variable/newsreader/wght-italic.css';
+
+import ThemeToggle from '../../components/system/ThemeToggle.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const finalists = [
+  {
+    id: 'C',
+    name: 'Spectral',
+    family: "'Spectral', serif",
+  },
+  {
+    id: 'A',
+    name: 'Cormorant Garamond',
+    family: "'Cormorant Garamond Variable', serif",
+  },
+  {
+    id: 'E',
+    name: 'Newsreader',
+    family: "'Newsreader Variable', serif",
+  },
+];
+---
+
+<BaseLayout title="Typography Lab — Gabriel Chen" noindex={true}>
+  <main class="typography-lab">
+    <header class="lab-header">
+      <div>
+        <p class="lab-meta">TYPOGRAPHY LAB / FINALIST ROUND</p>
+        <p class="lab-intro">
+          Three editorial serif finalists tested across real interface roles.
+        </p>
+      </div>
+
+      <div class="theme-control">
+        <ThemeToggle />
+      </div>
+    </header>
+
+    {
+      finalists.map((finalist) => (
+        <section
+          class="finalist"
+          style={`--finalist-serif:${finalist.family};`}
+        >
+          <div class="finalist-index">
+            <p>{finalist.id} / {finalist.name}</p>
+            <p>EDITORIAL SERIF FINALIST</p>
+          </div>
+
+          <div class="hero-study">
+            <p class="serif-kicker" data-serif-kicker>
+              Selected Work
+            </p>
+
+            <h1 class="display-title">
+              BUILDING SYSTEMS
+              <span>FOR BETTER DECISIONS</span>
+            </h1>
+
+            <p class="serif-lede" data-serif-lede>
+              Research, systems and ideas shaped through practice —
+              designed to become clearer, more useful and more enduring over time.
+            </p>
+
+            <p class="index-mark">
+              G.026 / PH.04 / 2026.08 / FIG.03
+            </p>
+          </div>
+
+          <div class="quote-study">
+            <p class="quote-label">REFLECTION / 01</p>
+
+            <blockquote class="serif-quote" data-serif-quote>
+              “The most useful systems do not merely record what has happened.
+              They make the next decision clearer.”
+            </blockquote>
+
+            <p class="quote-meta">
+              Notes on building analytical systems
+            </p>
+          </div>
+        </section>
+      ))
+    }
+  </main>
+
+  <style>
+    .typography-lab {
+      padding-block:
+        clamp(2rem, 4vw, 4rem)
+        clamp(8rem, 14vw, 14rem);
+    }
+
+    .lab-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 3rem;
+      padding-bottom: clamp(5rem, 10vw, 10rem);
+    }
+
+    .lab-meta,
+    .finalist-index,
+    .index-mark,
+    .quote-label,
+    .quote-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.13em;
+      line-height: 1.6;
+      text-transform: uppercase;
+    }
+
+    .lab-meta,
+    .lab-intro,
+    .finalist-index p,
+    .index-mark,
+    .quote-label,
+    .quote-meta {
+      margin: 0;
+    }
+
+    .lab-intro {
+      max-width: 34rem;
+      margin-top: 1.25rem;
+      color: var(--ink-muted);
+      font-family: 'Inter Variable', sans-serif;
+      font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+      font-weight: 350;
+      line-height: 1.6;
+    }
+
+    .theme-control :global([data-theme-toggle]) {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .finalist {
+      padding-block: clamp(6rem, 12vw, 12rem);
+      border-top: 1px solid var(--hairline);
+    }
+
+    .finalist-index {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      color: var(--ink-muted);
+    }
+
+    .hero-study {
+      max-width: 82rem;
+      margin-inline: auto;
+      padding-top: clamp(5rem, 9vw, 9rem);
+      text-align: center;
+    }
+
+    .serif-kicker {
+      margin: 0 0 clamp(2rem, 4vw, 3.5rem);
+      font-family: var(--finalist-serif);
+      font-size: clamp(1.15rem, 1.8vw, 1.6rem);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.2;
+    }
+
+    .display-title {
+      margin: 0;
+      font-family: 'Inter Variable', sans-serif;
+      font-size: clamp(2.8rem, 5.6vw, 6.4rem);
+      font-weight: 200;
+      letter-spacing: 0.14em;
+      line-height: 1.08;
+    }
+
+    .display-title span {
+      display: block;
+      margin-top: 0.16em;
+    }
+
+    .serif-lede {
+      max-width: 47rem;
+      margin:
+        clamp(3.5rem, 6vw, 6rem)
+        auto
+        0;
+      font-family: var(--finalist-serif);
+      font-size: clamp(1.35rem, 2vw, 1.85rem);
+      font-weight: 300;
+      line-height: 1.48;
+    }
+
+    .index-mark {
+      margin-top: clamp(3rem, 5vw, 5rem);
+      color: var(--ink-muted);
+    }
+
+    .quote-study {
+      max-width: 62rem;
+      margin:
+        clamp(7rem, 12vw, 12rem)
+        auto
+        0;
+      padding-top: clamp(3rem, 5vw, 5rem);
+      border-top: 1px solid var(--hairline);
+    }
+
+    .quote-label,
+    .quote-meta {
+      color: var(--ink-muted);
+    }
+
+    .serif-quote {
+      max-width: 56rem;
+      margin:
+        clamp(2rem, 4vw, 3.5rem)
+        0;
+      font-family: var(--finalist-serif);
+      font-size: clamp(2rem, 3.6vw, 4rem);
+      font-style: italic;
+      font-weight: 300;
+      letter-spacing: -0.015em;
+      line-height: 1.14;
+    }
+
+    @media (max-width: 47.99rem) {
+      .lab-header {
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .finalist-index {
+        display: block;
+      }
+
+      .finalist-index p + p {
+        margin-top: 0.35rem;
+      }
+
+      .hero-study {
+        text-align: left;
+      }
+
+      .display-title {
+        font-size: clamp(2.4rem, 10vw, 4rem);
+        letter-spacing: 0.075em;
+      }
+
+      .serif-lede {
+        margin-inline: 0;
+      }
+
+      .serif-quote {
+        font-size: clamp(2rem, 9vw, 3.25rem);
+      }
+    }
+  </style>
+</BaseLayout>
