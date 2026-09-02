@@ -1,18 +1,17 @@
 ---
-const title = 'Gabriel Chen';
+import ThemeToggle from '../components/system/ThemeToggle.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="robots" content="noindex" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <main>
-      <h1>Gabriel Chen</h1>
-      <p>Portfolio foundation in progress.</p>
-    </main>
-  </body>
-</html>
+<BaseLayout title="Gabriel Chen">
+  <main>
+    <header>
+      <p class="data-copy">G. / ∞ · Portfolio foundation</p>
+      <ThemeToggle />
+    </header>
+    <section>
+      <h1 class="display">Gabriel Chen</h1>
+      <p class="body-copy">A living editorial space for work, research, systems, and evolving ideas.</p>
+    </section>
+  </main>
+</BaseLayout>

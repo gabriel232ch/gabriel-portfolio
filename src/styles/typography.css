@@ -1,0 +1,17 @@
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+
+.body-copy {
+  font-family: var(--font-body);
+  line-height: 1.58;
+}
+
+.data-copy {
+  font-family: var(--font-data);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

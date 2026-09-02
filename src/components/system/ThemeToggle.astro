@@ -1,0 +1,23 @@
+<button type="button" data-theme-toggle aria-label="Switch color theme">
+  <span data-theme-label>Theme</span>
+</button>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const label = document.querySelector<HTMLElement>('[data-theme-label]');
+
+  const syncLabel = () => {
+    const theme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+    if (label) label.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    button?.setAttribute('aria-pressed', String(theme === 'dark'));
+  };
+
+  button?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('theme', next);
+    syncLabel();
+  });
+
+  syncLabel();
+</script>
