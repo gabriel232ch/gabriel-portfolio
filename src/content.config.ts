@@ -31,7 +31,7 @@ const work = defineCollection({
       featuredOrder: z.number().int().positive().optional(),
       source: z
         .object({
-          github: z.string().url().optional(),
+          github: z.url().optional(),
           originalReport: z.string().optional(),
         })
         .default({}),
