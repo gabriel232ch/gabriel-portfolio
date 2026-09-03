@@ -18,6 +18,7 @@
 - **Every milestone must leave a complete, usable website.**
 - Use Astro with Markdown/MDX and Astro Content Collections.
 - GitHub repository is the only final source of truth.
+- Human-approved decision records and review outcomes supersede earlier exploratory assumptions; reconcile this plan and the design spec before dependent work continues.
 - Hosting foundation is Cloudflare Workers, static-first.
 - V1 has no database, login, headless CMS, full SSR, custom backend, R2 infrastructure, site-wide WebGL, automatic public publishing, or automatic Phase creation.
 - Desktop grid is 12 columns; tablet is 6; mobile is 4.
@@ -1407,14 +1408,12 @@ html {
 body {
   margin: 0;
   min-width: 20rem;
+  min-height: 100vh;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  transition:
-    background-color var(--motion-editorial) var(--ease-editorial),
-    color var(--motion-editorial) var(--ease-editorial);
 }
 
 main {
@@ -1440,6 +1439,19 @@ a {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 900ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 }
 ```
@@ -1507,11 +1519,26 @@ Create `src/components/system/ThemeToggle.astro`:
     button?.setAttribute('aria-pressed', String(theme === 'dark'));
   };
 
-  button?.addEventListener('click', () => {
+  const toggleTheme = () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
     localStorage.setItem('theme', next);
     syncLabel();
+  };
+
+  button?.addEventListener('click', () => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (
+      !reduceMotion &&
+      document.visibilityState === 'visible' &&
+      'startViewTransition' in document
+    ) {
+      document.startViewTransition(toggleTheme);
+      return;
+    }
+
+    toggleTheme();
   });
 
   syncLabel();
@@ -1589,11 +1616,20 @@ git add src/styles src/lib/theme.ts src/layouts src/components/system src/pages/
 git commit -m "feat: establish editorial theme and grid foundation"
 ```
 
-**Review gate:** Light and Dark must both feel intentional even with fallback fonts before typography selection begins.
+**Human-approved Task 6 outcome (authoritative):**
+
+- Light and Dark are intentionally art-directed semantic worlds.
+- Explicit theme choice persists across reload.
+- Supported visible documents use the native View Transition API as progressive enhancement.
+- The approved theme transition is `900ms` with `cubic-bezier(0.16, 1, 0.3, 1)`.
+- Reduced-motion users, hidden documents, and unsupported browsers receive an immediate non-cinematic fallback.
+- Theme transition behavior remains unified and smooth rather than animating individual page elements independently.
+
+**Review gate:** Light and Dark must both feel intentional before typography work begins, and theme behavior must preserve reduced-motion equivalence.
 
 ---
 
-## Task 7: Run a Controlled Typography Audition and Lock the Phase 1 Font Roles
+## Task 7: Preserve and Lock the Human-Approved Phase 1 Typography System
 
 **Files:**
 - Create: `src/pages/lab/typography.astro`
@@ -1603,251 +1639,127 @@ git commit -m "feat: establish editorial theme and grid foundation"
 - Modify: `package.json` / `package-lock.json`
 
 **Interfaces:**
-- Consumes: semantic typography roles from Task 6.
-- Produces: one explicitly human-approved Display Serif; Functional Sans and Data Mono remain stable across the site.
+- Consumes: the human-approved semantic theme and grid foundation from Task 6.
+- Produces the human-approved Phase 1 semantic typography system:
+  - Structural Display: Inter Variable
+  - Editorial Serif: Cormorant Garamond Variable
+  - Body: Inter Variable
+  - Data: IBM Plex Mono
 
-**Typography candidates:**
+**Human-review outcome (authoritative):**
 
-- **A — Instrument:** Instrument Serif + Inter Variable + IBM Plex Mono
-- **B — Bodoni:** Bodoni Moda Variable + Inter Variable + IBM Plex Mono
-- **C — Cormorant:** Cormorant Garamond Variable + Inter Variable + IBM Plex Mono
+The original serif-led display hypothesis was rejected during visual review. Large serif headlines felt too visually active and too close to generic luxury / fashion-template language.
 
-The purpose is not to pick the most “luxury-looking” font in isolation. The chosen stack must support long-term Editorial Intelligence and look convincing in both Light and Dark worlds.
+The approved system is a restrained sans-led hybrid:
 
-- [ ] **Step 1: Install all three audition serifs plus the fixed Sans/Mono roles locally**
+- Inter Variable carries structural display and body roles.
+- Cormorant Garamond Variable is used selectively for editorial kickers, ledes, quotes, and reflective moments.
+- IBM Plex Mono carries evidence, data, index, folio, source, and system notation.
 
-```bash
-npm install \
-  @fontsource/instrument-serif \
-  @fontsource-variable/bodoni-moda \
-  @fontsource-variable/cormorant-garamond \
-  @fontsource-variable/inter \
-  @fontsource/ibm-plex-mono
+Core principle:
+
+> **Sans builds structure. Serif adds character.**
+
+The typography audition remains historical design evidence. Later tasks must consume this approved semantic system rather than restart serif-led display selection.
+
+- [ ] **Step 1: Lock the approved production typography roles**
+
+The Phase 1 production roles are fixed as:
+
+```text
+Structural Display: Inter Variable
+Editorial Serif: Cormorant Garamond Variable
+Body: Inter Variable
+Data: IBM Plex Mono
 ```
 
-- [ ] **Step 2: Create the typography audition route with all candidates in identical content**
+`src/styles/tokens.css` must expose:
 
-Create `src/pages/lab/typography.astro`:
-
-```astro
----
-import '@fontsource/instrument-serif';
-import '@fontsource-variable/bodoni-moda/wght.css';
-import '@fontsource-variable/cormorant-garamond/wght.css';
-import '@fontsource-variable/inter';
-import '@fontsource/ibm-plex-mono';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-
-const candidates = [
-  { id: 'A', name: 'Instrument Serif', family: "'Instrument Serif', serif" },
-  { id: 'B', name: 'Bodoni Moda', family: "'Bodoni Moda Variable', serif" },
-  { id: 'C', name: 'Cormorant Garamond', family: "'Cormorant Garamond Variable', serif" },
-];
----
-
-<BaseLayout title="Typography Lab — Gabriel Chen" noindex={true}>
-  <main>
-    <p style="font-family: 'IBM Plex Mono';">TYPOGRAPHY LAB / HUMAN REVIEW REQUIRED</p>
-    {
-      candidates.map((candidate) => (
-        <section style="padding-block: 5rem; border-top: 1px solid var(--hairline);">
-          <p style="font-family: 'IBM Plex Mono';">{candidate.id} / {candidate.name}</p>
-          <h1 style={`font-family:${candidate.family}; font-size:clamp(4rem,10vw,9rem); line-height:.82; font-weight:400; letter-spacing:-.05em; margin:2rem 0;`}>
-            Competitive<br />Positioning<br /><em>Against Giants</em>
-          </h1>
-          <p style="max-width:42rem; font-family:'Inter Variable'; font-size:1.125rem; line-height:1.6; color:var(--ink-muted);">
-            A living editorial space for work, research, systems, and the ideas that connect them.
-          </p>
-          <p style="font-family:'IBM Plex Mono'; letter-spacing:.08em;">G.026 / PH.04 / 2026.08 / FIG.03</p>
-        </section>
-      ))
-    }
-  </main>
-</BaseLayout>
+```css
+--font-display: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+--font-editorial: 'Cormorant Garamond Variable', Georgia, serif;
+--font-body: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+--font-data: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 ```
 
-- [ ] **Step 3: Add a deterministic typography smoke test**
+`src/styles/typography.css` must preserve these semantic behaviors:
 
-Create `tests/e2e/typography.spec.ts`:
+```css
+.display {
+  font-family: var(--font-display);
+  font-weight: 200;
+  letter-spacing: 0.08em;
+  line-height: 0.96;
+}
 
-```ts
-import { expect, test } from '@playwright/test';
+.editorial {
+  font-family: var(--font-editorial);
+  font-weight: 300;
+  line-height: 1.48;
+}
 
-test('typography lab exposes all three controlled candidates', async ({ page }) => {
-  await page.goto('/lab/typography');
+.body-copy {
+  font-family: var(--font-body);
+  line-height: 1.58;
+}
 
-  await expect(page.getByText('A / Instrument Serif')).toBeVisible();
-  await expect(page.getByText('B / Bodoni Moda')).toBeVisible();
-  await expect(page.getByText('C / Cormorant Garamond')).toBeVisible();
-});
+.data-copy {
+  font-family: var(--font-data);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 ```
+
+- [ ] **Step 2: Preserve the typography lab as design-decision evidence**
+
+`/lab/typography` remains unlinked and `noindex`.
+
+It preserves the finalist comparison that led to the approved system and should continue to demonstrate this composition grammar:
+
+```text
+Small Cormorant italic kicker
+→ restrained lightweight tracked Inter structural display
+→ Cormorant editorial lede
+→ IBM Plex Mono index notation
+→ Cormorant editorial pull quote
+```
+
+Spectral and Newsreader may remain installed because the lab preserves finalist evidence. They are not production semantic roles.
+
+Do not reintroduce Instrument Serif or Bodoni Moda into the production system unless a new explicit human-approved typography decision reopens font-family selection.
+
+- [ ] **Step 3: Preserve the authoritative typography decision record**
+
+`docs/decisions/phase-1-typography-selection.md` is authoritative and must record:
+
+```text
+Display: Inter Variable
+Editorial: Cormorant Garamond Variable
+Body: Inter Variable
+Data: IBM Plex Mono
+
+Sans builds structure. Serif adds character.
+```
+
+- [ ] **Step 4: Verify the approved typography system**
 
 Run:
 
 ```bash
 npm run verify
+git diff --check
 ```
 
 Expected: PASS.
 
-- [ ] **Step 4: Human visual review — STOP here until Gabriel explicitly chooses A, B, or C**
-
-Review at minimum:
-
-```text
-Desktop Light
-Desktop Dark
-Mobile Light
-Mobile Dark
-```
-
-Judge:
-
-```text
-1. Luxury/editorial character
-2. Gabriel-specific potential rather than generic fashion branding
-3. Legibility in very large display text
-4. Mixed English/Chinese coexistence when Chinese falls back to the body system font
-5. Whether italic forms feel intentional rather than decorative
-6. Whether the stack still feels contemporary in Dark mode
-```
-
-**Do not continue this task without explicit human selection.**
-
-- [ ] **Step 5A: If A is approved, lock Instrument Serif**
-
-Replace `src/styles/typography.css` with:
-
-```css
-@import '@fontsource/instrument-serif';
-@import '@fontsource-variable/inter';
-@import '@fontsource/ibm-plex-mono';
-
-.display {
-  font-family: 'Instrument Serif', serif;
-  font-weight: 400;
-  letter-spacing: -0.045em;
-  line-height: 0.9;
-}
-
-.body-copy {
-  font-family: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  line-height: 1.58;
-}
-
-.data-copy {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-```
-
-Update `src/styles/tokens.css`:
-
-```css
---font-display: 'Instrument Serif', serif;
---font-body: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
---font-data: 'IBM Plex Mono', ui-monospace, monospace;
-```
-
-Then:
+- [ ] **Step 5: Commit the approved typography system**
 
 ```bash
-npm uninstall @fontsource-variable/bodoni-moda @fontsource-variable/cormorant-garamond
+git add src/styles src/pages/lab/typography.astro package.json package-lock.json tests/e2e/typography.spec.ts docs/decisions/phase-1-typography-selection.md
+git commit -m "feat: establish editorial typography system"
 ```
 
-- [ ] **Step 5B: If B is approved, lock Bodoni Moda**
-
-Use:
-
-```css
-@import '@fontsource-variable/bodoni-moda/wght.css';
-@import '@fontsource-variable/inter';
-@import '@fontsource/ibm-plex-mono';
-
-.display {
-  font-family: 'Bodoni Moda Variable', serif;
-  font-weight: 400;
-  font-optical-sizing: auto;
-  letter-spacing: -0.05em;
-  line-height: 0.88;
-}
-
-.body-copy {
-  font-family: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  line-height: 1.58;
-}
-
-.data-copy {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-```
-
-Set tokens to the same three chosen families and run:
-
-```bash
-npm uninstall @fontsource/instrument-serif @fontsource-variable/cormorant-garamond
-```
-
-- [ ] **Step 5C: If C is approved, lock Cormorant Garamond**
-
-Use:
-
-```css
-@import '@fontsource-variable/cormorant-garamond/wght.css';
-@import '@fontsource-variable/inter';
-@import '@fontsource/ibm-plex-mono';
-
-.display {
-  font-family: 'Cormorant Garamond Variable', serif;
-  font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 0.88;
-}
-
-.body-copy {
-  font-family: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  line-height: 1.58;
-}
-
-.data-copy {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-```
-
-Set tokens to the same three chosen families and run:
-
-```bash
-npm uninstall @fontsource/instrument-serif @fontsource-variable/bodoni-moda
-```
-
-- [ ] **Step 6: Update the typography lab to highlight only the approved stack while preserving the audition record in Git history**
-
-Change the lab route to render one selected stack plus these specimens:
-
-```text
-GABRIEL CHEN
-Competitive Positioning Against Giants
-Luxury Handbag Pricing Architecture
-G.026 / PH.04 / FIG.03 / 2026.08
-一段用于检查中英文混排节奏的中文正文。
-```
-
-Do not keep all three font packages installed after selection.
-
-- [ ] **Step 7: Run full verification and commit the typography decision**
-
-```bash
-npm run verify
-git add src/styles src/pages/lab/typography.astro package.json package-lock.json tests/e2e/typography.spec.ts
-git commit -m "feat: lock editorial typography system"
-```
-
-**Review gate:** the chosen font stack is frozen for Phase 2. Do not continue font-shopping during Home implementation unless a concrete layout failure demonstrates a real issue.
+**Review gate:** the four semantic font families are frozen for Phase 2. Later visual tasks may tune composition, scale, weight, tracking, and spacing, but must not silently return to a serif-led display system or reopen font-family selection without a new explicit human-approved design decision.
 
 ---
 
@@ -1865,8 +1777,18 @@ git commit -m "feat: lock editorial typography system"
 - Create: `tests/e2e/design-system.spec.ts`
 
 **Interfaces:**
-- Consumes: approved token, grid, theme, and typography system.
-- Produces: a small controlled vocabulary that Phase 2 must reuse rather than inventing raw visual markup.
+- Consumes the human-approved Light / Dark / grid foundation from Task 6.
+- Consumes the human-approved sans-led typography system from Task 7.
+- Produces a small controlled editorial primitive vocabulary that Phase 2 must reuse rather than replace with raw page-specific markup.
+- Produces a deterministic style tile proving that the primitives support the approved composition grammar rather than redefining it.
+
+**Composition guardrail:**
+
+Task 8 must extend, not overwrite, the visual language approved in Task 7.
+
+The approved grammar is restrained lightweight Inter structural display, generous tracking and whitespace, selective Cormorant editorial moments, IBM Plex Mono analytical metadata, and G.xxx / PH.xx / folio notation as supporting structure.
+
+Editorial primitives support the composition. They must not make the page feel like a dashboard, cyberpunk HUD, generic SaaS design system, oversized information poster, or generic fashion template.
 
 - [ ] **Step 1: Create `EditorialRule.astro`**
 
@@ -2078,7 +2000,7 @@ const { src, alt, caption, bleed = false } = Astro.props;
 
 `ImagePlate` intentionally accepts a simple `src` in Phase 1. Astro Image optimization integration is deferred until real content assets exist in Phase 2; do not pre-build an abstraction without real images.
 
-- [ ] **Step 8: Build the deterministic design-system lab page using every primitive**
+- [ ] **Step 8: Build the deterministic style tile from the Task 7 approved composition grammar**
 
 Create `src/pages/lab/design-system.astro`:
 
@@ -2097,31 +2019,64 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <BaseLayout title="Design System Lab — Gabriel Chen" noindex={true}>
   <main class="lab-shell">
     <header class="lab-topline">
-      <GIndex id="G.026" />
+      <GIndex id="G.026" subtle={true} />
+      <span class="data-copy lab-identity">EDITORIAL INTELLIGENCE</span>
       <ThemeToggle />
     </header>
 
     <EditorialRule />
 
-    <section class="editorial-grid hero-spread">
-      <div class="hero-title">
-        <SectionLabel index="01" label="EDITORIAL INTELLIGENCE" />
-        <h1 class="display">Competitive<br />Positioning<br /><em>Against Giants</em></h1>
+    <section class="editorial-grid approved-hero">
+      <div class="hero-label">
+        <SectionLabel index="01" label="SELECTED WORK" />
       </div>
+
+      <div class="hero-study">
+        <p class="editorial hero-kicker"><em>Selected Work</em></p>
+
+        <h1 class="hero-display">
+          BUILDING SYSTEMS
+          <span>FOR BETTER DECISIONS</span>
+        </h1>
+
+        <p class="editorial hero-lede">
+          Research, systems and ideas shaped through practice — designed
+          to become clearer, more useful and more enduring over time.
+        </p>
+
+        <div class="hero-index">
+          <FolioNumber current="01" />
+          <PhaseMarker id="PH.04" label="BEIJING / 2026" />
+        </div>
+      </div>
+
       <div class="hero-notes">
-        <FolioNumber current="01" />
-        <PhaseMarker id="PH.04" label="BEIJING / 2026" />
-        <Marginalia items={['STRATEGY / RESEARCH', 'SOURCE 07', 'FIG.03', 'UPDATED 2026.08']} />
+        <Marginalia
+          items={[
+            'STRATEGY / RESEARCH',
+            'SOURCE 07',
+            'FIG.03',
+            'UPDATED 2026.08',
+          ]}
+        />
       </div>
     </section>
 
     <EditorialRule />
 
     <section class="editorial-grid data-spread">
-      <p class="display data-question">How large is the gap?</p>
+      <div class="data-label">
+        <SectionLabel index="02" label="INFORMATION" />
+      </div>
+
+      <div class="data-question-wrap">
+        <p class="editorial data-kicker"><em>Evidence</em></p>
+        <h2 class="data-question">How large is the gap?</h2>
+      </div>
+
       <div class="data-answer">
         <span class="data-copy">CHANEL</span>
-        <strong class="display">10.5</strong>
+        <strong>10.5</strong>
         <span class="data-copy">THOUSAND / INDEXED EXAMPLE</span>
       </div>
     </section>
@@ -2130,85 +2085,232 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <style>
   .lab-shell {
-    padding-block: clamp(2rem, 6vw, 6rem);
+    padding-block:
+      clamp(2rem, 4vw, 4rem)
+      clamp(8rem, 14vw, 14rem);
   }
 
   .lab-topline {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
     padding-bottom: 1rem;
   }
 
-  .hero-spread,
-  .data-spread {
-    padding-block: clamp(4rem, 10vw, 10rem);
+  .lab-identity {
+    color: var(--ink-muted);
+    font-size: 0.68rem;
+    text-align: center;
   }
 
-  .hero-title {
+  .lab-topline :global([data-theme-toggle]) {
+    justify-self: end;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: var(--font-data);
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .approved-hero {
+    padding-block: clamp(5rem, 10vw, 10rem);
+  }
+
+  .hero-label,
+  .data-label {
     grid-column: 1 / -1;
   }
 
-  .hero-title h1 {
-    margin: 3rem 0 0;
-    font-size: clamp(4.2rem, 11vw, 10rem);
+  .hero-study {
+    grid-column: 1 / -1;
+    max-width: 82rem;
+    margin-inline: auto;
+    padding-top: clamp(4rem, 8vw, 8rem);
+    text-align: center;
+  }
+
+  .hero-kicker {
+    margin: 0 0 clamp(2rem, 4vw, 3.5rem);
+    font-size: clamp(1.15rem, 1.8vw, 1.6rem);
+  }
+
+  .hero-kicker em,
+  .data-kicker em {
+    font-style: italic;
+  }
+
+  .hero-display {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 5.6vw, 6.4rem);
+    font-weight: 200;
+    letter-spacing: 0.14em;
+    line-height: 1.08;
+  }
+
+  .hero-display span {
+    display: block;
+    margin-top: 0.16em;
+  }
+
+  .hero-lede {
+    max-width: 47rem;
+    margin:
+      clamp(3.5rem, 6vw, 6rem)
+      auto
+      0;
+    font-size: clamp(1.35rem, 2vw, 1.85rem);
+    font-weight: 300;
+    line-height: 1.48;
+  }
+
+  .hero-index {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 2rem;
+    margin-top: clamp(3rem, 5vw, 5rem);
   }
 
   .hero-notes {
     grid-column: 1 / -1;
-    display: grid;
-    gap: 1.25rem;
-    align-content: end;
-    margin-top: 3rem;
+    justify-self: end;
+    margin-top: clamp(3rem, 5vw, 5rem);
+  }
+
+  .data-spread {
+    padding-block: clamp(5rem, 10vw, 10rem);
+  }
+
+  .data-question-wrap {
+    grid-column: 1 / -1;
+    padding-top: clamp(4rem, 7vw, 7rem);
+  }
+
+  .data-kicker {
+    margin: 0 0 1.5rem;
+    font-size: clamp(1.05rem, 1.5vw, 1.35rem);
   }
 
   .data-question {
-    grid-column: 1 / -1;
+    max-width: 12ch;
     margin: 0;
-    font-size: clamp(3rem, 7vw, 7rem);
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4.5vw, 5rem);
+    font-weight: 200;
+    letter-spacing: 0.06em;
+    line-height: 1.06;
   }
 
   .data-answer {
     grid-column: 1 / -1;
     display: grid;
     gap: 1rem;
-    margin-top: 4rem;
+    margin-top: clamp(4rem, 8vw, 8rem);
   }
 
   .data-answer strong {
-    font-size: clamp(7rem, 20vw, 18rem);
-    font-weight: 400;
-    line-height: 0.7;
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 11rem);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    line-height: 0.8;
   }
 
   @media (min-width: 48rem) {
-    .hero-title { grid-column: 1 / 5; }
-    .hero-notes { grid-column: 5 / 7; margin-top: 0; }
-    .data-question { grid-column: 1 / 4; }
-    .data-answer { grid-column: 4 / 7; margin-top: 0; }
+    .hero-notes {
+      grid-column: 5 / 7;
+    }
+
+    .data-question-wrap {
+      grid-column: 1 / 4;
+    }
+
+    .data-answer {
+      grid-column: 4 / 7;
+      margin-top: clamp(4rem, 7vw, 7rem);
+    }
   }
 
   @media (min-width: 72rem) {
-    .hero-title { grid-column: 1 / 9; }
-    .hero-notes { grid-column: 10 / 13; }
-    .data-question { grid-column: 1 / 7; }
-    .data-answer { grid-column: 8 / 13; }
+    .hero-study {
+      grid-column: 2 / 12;
+    }
+
+    .hero-notes {
+      grid-column: 10 / 13;
+    }
+
+    .data-question-wrap {
+      grid-column: 1 / 7;
+    }
+
+    .data-answer {
+      grid-column: 8 / 13;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .lab-topline {
+      grid-template-columns: 1fr auto;
+    }
+
+    .lab-identity {
+      display: none;
+    }
+
+    .hero-study {
+      text-align: left;
+    }
+
+    .hero-display {
+      font-size: clamp(2.4rem, 10vw, 4rem);
+      letter-spacing: 0.075em;
+    }
+
+    .hero-lede {
+      margin-inline: 0;
+    }
+
+    .hero-index {
+      justify-content: flex-start;
+    }
+
+    .hero-notes {
+      justify-self: start;
+    }
   }
 </style>
 ```
 
-- [ ] **Step 9: Add visual regression tests for Light/Dark on desktop and semantic smoke on mobile**
+This style tile deliberately carries forward the Task 7 human-approved composition:
+
+```text
+Cormorant kicker
+→ restrained tracked Inter statement
+→ Cormorant lede
+→ quiet Mono / G.xxx / PH.xx evidence language
+```
+
+`ImagePlate` remains part of the primitive library but is intentionally not filled with a fake image on this deterministic Phase 1 surface. Its real visual composition is deferred until Phase 2 provides actual project assets.
+
+- [ ] **Step 9: Add regression tests for the approved style tile**
 
 Create `tests/e2e/design-system.spec.ts`:
 
 ```ts
 import { expect, test } from '@playwright/test';
 
-test('design-system lab renders the complete editorial vocabulary', async ({ page }) => {
+test('design-system lab renders the approved editorial vocabulary', async ({ page }) => {
   await page.goto('/lab/design-system');
 
   await expect(page.getByText('G.026')).toBeVisible();
+  await expect(page.getByText('BUILDING SYSTEMS')).toBeVisible();
   await expect(page.getByText('PH.04')).toBeVisible();
   await expect(page.getByText('How large is the gap?')).toBeVisible();
 });
@@ -2228,33 +2330,109 @@ test('desktop design-system dark world visual baseline', async ({ page }, testIn
 });
 ```
 
-- [ ] **Step 10: Generate baselines deliberately, review the images, then rerun without update mode**
-
-First run:
+Run static verification only:
 
 ```bash
-npm run test:e2e:update -- tests/e2e/design-system.spec.ts
+npm run check
+npx eslint tests/e2e/design-system.spec.ts
+git diff --check
 ```
 
-Open the generated screenshots. Do not accept them merely because Playwright created them.
+Do **not** generate or update screenshot baselines yet.
 
-After human visual review of both images:
+- [ ] **Step 10: Perform Human Visual Review on localhost before creating regression baselines**
+
+Run:
 
 ```bash
-npm run test:e2e -- tests/e2e/design-system.spec.ts
+npm run dev -- --host 127.0.0.1
 ```
 
-Expected: PASS without updating snapshots.
+Review:
 
-- [ ] **Step 11: Run complete verification and commit primitives**
+```text
+http://127.0.0.1:4321/lab/design-system
+```
+
+Review at minimum:
+
+```text
+Desktop Light
+Desktop Dark
+Mobile Light
+Mobile Dark
+```
+
+The localhost page is the primary design-approval surface because it exposes real browser rendering, responsive behavior, theme switching, typography, spacing, and interaction.
+
+Judge:
+
+```text
+1. The Task 7 approved sans-led composition is still clearly recognizable.
+2. Inter structural typography feels lightweight, spacious, and restrained.
+3. Cormorant adds character selectively rather than dominating.
+4. G.xxx / PH.xx / folio / marginalia read as structural notation rather than HUD decoration.
+5. Editorial / publishing remains visually dominant over data / information language.
+6. The data spread feels analytical rather than dashboard-like.
+7. Light feels warm, contemporary, and restrained.
+8. Dark feels intentionally art-directed rather than mechanically inverted.
+9. Mobile is recomposed rather than squeezed.
+10. The result does not resemble a generic SaaS system, fashion template, cyberpunk HUD, or oversized information poster.
+```
+
+**If Human Visual Review rejects the page:**
+
+- do not generate new baselines;
+- do not weaken tests;
+- remain inside Task 8;
+- correct the implementation;
+- if the rejection changes the design contract, reconcile this plan and the design spec before continuing.
+
+Automated success never overrides a failed visual review.
+
+- [ ] **Step 11: After explicit Human approval, create regression baselines, verify, and commit**
+
+If rejected baselines from an earlier attempt exist, remove them first:
+
+```bash
+rm -rf tests/e2e/design-system.spec.ts-snapshots
+```
+
+Generate the approved baselines deliberately with the current Playwright CLI:
+
+```bash
+npx playwright test tests/e2e/design-system.spec.ts --update-snapshots=changed
+```
+
+Expected on the current desktop/mobile project matrix:
+
+```text
+4 passed
+2 skipped
+```
+
+Then prove the approved baseline reproduces without update mode:
+
+```bash
+npx playwright test tests/e2e/design-system.spec.ts
+```
+
+Run the complete quality gate:
 
 ```bash
 npm run verify
-git add src/components/editorial src/pages/lab/design-system.astro tests/e2e/design-system.spec.ts tests/e2e/design-system.spec.ts-snapshots
+git diff --check
+```
+
+Commit only after automated gates and explicit Human Visual Review both pass:
+
+```bash
+git add   src/components/editorial   src/pages/lab/design-system.astro   tests/e2e/design-system.spec.ts   tests/e2e/design-system.spec.ts-snapshots
+
 git commit -m "feat: build editorial primitive design system"
 ```
 
-**Review gate:** reject the task if the page looks like a generic SaaS design system, a card UI, or a fashion-template clone even if all tests pass.
+**Review gate:** reject Task 8 if the page diverges from the Task 7 approved visual language even when every automated test is green. Human visual approval and automated regression are both required.
 
 ---
 

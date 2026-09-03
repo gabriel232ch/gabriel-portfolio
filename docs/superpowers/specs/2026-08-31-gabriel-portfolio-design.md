@@ -2,7 +2,7 @@
 
 **Project:** `gabrielchen.me`  
 **Date:** 2026-08-31  
-**Status:** Design approved; pending final spec review before implementation planning  
+**Status:** Living specification; Phase 0 complete; Phase 1 active and governed by human review
 **Primary domain:** `gabrielchen.me`
 
 ---
@@ -23,6 +23,18 @@ The product should launch first as a complete, beautiful, durable portfolio, the
 2. **One flagship before many projects.**
 3. **Typography and information design before WebGL.**
 4. **Every milestone must leave a complete, usable website.**
+
+### Human Review Precedence
+
+Human visual review is an authoritative design gate, not an informal comment layer.
+
+When review changes an earlier design hypothesis:
+
+1. The explicitly human-approved outcome supersedes earlier exploratory assumptions.
+2. Record the decision in the repository.
+3. Reconcile this specification and the active implementation plan before dependent work continues.
+4. Later tasks must consume the latest approved design state rather than mechanically reproduce older exploratory instructions.
+5. Passing automated tests never overrides a failed human visual review.
 
 ---
 
@@ -270,38 +282,75 @@ Approximate emphasis:
 
 ## 3.3 Typography roles
 
-Three distinct typographic voices:
+Phase 1 human review replaced the original serif-led display hypothesis with a restrained sans-led hybrid system.
 
-### Editorial Display Serif
+The approved semantic roles are:
+
+### Structural Display — Inter Variable
+
 Used for:
-- hero
-- case study title
-- section title
-- pull quotes
-- major conclusions
+- hero statements
+- case study titles
+- section-scale structural typography
+- navigation-scale display
+- major analytical conclusions
 
-### Functional Grotesk
+The display voice should feel quiet, lightweight, spacious, and precise.
+
+Default direction:
+- light weights, typically around `200`
+- generous tracking
+- deliberate line breaks
+- large scale without visual aggression
+- luxury through proportion and restraint rather than ornament
+
+### Editorial Serif — Cormorant Garamond Variable
+
+Used selectively for:
+- small italic kickers
+- editorial ledes
+- pull quotes
+- reflective passages
+- occasional expressive moments
+
+Cormorant Garamond is not the dominant display face. Its value comes from contrast with the quieter Inter-based structural system.
+
+### Functional Sans — Inter Variable
+
 Used for:
 - body text
 - navigation
-- metadata
-- UI
-- long-form reading
+- interface copy
+- general reading
+- functional metadata where Mono is unnecessary
 
-### Data / Mono
+### Data / Mono — IBM Plex Mono
+
 Used for:
+- `G.xxx` identifiers
+- `PH.xx` identifiers
 - numbers
 - timestamps
 - folio references
 - sources
 - figures
 - index markers
+- analytical metadata
 
 System:
+- **Sans = structure / clarity**
+- **Serif = character / editorial narrative**
+- **Mono = evidence / data / system**
 
-- Serif = emotion / editorial narrative
-- Sans = clarity / reading / interface
-- Mono = evidence / data / system
+Core principle:
+
+> **Sans builds structure. Serif adds character.**
+
+The intended result is refined, spacious, editorial, and analytical without becoming decorative, fashion-template generic, or dashboard-like.
+
+The authoritative typography decision is recorded in:
+
+`docs/decisions/phase-1-typography-selection.md`
 
 ## 3.4 Grid
 
