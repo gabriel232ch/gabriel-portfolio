@@ -2735,58 +2735,131 @@ git commit -m "feat: build editorial primitive design system"
 - Modify: `src/styles/global.css`
 - Modify: `src/pages/lab/design-system.astro`
 - Create: `tests/e2e/motion.spec.ts`
+- Modify screenshot baselines only if the Human-approved settled frame actually changes.
 
 **Interfaces:**
-- Consumes: static editorial primitives.
-- Produces four reusable native/CSS motion classes: Reveal, Assemble, Shift, Morph. These are the only Phase 1 motion primitives; GSAP remains prohibited until Phase 3.
+- Consumes: the frozen Task 8 editorial primitives, Section 01 `SELECTED WORK`, Section 02 `EVIDENCE`, and the fixed pure-text `LIGHT / DARK` ThemeToggle contract (no background, border, pill, shadow, or sticky header; 9px mobile and 10px from `48rem` upward), symmetric reading gutter, and targeted SectionLabel micro-zone (2rem mobile, 1.5rem from `48rem` upward).
+- Produces four reusable native/CSS motion classes—Reveal, Assemble, Shift, and Morph—plus a lab-only IntersectionObserver driver. These are the only Phase 1 motion primitives; GSAP remains prohibited until Phase 3.
+- Contract: JavaScript progressively enhances already-readable content. Browsers without IntersectionObserver and users with reduced motion receive the entered state immediately. Reduced motion must preserve information equivalence and remove displacement rather than merely shortening a transition.
 
-- [ ] **Step 1: Create the motion vocabulary as progressive enhancement**
+- [ ] **Step 1: Write failing behavioral motion E2E contracts before changing production files**
 
-Create `src/styles/motion.css`:
+Create `tests/e2e/motion.spec.ts` while `src/styles/motion.css`, the specimen, and its driver do not yet exist:
+
+```ts
+import { expect, test } from '@playwright/test';
+
+const motionKinds = ['reveal', 'assemble', 'shift', 'morph'] as const;
+
+test('full-motion users receive the entered state for every motion primitive', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/lab/design-system');
+
+  for (const kind of motionKinds) {
+    const specimen = page.locator(`[data-motion-demo="${kind}"]`);
+    await specimen.scrollIntoViewIfNeeded();
+    await expect(specimen).toHaveAttribute('data-motion-state', 'entered');
+  }
+});
+
+test('reduced-motion users see every specimen without opacity or displacement loss', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/lab/design-system');
+
+  const states = await page.locator('[data-motion-demo]').evaluateAll((elements) =>
+    elements.map((element) => {
+      const style = getComputedStyle(element);
+      return {
+        visible: style.visibility !== 'hidden' && Number(style.opacity) > 0,
+        transform: style.transform,
+      };
+    }),
+  );
+
+  expect(states).toHaveLength(motionKinds.length);
+  expect(states.every(({ visible }) => visible)).toBe(true);
+  expect(states.every(({ transform }) => transform === 'none')).toBe(true);
+});
+
+test('unsupported IntersectionObserver browsers receive the entered state immediately', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'IntersectionObserver', {
+      configurable: true,
+      value: undefined,
+    });
+  });
+  await page.goto('/lab/design-system');
+
+  for (const kind of motionKinds) {
+    await expect(page.locator(`[data-motion-demo="${kind}"]`)).toHaveAttribute(
+      'data-motion-state',
+      'entered',
+    );
+  }
+});
+```
+
+The selectors intentionally cover observable entered states for all four primitives, information visibility, displacement removal, and the unsupported-browser fallback. Do not add tests for private timing values, exact easing, or the internal observer implementation beyond the required fallback contract.
+
+- [ ] **Step 2: Run the new motion tests and explicitly observe RED**
+
+Run:
+
+```bash
+npx playwright test tests/e2e/motion.spec.ts
+```
+
+Expected: FAIL because the current Task 8 lab has no `[data-motion-demo]` specimens or entered-state driver yet. Do not modify production code to hide this failure; the failing behavioral contract is the starting point for Task 9.
+
+- [ ] **Step 3: Implement the minimal native motion vocabulary as progressive enhancement**
+
+Create `src/styles/motion.css`. Keep the default state readable; only the lab driver should add `data-motion-state="pending"`, so content remains visible if JavaScript is absent. Use restrained distances and scale changes that support editorial hierarchy:
 
 ```css
-.motion-reveal {
-  opacity: 0;
-  transform: translateY(0.8rem);
+.motion-reveal,
+.motion-assemble,
+.motion-shift,
+.motion-morph {
   transition:
     opacity var(--motion-editorial) var(--ease-editorial),
-    transform var(--motion-editorial) var(--ease-editorial);
+    transform var(--motion-editorial) var(--ease-editorial),
+    border-radius var(--motion-editorial) var(--ease-editorial);
 }
 
-.motion-reveal[data-motion-state='entered'] {
+[data-motion-state='pending'].motion-reveal {
+  opacity: 0;
+  transform: translateY(0.6rem);
+}
+
+[data-motion-state='entered'].motion-reveal {
   opacity: 1;
   transform: translateY(0);
 }
 
-.motion-assemble {
-  transform: scaleX(0);
+[data-motion-state='pending'].motion-assemble {
+  transform: scaleX(0.2);
   transform-origin: left center;
-  transition: transform var(--motion-cinematic) var(--ease-editorial);
 }
 
-.motion-assemble[data-motion-state='entered'] {
+[data-motion-state='entered'].motion-assemble {
   transform: scaleX(1);
 }
 
-.motion-shift {
+[data-motion-state='pending'].motion-shift {
+  transform: translateX(var(--motion-shift-x, 0.5rem));
+}
+
+[data-motion-state='entered'].motion-shift {
   transform: translateX(0);
-  transition: transform var(--motion-editorial) var(--ease-editorial);
 }
 
-.motion-shift[data-motion-state='entered'] {
-  transform: translateX(var(--motion-shift-x, 0.75rem));
-}
-
-.motion-morph {
+[data-motion-state='pending'].motion-morph {
   border-radius: 999px;
-  transform: scaleX(0.25);
+  transform: scaleX(0.7);
   transform-origin: left center;
-  transition:
-    border-radius var(--motion-editorial) var(--ease-editorial),
-    transform var(--motion-cinematic) var(--ease-editorial);
 }
 
-.motion-morph[data-motion-state='entered'] {
+[data-motion-state='entered'].motion-morph {
   border-radius: 0;
   transform: scaleX(1);
 }
@@ -2799,32 +2872,170 @@ Create `src/styles/motion.css`:
     opacity: 1;
     transform: none;
     border-radius: 0;
+    transition: none;
   }
 }
 ```
 
-- [ ] **Step 2: Import motion CSS globally**
+- [ ] **Step 4: Import the motion CSS globally without changing the existing theme transition**
 
-Append to the import block in `src/styles/global.css`:
+Add the following to the import block in `src/styles/global.css`, before all non-import rules:
 
 ```css
 @import './motion.css';
 ```
 
-Keep imports before all non-import rules.
+Do not alter the approved `900ms cubic-bezier(0.16, 1, 0.3, 1)` view-transition contract.
 
-- [ ] **Step 3: Add a native IntersectionObserver driver to the design-system lab only**
+- [ ] **Step 5: Add one restrained third specimen and a lab-only native driver**
 
-Append to `src/pages/lab/design-system.astro` after the page markup:
+In `src/pages/lab/design-system.astro`, append this third controlled specimen before `</main>`. It must follow the existing editorial grammar, remain subordinate to Sections 01 and 02, and introduce no cards, dashboard, HUD, poster, or new hero language:
+
+```astro
+<section class="editorial-grid motion-specimen" aria-labelledby="motion-title">
+  <div class="motion-label">
+    <SectionLabel index="03" label="MOTION GRAMMAR" />
+  </div>
+
+  <div class="motion-intro">
+    <p class="editorial motion-kicker"><em>Controlled movement</em></p>
+    <h2 id="motion-title" class="display motion-title">
+      Movement with intent
+    </h2>
+    <p class="body-copy motion-context">
+      Four quiet behaviors for making hierarchy clearer without asking motion to become the subject.
+    </p>
+  </div>
+
+  <div class="motion-vocabulary" aria-label="Motion vocabulary specimens">
+    <div class="motion-item">
+      <span class="data-copy">REVEAL / 01</span>
+      <p class="editorial motion-reveal" data-motion-demo="reveal">Make the next idea legible.</p>
+    </div>
+    <div class="motion-item">
+      <span class="data-copy">ASSEMBLE / 02</span>
+      <div class="motion-line motion-assemble" data-motion-demo="assemble" aria-hidden="true"></div>
+    </div>
+    <div class="motion-item">
+      <span class="data-copy">SHIFT / 03</span>
+      <p class="data-copy motion-shift" data-motion-demo="shift" style="--motion-shift-x: 0.5rem;">
+        Information moves with intent
+      </p>
+    </div>
+    <div class="motion-item">
+      <span class="data-copy">MORPH / 04</span>
+      <div class="motion-block motion-morph" data-motion-demo="morph" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+```
+
+Use scoped CSS that reuses the approved display, editorial, body, data, spacing, and rule language. Keep the heading below the approved hero scale and keep the specimen visually subordinate:
+
+```css
+.motion-specimen {
+  padding-block: clamp(5rem, 9vw, 9rem);
+}
+
+.motion-label {
+  grid-column: 1 / -1;
+}
+
+.motion-intro {
+  grid-column: 1 / -1;
+  max-width: 42rem;
+  padding-top: clamp(3rem, 6vw, 6rem);
+}
+
+.motion-kicker {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+}
+
+.motion-kicker em {
+  font-style: italic;
+}
+
+.motion-title {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  line-height: 1;
+}
+
+.motion-context {
+  max-width: 34rem;
+  margin: 2rem 0 0;
+  color: var(--ink-muted);
+}
+
+.motion-vocabulary {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0;
+  margin-top: clamp(4rem, 7vw, 7rem);
+}
+
+.motion-item {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.28fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.motion-item > span {
+  color: var(--ink-muted);
+  font-size: 0.64rem;
+}
+
+.motion-item p {
+  margin: 0;
+}
+
+.motion-line {
+  width: 100%;
+  height: 1px;
+  background: var(--ink);
+}
+
+.motion-block {
+  width: min(16rem, 70vw);
+  height: 1.5rem;
+  background: var(--ink);
+}
+
+@media (min-width: 48rem) {
+  .motion-intro {
+    grid-column: 1 / 7;
+  }
+
+  .motion-vocabulary {
+    grid-column: 2 / 12;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .motion-item {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+```
+
+Append this script after the page markup. Set `pending` only when full motion and IntersectionObserver are available; otherwise set `entered` immediately so unsupported browsers and reduced-motion users never lose information:
 
 ```astro
 <script>
   const motionNodes = document.querySelectorAll<HTMLElement>('[data-motion-demo]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (reduceMotion || !('IntersectionObserver' in window)) {
+  if (reduceMotion || typeof IntersectionObserver !== 'function') {
     motionNodes.forEach((node) => (node.dataset.motionState = 'entered'));
   } else {
+    motionNodes.forEach((node) => (node.dataset.motionState = 'pending'));
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -2841,110 +3052,90 @@ Append to `src/pages/lab/design-system.astro` after the page markup:
 </script>
 ```
 
-Add this motion specimen before the closing `</main>`:
+- [ ] **Step 6: Run the motion tests and observe GREEN on both desktop and mobile projects**
 
-```astro
-<section class="motion-specimen" aria-labelledby="motion-title">
-  <SectionLabel index="02" label="MOTION GRAMMAR" />
-  <h2 id="motion-title" class="display motion-reveal" data-motion-demo>Reveal.</h2>
-  <div class="motion-line motion-assemble" data-motion-demo></div>
-  <p class="data-copy motion-shift" data-motion-demo style="--motion-shift-x: 1.5rem;">Shift / Information moves with intent</p>
-  <div class="motion-block motion-morph" data-motion-demo></div>
-</section>
-```
-
-Add scoped CSS:
-
-```css
-.motion-specimen {
-  padding-block: clamp(6rem, 14vw, 14rem);
-}
-
-.motion-specimen h2 {
-  font-size: clamp(5rem, 14vw, 12rem);
-  margin-block: 3rem;
-}
-
-.motion-line {
-  width: 100%;
-  height: 1px;
-  background: var(--ink);
-  margin-block: 3rem;
-}
-
-.motion-block {
-  width: min(22rem, 70vw);
-  height: 2.5rem;
-  background: var(--ink);
-  margin-top: 3rem;
-}
-```
-
-- [ ] **Step 4: Write reduced-motion E2E tests before accepting the motion implementation**
-
-Create `tests/e2e/motion.spec.ts`:
-
-```ts
-import { expect, test } from '@playwright/test';
-
-test('full-motion users receive entered editorial motion states', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'no-preference' });
-  await page.goto('/lab/design-system');
-  await page.getByRole('heading', { name: 'Reveal.' }).scrollIntoViewIfNeeded();
-
-  await expect(page.getByRole('heading', { name: 'Reveal.' })).toHaveAttribute(
-    'data-motion-state',
-    'entered',
-  );
-});
-
-test('reduced-motion users receive the same information without transitional displacement', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/lab/design-system');
-  const heading = page.getByRole('heading', { name: 'Reveal.' });
-  await heading.scrollIntoViewIfNeeded();
-
-  await expect(heading).toBeVisible();
-  const transform = await heading.evaluate((element) => getComputedStyle(element).transform);
-  const opacity = await heading.evaluate((element) => getComputedStyle(element).opacity);
-
-  expect(transform).toBe('none');
-  expect(opacity).toBe('1');
-});
-```
-
-- [ ] **Step 5: Run motion verification on both desktop and mobile projects**
+Run:
 
 ```bash
-npm run test:e2e -- tests/e2e/motion.spec.ts
+npx playwright test tests/e2e/motion.spec.ts
 ```
 
-Expected: PASS in both projects.
+Expected: all motion tests pass in both `desktop-chromium` and `mobile-chromium`. If a test fails, fix the smallest motion implementation or test-contract issue inside Task 9; do not weaken the contract or alter Sections 01 and 02.
 
-- [ ] **Step 6: Regenerate design-system visual baselines only if motion changes the settled frame**
+- [ ] **Step 7: Perform Human Visual Review before any screenshot update**
 
-First run the existing screenshots without update mode:
+Run the local site and review `/lab/design-system` at:
+
+```text
+Desktop Light
+Desktop Dark
+Mobile Light
+Mobile Dark
+Desktop prefers-reduced-motion: reduce
+Mobile prefers-reduced-motion: reduce
+```
+
+Review all of the following:
+
+```text
+1. Motion is restrained and demonstrates behavior rather than spectacle.
+2. The specimen extends the approved Task 8 editorial grammar without creating a new visual language.
+3. Sections 01 SELECTED WORK and 02 EVIDENCE still feel like the approved Task 8 composition.
+4. The fixed pure-text LIGHT / DARK utility remains usable and unobtrusive; it has no background, border, pill, shadow, or sticky header.
+5. The fixed toggle does not collide with the right-edge SectionLabel micro-zone.
+6. Mobile feels recomposed, not squeezed.
+7. Reduced motion preserves all information and removes transitional displacement.
+8. Reveal, Assemble, Shift, and Morph feel like one coherent grammar.
+9. Motion supports hierarchy instead of competing with content.
+10. The system feels premium because it is controlled, not because more things move.
+```
+
+If Human Review rejects the motion, do not regenerate visual baselines, do not weaken tests, and do not leave Task 9. Correct the motion implementation inside Task 9. Reconcile this plan only if Human Review changes the motion design contract.
+
+- [ ] **Step 8: After Human approval, run the existing design-system screenshots without update mode**
+
+Run exactly:
 
 ```bash
-npm run test:e2e -- tests/e2e/design-system.spec.ts
+npx playwright test tests/e2e/design-system.spec.ts
 ```
 
-If they fail because the intended settled layout changed, inspect the diff. Only after visual approval run:
+Because Task 9 intentionally adds Section 03 `MOTION GRAMMAR` to a `fullPage` screenshot, the existing Task 8 baselines are expected to fail dimensionally. Inspect the actual/diff and confirm that the differences are limited to the Human-approved Section 03 and any explicitly approved settled-frame consequences. Do not treat this expected structural baseline failure as a motion-regression defect by itself.
+
+- [ ] **Step 9: Deliberately regenerate the approved fullPage baselines and prove reproducibility**
+
+After Step 7 Human approval and Step 8 diff inspection confirm the expected, limited changes, run:
 
 ```bash
-npm run test:e2e:update -- tests/e2e/design-system.spec.ts
-npm run test:e2e -- tests/e2e/design-system.spec.ts
+npx playwright test tests/e2e/design-system.spec.ts --update-snapshots=changed
 ```
 
-- [ ] **Step 7: Run full verification and commit motion grammar**
+Immediately prove reproducibility without update mode:
+
+```bash
+npx playwright test tests/e2e/design-system.spec.ts
+```
+
+Never update snapshots before Human Review. Never use a bare `--update-snapshots` form here, because its optional mode can consume a following file path.
+
+- [ ] **Step 10: Run full verification and commit only after GREEN and Human approval**
+
+Run:
 
 ```bash
 npm run verify
-git add src/styles/motion.css src/styles/global.css src/pages/lab/design-system.astro tests/e2e/motion.spec.ts tests/e2e/design-system.spec.ts-snapshots
+git diff --check
+```
+
+Expected: PASS, with the existing design-system regression suite still covering the fixed ThemeToggle, symmetric main gutter, and SectionLabel collision contract. Commit only after the motion tests, full verification, and Human Visual Review pass:
+
+```bash
+git add src/styles/motion.css src/styles/global.css src/pages/lab/design-system.astro tests/e2e/motion.spec.ts
+git add tests/e2e/design-system.spec.ts-snapshots  # only when Step 9 changed approved baselines
 git commit -m "feat: establish editorial motion grammar"
 ```
 
-**Review gate:** motion should feel more expensive because it is controlled, not because more elements move. Reject gratuitous motion.
+**Review gate:** native/CSS motion remains the only Phase 1 motion implementation; no GSAP, D3, Three.js, WebGL, animation library, scroll-jacking, complex choreography, or new card system may enter this task.
 
 ---
 
@@ -2956,16 +3147,22 @@ git commit -m "feat: establish editorial motion grammar"
 
 **Interfaces:**
 - Consumes: completed Tasks 6–9.
-- Produces: explicit human approval that authorizes writing the Phase 2 Home v1 implementation plan.
+- Produces: an evidence-backed review record and, only after explicit approval, authorization to write a separate Phase 2 Home v1 implementation plan. Task 10 creates no production feature.
 
-- [ ] **Step 1: Create a dedicated review branch rather than reviewing only localhost**
+- [ ] **Step 1: Prepare the production-preview review branch without changing production code**
 
 ```bash
 git switch -c review/phase-1-design-system
 git push -u origin review/phase-1-design-system
 ```
 
-Expected: Cloudflare generates a branch preview URL.
+Expected: Cloudflare generates a branch preview URL. Use normal `git push` first. If the known Mac-specific `LibreSSL SSL_connect: SSL_ERROR_SYSCALL` recurs, preserve the configured proxy (`http.proxy` and `https.proxy` remain `http://127.0.0.1:7897`) and retry only that command with:
+
+```bash
+git -c http.version=HTTP/1.1 push -u origin review/phase-1-design-system
+```
+
+Do not bypass or remove the proxy, and do not change Git's global HTTP version setting.
 
 - [ ] **Step 2: Run the full automated gate before visual review**
 
@@ -2988,16 +3185,23 @@ Review `/lab/design-system` and `/lab/typography` in:
 6. Mobile / prefers-reduced-motion: reduce
 ```
 
-Evaluate against the approved Section 3 principles:
+For each reduced-motion review, use Chromium DevTools: open `Rendering`, then set `Emulate CSS media feature prefers-reduced-motion` to `reduce`. This is a review-only browser setting; do not add a production reduced-motion UI control.
+
+Evaluate against the approved Phase 1 system and Section 3 principles:
 
 ```text
-Editorial / publishing is dominant.
-Data/information language is visible but not dashboard-like.
-Dark is a distinct art direction rather than inversion.
-Typography feels luxury/editorial without becoming fashion-template generic.
-G.xxx / PH.xx / marginalia feel structural rather than decorative HUD.
-No conventional card system has crept in.
-Motion is C+ in potential but remains restrained at the primitive layer.
+Light / Dark are semantic worlds, not a light/dark filter.
+The 4 / 6 / 12 editorial grid remains coherent across mobile / tablet / desktop.
+Inter Variable carries structural display and body structure.
+Cormorant Garamond Variable adds selective editorial character.
+IBM Plex Mono carries data and system notation.
+Sans builds structure. Serif adds character.
+The editorial primitive vocabulary—G.xxx, PH.xx, folio, marginalia, rules, SectionLabel, and ImagePlate—feels structural.
+The approved EVIDENCE language remains analytical and editorial rather than dashboard-like.
+The fixed compact LIGHT / DARK utility remains unobtrusive and collision-safe.
+Reveal / Assemble / Shift / Morph feel like one restrained, coherent grammar.
+Reduced motion preserves the same information with no required displacement.
+No conventional card system, HUD, poster aesthetic, or generic SaaS language has crept in.
 Mobile feels recomposed rather than squeezed.
 ```
 
@@ -3012,27 +3216,39 @@ The required approval is semantic, not exact wording. Examples that count:
 
 Statements such as “looks pretty good” do **not** count as the gate.
 
-- [ ] **Step 5: Record the actual review result**
+- [ ] **Step 5: Record the actual review result and freeze only what was approved**
 
 If approved, create `docs/decisions/phase-1-design-system-review.md`:
 
 ```markdown
 # Phase 1 Design System Review
 
-Date: 2026-08-31
+Date: [record the actual calendar date on which this review is performed, in YYYY-MM-DD format]
 Status: PASS
 
 ## Approved system
 
 - Editorial Intelligence visual foundation
-- Light and Dark semantic worlds
-- 12 / 6 / 4 editorial grid
-- Approved Display Serif + Inter Variable + IBM Plex Mono role system
-- Living Folio primitives
-- G.xxx and PH.xx notation primitives
-- Marginalia and editorial rule language
+- Light / Dark semantic worlds
+- 4 / 6 / 12 editorial grid (mobile / tablet / desktop)
+- Structural Display — Inter Variable
+- Editorial Serif — Cormorant Garamond Variable
+- Functional / Body Sans — Inter Variable
+- Data / Mono — IBM Plex Mono
+- Principle: Sans builds structure. Serif adds character.
+- Editorial primitive vocabulary: G.xxx, PH.xx, folio, marginalia, rules, SectionLabel, and ImagePlate
+- Approved Section 01 SELECTED WORK composition
+- Approved Section 02 EVIDENCE language and composition
+- Fixed pure-text LIGHT / DARK utility: 9px mobile, 10px at >=48rem, with no background, border, pill, shadow, or sticky header
+- Symmetric main reading gutter with a targeted SectionLabel micro-zone; no global safe gutter
 - Reveal / Assemble / Shift / Morph motion grammar
-- Reduced-motion equivalence
+- Reduced-motion information equivalence with displacement removed
+
+## Review evidence
+
+- Reviewed `/lab/design-system` and `/lab/typography` on the Cloudflare production preview.
+- Reviewed Desktop Light, Desktop Dark, Mobile Light, Mobile Dark, Desktop reduced motion, and Mobile reduced motion.
+- Automated verification and the approved design-system regression suite passed before this decision was recorded.
 
 ## Freeze
 
@@ -3050,9 +3266,9 @@ Phase 2 must reuse this vocabulary. It may compose and extend it for real Home c
 - CMS / database / SSR
 ```
 
-If not approved, set `Status: FAIL`, list each concrete visual defect, and write a small corrective plan for Phase 1 only. Do not start Phase 2.
+The `Date` field must be filled with the actual review date when this task is performed; do not copy a historical plan/spec date. If not approved, set `Status: FAIL`, list each concrete visual defect, and write a small corrective plan for Phase 1 only. Do not start Phase 2.
 
-- [ ] **Step 6: Merge the reviewed branch and verify production is still healthy**
+- [ ] **Step 6: Commit and push the review record, merge the reviewed branch, and verify production health**
 
 After approval:
 
@@ -3061,6 +3277,14 @@ git add docs/decisions/phase-1-design-system-review.md
 git commit -m "docs: approve Phase 1 design system"
 git push
 ```
+
+Use normal `git push` first. If the known `SSL_ERROR_SYSCALL` transport failure recurs, preserve the configured proxy and retry the individual push with:
+
+```bash
+git -c http.version=HTTP/1.1 push
+```
+
+Do not bypass the proxy or alter global Git settings merely to complete Phase 1.
 
 Merge the PR to `main`, then:
 
@@ -3079,17 +3303,11 @@ Cloudflare main deployment → success
 /lab/typography → available but unlinked/noindex
 ```
 
-- [ ] **Step 7: STOP and write the next plan from the real repository state**
+- [ ] **Step 7: STOP at the Phase 1 boundary; plan Phase 2 separately from the verified repository**
 
-Do not implement Home.
+Do not implement Home, create project cards, invent project content, or add any other production feature in Task 10.
 
-The next artifact must be:
-
-```text
-a new file under `docs/superpowers/plans/` following the writing-plans date convention and ending in `-gabriel-portfolio-phase-2-home-v1-implementation-plan.md`
-```
-
-Before writing it, inspect:
+After the explicit Phase 1 approval, the next artifact may be a **new** file under `docs/superpowers/plans/` following the writing-plans date convention and ending in `-gabriel-portfolio-phase-2-home-v1-implementation-plan.md`. That separate planning task must first inspect:
 
 ```text
 - actual component APIs from Phase 1
@@ -3100,6 +3318,8 @@ Before writing it, inspect:
   2. Luxury Handbag Pricing Architecture
   3. Olist Business Analysis
 ```
+
+Then stop. Phase 2 implementation does not belong in this Phase 0–1 plan.
 
 The Phase 2 plan must not invent project content or generic placeholder cards. It must be planned from the real source material.
 
