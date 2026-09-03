@@ -1,0 +1,37 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  bleed?: boolean;
+}
+
+const { src, alt, caption, bleed = false } = Astro.props;
+---
+
+<figure class:list={['image-plate', { 'image-plate--bleed': bleed }]}>
+  <img src={src} alt={alt} loading="lazy" />
+  {caption && <figcaption class="data-copy">{caption}</figcaption>}
+</figure>
+
+<style>
+  .image-plate {
+    margin: 0;
+  }
+
+  .image-plate img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .image-plate figcaption {
+    margin-top: 0.65rem;
+    font-size: 0.64rem;
+    color: var(--ink-muted);
+  }
+
+  .image-plate--bleed {
+    width: calc(100% + var(--gutter));
+  }
+</style>

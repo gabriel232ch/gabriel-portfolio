@@ -1,0 +1,26 @@
+---
+interface Props {
+  axis?: 'horizontal' | 'vertical';
+}
+
+const { axis = 'horizontal' } = Astro.props;
+---
+
+<span class:list={['editorial-rule', `editorial-rule--${axis}`]} aria-hidden="true"></span>
+
+<style>
+  .editorial-rule {
+    display: block;
+    background: var(--hairline);
+  }
+
+  .editorial-rule--horizontal {
+    width: 100%;
+    height: 1px;
+  }
+
+  .editorial-rule--vertical {
+    width: 1px;
+    min-height: 3rem;
+  }
+</style>

@@ -1,0 +1,540 @@
+---
+import EditorialRule from '../../components/editorial/EditorialRule.astro';
+import FolioNumber from '../../components/editorial/FolioNumber.astro';
+import GIndex from '../../components/editorial/GIndex.astro';
+import Marginalia from '../../components/editorial/Marginalia.astro';
+import PhaseMarker from '../../components/editorial/PhaseMarker.astro';
+import SectionLabel from '../../components/editorial/SectionLabel.astro';
+import ThemeToggle from '../../components/system/ThemeToggle.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Design System Lab — Gabriel Chen" noindex={true}>
+  <main class="lab-shell">
+    <header class="lab-topline">
+      <GIndex id="G.026" subtle={true} />
+      <span class="data-copy lab-identity">EDITORIAL INTELLIGENCE</span>
+      <ThemeToggle />
+    </header>
+
+    <EditorialRule />
+
+    <section class="editorial-grid approved-hero">
+      <div class="hero-label">
+        <SectionLabel index="01" label="SELECTED WORK" />
+      </div>
+
+      <div class="hero-study">
+        <p class="editorial hero-kicker"><em>Selected Work</em></p>
+
+        <h1 class="hero-display">
+          BUILDING SYSTEMS
+          <span>FOR BETTER DECISIONS</span>
+        </h1>
+
+        <p class="editorial hero-lede">
+          Research, systems and ideas shaped through practice — designed
+          to become clearer, more useful and more enduring over time.
+        </p>
+
+        <div class="hero-index">
+          <FolioNumber current="01" />
+          <PhaseMarker id="PH.04" label="BEIJING / 2026" />
+        </div>
+      </div>
+
+      <div class="hero-notes">
+        <Marginalia
+          items={[
+            'STRATEGY / RESEARCH',
+            'SOURCE 07',
+            'FIG.03',
+            'UPDATED 2026.08',
+          ]}
+        />
+      </div>
+    </section>
+
+    <EditorialRule />
+
+    <section class="editorial-grid evidence-spread">
+      <div class="evidence-label">
+        <SectionLabel index="02" label="EVIDENCE" />
+      </div>
+
+      <div class="evidence-intro">
+        <p class="editorial evidence-kicker"><em>Pricing Architecture</em></p>
+        <h2 class="editorial evidence-question">How large is the premium?</h2>
+        <p class="body-copy evidence-context">
+          A compact analytical spread for presenting one quantified finding,
+          the comparison behind it, and the evidence needed to interpret it.
+        </p>
+      </div>
+
+      <div class="evidence-primary">
+        <span class="data-copy evidence-entity">CHANEL</span>
+        <div class="evidence-metric-row">
+          <strong class="evidence-metric">10.5k</strong>
+          <span class="data-copy evidence-unit">MEDIAN PRICE / USD</span>
+        </div>
+      </div>
+
+      <div class="evidence-comparison">
+        <div class="evidence-comparison-item">
+          <span class="data-copy evidence-meta-label">PEER MEDIAN</span>
+          <strong>7.2k</strong>
+        </div>
+
+        <div class="evidence-comparison-item">
+          <span class="data-copy evidence-meta-label">PRICE PREMIUM</span>
+          <strong>+46%</strong>
+        </div>
+      </div>
+
+      <div class="evidence-facts">
+        <div>
+          <strong class="data-copy">182 SKUs</strong>
+          <span class="data-copy">SAMPLE</span>
+        </div>
+        <div>
+          <strong class="data-copy">12 brands</strong>
+          <span class="data-copy">COVERAGE</span>
+        </div>
+        <div>
+          <strong class="data-copy">2025 snapshot</strong>
+          <span class="data-copy">PERIOD</span>
+        </div>
+      </div>
+
+      <div class="evidence-interpretation">
+        <span class="data-copy evidence-meta-label">INTERPRETATION</span>
+        <p class="editorial">
+          The premium remains substantial against the peer median, turning
+          a single price point into a comparative finding rather than an isolated number.
+        </p>
+      </div>
+
+      <div class="evidence-source data-copy">
+        SOURCE 07 / ILLUSTRATIVE DATASET / DESIGN-SYSTEM DEMO
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .lab-shell {
+    padding-block:
+      clamp(2rem, 4vw, 4rem)
+      clamp(8rem, 14vw, 14rem);
+  }
+
+  .lab-topline {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  .lab-identity {
+    color: var(--ink-muted);
+    font-size: 0.68rem;
+    text-align: center;
+  }
+
+  .approved-hero {
+    padding-block: clamp(5rem, 10vw, 10rem);
+  }
+
+  .hero-label,
+  .data-label {
+    grid-column: 1 / -1;
+  }
+
+  .hero-study {
+    grid-column: 1 / -1;
+    max-width: 82rem;
+    margin-inline: auto;
+    padding-top: clamp(4rem, 8vw, 8rem);
+    text-align: center;
+  }
+
+  .hero-kicker {
+    margin: 0 0 clamp(2rem, 4vw, 3.5rem);
+    font-size: clamp(1.15rem, 1.8vw, 1.6rem);
+  }
+
+  .hero-kicker em,
+  .data-kicker em {
+    font-style: italic;
+  }
+
+  .hero-display {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 5.6vw, 6.4rem);
+    font-weight: 200;
+    letter-spacing: 0.14em;
+    line-height: 1.08;
+  }
+
+  .hero-display span {
+    display: block;
+    margin-top: 0.16em;
+  }
+
+  .hero-lede {
+    max-width: 47rem;
+    margin:
+      clamp(3.5rem, 6vw, 6rem)
+      auto
+      0;
+    font-size: clamp(1.35rem, 2vw, 1.85rem);
+    font-weight: 300;
+    line-height: 1.48;
+  }
+
+  .hero-index {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 2rem;
+    margin-top: clamp(3rem, 5vw, 5rem);
+  }
+
+  .hero-notes {
+    grid-column: 1 / -1;
+    justify-self: end;
+    margin-top: clamp(3rem, 5vw, 5rem);
+  }
+
+  .data-spread {
+    padding-block: clamp(5rem, 10vw, 10rem);
+  }
+
+  .data-question-wrap {
+    grid-column: 1 / -1;
+    padding-top: clamp(4rem, 7vw, 7rem);
+  }
+
+  .data-kicker {
+    margin: 0 0 1.5rem;
+    font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  }
+
+  .data-question {
+    max-width: 12ch;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4.5vw, 5rem);
+    font-weight: 200;
+    letter-spacing: 0.06em;
+    line-height: 1.06;
+  }
+
+  .data-answer {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 1rem;
+    margin-top: clamp(4rem, 8vw, 8rem);
+  }
+
+  .data-answer strong {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 11rem);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    line-height: 0.8;
+  }
+
+  @media (min-width: 48rem) {
+    .hero-notes {
+      grid-column: 5 / 7;
+    }
+
+    .data-question-wrap {
+      grid-column: 1 / 4;
+    }
+
+    .data-answer {
+      grid-column: 4 / 7;
+      margin-top: clamp(4rem, 7vw, 7rem);
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .hero-study {
+      grid-column: 2 / 12;
+    }
+
+    .hero-notes {
+      grid-column: 10 / 13;
+    }
+
+    .data-question-wrap {
+      grid-column: 1 / 7;
+    }
+
+    .data-answer {
+      grid-column: 8 / 13;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .lab-topline {
+      grid-template-columns: 1fr auto;
+    }
+
+    .lab-identity {
+      display: none;
+    }
+
+    .hero-study {
+      text-align: left;
+    }
+
+    .hero-display {
+      font-size: clamp(2.4rem, 10vw, 4rem);
+      letter-spacing: 0.075em;
+    }
+
+    .hero-lede {
+      margin-inline: 0;
+    }
+
+    .hero-index {
+      justify-content: flex-start;
+    }
+
+    .hero-notes {
+      justify-self: start;
+    }
+  }
+
+
+  /* Experimental evidence composition. Keep Section 1 frozen during review. */
+  .evidence-spread {
+    padding-block: clamp(5rem, 9vw, 9rem);
+  }
+
+  .evidence-label {
+    grid-column: 1 / -1;
+  }
+
+  .evidence-intro {
+    grid-column: 1 / -1;
+    max-width: 44rem;
+    padding-top: clamp(4rem, 7vw, 7rem);
+  }
+
+  .evidence-kicker {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+  }
+
+  .evidence-kicker em {
+    font-style: italic;
+  }
+
+  .evidence-question {
+    max-width: 13ch;
+    margin: 0;
+    font-size: clamp(2.6rem, 5vw, 5.4rem);
+    font-weight: 300;
+    line-height: 0.98;
+  }
+
+  .evidence-context {
+    max-width: 38rem;
+    margin: clamp(2rem, 3vw, 3rem) 0 0;
+    color: var(--ink-muted);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  }
+
+  .evidence-primary {
+    grid-column: 1 / -1;
+    margin-top: clamp(4rem, 8vw, 8rem);
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .evidence-entity {
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+  }
+
+  .evidence-metric-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem 1.5rem;
+  }
+
+  .evidence-metric {
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 9vw, 8rem);
+    font-weight: 200;
+    letter-spacing: -0.045em;
+    line-height: 0.82;
+  }
+
+  .evidence-unit {
+    max-width: 14rem;
+    padding-bottom: 0.35rem;
+    color: var(--ink-muted);
+    font-size: 0.68rem;
+  }
+
+  .evidence-comparison {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 1px solid var(--line);
+  }
+
+  .evidence-comparison-item {
+    display: grid;
+    gap: 1.25rem;
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .evidence-comparison-item + .evidence-comparison-item {
+    padding-left: clamp(1.5rem, 4vw, 4rem);
+    border-left: 1px solid var(--line);
+  }
+
+  .evidence-meta-label {
+    color: var(--ink-muted);
+    font-size: 0.66rem;
+  }
+
+  .evidence-comparison-item strong {
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 4.5vw, 4.5rem);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+  }
+
+  .evidence-facts {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    padding-block: clamp(2rem, 4vw, 3rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .evidence-facts div {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .evidence-facts strong {
+    font-size: 0.78rem;
+  }
+
+  .evidence-facts span {
+    color: var(--ink-muted);
+    font-size: 0.62rem;
+  }
+
+  .evidence-interpretation {
+    grid-column: 1 / -1;
+    max-width: 50rem;
+    padding-top: clamp(4rem, 7vw, 7rem);
+  }
+
+  .evidence-interpretation p {
+    margin: 1.5rem 0 0;
+    font-size: clamp(1.55rem, 2.6vw, 2.35rem);
+    font-weight: 300;
+    line-height: 1.35;
+  }
+
+  .evidence-source {
+    grid-column: 1 / -1;
+    margin-top: clamp(4rem, 6vw, 6rem);
+    color: var(--ink-muted);
+    font-size: 0.62rem;
+  }
+
+  @media (min-width: 48rem) {
+    .evidence-intro {
+      grid-column: 1 / 5;
+    }
+
+    .evidence-primary {
+      grid-column: 1 / 7;
+    }
+
+    .evidence-comparison {
+      grid-column: 1 / 7;
+    }
+
+    .evidence-facts {
+      grid-column: 1 / 7;
+    }
+
+    .evidence-interpretation {
+      grid-column: 2 / 6;
+    }
+
+    .evidence-source {
+      grid-column: 1 / 7;
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .evidence-intro {
+      grid-column: 1 / 6;
+    }
+
+    .evidence-primary {
+      grid-column: 7 / 13;
+      margin-top: clamp(4rem, 7vw, 7rem);
+    }
+
+    .evidence-comparison {
+      grid-column: 7 / 13;
+    }
+
+    .evidence-facts {
+      grid-column: 7 / 13;
+    }
+
+    .evidence-interpretation {
+      grid-column: 2 / 8;
+      padding-top: clamp(6rem, 9vw, 9rem);
+    }
+
+    .evidence-source {
+      grid-column: 8 / 13;
+      align-self: end;
+      text-align: right;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .evidence-question {
+      font-size: clamp(2.4rem, 11vw, 4rem);
+    }
+
+    .evidence-comparison {
+      grid-template-columns: 1fr;
+    }
+
+    .evidence-comparison-item + .evidence-comparison-item {
+      padding-left: 0;
+      border-top: 1px solid var(--line);
+      border-left: 0;
+    }
+
+    .evidence-facts {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

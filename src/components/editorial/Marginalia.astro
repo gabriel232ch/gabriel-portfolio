@@ -1,0 +1,22 @@
+---
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+---
+
+<aside class="marginalia data-copy" aria-label="Editorial notes">
+  {items.map((item) => <span>{item}</span>)}
+</aside>
+
+<style>
+  .marginalia {
+    display: grid;
+    gap: 0.45rem;
+    align-content: start;
+    font-size: 0.66rem;
+    line-height: 1.45;
+    color: var(--ink-muted);
+  }
+</style>

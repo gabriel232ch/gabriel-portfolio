@@ -2,6 +2,34 @@
   <span data-theme-label>Theme</span>
 </button>
 
+<style>
+  [data-theme-toggle] {
+    position: fixed;
+    top: max(0.75rem, env(safe-area-inset-top));
+    right: max(0.75rem, env(safe-area-inset-right));
+    z-index: 100;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: var(--font-data);
+    font-size: 0.5625rem;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 48rem) {
+    [data-theme-toggle] {
+      top: 1.25rem;
+      right: 1.25rem;
+      font-size: 0.625rem;
+      letter-spacing: 0.08em;
+    }
+  }
+</style>
+
 <script>
   const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
   const label = document.querySelector<HTMLElement>('[data-theme-label]');

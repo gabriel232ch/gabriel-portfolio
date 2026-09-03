@@ -1,0 +1,30 @@
+---
+interface Props {
+  index?: string;
+  label: string;
+}
+
+const { index, label } = Astro.props;
+---
+
+<div class="section-label data-copy">
+  {index && <span>{index}</span>}
+  <span>{label}</span>
+</div>
+
+<style>
+  .section-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-inline-end: 2rem;
+    font-size: 0.68rem;
+    color: var(--ink-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .section-label {
+      padding-inline-end: 1.5rem;
+    }
+  }
+</style>

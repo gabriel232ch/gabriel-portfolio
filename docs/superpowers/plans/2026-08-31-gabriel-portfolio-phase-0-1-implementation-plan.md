@@ -1773,6 +1773,9 @@ git commit -m "feat: establish editorial typography system"
 - Create: `src/components/editorial/Marginalia.astro`
 - Create: `src/components/editorial/PhaseMarker.astro`
 - Create: `src/components/editorial/SectionLabel.astro`
+- Modify: `src/components/system/ThemeToggle.astro`
+- Modify: `src/styles/global.css`
+- Modify: `src/pages/lab/typography.astro`
 - Create: `src/pages/lab/design-system.astro`
 - Create: `tests/e2e/design-system.spec.ts`
 
@@ -1950,8 +1953,15 @@ const { index, label } = Astro.props;
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    padding-inline-end: 2rem;
     font-size: 0.68rem;
     color: var(--ink-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .section-label {
+      padding-inline-end: 1.5rem;
+    }
   }
 </style>
 ```
@@ -2064,20 +2074,65 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     <EditorialRule />
 
-    <section class="editorial-grid data-spread">
-      <div class="data-label">
-        <SectionLabel index="02" label="INFORMATION" />
+    <section class="editorial-grid evidence-spread">
+      <div class="evidence-label">
+        <SectionLabel index="02" label="EVIDENCE" />
       </div>
 
-      <div class="data-question-wrap">
-        <p class="editorial data-kicker"><em>Evidence</em></p>
-        <h2 class="data-question">How large is the gap?</h2>
+      <div class="evidence-intro">
+        <p class="editorial evidence-kicker"><em>Pricing Architecture</em></p>
+        <h2 class="editorial evidence-question">How large is the premium?</h2>
+        <p class="body-copy evidence-context">
+          A compact analytical spread for presenting one quantified finding,
+          the comparison behind it, and the evidence needed to interpret it.
+        </p>
       </div>
 
-      <div class="data-answer">
-        <span class="data-copy">CHANEL</span>
-        <strong>10.5</strong>
-        <span class="data-copy">THOUSAND / INDEXED EXAMPLE</span>
+      <div class="evidence-primary">
+        <span class="data-copy evidence-entity">CHANEL</span>
+        <div class="evidence-metric-row">
+          <strong class="evidence-metric">10.5k</strong>
+          <span class="data-copy evidence-unit">MEDIAN PRICE / USD</span>
+        </div>
+      </div>
+
+      <div class="evidence-comparison">
+        <div class="evidence-comparison-item">
+          <span class="data-copy evidence-meta-label">PEER MEDIAN</span>
+          <strong>7.2k</strong>
+        </div>
+
+        <div class="evidence-comparison-item">
+          <span class="data-copy evidence-meta-label">PRICE PREMIUM</span>
+          <strong>+46%</strong>
+        </div>
+      </div>
+
+      <div class="evidence-facts">
+        <div>
+          <strong class="data-copy">182 SKUs</strong>
+          <span class="data-copy">SAMPLE</span>
+        </div>
+        <div>
+          <strong class="data-copy">12 brands</strong>
+          <span class="data-copy">COVERAGE</span>
+        </div>
+        <div>
+          <strong class="data-copy">2025 snapshot</strong>
+          <span class="data-copy">PERIOD</span>
+        </div>
+      </div>
+
+      <div class="evidence-interpretation">
+        <span class="data-copy evidence-meta-label">INTERPRETATION</span>
+        <p class="editorial">
+          The premium remains substantial against the peer median, turning
+          a single price point into a comparative finding rather than an isolated number.
+        </p>
+      </div>
+
+      <div class="evidence-source data-copy">
+        SOURCE 07 / ILLUSTRATIVE DATASET / DESIGN-SYSTEM DEMO
       </div>
     </section>
   </main>
@@ -2285,6 +2340,233 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       justify-self: start;
     }
   }
+
+
+  /* Experimental evidence composition. Keep Section 1 frozen during review. */
+  .evidence-spread {
+    padding-block: clamp(5rem, 9vw, 9rem);
+  }
+
+  .evidence-label {
+    grid-column: 1 / -1;
+  }
+
+  .evidence-intro {
+    grid-column: 1 / -1;
+    max-width: 44rem;
+    padding-top: clamp(4rem, 7vw, 7rem);
+  }
+
+  .evidence-kicker {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+  }
+
+  .evidence-kicker em {
+    font-style: italic;
+  }
+
+  .evidence-question {
+    max-width: 13ch;
+    margin: 0;
+    font-size: clamp(2.6rem, 5vw, 5.4rem);
+    font-weight: 300;
+    line-height: 0.98;
+  }
+
+  .evidence-context {
+    max-width: 38rem;
+    margin: clamp(2rem, 3vw, 3rem) 0 0;
+    color: var(--ink-muted);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  }
+
+  .evidence-primary {
+    grid-column: 1 / -1;
+    margin-top: clamp(4rem, 8vw, 8rem);
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .evidence-entity {
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+  }
+
+  .evidence-metric-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem 1.5rem;
+  }
+
+  .evidence-metric {
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 9vw, 8rem);
+    font-weight: 200;
+    letter-spacing: -0.045em;
+    line-height: 0.82;
+  }
+
+  .evidence-unit {
+    max-width: 14rem;
+    padding-bottom: 0.35rem;
+    color: var(--ink-muted);
+    font-size: 0.68rem;
+  }
+
+  .evidence-comparison {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 1px solid var(--line);
+  }
+
+  .evidence-comparison-item {
+    display: grid;
+    gap: 1.25rem;
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .evidence-comparison-item + .evidence-comparison-item {
+    padding-left: clamp(1.5rem, 4vw, 4rem);
+    border-left: 1px solid var(--line);
+  }
+
+  .evidence-meta-label {
+    color: var(--ink-muted);
+    font-size: 0.66rem;
+  }
+
+  .evidence-comparison-item strong {
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 4.5vw, 4.5rem);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+  }
+
+  .evidence-facts {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    padding-block: clamp(2rem, 4vw, 3rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .evidence-facts div {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .evidence-facts strong {
+    font-size: 0.78rem;
+  }
+
+  .evidence-facts span {
+    color: var(--ink-muted);
+    font-size: 0.62rem;
+  }
+
+  .evidence-interpretation {
+    grid-column: 1 / -1;
+    max-width: 50rem;
+    padding-top: clamp(4rem, 7vw, 7rem);
+  }
+
+  .evidence-interpretation p {
+    margin: 1.5rem 0 0;
+    font-size: clamp(1.55rem, 2.6vw, 2.35rem);
+    font-weight: 300;
+    line-height: 1.35;
+  }
+
+  .evidence-source {
+    grid-column: 1 / -1;
+    margin-top: clamp(4rem, 6vw, 6rem);
+    color: var(--ink-muted);
+    font-size: 0.62rem;
+  }
+
+  @media (min-width: 48rem) {
+    .evidence-intro {
+      grid-column: 1 / 5;
+    }
+
+    .evidence-primary {
+      grid-column: 1 / 7;
+    }
+
+    .evidence-comparison {
+      grid-column: 1 / 7;
+    }
+
+    .evidence-facts {
+      grid-column: 1 / 7;
+    }
+
+    .evidence-interpretation {
+      grid-column: 2 / 6;
+    }
+
+    .evidence-source {
+      grid-column: 1 / 7;
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .evidence-intro {
+      grid-column: 1 / 6;
+    }
+
+    .evidence-primary {
+      grid-column: 7 / 13;
+      margin-top: clamp(4rem, 7vw, 7rem);
+    }
+
+    .evidence-comparison {
+      grid-column: 7 / 13;
+    }
+
+    .evidence-facts {
+      grid-column: 7 / 13;
+    }
+
+    .evidence-interpretation {
+      grid-column: 2 / 8;
+      padding-top: clamp(6rem, 9vw, 9rem);
+    }
+
+    .evidence-source {
+      grid-column: 8 / 13;
+      align-self: end;
+      text-align: right;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .evidence-question {
+      font-size: clamp(2.4rem, 11vw, 4rem);
+    }
+
+    .evidence-comparison {
+      grid-template-columns: 1fr;
+    }
+
+    .evidence-comparison-item + .evidence-comparison-item {
+      padding-left: 0;
+      border-top: 1px solid var(--line);
+      border-left: 0;
+    }
+
+    .evidence-facts {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 ```
 
@@ -2390,6 +2672,16 @@ Judge:
 
 Automated success never overrides a failed visual review.
 
+**Human-approved Task 8 refinement — 2026-09-03**
+
+- `ThemeToggle` remains a fixed, pure-text `LIGHT / DARK` utility with no background, border, shadow, pill, or sticky header.
+- Compact scale is `9px` on mobile and `10px` from `48rem` upward.
+- The global `main` reading surface keeps symmetric `var(--gutter)` padding; a global right-side safe gutter is explicitly rejected because it unnecessarily narrows the whole composition.
+- Collision avoidance is targeted to the right-edge editorial primitive instead: `SectionLabel` reserves a micro-zone of `2rem` on mobile and `1.5rem` from `48rem` upward.
+- The fixed utility remains accessible while scrolling, and automated regression verifies that it never crosses the right-edge `SectionLabel`.
+- Desktop Light, Desktop Dark, Mobile Light, and Mobile Dark were explicitly Human-approved after localhost review.
+- Rejected earlier visual baselines were removed; the approved Light / Dark baselines were regenerated and reproduced successfully in non-update mode.
+
 - [ ] **Step 11: After explicit Human approval, create regression baselines, verify, and commit**
 
 If rejected baselines from an earlier attempt exist, remove them first:
@@ -2407,7 +2699,7 @@ npx playwright test tests/e2e/design-system.spec.ts --update-snapshots=changed
 Expected on the current desktop/mobile project matrix:
 
 ```text
-4 passed
+12 passed
 2 skipped
 ```
 
@@ -2427,7 +2719,7 @@ git diff --check
 Commit only after automated gates and explicit Human Visual Review both pass:
 
 ```bash
-git add   src/components/editorial   src/pages/lab/design-system.astro   tests/e2e/design-system.spec.ts   tests/e2e/design-system.spec.ts-snapshots
+git add   src/components/editorial   src/components/system/ThemeToggle.astro   src/styles/global.css   src/pages/lab/typography.astro   src/pages/lab/design-system.astro   tests/e2e/design-system.spec.ts   tests/e2e/design-system.spec.ts-snapshots   docs/superpowers/plans/2026-08-31-gabriel-portfolio-phase-0-1-implementation-plan.md
 
 git commit -m "feat: build editorial primitive design system"
 ```

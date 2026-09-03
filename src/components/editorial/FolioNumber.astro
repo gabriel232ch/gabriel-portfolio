@@ -1,0 +1,19 @@
+---
+interface Props {
+  current: string;
+  total?: string;
+}
+
+const { current, total = '∞' } = Astro.props;
+---
+
+<span class="folio-number data-copy" aria-label={`Folio ${current} of ${total}`}>
+  {current} / {total}
+</span>
+
+<style>
+  .folio-number {
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+  }
+</style>
