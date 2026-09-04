@@ -118,8 +118,73 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         SOURCE 07 / ILLUSTRATIVE DATASET / DESIGN-SYSTEM DEMO
       </div>
     </section>
+
+    <section class="editorial-grid motion-specimen" aria-labelledby="motion-title">
+      <div class="motion-label">
+        <SectionLabel index="03" label="MOTION GRAMMAR" />
+      </div>
+
+      <div class="motion-intro">
+        <p class="editorial motion-kicker"><em>Controlled movement</em></p>
+        <h2 id="motion-title" class="display motion-title">
+          Movement with intent
+        </h2>
+        <p class="body-copy motion-context">
+          Four quiet behaviors for making hierarchy clearer without asking motion to become the subject.
+        </p>
+      </div>
+
+      <div class="motion-vocabulary" aria-label="Motion vocabulary specimens">
+        <div class="motion-item">
+          <span class="data-copy">REVEAL / 01</span>
+          <p class="editorial motion-reveal" data-motion-demo="reveal">Make the next idea legible.</p>
+        </div>
+        <div class="motion-item">
+          <span class="data-copy">ASSEMBLE / 02</span>
+          <div class="motion-assembly motion-assemble" data-motion-demo="assemble" aria-hidden="true">
+            <span class="motion-segment motion-segment-short"></span>
+            <span class="motion-segment motion-segment-medium"></span>
+            <span class="motion-segment motion-segment-long"></span>
+          </div>
+        </div>
+        <div class="motion-item">
+          <span class="data-copy">SHIFT / 03</span>
+          <p class="data-copy motion-shift" data-motion-demo="shift" style="--motion-shift-x: 0.5rem;">
+            Information moves with intent
+          </p>
+        </div>
+        <div class="motion-item">
+          <span class="data-copy">MORPH / 04</span>
+          <div class="motion-block motion-morph" data-motion-demo="morph" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
   </main>
 </BaseLayout>
+
+<script>
+  const motionNodes = document.querySelectorAll<HTMLElement>('[data-motion-demo]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduceMotion || typeof IntersectionObserver !== 'function') {
+    motionNodes.forEach((node) => (node.dataset.motionState = 'entered'));
+  } else {
+    motionNodes.forEach((node) => (node.dataset.motionState = 'pending'));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          (entry.target as HTMLElement).dataset.motionState = 'entered';
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.25 },
+    );
+
+    motionNodes.forEach((node) => observer.observe(node));
+  }
+</script>
 
 <style>
   .lab-shell {
@@ -535,6 +600,116 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     .evidence-facts {
       grid-template-columns: 1fr;
+    }
+  }
+
+  .motion-specimen {
+    padding-block: clamp(5rem, 9vw, 9rem);
+  }
+
+  .motion-label {
+    grid-column: 1 / -1;
+  }
+
+  .motion-intro {
+    grid-column: 1 / -1;
+    max-width: 42rem;
+    padding-top: clamp(3rem, 6vw, 6rem);
+  }
+
+  .motion-kicker {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  }
+
+  .motion-kicker em {
+    font-style: italic;
+  }
+
+  .motion-title {
+    max-width: 14ch;
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 4.5rem);
+    line-height: 1;
+  }
+
+  .motion-context {
+    max-width: 34rem;
+    margin: 2rem 0 0;
+    color: var(--ink-muted);
+  }
+
+  .motion-vocabulary {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 0;
+    margin-top: clamp(4rem, 7vw, 7rem);
+  }
+
+  .motion-item {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.28fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .motion-item > span {
+    color: var(--ink-muted);
+    font-size: 0.64rem;
+  }
+
+  .motion-item p {
+    margin: 0;
+  }
+
+  .motion-assembly {
+    display: grid;
+    gap: 0.55rem;
+    width: min(28rem, 100%);
+  }
+
+  .motion-segment {
+    display: block;
+    height: 1px;
+    background: var(--ink);
+    transform-origin: left center;
+    transition: transform var(--motion-editorial) var(--ease-editorial);
+  }
+
+  .motion-segment-short {
+    width: 43%;
+  }
+
+  .motion-segment-medium {
+    width: 72%;
+  }
+
+  .motion-segment-long {
+    width: 100%;
+  }
+
+  .motion-block {
+    width: min(16rem, 70vw);
+    height: 1.5rem;
+    background: var(--ink);
+  }
+
+  @media (min-width: 48rem) {
+    .motion-intro {
+      grid-column: 1 / 7;
+    }
+
+    .motion-vocabulary {
+      grid-column: 2 / 12;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .motion-item {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
     }
   }
 </style>

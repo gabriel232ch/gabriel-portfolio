@@ -1,0 +1,72 @@
+.motion-reveal,
+.motion-assemble,
+.motion-shift,
+.motion-morph {
+  transition:
+    opacity var(--motion-editorial) var(--ease-editorial),
+    transform var(--motion-editorial) var(--ease-editorial),
+    border-radius var(--motion-editorial) var(--ease-editorial);
+}
+
+[data-motion-state='pending'].motion-reveal {
+  opacity: 0;
+  transform: translateY(0.6rem);
+}
+
+[data-motion-state='entered'].motion-reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-motion-state='pending'].motion-assemble {
+  transform: scaleX(0.2);
+  transform-origin: left center;
+}
+
+[data-motion-state='pending'].motion-assemble .motion-segment {
+  transform: scaleX(0.5);
+}
+
+[data-motion-state='entered'].motion-assemble {
+  transform: scaleX(1);
+}
+
+[data-motion-state='entered'].motion-assemble .motion-segment {
+  transform: scaleX(1);
+}
+
+[data-motion-state='pending'].motion-shift {
+  transform: translateX(var(--motion-shift-x, 0.5rem));
+}
+
+[data-motion-state='entered'].motion-shift {
+  transform: translateX(0);
+}
+
+[data-motion-state='pending'].motion-morph {
+  border-radius: 999px;
+  transform: scaleX(0.7);
+  transform-origin: left center;
+}
+
+[data-motion-state='entered'].motion-morph {
+  border-radius: 0;
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-reveal,
+  .motion-assemble,
+  .motion-shift,
+  .motion-morph {
+    opacity: 1 !important;
+    transform: none !important;
+    border-radius: 0 !important;
+    transition: none !important;
+  }
+
+  .motion-assemble .motion-segment {
+    transform: none !important;
+    transition: none !important;
+  }
+}

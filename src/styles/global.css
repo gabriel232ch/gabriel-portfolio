@@ -1,6 +1,7 @@
 @import './tokens.css';
 @import './typography.css';
 @import './grid.css';
+@import './motion.css';
 
 * {
   box-sizing: border-box;
