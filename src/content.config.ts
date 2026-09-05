@@ -35,6 +35,29 @@ const work = defineCollection({
           originalReport: z.string().optional(),
         })
         .default({}),
+      home: z
+        .object({
+          question: z.string().min(1),
+          outcome: z.string().min(1),
+          evidence: z
+            .array(
+              z.object({
+                label: z.string().min(1),
+                value: z.string().min(1),
+                note: z.string().min(1).optional(),
+              }),
+            )
+            .min(1),
+          signals: z.array(z.string().min(1)).default([]),
+          visual: z
+            .object({
+              src: z.string().startsWith('/'),
+              alt: z.string().min(1),
+              caption: z.string().min(1).optional(),
+            })
+            .optional(),
+        })
+        .optional(),
       visual: z
         .object({
           accent: z.string().optional(),
@@ -57,6 +80,14 @@ const work = defineCollection({
           code: 'custom',
           path: ['curation'],
           message: 'Featured work must be public.',
+        });
+      }
+
+      if (value.curation === 'featured' && !value.home) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['home'],
+          message: 'Featured work must include Home metadata.',
         });
       }
     }),
