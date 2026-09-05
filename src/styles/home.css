@@ -1,0 +1,125 @@
+.home-navigation {
+  align-items: start;
+  padding-top: var(--space-6);
+}
+
+.home-navigation__links {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: var(--space-6);
+  font-size: 0.625rem;
+}
+
+.home-navigation__links a {
+  text-decoration: none;
+}
+
+.home-navigation__links a:hover {
+  color: var(--ink-muted);
+}
+
+.home-hero {
+  padding-block: clamp(3rem, 9vw, 9rem) clamp(5rem, 11vw, 12rem);
+  row-gap: var(--space-12);
+}
+
+.home-hero__identity,
+.home-hero__phase,
+.home-hero__movements {
+  grid-column: 1 / -1;
+}
+
+.home-hero__identity .section-label {
+  margin-bottom: clamp(2.5rem, 6vw, 5rem);
+}
+
+.home-hero h1 {
+  max-width: 9ch;
+  margin: 0 0 var(--space-8);
+  font-size: clamp(3.75rem, 13vw, 10.5rem);
+}
+
+.home-hero__phase,
+.home-hero__movements {
+  max-width: 34rem;
+}
+
+.home-hero__phase .editorial-rule,
+.home-hero__movements .editorial-rule {
+  margin-bottom: var(--space-4);
+}
+
+.home-hero__phase-label,
+.home-hero__movements-label,
+.home-hero__movement-meta {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.625rem;
+}
+
+.home-hero__phase-statement {
+  margin: var(--space-4) 0 0;
+  font-size: clamp(1.5rem, 4.8vw, 2.35rem);
+}
+
+.home-hero__movements ol {
+  display: grid;
+  gap: var(--space-6);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-hero__movements li + li {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--hairline);
+}
+
+.home-hero__movement-title {
+  margin: var(--space-2) 0 0;
+  font-size: clamp(1.125rem, 3.8vw, 1.45rem);
+}
+
+@media (min-width: 48rem) {
+  .home-navigation__links {
+    grid-column: 1 / span 3;
+  }
+
+  .home-hero {
+    align-items: end;
+    row-gap: clamp(4rem, 8vw, 8rem);
+  }
+
+  .home-hero__identity {
+    grid-column: 1 / span 5;
+  }
+
+  .home-hero__phase {
+    grid-column: 2 / span 4;
+  }
+
+  .home-hero__movements {
+    grid-column: 3 / span 3;
+    justify-self: end;
+  }
+}
+
+@media (min-width: 72rem) {
+  .home-navigation__links {
+    grid-column: 1 / span 4;
+  }
+
+  .home-hero__identity {
+    grid-column: 1 / span 7;
+  }
+
+  .home-hero__phase {
+    grid-column: 7 / span 4;
+    margin-bottom: clamp(2rem, 7vw, 7rem);
+  }
+
+  .home-hero__movements {
+    grid-column: 9 / span 4;
+    margin-bottom: var(--space-8);
+  }
+}

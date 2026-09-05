@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('foundation page exposes the intended temporary construction state', async ({ page }) => {
+test('Home preserves the approved foundation metadata', async ({ page }) => {
   await page.goto('/');
 
   await expect(page).toHaveTitle('Gabriel Chen');

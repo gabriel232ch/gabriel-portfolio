@@ -1,17 +1,21 @@
 ---
-import ThemeToggle from '../components/system/ThemeToggle.astro';
+import { getCollection } from 'astro:content';
+import HomeHero from '../components/home/HomeHero.astro';
+import HomeNavigation from '../components/home/HomeNavigation.astro';
+import { HOME_STATE, HOME_WORK_SLUGS } from '../data/home';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/home.css';
+
+const featuredWork = (await getCollection('work')).filter((entry) =>
+  HOME_WORK_SLUGS.includes(entry.id as (typeof HOME_WORK_SLUGS)[number]),
+);
+void featuredWork;
 ---
 
 <BaseLayout title="Gabriel Chen">
   <main>
-    <header>
-      <p class="data-copy">G. / ∞ · Portfolio foundation</p>
-      <ThemeToggle />
-    </header>
-    <section>
-      <h1 class="display">Gabriel Chen</h1>
-      <p class="body-copy">A living editorial space for work, research, systems, and evolving ideas.</p>
-    </section>
+    <HomeNavigation />
+    <HomeHero state={HOME_STATE} />
+    <section id="work" aria-label="Selected Work"></section>
   </main>
 </BaseLayout>
