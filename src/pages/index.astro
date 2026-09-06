@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import HomeHero from '../components/home/HomeHero.astro';
 import HomeNavigation from '../components/home/HomeNavigation.astro';
+import LuxuryFeature from '../components/home/LuxuryFeature.astro';
 import { HOME_STATE, HOME_WORK_SLUGS } from '../data/home';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/home.css';
@@ -9,13 +10,17 @@ import '../styles/home.css';
 const featuredWork = (await getCollection('work')).filter((entry) =>
   HOME_WORK_SLUGS.includes(entry.id as (typeof HOME_WORK_SLUGS)[number]),
 );
-void featuredWork;
+const luxury = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[0]);
+
+if (!luxury) {
+  throw new Error('Luxury Handbag Pricing Architecture Home entry is missing.');
+}
 ---
 
 <BaseLayout title="Gabriel Chen">
   <main>
     <HomeNavigation />
     <HomeHero state={HOME_STATE} />
-    <section id="work" aria-label="Selected Work"></section>
+    <LuxuryFeature entry={luxury} />
   </main>
 </BaseLayout>

@@ -22,8 +22,4 @@ home:
     - label: Scope boundary
       value: France/U.S. local list prices
       note: Descriptive only; prices are not FX/tax normalized.
-  visual:
-    src: /work/luxury-handbag/01_four_brand_current_architecture.svg
-    alt: Four-brand comparison of current luxury handbag price architecture.
-    caption: Canonical chart from the source analysis.
 ---

@@ -1,0 +1,206 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Marginalia from '../editorial/Marginalia.astro';
+import SectionLabel from '../editorial/SectionLabel.astro';
+import {
+  LUXURY_PRICE_SOURCE,
+  LUXURY_PRICE_SUMMARY,
+  type LuxuryPriceSummary,
+} from '../../data/luxury';
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+}
+
+const { entry } = Astro.props;
+const home = entry.data.home;
+
+if (!home) {
+  throw new Error(`Featured work ${entry.id} requires Home metadata.`);
+}
+
+const marketOrder = ['FR', 'US'] as const;
+const marketNames = {
+  FR: 'France',
+  US: 'United States',
+} as const;
+
+const formatCurrency = (value: number, currency: LuxuryPriceSummary['currency']) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(value);
+
+const marketPanels = marketOrder.map((market) => {
+  const rows = LUXURY_PRICE_SUMMARY.filter((row) => row.market === market);
+  const scaleMin = Math.min(...rows.map((row) => row.minimum));
+  const scaleMax = Math.max(...rows.map((row) => row.maximum));
+
+  return {
+    market,
+    rows,
+    scaleMin,
+    scaleSpan: scaleMax - scaleMin,
+  };
+});
+
+const methodNotes = home.evidence
+  .filter((evidence) => evidence.note)
+  .map((evidence) => `${evidence.label} / ${evidence.note}`);
+---
+
+<section
+  id="work"
+  class="luxury-feature editorial-grid"
+  aria-labelledby="luxury-feature-title"
+  data-work-slug="luxury-handbag-pricing-architecture"
+>
+  <div class="luxury-feature__label">
+    <SectionLabel index="01" label="VISUAL / MARKET" />
+  </div>
+
+  <div class="luxury-feature__question">
+    <p class="data-copy">Question</p>
+    <p class="display luxury-feature__question-text" data-work-question>{home.question}</p>
+  </div>
+
+  <div class="luxury-feature__outcome">
+    <p class="data-copy">Outcome</p>
+    <h2 id="luxury-feature-title" class="display luxury-feature__outcome-title" data-work-outcome>
+      {home.outcome}
+    </h2>
+  </div>
+
+  <div class="luxury-feature__evidence" aria-label="Research evidence">
+    <p class="data-copy">Evidence</p>
+    <dl>
+      {home.evidence.map((evidence) => (
+        <div data-work-evidence>
+          <dt class="data-copy">{evidence.label}</dt>
+          <dd class="body-copy">{evidence.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+
+  <section
+    class="luxury-data-story luxury-feature__visual"
+    aria-labelledby="luxury-data-title"
+    data-luxury-data-story
+  >
+    <p class="editorial luxury-data-story__kicker"><em>Current architecture</em></p>
+    <h3 id="luxury-data-title" class="display luxury-data-story__title">
+      Price architecture, opened by market.
+    </h3>
+    <p class="body-copy luxury-data-story__intro">
+      Expand a market to inspect the observed range, middle 50%, and median for each brand.
+    </p>
+
+    <div class="luxury-data-story__legend data-copy" aria-label="Chart legend">
+      <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--range"></i>MIN–MAX</span>
+      <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--quartile"></i>P25–P75</span>
+      <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--median"></i>MEDIAN</span>
+    </div>
+
+    <div class="luxury-data-story__markets">
+      {marketPanels.map((panel) => (
+        <details
+          class="luxury-data-story__market"
+          data-market-panel
+          data-market={panel.market}
+          open={panel.market === 'US'}
+        >
+          <summary>
+            <span>
+              <strong class="display">{marketNames[panel.market]}</strong>
+              <span class="data-copy">{panel.market} / {panel.rows[0].currency}</span>
+            </span>
+            <span class="data-copy">{panel.rows.length} brands / expand</span>
+          </summary>
+
+          <div class="luxury-data-story__panel">
+            {panel.rows.map((row) => {
+              const rangeStart = ((row.minimum - panel.scaleMin) / panel.scaleSpan) * 100;
+              const rangeWidth = ((row.maximum - row.minimum) / panel.scaleSpan) * 100;
+              const quartileStart = ((row.lowerQuartile - panel.scaleMin) / panel.scaleSpan) * 100;
+              const quartileWidth =
+                ((row.upperQuartile - row.lowerQuartile) / panel.scaleSpan) * 100;
+              const medianPosition = ((row.median - panel.scaleMin) / panel.scaleSpan) * 100;
+
+              return (
+                <div class="luxury-data-story__row" data-brand-row={row.brand}>
+                  <div class="luxury-data-story__row-header">
+                    <strong class="luxury-data-story__brand">{row.brand}</strong>
+                    <span class="luxury-data-story__row-meta data-copy">
+                      {formatCurrency(row.minimum, row.currency)}–{formatCurrency(row.maximum, row.currency)}
+                      / {row.numericObservations} observations
+                    </span>
+                  </div>
+
+                  <div
+                    class="luxury-data-story__range"
+                    role="img"
+                    aria-label={`${row.brand}: ${formatCurrency(row.minimum, row.currency)} to ${formatCurrency(row.maximum, row.currency)}, median ${formatCurrency(row.median, row.currency)}`}
+                    style={`--range-start:${rangeStart}%;--range-width:${rangeWidth}%;--quartile-start:${quartileStart}%;--quartile-width:${quartileWidth}%;--median-position:${medianPosition}%;`}
+                  >
+                    <span class="luxury-data-story__range-line"></span>
+                    <span class="luxury-data-story__quartile-line"></span>
+                    <span class="luxury-data-story__median-line"></span>
+                  </div>
+
+                  <div class="luxury-data-story__values data-copy">
+                    <span>MIN {formatCurrency(row.minimum, row.currency)}</span>
+                    <span>P25 {formatCurrency(row.lowerQuartile, row.currency)}</span>
+                    <span>MEDIAN {formatCurrency(row.median, row.currency)}</span>
+                    <span>P75 {formatCurrency(row.upperQuartile, row.currency)}</span>
+                    <span>MAX {formatCurrency(row.maximum, row.currency)}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <div class="luxury-data-story__source">
+      <a class="data-copy" href={LUXURY_PRICE_SOURCE} target="_blank" rel="noreferrer">
+        SOURCE / BRAND PRICE SUMMARY CSV
+      </a>
+      <span class="data-copy">BUILD-TIME SNAPSHOT / DESCRIPTIVE ONLY</span>
+    </div>
+  </section>
+
+  {methodNotes.length > 0 && (
+    <div class="luxury-feature__marginalia">
+      <Marginalia items={methodNotes} />
+    </div>
+  )}
+</section>
+
+<script>
+  const story = document.querySelector<HTMLElement>('[data-luxury-data-story]');
+
+  if (story) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion || typeof IntersectionObserver !== 'function') {
+      story.dataset.luxuryMotionState = 'entered';
+    } else {
+      story.dataset.luxuryMotionState = 'pending';
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry?.isIntersecting) return;
+          story.dataset.luxuryMotionState = 'entered';
+          observer.disconnect();
+        },
+        { threshold: 0.2 },
+      );
+
+      observer.observe(story);
+    }
+  }
+</script>
