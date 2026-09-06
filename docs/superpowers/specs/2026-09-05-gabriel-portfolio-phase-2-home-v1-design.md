@@ -244,21 +244,13 @@ Canonical project source:
 
 Verified available source material includes the final report, appendix, reproducible scripts, current/historical datasets and calculation outputs, and report visuals.
 
-Available visual assets include:
-
-- four-brand current architecture;
-- price-band battleground;
-- Chanel current ladder;
-- historical icon/access view;
-- four-brand archetype matrix.
-
-Home should use one dominant visual, with at most a small supporting fragment if the composition genuinely needs it. Home must not become a gallery of all five assets.
+The current Home composition uses the canonical brand-price calculation output as a live data story rather than rendering a report image. Market panels expand natively to reveal the observed range, middle 50%, and median for each brand. The source asset remains provenance, not a requirement for the Home presentation.
 
 Recommended narrative stages:
 
 1. short research question;
 2. core outcome statement;
-3. dominant price-architecture visual plus light methodological marginalia.
+3. source-backed price-architecture data story plus light methodological marginalia.
 
 Luxury may carry the strongest motion of the three projects through rule/chart assembly, outcome reveal, and restrained annotation shifts. The implementation must not rewrite or visually animate the underlying data into a different claim.
 
@@ -270,29 +262,36 @@ Canonical project source:
 
 - `gabriel232ch/olist-marketplace-analytics`
 
-Verified available source material includes the validated PostgreSQL analysis pipeline, decision-science documentation, verified findings, prioritization logic, Tableau deliverable, Power BI assets, and static dashboard views.
+Verified available source material includes the validated PostgreSQL analysis pipeline, decision-science documentation, verified findings, prioritization logic, Tableau deliverable, Power BI assets, executive KPI CSV, and static dashboard views.
 
-Existing static visual assets include:
+Olist must not read as a BI dashboard gallery or render the dashboard image on Home. Its current Home composition is a custom, source-backed data story built from the canonical executive KPI CSV and README findings. The display may animate and expand, but it must not invent intermediate values or alter the underlying claims.
 
-- executive overview;
-- opportunity portfolio;
-- fulfillment/CX view.
-
-Olist must not read as a BI dashboard gallery. Its central story is:
+Its central story is:
 
 **Complex marketplace evidence → explainable decision system**
 
-The real `GROW / DEFEND / FIX / INVESTIGATE` prioritization structure should provide the core conceptual visual language before the dashboard evidence appears.
+The real `GROW / DEFEND / FIX / INVESTIGATE` prioritization structure should provide the core conceptual visual language before the data story opens.
 
 Recommended narrative stages:
 
 1. resource-allocation question;
 2. decision posture/outcome structure;
-3. one dominant dashboard/evidence visual with a minimal verified evidence fragment.
+3. a slow, expandable data composition with a minimal verified evidence fragment.
 
-Olist motion should emphasize hierarchy and system assembly rather than continuous dashboard movement.
+Olist motion should emphasize hierarchy and system assembly rather than continuous dashboard movement. The data story uses discrete viewport-entered reveal and slow expansion states; reduced motion preserves the complete information without requiring animation.
 
-### 6.6 Competitive Positioning Against Giants
+### 6.6 Current Home typography direction
+
+The current human-approved Home direction uses one shared hierarchy across the selected-work features. This is a composition decision within the frozen Phase 1 type system, not a reopening of the foundation:
+
+- **Question:** the small italic Cormorant/editorial role used by `Selected Work`;
+- **Outcome:** the restrained Cormorant/editorial lede role used by the `Research, systems...` treatment;
+- **Supporting data:** IBM Plex Mono for labels, contexts, source paths, and compact values;
+- **Supporting titles and signal names:** restrained Inter/display treatment at the already-approved smaller scale.
+
+Luxury and Olist must keep these same roles and sizes. Feature sections may change composition, but they must not introduce a new oversized display treatment or a section-specific font hierarchy.
+
+### 6.7 Competitive Positioning Against Giants
 
 Role: **Argument / Strategy**
 

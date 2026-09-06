@@ -27,8 +27,4 @@ home:
     - DEFEND
     - FIX
     - INVESTIGATE
-  visual:
-    src: /work/olist/executive-overview.jpg
-    alt: Executive overview of Olist marketplace portfolio analysis.
-    caption: Canonical executive overview from the source analysis.
 ---

@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import HomeHero from '../components/home/HomeHero.astro';
 import HomeNavigation from '../components/home/HomeNavigation.astro';
 import LuxuryFeature from '../components/home/LuxuryFeature.astro';
+import OlistFeature from '../components/home/OlistFeature.astro';
 import { HOME_STATE, HOME_WORK_SLUGS } from '../data/home';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/home.css';
@@ -11,9 +12,14 @@ const featuredWork = (await getCollection('work')).filter((entry) =>
   HOME_WORK_SLUGS.includes(entry.id as (typeof HOME_WORK_SLUGS)[number]),
 );
 const luxury = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[0]);
+const olist = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[1]);
 
 if (!luxury) {
   throw new Error('Luxury Handbag Pricing Architecture Home entry is missing.');
+}
+
+if (!olist) {
+  throw new Error('Olist Marketplace Analysis Home entry is missing.');
 }
 ---
 
@@ -22,5 +28,6 @@ if (!luxury) {
     <HomeNavigation />
     <HomeHero state={HOME_STATE} />
     <LuxuryFeature entry={luxury} />
+    <OlistFeature entry={olist} />
   </main>
 </BaseLayout>

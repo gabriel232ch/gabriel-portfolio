@@ -1,0 +1,191 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SectionLabel from '../editorial/SectionLabel.astro';
+import { OLIST_DATA_METRICS, OLIST_DATA_SOURCES } from '../../data/olist';
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+}
+
+const { entry } = Astro.props;
+const home = entry.data.home;
+
+if (!home) {
+  throw new Error(`Featured work ${entry.id} requires Home metadata.`);
+}
+
+const comparisonMetrics = OLIST_DATA_METRICS.filter(
+  (metric) => metric.id !== 'fix',
+);
+const fixMetric = OLIST_DATA_METRICS.find((metric) => metric.id === 'fix');
+
+if (!fixMetric || fixMetric.id !== 'fix') {
+  throw new Error('Olist Home data is missing the Fix-before-growth metric.');
+}
+---
+
+<section
+  class="olist-feature editorial-grid"
+  aria-labelledby="olist-feature-title"
+  data-work-slug="olist-marketplace-analysis"
+>
+  <div class="olist-feature__label">
+    <SectionLabel index="02" label="SYSTEM / ANALYTICS" />
+  </div>
+
+  <div class="olist-feature__question">
+    <p class="data-copy">Question</p>
+    <p class="display olist-feature__question-text" data-work-question>{home.question}</p>
+  </div>
+
+  <div class="olist-feature__signals" aria-label="Decision signals">
+    <p class="data-copy">Decision signals</p>
+    <ul>
+      {home.signals.map((signal) => (
+        <li data-decision-signal data-olist-signal>{signal}</li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="olist-feature__outcome">
+    <p class="data-copy">Outcome</p>
+    <h2 id="olist-feature-title" class="display olist-feature__outcome-title" data-work-outcome>
+      {home.outcome}
+    </h2>
+  </div>
+
+  <div class="olist-feature__evidence" aria-label="Analysis evidence">
+    <p class="data-copy">Evidence</p>
+    <dl>
+      {home.evidence.map((evidence) => (
+        <div data-work-evidence>
+          <dt class="data-copy">{evidence.label}</dt>
+          <dd class="body-copy">
+            {evidence.value}
+            {evidence.note && <span class="olist-feature__evidence-note data-copy">{evidence.note}</span>}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+
+  <section
+    class="olist-data-story olist-feature__data-story"
+    aria-labelledby="olist-data-title"
+    data-olist-data-story
+  >
+    <div class="olist-data-story__header">
+      <p class="editorial olist-data-story__kicker"><em>Decision system</em></p>
+      <h3 id="olist-data-title" class="display olist-data-story__title">
+        Decision signals, in motion.
+      </h3>
+      <p class="body-copy olist-data-story__intro">
+        Open each signal to follow the observed change from scale to operating priority.
+      </p>
+    </div>
+
+    <div class="olist-data-story__metrics">
+      {comparisonMetrics.map((metric, index) => {
+        const fromPosition = (metric.fromValue / metric.scaleMax) * 100;
+        const toPosition = (metric.toValue / metric.scaleMax) * 100;
+        const lineStart = Math.min(fromPosition, toPosition);
+        const lineWidth = Math.abs(toPosition - fromPosition);
+
+        return (
+          <details class="olist-data-story__metric" data-olist-metric open={index === 0}>
+            <summary>
+              <span class="olist-data-story__metric-heading">
+                <span class="data-copy">{metric.label}</span>
+                <strong class="display">{metric.toLabel}</strong>
+              </span>
+              <span class="data-copy">{metric.context} / expand</span>
+            </summary>
+
+            <div class="olist-data-story__metric-panel">
+              <div
+                class="olist-data-story__comparison"
+                role="img"
+                aria-label={`${metric.label}: ${metric.fromLabel} in 2017 to ${metric.toLabel} in 2018`}
+                style={`--olist-from:${fromPosition}%;--olist-to:${toPosition}%;--olist-line-start:${lineStart}%;--olist-line-width:${lineWidth}%;`}
+              >
+                <span class="olist-data-story__comparison-track"></span>
+                <span class="olist-data-story__comparison-line"></span>
+                <span class="olist-data-story__comparison-point olist-data-story__comparison-point--from"></span>
+                <span class="olist-data-story__comparison-point olist-data-story__comparison-point--to"></span>
+              </div>
+              <div class="olist-data-story__comparison-values data-copy">
+                <span><b>2017</b> {metric.fromLabel}</span>
+                <span><b>2018</b> {metric.toLabel}</span>
+              </div>
+              <p class="olist-data-story__metric-note body-copy">{metric.note}</p>
+            </div>
+          </details>
+        );
+      })}
+
+      <details class="olist-data-story__metric" data-olist-metric>
+        <summary>
+          <span class="olist-data-story__metric-heading">
+            <span class="data-copy">{fixMetric.label}</span>
+            <strong class="display">{fixMetric.segments} markets</strong>
+          </span>
+          <span class="data-copy">{fixMetric.context} / expand</span>
+        </summary>
+
+        <div class="olist-data-story__metric-panel">
+          <div class="olist-data-story__segment-rail" aria-label={`${fixMetric.segments} material Fix markets`}>
+            {Array.from({ length: fixMetric.segments }, (_, index) => (
+              <span class="olist-data-story__segment" data-olist-segment={index + 1}>
+                {String(index + 1).padStart(2, '0')}
+              </span>
+            ))}
+          </div>
+          <p class="olist-data-story__segment-caption data-copy" data-olist-segment-caption>
+            ONE MARK = ONE MATERIAL FIX MARKET
+          </p>
+          <div class="olist-data-story__fix-values data-copy">
+            <span><b>{fixMetric.segments}</b> material markets</span>
+            <span><b>{fixMetric.orders}</b></span>
+            <span><b>{fixMetric.gmvExposure}</b></span>
+            <span><b>{fixMetric.lateOrders}</b></span>
+          </div>
+          <p class="olist-data-story__metric-note body-copy">{fixMetric.note}</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="olist-data-story__source">
+      <a class="data-copy" href={OLIST_DATA_SOURCES.executiveKpis} target="_blank" rel="noreferrer">
+        SOURCE / EXECUTIVE KPIS CSV
+      </a>
+      <a class="data-copy" href={OLIST_DATA_SOURCES.readme} target="_blank" rel="noreferrer">
+        SOURCE / ANALYSIS README
+      </a>
+    </div>
+  </section>
+</section>
+
+<script>
+  const story = document.querySelector<HTMLElement>('[data-olist-data-story]');
+
+  if (story) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion || typeof IntersectionObserver !== 'function') {
+      story.dataset.olistMotionState = 'entered';
+    } else {
+      story.dataset.olistMotionState = 'pending';
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry?.isIntersecting) return;
+          story.dataset.olistMotionState = 'entered';
+          observer.disconnect();
+        },
+        { threshold: 0.2 },
+      );
+
+      observer.observe(story);
+    }
+  }
+</script>

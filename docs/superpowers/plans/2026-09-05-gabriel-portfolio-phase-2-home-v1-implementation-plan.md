@@ -4,7 +4,7 @@
 
 **Goal:** Build the approved Home v1 as a living editorial front door using only real curated content, the frozen Phase 1 design system, responsive editorial compositions, and discrete viewport-driven motion.
 
-**Architecture:** Home remains a static Astro page composed from focused Home components. Selected Work is sourced from Astro content entries that carry a small Home-presentation contract; current-state signals live in a typed `src/data/home.ts` object. Three work features remain intentionally different in composition while sharing the frozen grid, typography, primitives, and motion grammar.
+**Architecture:** Home remains a static Astro page composed from focused Home components. Selected Work is sourced from Astro content entries that carry a small Home-presentation contract; current-state signals live in a typed `src/data/home.ts` object, while project data stories use typed build-time snapshots of canonical source outputs. Three work features remain intentionally different in composition while sharing the frozen grid, the approved Chanel typography hierarchy, editorial primitives, and discrete motion grammar.
 
 **Tech Stack:** Astro 7 static output, Astro Content Collections, TypeScript 6, CSS, Vitest 4, Playwright 1.62, Cloudflare Workers/Wrangler 4. No new runtime dependency is authorized for Phase 2.
 
@@ -32,6 +32,8 @@
 ### Create
 
 - `src/data/home.ts` — typed current phase, two movements, Now threads, optional personal snapshot, optional archive glimpse, and approved Selected Work slug order.
+- `src/data/luxury.ts` — typed build-time snapshot of the canonical Luxury brand-price summary CSV.
+- `src/data/olist.ts` — typed build-time snapshot of the canonical Olist executive KPI findings used by the Home data story.
 - `src/components/home/HomeNavigation.astro` — lightweight in-page WORK / ABOUT / INDEX navigation plus unchanged ThemeToggle.
 - `src/components/home/HomeHero.astro` — balanced-asymmetry Living Signal Hero.
 - `src/components/home/LuxuryFeature.astro` — Visual / Market composition.
@@ -44,8 +46,6 @@
 - `src/content/work/luxury-handbag-pricing-architecture.md`
 - `src/content/work/olist-marketplace-analysis.md`
 - `src/content/work/competitive-positioning-against-giants.md`
-- `public/work/luxury-handbag/01_four_brand_current_architecture.svg`
-- `public/work/olist/executive-overview.jpg`
 - `tests/unit/home.test.ts`
 - `tests/e2e/home.spec.ts`
 - `tests/e2e/home-motion.spec.ts`
@@ -69,8 +69,8 @@
 - Create: `src/content/work/luxury-handbag-pricing-architecture.md`
 - Create: `src/content/work/olist-marketplace-analysis.md`
 - Create: `src/content/work/competitive-positioning-against-giants.md`
-- Create: `public/work/luxury-handbag/01_four_brand_current_architecture.svg`
-- Create: `public/work/olist/executive-overview.jpg`
+- Create: `src/data/luxury.ts`
+- Create: `src/data/olist.ts`
 - Modify: `src/content.config.ts`
 - Test: `tests/unit/home.test.ts`
 
@@ -84,14 +84,15 @@
 
 - [ ] **Step 1: Verify all three source packages before writing copy**
 
-For Luxury and Olist, verify the canonical repositories and the exact asset paths used by the plan:
+For Luxury and Olist, verify the canonical repositories and the exact source paths used by the plan:
 
 ```text
 gabriel232ch/luxury-handbag-price-architecture
-  final_report_assets/01_four_brand_current_architecture.svg
+  competitive_pricing_calculations/brand_price_summary.csv
 
 gabriel232ch/olist-marketplace-analytics
-  dashboard/images/executive-overview.jpg
+  dashboard/data/executive_kpis.csv
+  README.md
 ```
 
 For Competitive Positioning, search the executor workspace and connected project material for this canonical source package:
@@ -222,21 +223,9 @@ export const HOME_STATE = {
 
 Do not add a `PH.xx` or `G.xxx` value because neither registry currently contains a real Home coordinate.
 
-- [ ] **Step 6: Copy the two approved source visuals into the portfolio**
+- [ ] **Step 6: Record the approved source outputs for the Home data stories**
 
-Use the canonical raw files; do not redraw them:
-
-```bash
-mkdir -p public/work/luxury-handbag public/work/olist
-curl -fsSL \
-  https://raw.githubusercontent.com/gabriel232ch/luxury-handbag-price-architecture/main/final_report_assets/01_four_brand_current_architecture.svg \
-  -o public/work/luxury-handbag/01_four_brand_current_architecture.svg
-curl -fsSL \
-  https://raw.githubusercontent.com/gabriel232ch/olist-marketplace-analytics/main/dashboard/images/executive-overview.jpg \
-  -o public/work/olist/executive-overview.jpg
-```
-
-If network policy blocks `curl`, retrieve the same exact repository files through the available GitHub connection; do not substitute screenshots from search engines.
+Use the canonical calculation and KPI outputs as build-time typed snapshots. The Home may animate the presentation of these values, but it must not redraw a report image, invent intermediate values, or alter the underlying claims. Keep the canonical repository links visible in the feature source rows.
 
 - [ ] **Step 7: Create the three curated work entries**
 
@@ -257,7 +246,7 @@ Luxury must preserve these verified boundaries from its canonical repository:
 Question: How does Chanel's visible handbag price architecture differ from Louis Vuitton, Dior, and Hermès across France and the United States?
 Outcome: Chanel combines a higher visible entry threshold with a stable Classic high-end anchor; lower tiers overlap more with Louis Vuitton and Dior while upper tiers overlap more with Hermès.
 Evidence: 161 accepted current observations / 147 numeric prices; 77 accepted historical observations / 13 product lines; local France/U.S. list prices remain descriptive and are not FX/tax normalized.
-Visual: /work/luxury-handbag/01_four_brand_current_architecture.svg
+Home visual: none; the feature uses the canonical brand-price summary CSV as an expandable data story.
 ```
 
 Olist must preserve these verified boundaries from its canonical repository:
@@ -267,7 +256,7 @@ Question: Where should Olist allocate commercial and operational resources to gr
 Outcome: Growth was volume-led while operating quality weakened as scale grew, supporting distinct Grow / Defend / Fix / Investigate portfolios rather than one opaque score.
 Evidence: Jan–Aug GMV proxy R$2.99M → R$7.22M (+141.13%), with 99.40% of change allocated to order volume; on-time delivery 96.50% → 92.27%; six material Fix markets cover 2,920 orders and R$409K GMV exposure.
 Signals: GROW, DEFEND, FIX, INVESTIGATE
-Visual: /work/olist/executive-overview.jpg
+Home visual: none; the feature uses `dashboard/data/executive_kpis.csv` and README findings as an expandable data story.
 ```
 
 Competitive Positioning must be written only after opening the six named source files from Step 1. Its `question`, `outcome`, and evidence rows must be direct editorial compressions of the final report/evidence ledger, with no unsupported market-size, hiring-performance, causal, or financial claims. Store its canonical source label in `source.originalReport`; do not expose private local filesystem paths.
@@ -291,13 +280,13 @@ Check that:
 - every number in the Luxury and Olist entries exists in the canonical README/report;
 - Competitive copy can be traced to the opened source package;
 - no `G.xxx` or `PH.xx` was invented;
-- copied assets are the canonical repository files;
+- typed data snapshots trace to the canonical repository outputs;
 - `git diff --check` is clean.
 
 Then commit and push the implementation branch:
 
 ```bash
-git add src/content.config.ts src/data/home.ts src/content/work public/work tests/unit/home.test.ts
+git add src/content.config.ts src/data/home.ts src/data/luxury.ts src/data/olist.ts src/content/work tests/unit/home.test.ts
 git commit -m "feat: curate Home v1 content sources"
 git push -u origin phase-2/home-v1
 ```
@@ -402,6 +391,7 @@ If rejected, refine only Task 2. If approved, run `npm run verify`, commit `feat
 
 **Files:**
 - Create: `src/components/home/LuxuryFeature.astro`
+- Create: `src/data/luxury.ts`
 - Modify: `src/pages/index.astro`
 - Modify: `src/styles/home.css`
 - Modify/Test: `tests/e2e/home.spec.ts`
@@ -416,22 +406,20 @@ If rejected, refine only Task 2. If approved, run `npm run verify`, commit `feat
 ```ts
 const luxury = page.locator('[data-work-slug="luxury-handbag-pricing-architecture"]');
 await expect(luxury).toBeVisible();
-await expect(luxury.locator('img')).toHaveAttribute(
-  'src',
-  '/work/luxury-handbag/01_four_brand_current_architecture.svg',
-);
+await expect(luxury.locator('img')).toHaveCount(0);
 await expect(luxury.locator('[data-work-question]')).toBeVisible();
 await expect(luxury.locator('[data-work-outcome]')).toBeVisible();
 await expect(luxury.locator('[data-work-evidence]')).toHaveCount(3);
+await expect(luxury.locator('[data-luxury-data-story]')).toBeVisible();
 ```
 
 Run `npx playwright test tests/e2e/home.spec.ts` and confirm FAIL.
 
 - [ ] **Step 2: Implement the Luxury composition**
 
-Use one dominant `ImagePlate`; do not add the other four available report visuals. Place the question first but keep the outcome visually dominant. Use marginalia for sample/method boundaries instead of turning the section into a report page.
+Use the canonical brand-price summary CSV to create one expandable data story; do not add the report visuals as Home images. Place the question first but keep the outcome visually dominant. Use marginalia for sample/method boundaries instead of turning the section into a report page.
 
-Desktop may use asymmetric parallel visual/text relationships; mobile must sequence Question → Outcome → Evidence → visual without dropping evidence.
+Desktop may use asymmetric parallel data/text relationships; mobile must sequence Question → Outcome → Evidence → data story without dropping evidence.
 
 - [ ] **Step 3: Verify**
 
@@ -442,7 +430,7 @@ npm run verify
 
 - [ ] **Step 4: Human Visual Review Gate — STOP before commit**
 
-Review Desktop/Mobile in Light/Dark. Decision required: visual impact, hierarchy, whether one SVG is sufficient, and whether the section feels like an editorial research spread rather than a card/gallery.
+Review Desktop/Mobile in Light/Dark. Decision required: visual impact, hierarchy, whether the expandable data story feels like an editorial research spread rather than a card/gallery, and whether the source-backed values remain legible.
 
 On approval: final verify, commit `feat: compose Luxury selected work`, push branch, verify remote SHA, proceed to Task 4.
 
@@ -454,6 +442,7 @@ On approval: final verify, commit `feat: compose Luxury selected work`, push bra
 
 **Files:**
 - Create: `src/components/home/OlistFeature.astro`
+- Create: `src/data/olist.ts`
 - Modify: `src/pages/index.astro`
 - Modify: `src/styles/home.css`
 - Modify/Test: `tests/e2e/home.spec.ts`
@@ -465,7 +454,7 @@ On approval: final verify, commit `feat: compose Luxury selected work`, push bra
 
 - [ ] **Step 1: Add failing E2E assertions**
 
-Assert the Olist section appears after Luxury, exposes four `[data-decision-signal]` nodes, renders one main dashboard image, and contains Question/Outcome/Evidence.
+Assert the Olist section appears after Luxury, exposes four `[data-decision-signal]` nodes, renders no image, exposes one source-backed `[data-olist-data-story]` with three expandable metrics, and contains Question/Outcome/Evidence.
 
 Use DOM order rather than pixel position:
 
@@ -483,9 +472,9 @@ Run the test and confirm FAIL.
 
 - [ ] **Step 2: Implement the Olist composition**
 
-Lead from the resource-allocation question into the real `GROW / DEFEND / FIX / INVESTIGATE` decision vocabulary, then the outcome/evidence, then one `executive-overview.jpg` visual. Do not create a three-dashboard gallery.
+Lead from the resource-allocation question into the real `GROW / DEFEND / FIX / INVESTIGATE` decision vocabulary, then the outcome/evidence, then a custom source-backed data story built from the exact executive KPI findings. Do not render `executive-overview.jpg`, create a dashboard gallery, or invent intermediate values.
 
-The dashboard is evidence, not the hero of the section. Keep the decision structure legible without the image.
+Use native expandable controls and discrete viewport-entered reveal states so the data feels alive without continuous scroll-scrubbing. Keep all core evidence legible without JavaScript and preserve a complete reduced-motion state.
 
 - [ ] **Step 3: Verify**
 
@@ -493,7 +482,7 @@ Run targeted Home tests and full `npm run verify`.
 
 - [ ] **Step 4: Human Visual Review Gate — STOP before commit**
 
-Decision required: whether the section reads as decision intelligence rather than a BI portfolio, and whether its density provides a useful contrast with Luxury.
+Decision required: whether the section reads as decision intelligence rather than a BI portfolio, whether the custom data composition is visually useful without an image, whether the slow expansion pace feels intentional, and whether its density provides a useful contrast with Luxury.
 
 On approval: final verify, commit `feat: compose Olist selected work`, push, verify remote SHA, proceed to Task 5.
 
@@ -727,16 +716,13 @@ On approval: final verify, commit `feat: complete Home current and closing layer
 
 - [ ] **Step 1: Add final integrated E2E checks**
 
-Expand `home.spec.ts` to assert full Selected Work order and section order. Add an asset-response check for the two local Home visuals:
+Expand `home.spec.ts` to assert full Selected Work order and section order. Confirm the current Home data stories remain image-free while their source-backed content is present:
 
 ```ts
-for (const path of [
-  '/work/luxury-handbag/01_four_brand_current_architecture.svg',
-  '/work/olist/executive-overview.jpg',
-]) {
-  const response = await page.request.get(path);
-  expect(response.ok()).toBe(true);
-}
+await expect(page.locator('[data-work-slug="luxury-handbag-pricing-architecture"] img')).toHaveCount(0);
+await expect(page.locator('[data-work-slug="luxury-handbag-pricing-architecture"] [data-luxury-data-story]')).toBeVisible();
+await expect(page.locator('[data-work-slug="olist-marketplace-analysis"] img')).toHaveCount(0);
+await expect(page.locator('[data-work-slug="olist-marketplace-analysis"] [data-olist-data-story]')).toBeVisible();
 ```
 
 Ensure mobile contains the same three questions/outcomes/evidence sets as desktop; do not assert identical pixel layout.
