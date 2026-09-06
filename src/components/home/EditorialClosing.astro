@@ -1,0 +1,46 @@
+---
+import SectionLabel from '../editorial/SectionLabel.astro';
+import type { HomeArchiveItem } from '../../data/home';
+
+interface Props {
+  archive: HomeArchiveItem | null;
+}
+
+const { archive } = Astro.props;
+---
+
+<section id="index" class="editorial-closing editorial-grid" aria-labelledby="closing-title">
+  <div class="editorial-closing__label">
+    <SectionLabel index="05" label="INDEX / COORDINATES" />
+  </div>
+
+  <div class="editorial-closing__main motion-reveal" data-home-motion>
+    <p class="editorial editorial-closing__kicker"><em>Editorial closing</em></p>
+    <h2 id="closing-title" class="display editorial-closing__title">Work, research, and evolving ideas.</h2>
+
+    <nav class="editorial-closing__coordinates" aria-label="Editorial coordinates">
+      <a href="#about">
+        <span class="display">ABOUT</span>
+        <span class="data-copy">NOW / CURRENT ATTENTION</span>
+      </a>
+      <a href="#index">
+        <span class="display">INDEX</span>
+        <span class="data-copy">THIS CLOSING / HOME V1</span>
+      </a>
+    </nav>
+  </div>
+
+  {archive && (
+    <aside class="editorial-closing__archive motion-reveal" data-home-motion>
+      <p class="data-copy">{archive.type} / {archive.date}</p>
+      <h3>{archive.title}</h3>
+      {archive.note && <p class="body-copy">{archive.note}</p>}
+    </aside>
+  )}
+
+  <div class="editorial-closing__notation data-copy">
+    <span>GABRIEL CHEN</span>
+    <span>UPDATED 2026-09-05</span>
+    <span>gabrielchen.me</span>
+  </div>
+</section>

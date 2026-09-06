@@ -4,11 +4,26 @@ test('Home exposes lightweight navigation and the Living Signal Hero', async ({ 
   await page.goto('/');
 
   await expect(page.getByRole('link', { name: 'WORK' })).toHaveAttribute('href', '#work');
-  await expect(page.getByRole('link', { name: 'ABOUT' })).toHaveAttribute('href', '#about');
-  await expect(page.getByRole('link', { name: 'INDEX' })).toHaveAttribute('href', '#index');
+  await expect(page.getByRole('link', { name: 'ABOUT', exact: true })).toHaveAttribute('href', '#about');
+  await expect(page.getByRole('link', { name: 'INDEX', exact: true })).toHaveAttribute('href', '#index');
   await expect(page.getByRole('heading', { level: 1, name: 'Gabriel Chen' })).toBeVisible();
   await expect(page.getByText('CURRENT PHASE')).toBeVisible();
   await expect(page.locator('[data-home-movement]')).toHaveCount(2);
+});
+
+test('Home exposes the Now layer and quieter editorial closing', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.locator('#about')).toContainText('Employer Brand / GEO at JoinQuant');
+  await expect(page.locator('#about [data-now-side]')).toHaveCount(2);
+  await expect(page.locator('[data-personal-snapshot]')).toHaveCount(0);
+  await expect(page.locator('#index')).toBeVisible();
+
+  await page.getByRole('link', { name: 'ABOUT', exact: true }).click();
+  await expect(page.locator('#about')).toBeInViewport();
+
+  await page.getByRole('link', { name: 'INDEX', exact: true }).click();
+  await expect(page.locator('#index')).toBeInViewport();
 });
 
 test('Home renders Luxury as an expandable source-backed market story', async ({ page }) => {

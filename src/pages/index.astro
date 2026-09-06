@@ -4,6 +4,8 @@ import '@fontsource-variable/newsreader/wght.css';
 import HomeHero from '../components/home/HomeHero.astro';
 import HomeMotionController from '../components/home/HomeMotionController.astro';
 import HomeNavigation from '../components/home/HomeNavigation.astro';
+import NowSection from '../components/home/NowSection.astro';
+import EditorialClosing from '../components/home/EditorialClosing.astro';
 import LuxuryFeature from '../components/home/LuxuryFeature.astro';
 import OlistFeature from '../components/home/OlistFeature.astro';
 import CompetitiveFeature from '../components/home/CompetitiveFeature.astro';
@@ -38,6 +40,8 @@ if (!competitive) {
     <LuxuryFeature entry={luxury} />
     <OlistFeature entry={olist} />
     <CompetitiveFeature entry={competitive} />
+    <NowSection now={HOME_STATE.now} personalSnapshot={HOME_STATE.personalSnapshot} />
+    <EditorialClosing archive={HOME_STATE.archive} />
     <HomeMotionController />
   </main>
 </BaseLayout>

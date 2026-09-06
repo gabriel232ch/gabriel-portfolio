@@ -4,6 +4,19 @@ export const HOME_WORK_SLUGS = [
   'competitive-positioning-against-giants',
 ] as const;
 
+export interface PersonalSnapshot {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+export interface HomeArchiveItem {
+  type: string;
+  date: string;
+  title: string;
+  note?: string;
+}
+
 export const HOME_STATE = {
   currentPhase: {
     label: 'CURRENT PHASE',

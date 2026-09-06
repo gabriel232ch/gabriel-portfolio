@@ -1,0 +1,39 @@
+---
+import SectionLabel from '../editorial/SectionLabel.astro';
+import type { HOME_STATE, PersonalSnapshot } from '../../data/home';
+
+interface Props {
+  now: typeof HOME_STATE.now;
+  personalSnapshot: PersonalSnapshot | null;
+}
+
+const { now, personalSnapshot } = Astro.props;
+---
+
+<section id="about" class="home-now editorial-grid" aria-labelledby="now-title">
+  <div class="home-now__label">
+    <SectionLabel index="04" label="NOW / CURRENT" />
+  </div>
+
+  <div class="home-now__primary motion-reveal" data-home-motion>
+    <p class="data-copy">PRIMARY THREAD / CURRENT ATTENTION</p>
+    <h2 id="now-title" class="editorial home-now__primary-title">{now.primary.title}</h2>
+    <p class="body-copy home-now__primary-state">{now.primary.state}</p>
+  </div>
+
+  <div class="home-now__side" aria-label="Side threads">
+    {now.side.map((thread) => (
+      <article class="home-now__side-thread motion-reveal" data-home-motion data-now-side>
+        <h3>{thread.title}</h3>
+        <p class="body-copy">{thread.state}</p>
+      </article>
+    ))}
+  </div>
+
+  {personalSnapshot && (
+    <figure class="home-now__snapshot motion-reveal" data-home-motion data-personal-snapshot>
+      <img src={personalSnapshot.src} alt={personalSnapshot.alt} />
+      {personalSnapshot.caption && <figcaption class="data-copy">{personalSnapshot.caption}</figcaption>}
+    </figure>
+  )}
+</section>
