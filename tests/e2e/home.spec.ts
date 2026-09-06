@@ -26,6 +26,39 @@ test('Home exposes the Now layer and quieter editorial closing', async ({ page }
   await expect(page.locator('#index')).toBeInViewport();
 });
 
+test('Home preserves the integrated editorial order and image-free work stories', async ({ page }) => {
+  await page.goto('/');
+
+  const sections = page.locator('main > header, main > section');
+  await expect(sections).toHaveCount(7);
+  await expect(sections.nth(0)).toHaveClass(/home-navigation/);
+  await expect(sections.nth(1)).toHaveClass(/home-hero/);
+  await expect(sections.nth(2)).toHaveAttribute(
+    'data-work-slug',
+    'luxury-handbag-pricing-architecture',
+  );
+  await expect(sections.nth(3)).toHaveAttribute('data-work-slug', 'olist-marketplace-analysis');
+  await expect(sections.nth(4)).toHaveAttribute(
+    'data-work-slug',
+    'competitive-positioning-against-giants',
+  );
+  await expect(sections.nth(5)).toHaveId('about');
+  await expect(sections.nth(6)).toHaveId('index');
+
+  const workStories = page.locator('[data-work-slug]');
+  await expect(workStories).toHaveCount(3);
+  for (const story of await workStories.all()) {
+    await expect(story.locator('img')).toHaveCount(0);
+    await expect(story.locator('[data-work-question]')).toBeVisible();
+    await expect(story.locator('[data-work-outcome]')).toBeVisible();
+    await expect(story.locator('[data-work-evidence]')).toHaveCount(3);
+  }
+
+  await expect(page.locator('[data-luxury-data-story]')).toBeVisible();
+  await expect(page.locator('[data-olist-data-story]')).toBeVisible();
+  await expect(page.locator('[data-competitive-data-story]')).toBeVisible();
+});
+
 test('Home renders Luxury as an expandable source-backed market story', async ({ page }) => {
   await page.goto('/');
 
