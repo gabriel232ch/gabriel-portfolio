@@ -33,19 +33,23 @@ if (!sourceUrl) {
     <SectionLabel index="03" label="STRATEGY / COMPARATIVE" />
   </div>
 
-  <div class="competitive-feature__question">
+  <div
+    class="competitive-feature__question motion-shift"
+    data-home-motion
+    style="--motion-shift-x: -0.5rem;"
+  >
     <p class="data-copy">Question</p>
     <p class="display competitive-feature__question-text" data-work-question>{home.question}</p>
   </div>
 
-  <div class="competitive-feature__outcome">
+  <div class="competitive-feature__outcome motion-reveal" data-home-motion>
     <p class="data-copy">Outcome</p>
     <h2 id="competitive-feature-title" class="display competitive-feature__outcome-title" data-work-outcome>
       {home.outcome}
     </h2>
   </div>
 
-  <div class="competitive-feature__evidence" aria-label="Research evidence">
+  <div class="competitive-feature__evidence motion-reveal" data-home-motion aria-label="Research evidence">
     <p class="data-copy">Evidence</p>
     <dl>
       {home.evidence.map((evidence) => (
@@ -61,7 +65,8 @@ if (!sourceUrl) {
   </div>
 
   <section
-    class="competitive-data-story competitive-feature__data-story"
+    class="competitive-data-story competitive-feature__data-story motion-reveal"
+    data-home-motion
     aria-labelledby="competitive-data-title"
     data-competitive-data-story
   >
@@ -75,9 +80,17 @@ if (!sourceUrl) {
       </p>
     </div>
 
-    <ol class="competitive-data-story__mechanisms" aria-label="Five analytical mechanisms">
+    <ol
+      class="competitive-data-story__mechanisms motion-assemble"
+      data-home-motion
+      aria-label="Five analytical mechanisms"
+    >
       {COMPETITIVE_MECHANISMS.map((mechanism, index) => (
-        <li class="competitive-data-story__mechanism" data-competitive-mechanism>
+        <li
+          class="competitive-data-story__mechanism motion-reveal"
+          data-home-motion
+          data-competitive-mechanism
+        >
           <details open={index === 0}>
             <summary>
               <span class="competitive-data-story__mechanism-number data-copy">
@@ -102,28 +115,3 @@ if (!sourceUrl) {
     </div>
   </section>
 </section>
-
-<script>
-  const story = document.querySelector<HTMLElement>('[data-competitive-data-story]');
-
-  if (story) {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduceMotion || typeof IntersectionObserver !== 'function') {
-      story.dataset.competitiveMotionState = 'entered';
-    } else {
-      story.dataset.competitiveMotionState = 'pending';
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (!entry?.isIntersecting) return;
-          story.dataset.competitiveMotionState = 'entered';
-          observer.disconnect();
-        },
-        { threshold: 0.2 },
-      );
-
-      observer.observe(story);
-    }
-  }
-</script>

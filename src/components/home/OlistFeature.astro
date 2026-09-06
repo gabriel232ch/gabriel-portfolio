@@ -33,12 +33,16 @@ if (!fixMetric || fixMetric.id !== 'fix') {
     <SectionLabel index="02" label="SYSTEM / ANALYTICS" />
   </div>
 
-  <div class="olist-feature__question">
+  <div
+    class="olist-feature__question motion-shift"
+    data-home-motion
+    style="--motion-shift-x: -0.5rem;"
+  >
     <p class="data-copy">Question</p>
     <p class="display olist-feature__question-text" data-work-question>{home.question}</p>
   </div>
 
-  <div class="olist-feature__signals" aria-label="Decision signals">
+  <div class="olist-feature__signals motion-assemble" data-home-motion aria-label="Decision signals">
     <p class="data-copy">Decision signals</p>
     <ul>
       {home.signals.map((signal) => (
@@ -47,14 +51,14 @@ if (!fixMetric || fixMetric.id !== 'fix') {
     </ul>
   </div>
 
-  <div class="olist-feature__outcome">
+  <div class="olist-feature__outcome motion-reveal" data-home-motion>
     <p class="data-copy">Outcome</p>
     <h2 id="olist-feature-title" class="display olist-feature__outcome-title" data-work-outcome>
       {home.outcome}
     </h2>
   </div>
 
-  <div class="olist-feature__evidence" aria-label="Analysis evidence">
+  <div class="olist-feature__evidence motion-reveal" data-home-motion aria-label="Analysis evidence">
     <p class="data-copy">Evidence</p>
     <dl>
       {home.evidence.map((evidence) => (
@@ -70,7 +74,8 @@ if (!fixMetric || fixMetric.id !== 'fix') {
   </div>
 
   <section
-    class="olist-data-story olist-feature__data-story"
+    class="olist-data-story olist-feature__data-story motion-reveal"
+    data-home-motion
     aria-labelledby="olist-data-title"
     data-olist-data-story
   >
@@ -164,28 +169,3 @@ if (!fixMetric || fixMetric.id !== 'fix') {
     </div>
   </section>
 </section>
-
-<script>
-  const story = document.querySelector<HTMLElement>('[data-olist-data-story]');
-
-  if (story) {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduceMotion || typeof IntersectionObserver !== 'function') {
-      story.dataset.olistMotionState = 'entered';
-    } else {
-      story.dataset.olistMotionState = 'pending';
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (!entry?.isIntersecting) return;
-          story.dataset.olistMotionState = 'entered';
-          observer.disconnect();
-        },
-        { threshold: 0.2 },
-      );
-
-      observer.observe(story);
-    }
-  }
-</script>

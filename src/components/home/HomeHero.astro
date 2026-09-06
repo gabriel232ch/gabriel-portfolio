@@ -12,19 +12,24 @@ const { state } = Astro.props;
 ---
 
 <section class="home-hero editorial-grid" aria-labelledby="home-title">
-  <div class="home-hero__identity">
+  <div class="home-hero__identity motion-reveal" data-home-motion>
     <SectionLabel label="LIVING SIGNAL" />
     <h1 id="home-title" class="display">Gabriel Chen</h1>
     <FolioNumber current="01" />
   </div>
 
-  <div class="home-hero__phase">
+  <div
+    class="home-hero__phase motion-shift"
+    data-home-motion
+    style="--motion-shift-x: -0.5rem;"
+  >
     <EditorialRule />
     <p class="home-hero__phase-label data-copy">{state.currentPhase.label}</p>
     <p class="home-hero__phase-statement editorial">{state.currentPhase.statement}</p>
+    <span class="home-hero__ambient-rule" data-home-ambient aria-hidden="true"></span>
   </div>
 
-  <div class="home-hero__movements" aria-label="Latest meaningful movements">
+  <div class="home-hero__movements motion-reveal" data-home-motion aria-label="Latest meaningful movements">
     <EditorialRule />
     <p class="home-hero__movements-label data-copy">LATEST MEANINGFUL MOVEMENT</p>
     <ol>

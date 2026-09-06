@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import '@fontsource-variable/newsreader/wght.css';
 import HomeHero from '../components/home/HomeHero.astro';
+import HomeMotionController from '../components/home/HomeMotionController.astro';
 import HomeNavigation from '../components/home/HomeNavigation.astro';
 import LuxuryFeature from '../components/home/LuxuryFeature.astro';
 import OlistFeature from '../components/home/OlistFeature.astro';
@@ -37,5 +38,6 @@ if (!competitive) {
     <LuxuryFeature entry={luxury} />
     <OlistFeature entry={olist} />
     <CompetitiveFeature entry={competitive} />
+    <HomeMotionController />
   </main>
 </BaseLayout>
