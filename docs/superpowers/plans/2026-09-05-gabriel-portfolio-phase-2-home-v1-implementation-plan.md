@@ -4,7 +4,7 @@
 
 **Goal:** Build the approved Home v1 as a living editorial front door using only real curated content, the frozen Phase 1 design system, responsive editorial compositions, and discrete viewport-driven motion.
 
-**Architecture:** Home remains a static Astro page composed from focused Home components. Selected Work is sourced from Astro content entries that carry a small Home-presentation contract; current-state signals live in a typed `src/data/home.ts` object, while project data stories use typed build-time snapshots of canonical source outputs. Three work features remain intentionally different in composition while sharing the frozen grid, the approved Chanel typography hierarchy, editorial primitives, and discrete motion grammar.
+**Architecture:** Home remains a static Astro page composed from focused Home components. Selected Work is sourced from Astro content entries that carry a small Home-presentation contract; current-state signals live in a typed `src/data/home.ts` object, while project data stories use typed build-time snapshots of canonical source outputs. Three work features remain intentionally different in composition while sharing the frozen grid, the approved Chanel typography hierarchy (Cormorant editorial roles, Newsreader supporting evidence copy, Inter/display titles, and IBM Plex Mono utility labels), editorial primitives, and discrete motion grammar.
 
 **Tech Stack:** Astro 7 static output, Astro Content Collections, TypeScript 6, CSS, Vitest 4, Playwright 1.62, Cloudflare Workers/Wrangler 4. No new runtime dependency is authorized for Phase 2.
 
@@ -15,8 +15,8 @@
 - Start execution from approved `main` and isolate implementation on branch `phase-2/home-v1`; use `superpowers:using-git-worktrees` at execution start.
 - Node requirement remains `>=22.12.0`.
 - Astro remains `output: 'static'`; do not introduce SSR, a database, CMS, or framework migration.
-- Reuse the frozen Light/Dark worlds, 4/6/12 grid, Inter/Cormorant Garamond/IBM Plex Mono typography roles, ThemeToggle, editorial primitives, symmetric main gutter, and Reveal/Assemble/Shift/Morph grammar.
-- Do not edit Phase 1 primitives or global tokens unless an automated or browser defect proves the frozen contract insufficient; if that happens, stop for scope review.
+- Reuse the frozen Light/Dark worlds, 4/6/12 grid, the approved Inter/Cormorant Garamond/Newsreader/IBM Plex Mono Home typography roles, ThemeToggle, editorial primitives, symmetric main gutter, and Reveal/Assemble/Shift/Morph grammar.
+- Do not edit Phase 1 primitives or global tokens unless an automated or browser defect proves the frozen contract insufficient; if that happens, stop for scope review. Newsreader is scoped to Home supporting evidence copy and does not replace the global body token.
 - Do not add GSAP, D3, Three.js, WebGL, scroll-scrubbing libraries, long sticky pinning, or major parallax.
 - Core Home information must render without client-side JavaScript. JavaScript may progressively enhance motion only.
 - Preserve `noindex` during Phase 2; SEO/indexing is not part of this phase.
@@ -95,18 +95,20 @@ gabriel232ch/olist-marketplace-analytics
   README.md
 ```
 
-For Competitive Positioning, search the executor workspace and connected project material for this canonical source package:
+For Competitive Positioning, use the user-authorized canonical repository `gabriel232ch/small-high-impact-companies` and open the actual source files that define its independent analysis:
 
 ```text
-02_evidence_ledger.md
-03_gap_log.md
-04_benchmark_selection.md
-05_analysis_and_insights.md
-06_recommendations.md
-FINAL_REPORT.md
+README.md
+01_research_design/case_selection_criteria.md
+02_data/source_registry.csv
+04_analysis/phase3_summary_business_analysis.md
+04_analysis/archetypes_business_analysis.md
+04_analysis/counterexamples_business_analysis.md
+06_outputs/portfolio_analysis.md
+06_outputs/project_conclusion.md
 ```
 
-Required behavior: if the Competitive package cannot be opened, STOP Task 1 and report these exact missing source files. Do not write a substitute project narrative from memory.
+Required behavior: if this archive cannot be opened or the listed files cannot be read, STOP the Competitive source gate and report the exact missing items. Do not synthesize a JoinQuant-specific narrative or silently substitute another source package.
 
 - [ ] **Step 2: Write the failing Home-state unit test**
 
@@ -259,7 +261,7 @@ Signals: GROW, DEFEND, FIX, INVESTIGATE
 Home visual: none; the feature uses `dashboard/data/executive_kpis.csv` and README findings as an expandable data story.
 ```
 
-Competitive Positioning must be written only after opening the six named source files from Step 1. Its `question`, `outcome`, and evidence rows must be direct editorial compressions of the final report/evidence ledger, with no unsupported market-size, hiring-performance, causal, or financial claims. Store its canonical source label in `source.originalReport`; do not expose private local filesystem paths.
+Competitive Positioning must be written only after opening the authorized archive files from Step 1. Its `question`, `outcome`, and evidence rows must be direct editorial compressions of the archive's research design, final analysis, archetypes, counterexamples, and conclusion, with no employer-specific, hiring-performance, causal, or financial claims beyond the source. Store its canonical GitHub source label in `source.originalReport`; do not expose private local filesystem paths.
 
 - [ ] **Step 8: Run the content contract verification**
 
@@ -278,7 +280,7 @@ Expected: all PASS; Astro Content Collections accept all three entries.
 Check that:
 
 - every number in the Luxury and Olist entries exists in the canonical README/report;
-- Competitive copy can be traced to the opened source package;
+- Competitive copy can be traced to the opened `small-high-impact-companies` source package and preserves its independent-analysis boundary;
 - no `G.xxx` or `PH.xx` was invented;
 - typed data snapshots trace to the canonical repository outputs;
 - `git diff --check` is clean.
@@ -846,7 +848,7 @@ After production verification succeeds, delete the merged implementation branch 
 Before implementation begins, verify this plan against the approved design spec:
 
 1. **Spec coverage:** Hero, navigation, three unique work compositions, expressive discrete scroll choreography, responsive recomposition, Now, optional personal snapshot, closing, content truth, accessibility, reduced motion, human gates, and Phase boundary each map to a task above.
-2. **Source safety:** Luxury and Olist have named canonical repos/assets; Competitive has a named source-package gate and cannot proceed from memory.
+2. **Source safety:** Luxury and Olist have named canonical repos/data outputs; Competitive uses the user-authorized `small-high-impact-companies` archive and cannot proceed from memory or be reframed as employer-specific research.
 3. **Type consistency:** `HOME_STATE`, `HOME_WORK_SLUGS`, and the `home` work metadata shape are defined once in Task 1 and consumed consistently afterward.
 4. **Living Index safety:** review-state featured work remains without permanent IDs; no Home task changes `living-index.json`.
 5. **Visual workflow:** Tasks 2–8 stop before committing unapproved visual states. Task 1 is the only non-visual implementation task and may commit automatically after verification.

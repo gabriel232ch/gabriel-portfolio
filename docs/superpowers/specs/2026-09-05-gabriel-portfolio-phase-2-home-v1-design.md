@@ -286,18 +286,21 @@ The current human-approved Home direction uses one shared hierarchy across the s
 
 - **Question:** the small italic Cormorant/editorial role used by `Selected Work`;
 - **Outcome:** the restrained Cormorant/editorial lede role used by the `Research, systems...` treatment;
-- **Supporting data:** IBM Plex Mono for labels, contexts, source paths, and compact values;
+- **Supporting data labels:** IBM Plex Mono for labels, contexts, source paths, and compact utility values;
+- **Supporting evidence copy:** Newsreader for evidence values, data-story introductions, and explanatory mechanism notes across all three Home features;
 - **Supporting titles and signal names:** restrained Inter/display treatment at the already-approved smaller scale.
 
-Luxury and Olist must keep these same roles and sizes. Feature sections may change composition, but they must not introduce a new oversized display treatment or a section-specific font hierarchy.
+Luxury, Olist, and Competitive must keep these same roles and sizes. Feature sections may change composition, but they must not introduce a new oversized display treatment or a section-specific font hierarchy.
 
 ### 6.7 Competitive Positioning Against Giants
 
 Role: **Argument / Strategy**
 
-Canonical source material has been identified in the JoinQuant employer-brand/employee-experience benchmark research package, including evidence ledger, gap log, benchmark selection, analysis/insights, recommendations, and final report.
+Canonical source material is the approved private repository `gabriel232ch/small-high-impact-companies`, an independent comparative business-analysis archive. Its README explicitly limits the work to external cross-company analysis and excludes application to a specific employer, employer-brand positioning, internal interview validation, candidate/recruiting research for a specific company, and GEO distribution strategy.
 
-The Home must use those real research materials and evidence boundaries. It must not create decorative market numbers or a fictional dashboard merely to make the third project visually symmetrical with the first two.
+The Home must use the archive's real research materials and preserve those evidence boundaries. It must not present the archive as a JoinQuant-specific benchmark report, create decorative market numbers, or imply employer-specific conclusions that the source does not contain.
+
+The current Home entry is grounded in the archive's research design, source registry, six longitudinal deep dives, two counterexamples, five strategic/talent archetypes, and final conclusion. The strongest supported conclusion is that smallness is not itself an advantage; disproportionate impact depends on a viable position, a leverage mechanism, organizational alignment, mission-critical talent fit, and credible visible output.
 
 Its composition should deliberately be the most textual and memo-like of the three projects, using real benchmark/evidence/implication structure through:
 
@@ -309,7 +312,7 @@ Its composition should deliberately be the most textual and memo-like of the thr
 
 Recommended narrative stages:
 
-1. strategic question grounded in the real benchmark project;
+1. strategic question grounded in the real independent comparative analysis;
 2. core strategic conclusion;
 3. benchmark/evidence/implication structure.
 

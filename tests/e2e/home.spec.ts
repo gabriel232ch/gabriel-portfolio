@@ -81,3 +81,35 @@ test('Home renders Olist as a decision-intelligence feature after Luxury', async
   await expect(olist.locator('[data-olist-signal]')).toHaveCount(4);
   await expect(olist.locator('[data-olist-data-story] a')).toHaveCount(2);
 });
+
+test('Home renders Competitive Positioning as a source-backed strategy feature after Olist', async ({ page }) => {
+  await page.goto('/');
+
+  const slugs = await page.locator('[data-work-slug]').evaluateAll((nodes) =>
+    nodes.map((node) => node.getAttribute('data-work-slug')),
+  );
+  expect(slugs.slice(0, 3)).toEqual([
+    'luxury-handbag-pricing-architecture',
+    'olist-marketplace-analysis',
+    'competitive-positioning-against-giants',
+  ]);
+
+  const competitive = page.locator('[data-work-slug="competitive-positioning-against-giants"]');
+  await expect(competitive).toBeVisible();
+  await expect(competitive.locator('img')).toHaveCount(0);
+  await expect(competitive.locator('[data-work-question]')).toBeVisible();
+  await expect(competitive.locator('[data-work-outcome]')).toBeVisible();
+  await expect(competitive.locator('[data-work-evidence]')).toHaveCount(3);
+  await expect(competitive.locator('[data-competitive-data-story]')).toBeVisible();
+  const mechanisms = competitive.locator('[data-competitive-mechanism]');
+  await expect(mechanisms).toHaveCount(5);
+  await expect(mechanisms.nth(0)).toContainText('Deliberate Constraint Advantage');
+  await expect(mechanisms.nth(4)).toContainText('Selective Fit Flywheel');
+  await mechanisms.nth(1).locator('summary').click();
+  await expect(mechanisms.nth(1).locator('details')).toHaveAttribute('open', '');
+  await expect(mechanisms.nth(1).locator('.competitive-data-story__mechanism-note')).toBeVisible();
+  await expect(competitive.locator('[data-competitive-boundary]')).toHaveText(
+    'INDEPENDENT COMPARATIVE ANALYSIS / NOT EMPLOYER-SPECIFIC',
+  );
+  await expect(competitive.locator('[data-competitive-data-story] a')).toHaveCount(1);
+});

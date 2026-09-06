@@ -1,0 +1,129 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SectionLabel from '../editorial/SectionLabel.astro';
+import { COMPETITIVE_MECHANISMS } from '../../data/competitive';
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+}
+
+const { entry } = Astro.props;
+const home = entry.data.home;
+const sourceUrl = entry.data.source.originalReport;
+
+if (!home) {
+  throw new Error(`Featured work ${entry.id} requires Home metadata.`);
+}
+
+if (home.evidence.length !== 3) {
+  throw new Error(`Competitive Home evidence must contain exactly three rows.`);
+}
+
+if (!sourceUrl) {
+  throw new Error(`Featured work ${entry.id} requires a canonical source link.`);
+}
+---
+
+<section
+  class="competitive-feature editorial-grid"
+  aria-labelledby="competitive-feature-title"
+  data-work-slug="competitive-positioning-against-giants"
+>
+  <div class="competitive-feature__label">
+    <SectionLabel index="03" label="STRATEGY / COMPARATIVE" />
+  </div>
+
+  <div class="competitive-feature__question">
+    <p class="data-copy">Question</p>
+    <p class="display competitive-feature__question-text" data-work-question>{home.question}</p>
+  </div>
+
+  <div class="competitive-feature__outcome">
+    <p class="data-copy">Outcome</p>
+    <h2 id="competitive-feature-title" class="display competitive-feature__outcome-title" data-work-outcome>
+      {home.outcome}
+    </h2>
+  </div>
+
+  <div class="competitive-feature__evidence" aria-label="Research evidence">
+    <p class="data-copy">Evidence</p>
+    <dl>
+      {home.evidence.map((evidence) => (
+        <div data-work-evidence>
+          <dt class="data-copy">{evidence.label}</dt>
+          <dd class="body-copy">
+            {evidence.value}
+            {evidence.note && <span class="competitive-feature__evidence-note data-copy">{evidence.note}</span>}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+
+  <section
+    class="competitive-data-story competitive-feature__data-story"
+    aria-labelledby="competitive-data-title"
+    data-competitive-data-story
+  >
+    <div class="competitive-data-story__header">
+      <p class="editorial competitive-data-story__kicker"><em>Comparative frame</em></p>
+      <h3 id="competitive-data-title" class="display competitive-data-story__title">
+        Mechanisms, not practices.
+      </h3>
+      <p class="body-copy competitive-data-story__intro">
+        Five recurring mechanisms from the archive. Open each one to read the conservative interpretation.
+      </p>
+    </div>
+
+    <ol class="competitive-data-story__mechanisms" aria-label="Five analytical mechanisms">
+      {COMPETITIVE_MECHANISMS.map((mechanism, index) => (
+        <li class="competitive-data-story__mechanism" data-competitive-mechanism>
+          <details open={index === 0}>
+            <summary>
+              <span class="competitive-data-story__mechanism-number data-copy">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <strong class="display competitive-data-story__mechanism-title">{mechanism.label}</strong>
+              <span class="data-copy">OPEN / CLOSE</span>
+            </summary>
+            <div class="competitive-data-story__mechanism-panel">
+              <p class="competitive-data-story__mechanism-note body-copy">{mechanism.summary}</p>
+            </div>
+          </details>
+        </li>
+      ))}
+    </ol>
+
+    <div class="competitive-data-story__source">
+      <p class="data-copy" data-competitive-boundary>INDEPENDENT COMPARATIVE ANALYSIS / NOT EMPLOYER-SPECIFIC</p>
+      <a class="data-copy" href={sourceUrl} target="_blank" rel="noreferrer">
+        SOURCE / PORTFOLIO ANALYSIS
+      </a>
+    </div>
+  </section>
+</section>
+
+<script>
+  const story = document.querySelector<HTMLElement>('[data-competitive-data-story]');
+
+  if (story) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion || typeof IntersectionObserver !== 'function') {
+      story.dataset.competitiveMotionState = 'entered';
+    } else {
+      story.dataset.competitiveMotionState = 'pending';
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry?.isIntersecting) return;
+          story.dataset.competitiveMotionState = 'entered';
+          observer.disconnect();
+        },
+        { threshold: 0.2 },
+      );
+
+      observer.observe(story);
+    }
+  }
+</script>
