@@ -4,15 +4,16 @@ import type { HOME_STATE, PersonalSnapshot } from '../../data/home';
 
 interface Props {
   now: typeof HOME_STATE.now;
+  authorNote: typeof HOME_STATE.authorNote;
   personalSnapshot: PersonalSnapshot | null;
 }
 
-const { now, personalSnapshot } = Astro.props;
+const { now, authorNote, personalSnapshot } = Astro.props;
 ---
 
 <section id="about" class="home-now editorial-grid" aria-labelledby="now-title">
   <div class="home-now__label">
-    <SectionLabel index="04" label="NOW / CURRENT" />
+    <SectionLabel index="04" label="NOW" />
   </div>
 
   <div class="home-now__primary motion-reveal" data-home-motion>
@@ -29,6 +30,11 @@ const { now, personalSnapshot } = Astro.props;
       </article>
     ))}
   </div>
+
+  <aside class="home-now__author-note" data-author-note>
+    <h3>{authorNote.title}</h3>
+    <p class="body-copy">{authorNote.body}</p>
+  </aside>
 
   {personalSnapshot && (
     <figure class="home-now__snapshot motion-reveal" data-home-motion data-personal-snapshot>

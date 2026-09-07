@@ -1,7 +1,5 @@
 ---
-import EditorialRule from '../editorial/EditorialRule.astro';
 import FolioNumber from '../editorial/FolioNumber.astro';
-import SectionLabel from '../editorial/SectionLabel.astro';
 import type { HOME_STATE } from '../../data/home';
 
 interface Props {
@@ -12,33 +10,27 @@ const { state } = Astro.props;
 ---
 
 <section class="home-hero editorial-grid" aria-labelledby="home-title">
-  <div class="home-hero__identity motion-reveal" data-home-motion>
-    <SectionLabel label="LIVING SIGNAL" />
+  <div class="home-hero__identity">
     <h1 id="home-title" class="display">Gabriel Chen</h1>
     <FolioNumber current="01" />
   </div>
 
-  <div
-    class="home-hero__phase motion-shift"
-    data-home-motion
-    style="--motion-shift-x: -0.5rem;"
-  >
-    <EditorialRule />
-    <p class="home-hero__phase-label data-copy">{state.currentPhase.label}</p>
-    <p class="home-hero__phase-statement editorial">{state.currentPhase.statement}</p>
-    <span class="home-hero__ambient-rule" data-home-ambient aria-hidden="true"></span>
-  </div>
+  <div class="home-hero__context">
+    <p class="home-hero__intro-label data-copy">{state.intro.label}</p>
+    <p class="home-hero__intro editorial">{state.intro.statement}</p>
 
-  <div class="home-hero__movements motion-reveal" data-home-motion aria-label="Latest meaningful movements">
-    <EditorialRule />
-    <p class="home-hero__movements-label data-copy">LATEST MEANINGFUL MOVEMENT</p>
-    <ol>
-      {state.movements.map((movement) => (
-        <li data-home-movement>
-          <p class="home-hero__movement-meta data-copy">{movement.date} / {movement.type}</p>
-          <p class="home-hero__movement-title editorial">{movement.title}</p>
-        </li>
-      ))}
-    </ol>
+    <div class="home-hero__reading" aria-label="Starting points for reading">
+      <p class="home-hero__reading-label data-copy">START READING</p>
+      <ul>
+        {state.reading.map((item) => (
+          <li>
+            <a data-home-reading href={item.href}>
+              <span class="home-hero__reading-title editorial">{item.title}</span>
+              <span class="home-hero__reading-meta data-copy">{item.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 </section>

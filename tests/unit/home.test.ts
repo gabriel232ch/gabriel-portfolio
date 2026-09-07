@@ -10,10 +10,15 @@ describe('Home content contract', () => {
     ]);
   });
 
-  it('exposes one primary thread, two side threads, and exactly two movements', () => {
-    expect(HOME_STATE.movements).toHaveLength(2);
+  it('exposes one primary thread, two side threads, and two real reading paths', () => {
+    expect(HOME_STATE.reading).toHaveLength(2);
     expect(HOME_STATE.now.side).toHaveLength(2);
     expect(HOME_STATE.now.primary.title).toBe('Employer Brand / GEO at JoinQuant');
+  });
+
+  it('offers two real starting points without invented activity dates', () => {
+    expect(HOME_STATE.reading.map((item) => item.href)).toEqual(['#work', '#olist']);
+    expect(HOME_STATE.reading.every((item) => !('date' in item))).toBe(true);
   });
 
   it('does not pretend a personal photo or archive entry exists', () => {

@@ -12,8 +12,10 @@ disciplines:
 source:
   github: https://github.com/gabriel232ch/olist-marketplace-analytics
 home:
-  question: Where should Olist allocate commercial and operational resources to grow marketplace value while protecting delivery reliability and customer experience?
-  outcome: Growth was volume-led while operating quality weakened as scale grew, supporting distinct Grow / Defend / Fix / Investigate portfolios rather than one opaque score.
+  headline: "Growth and delivery, in tension"
+  takeaway: "GMV growth was volume-led, while on-time delivery declined—supporting different priorities for growth and repair."
+  question: "Where should Olist allocate commercial and operational resources to grow marketplace value while protecting delivery reliability and customer experience?"
+  outcome: "Growth was volume-led while operating quality weakened as scale grew, supporting distinct Grow / Defend / Fix / Investigate portfolios rather than one opaque score."
   evidence:
     - label: GMV proxy
       value: Jan–Aug GMV proxy R$2.99M → R$7.22M (+141.13%)

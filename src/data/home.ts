@@ -18,13 +18,21 @@ export interface HomeArchiveItem {
 }
 
 export const HOME_STATE = {
-  currentPhase: {
-    label: 'CURRENT PHASE',
-    statement: 'Building a durable personal system for work, research, and the things I want to keep.',
+  intro: {
+    label: 'RESEARCH / SYSTEMS / NOTES',
+    statement: 'I explore how businesses work, and how research can become useful systems.',
   },
-  movements: [
-    { date: '2026-09-05', type: 'SYSTEM', title: 'Home v1 architecture approved.' },
-    { date: '2026-09-04', type: 'SYSTEM', title: 'Editorial design system frozen.' },
+  reading: [
+    {
+      title: 'How luxury brands structure price',
+      href: '#work',
+      label: 'PRICING RESEARCH',
+    },
+    {
+      title: 'When marketplace growth strains delivery',
+      href: '#olist',
+      label: 'MARKETPLACE ANALYSIS',
+    },
   ],
   now: {
     primary: {
@@ -41,6 +49,10 @@ export const HOME_STATE = {
         state: 'Building gabrielchen.me as a long-lived editorial archive rather than a one-off recruiting site.',
       },
     ],
+  },
+  authorNote: {
+    title: 'A place to keep thinking',
+    body: 'This is a place for work, research, and ideas I want to return to. I’m building it to grow with my interests over time.',
   },
   personalSnapshot: null,
   archive: null,

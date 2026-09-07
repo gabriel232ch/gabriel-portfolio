@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import Marginalia from '../editorial/Marginalia.astro';
 import SectionLabel from '../editorial/SectionLabel.astro';
+import WorkResearchNotes from './WorkResearchNotes.astro';
 import {
   LUXURY_PRICE_SOURCE,
   LUXURY_PRICE_SUMMARY,
@@ -46,9 +46,6 @@ const marketPanels = marketOrder.map((market) => {
   };
 });
 
-const methodNotes = home.evidence
-  .filter((evidence) => evidence.note)
-  .map((evidence) => `${evidence.label} / ${evidence.note}`);
 ---
 
 <section
@@ -61,59 +58,33 @@ const methodNotes = home.evidence
     <SectionLabel index="01" label="VISUAL / MARKET" />
   </div>
 
-  <div
-    class="luxury-feature__question motion-shift"
-    data-home-motion
-    style="--motion-shift-x: -0.5rem;"
-  >
-    <p class="data-copy">Question</p>
-    <p class="display luxury-feature__question-text" data-work-question>{home.question}</p>
+  <div class="luxury-feature__summary">
+    <h2 id="luxury-feature-title" class="display" data-work-title>{home.headline}</h2>
+    <p class="editorial luxury-feature__takeaway" data-work-takeaway>{home.takeaway}</p>
   </div>
 
-  <div class="luxury-feature__outcome motion-reveal" data-home-motion>
-    <p class="data-copy">Outcome</p>
-    <h2 id="luxury-feature-title" class="display luxury-feature__outcome-title" data-work-outcome>
-      {home.outcome}
-    </h2>
-  </div>
-
-  <div class="luxury-feature__evidence motion-reveal" data-home-motion aria-label="Research evidence">
-    <p class="data-copy">Evidence</p>
-    <dl>
-      {home.evidence.map((evidence) => (
-        <div data-work-evidence>
-          <dt class="data-copy">{evidence.label}</dt>
-          <dd class="body-copy">{evidence.value}</dd>
-        </div>
-      ))}
-    </dl>
+  <div class="luxury-feature__scope">
+    <p class="data-copy">Observed price ranges</p>
+    <p class="body-copy">France/U.S. local list prices. Descriptive only; prices are not FX/tax normalized.</p>
   </div>
 
   <section
-    class="luxury-data-story luxury-feature__visual motion-reveal"
-    data-home-motion
+    class="luxury-data-story luxury-feature__visual"
     aria-labelledby="luxury-data-title"
     data-luxury-data-story
   >
-    <p class="editorial luxury-data-story__kicker"><em>Current architecture</em></p>
-    <h3 id="luxury-data-title" class="display luxury-data-story__title">
-      Price architecture, opened by market.
-    </h3>
+    <h3 id="luxury-data-title" class="display luxury-data-story__title">Observed price ranges</h3>
     <p class="body-copy luxury-data-story__intro">
-      Expand a market to inspect the observed range, middle 50%, and median for each brand.
+      Open a market to inspect the observed range, middle 50%, and median for each brand.
     </p>
 
-    <div
-      class="luxury-data-story__legend data-copy motion-assemble"
-      data-home-motion
-      aria-label="Chart legend"
-    >
+    <div class="luxury-data-story__legend data-copy" aria-label="Chart legend">
       <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--range"></i>MIN–MAX</span>
       <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--quartile"></i>P25–P75</span>
       <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--median"></i>MEDIAN</span>
     </div>
 
-    <div class="luxury-data-story__markets motion-assemble" data-home-motion>
+    <div class="luxury-data-story__markets">
       {marketPanels.map((panel) => (
         <details
           class="luxury-data-story__market"
@@ -178,13 +149,9 @@ const methodNotes = home.evidence
       <a class="data-copy" href={LUXURY_PRICE_SOURCE} target="_blank" rel="noreferrer">
         SOURCE / BRAND PRICE SUMMARY CSV
       </a>
-      <span class="data-copy">BUILD-TIME SNAPSHOT / DESCRIPTIVE ONLY</span>
+      <span class="data-copy">FRANCE/U.S. LOCAL LIST PRICES · DESCRIPTIVE ONLY · NOT FX/TAX NORMALIZED</span>
     </div>
   </section>
 
-  {methodNotes.length > 0 && (
-    <div class="luxury-feature__marginalia">
-      <Marginalia items={methodNotes} />
-    </div>
-  )}
+  <WorkResearchNotes question={home.question} outcome={home.outcome} evidence={home.evidence} />
 </section>

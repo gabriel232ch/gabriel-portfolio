@@ -37,6 +37,8 @@ const work = defineCollection({
         .default({}),
       home: z
         .object({
+          headline: z.string().min(1),
+          takeaway: z.string().min(1),
           question: z.string().min(1),
           outcome: z.string().min(1),
           evidence: z
