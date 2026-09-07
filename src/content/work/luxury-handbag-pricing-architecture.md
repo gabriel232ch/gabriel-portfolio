@@ -12,8 +12,10 @@ disciplines:
 source:
   github: https://github.com/gabriel232ch/luxury-handbag-price-architecture
 home:
-  question: How does Chanel's visible handbag price architecture differ from Louis Vuitton, Dior, and Hermès across France and the United States?
-  outcome: Chanel combines a higher visible entry threshold with a stable Classic high-end anchor; lower tiers overlap more with Louis Vuitton and Dior while upper tiers overlap more with Hermès.
+  headline: "Luxury pricing, compared"
+  takeaway: "Chanel’s observed range begins higher, with lower tiers overlapping Louis Vuitton and Dior and upper tiers overlapping Hermès."
+  question: "How does Chanel's visible handbag price architecture differ from Louis Vuitton, Dior, and Hermès across France and the United States?"
+  outcome: "Chanel combines a higher visible entry threshold with a stable Classic high-end anchor; lower tiers overlap more with Louis Vuitton and Dior while upper tiers overlap more with Hermès."
   evidence:
     - label: Current observations
       value: 161 accepted current observations / 147 numeric prices

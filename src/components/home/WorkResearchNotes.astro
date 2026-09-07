@@ -1,0 +1,31 @@
+---
+interface Props {
+  question: string;
+  outcome: string;
+  evidence: Array<{ label: string; value: string; note?: string }>;
+}
+
+const { question, outcome, evidence } = Astro.props;
+---
+
+<details class="work-research-notes" data-research-notes>
+  <summary>Read the research notes</summary>
+  <div class="work-research-notes__body">
+    <h3>Research question</h3>
+    <p data-work-question>{question}</p>
+    <h3>Full finding</h3>
+    <p data-work-outcome>{outcome}</p>
+    <h3>Evidence and scope</h3>
+    <dl>
+      {evidence.map((item) => (
+        <div data-work-evidence>
+          <dt>{item.label}</dt>
+          <dd>
+            {item.value}
+            {item.note && <p>{item.note}</p>}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</details>

@@ -31,6 +31,11 @@ if (!olist) {
 if (!competitive) {
   throw new Error('Competitive Positioning Against Giants Home entry is missing.');
 }
+
+const closingSources = [
+  { label: 'Luxury pricing repository', href: luxury.data.source.github },
+  { label: 'Olist analysis repository', href: olist.data.source.github },
+].filter((item): item is { label: string; href: string } => Boolean(item.href));
 ---
 
 <BaseLayout title="Gabriel Chen">
@@ -40,8 +45,12 @@ if (!competitive) {
     <LuxuryFeature entry={luxury} />
     <OlistFeature entry={olist} />
     <CompetitiveFeature entry={competitive} />
-    <NowSection now={HOME_STATE.now} personalSnapshot={HOME_STATE.personalSnapshot} />
-    <EditorialClosing archive={HOME_STATE.archive} />
+    <NowSection
+      now={HOME_STATE.now}
+      authorNote={HOME_STATE.authorNote}
+      personalSnapshot={HOME_STATE.personalSnapshot}
+    />
+    <EditorialClosing archive={HOME_STATE.archive} sources={closingSources} />
     <HomeMotionController />
   </main>
 </BaseLayout>

@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import SectionLabel from '../editorial/SectionLabel.astro';
 import { OLIST_DATA_METRICS, OLIST_DATA_SOURCES } from '../../data/olist';
+import WorkResearchNotes from './WorkResearchNotes.astro';
 
 interface Props {
   entry: CollectionEntry<'work'>;
@@ -18,6 +19,7 @@ const comparisonMetrics = OLIST_DATA_METRICS.filter(
   (metric) => metric.id !== 'fix',
 );
 const fixMetric = OLIST_DATA_METRICS.find((metric) => metric.id === 'fix');
+const comparisonPeriod = comparisonMetrics[0].context;
 
 if (!fixMetric || fixMetric.id !== 'fix') {
   throw new Error('Olist Home data is missing the Fix-before-growth metric.');
@@ -25,6 +27,7 @@ if (!fixMetric || fixMetric.id !== 'fix') {
 ---
 
 <section
+  id="olist"
   class="olist-feature editorial-grid"
   aria-labelledby="olist-feature-title"
   data-work-slug="olist-marketplace-analysis"
@@ -33,17 +36,13 @@ if (!fixMetric || fixMetric.id !== 'fix') {
     <SectionLabel index="02" label="SYSTEM / ANALYTICS" />
   </div>
 
-  <div
-    class="olist-feature__question motion-shift"
-    data-home-motion
-    style="--motion-shift-x: -0.5rem;"
-  >
-    <p class="data-copy">Question</p>
-    <p class="display olist-feature__question-text" data-work-question>{home.question}</p>
+  <div class="olist-feature__summary">
+    <h2 id="olist-feature-title" class="display" data-work-title>{home.headline}</h2>
+    <p class="editorial olist-feature__takeaway" data-work-takeaway>{home.takeaway}</p>
   </div>
 
-  <div class="olist-feature__signals motion-assemble" data-home-motion aria-label="Decision signals">
-    <p class="data-copy">Decision signals</p>
+  <div class="olist-feature__signals" aria-label="Decision paths">
+    <p class="data-copy">Decision paths</p>
     <ul>
       {home.signals.map((signal) => (
         <li data-decision-signal data-olist-signal>{signal}</li>
@@ -51,41 +50,21 @@ if (!fixMetric || fixMetric.id !== 'fix') {
     </ul>
   </div>
 
-  <div class="olist-feature__outcome motion-reveal" data-home-motion>
-    <p class="data-copy">Outcome</p>
-    <h2 id="olist-feature-title" class="display olist-feature__outcome-title" data-work-outcome>
-      {home.outcome}
-    </h2>
-  </div>
-
-  <div class="olist-feature__evidence motion-reveal" data-home-motion aria-label="Analysis evidence">
-    <p class="data-copy">Evidence</p>
-    <dl>
-      {home.evidence.map((evidence) => (
-        <div data-work-evidence>
-          <dt class="data-copy">{evidence.label}</dt>
-          <dd class="body-copy">
-            {evidence.value}
-            {evidence.note && <span class="olist-feature__evidence-note data-copy">{evidence.note}</span>}
-          </dd>
-        </div>
-      ))}
-    </dl>
+  <div class="olist-feature__period">
+    <p class="data-copy">{comparisonPeriod}</p>
   </div>
 
   <section
-    class="olist-data-story olist-feature__data-story motion-reveal"
-    data-home-motion
+    class="olist-data-story olist-feature__data-story"
     aria-labelledby="olist-data-title"
     data-olist-data-story
   >
     <div class="olist-data-story__header">
-      <p class="editorial olist-data-story__kicker"><em>Decision system</em></p>
       <h3 id="olist-data-title" class="display olist-data-story__title">
         Decision signals, in motion.
       </h3>
       <p class="body-copy olist-data-story__intro">
-        Open each signal to follow the observed change from scale to operating priority.
+        Open each metric to follow the observed change from scale to operating priority.
       </p>
     </div>
 
@@ -97,13 +76,12 @@ if (!fixMetric || fixMetric.id !== 'fix') {
         const lineWidth = Math.abs(toPosition - fromPosition);
 
         return (
-          <details class="olist-data-story__metric" data-olist-metric open={index === 0}>
+          <details class="olist-data-story__metric" data-olist-metric open={index < 2}>
             <summary>
               <span class="olist-data-story__metric-heading">
                 <span class="data-copy">{metric.label}</span>
                 <strong class="display">{metric.toLabel}</strong>
               </span>
-              <span class="data-copy">{metric.context} / expand</span>
             </summary>
 
             <div class="olist-data-story__metric-panel">
@@ -128,13 +106,12 @@ if (!fixMetric || fixMetric.id !== 'fix') {
         );
       })}
 
-      <details class="olist-data-story__metric" data-olist-metric>
+      <details class="olist-data-story__metric olist-data-story__metric--fix" data-olist-metric data-olist-fix>
         <summary>
           <span class="olist-data-story__metric-heading">
             <span class="data-copy">{fixMetric.label}</span>
             <strong class="display">{fixMetric.segments} markets</strong>
           </span>
-          <span class="data-copy">{fixMetric.context} / expand</span>
         </summary>
 
         <div class="olist-data-story__metric-panel">
@@ -168,4 +145,6 @@ if (!fixMetric || fixMetric.id !== 'fix') {
       </a>
     </div>
   </section>
+
+  <WorkResearchNotes question={home.question} outcome={home.outcome} evidence={home.evidence} />
 </section>

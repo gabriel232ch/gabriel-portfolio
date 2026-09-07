@@ -4,29 +4,31 @@ import type { HomeArchiveItem } from '../../data/home';
 
 interface Props {
   archive: HomeArchiveItem | null;
+  sources: Array<{ label: string; href: string }>;
 }
 
-const { archive } = Astro.props;
+const { archive, sources } = Astro.props;
 ---
 
 <section id="index" class="editorial-closing editorial-grid" aria-labelledby="closing-title">
   <div class="editorial-closing__label">
-    <SectionLabel index="05" label="INDEX / COORDINATES" />
+    <SectionLabel index="05" label="CLOSING / SOURCES" />
   </div>
 
   <div class="editorial-closing__main motion-reveal" data-home-motion>
-    <p class="editorial editorial-closing__kicker"><em>Editorial closing</em></p>
-    <h2 id="closing-title" class="display editorial-closing__title">Work, research, and evolving ideas.</h2>
+    <h2 id="closing-title" class="display editorial-closing__title">Keep exploring</h2>
 
-    <nav class="editorial-closing__coordinates" aria-label="Editorial coordinates">
-      <a href="#about">
-        <span class="display">ABOUT</span>
-        <span class="data-copy">NOW / CURRENT ATTENTION</span>
+    <nav class="editorial-closing__coordinates" aria-label="Continue reading">
+      <a href="#work">
+        <span class="display">Selected work</span>
+        <span class="data-copy">RETURN TO WORK</span>
       </a>
-      <a href="#index">
-        <span class="display">INDEX</span>
-        <span class="data-copy">THIS CLOSING / HOME V1</span>
-      </a>
+      {sources.map((source) => (
+        <a data-closing-source href={source.href} target="_blank" rel="noreferrer">
+          <span class="display">{source.label}</span>
+          <span class="data-copy">PUBLIC SOURCE</span>
+        </a>
+      ))}
     </nav>
   </div>
 
@@ -40,7 +42,6 @@ const { archive } = Astro.props;
 
   <div class="editorial-closing__notation data-copy">
     <span>GABRIEL CHEN</span>
-    <span>UPDATED 2026-09-05</span>
     <span>gabrielchen.me</span>
   </div>
 </section>

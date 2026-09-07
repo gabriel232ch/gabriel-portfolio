@@ -27,7 +27,10 @@ test('reduced motion preserves all Home information without displacement', async
   expect(states.length).toBeGreaterThan(0);
   expect(states.every((state) => state.opacity > 0)).toBe(true);
   expect(states.every((state) => state.transform === 'none')).toBe(true);
-  await expect(page.locator('[data-home-ambient]')).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('[data-home-ambient]')).toHaveCount(0);
+  const notes = page.locator('[data-research-notes]').first();
+  await notes.locator('summary').click();
+  await expect(notes.locator('[data-work-question]')).toHaveCSS('opacity', '1');
 });
 
 test('unsupported IntersectionObserver browsers enter Home stages immediately', async ({ page }) => {

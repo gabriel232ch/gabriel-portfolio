@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import SectionLabel from '../editorial/SectionLabel.astro';
 import { COMPETITIVE_MECHANISMS } from '../../data/competitive';
+import WorkResearchNotes from './WorkResearchNotes.astro';
 
 interface Props {
   entry: CollectionEntry<'work'>;
@@ -25,6 +26,7 @@ if (!sourceUrl) {
 ---
 
 <section
+  id="competitive"
   class="competitive-feature editorial-grid"
   aria-labelledby="competitive-feature-title"
   data-work-slug="competitive-positioning-against-giants"
@@ -33,56 +35,27 @@ if (!sourceUrl) {
     <SectionLabel index="03" label="STRATEGY / COMPARATIVE" />
   </div>
 
-  <div
-    class="competitive-feature__question motion-shift"
-    data-home-motion
-    style="--motion-shift-x: -0.5rem;"
-  >
-    <p class="data-copy">Question</p>
-    <p class="display competitive-feature__question-text" data-work-question>{home.question}</p>
-  </div>
-
-  <div class="competitive-feature__outcome motion-reveal" data-home-motion>
-    <p class="data-copy">Outcome</p>
-    <h2 id="competitive-feature-title" class="display competitive-feature__outcome-title" data-work-outcome>
-      {home.outcome}
-    </h2>
-  </div>
-
-  <div class="competitive-feature__evidence motion-reveal" data-home-motion aria-label="Research evidence">
-    <p class="data-copy">Evidence</p>
-    <dl>
-      {home.evidence.map((evidence) => (
-        <div data-work-evidence>
-          <dt class="data-copy">{evidence.label}</dt>
-          <dd class="body-copy">
-            {evidence.value}
-            {evidence.note && <span class="competitive-feature__evidence-note data-copy">{evidence.note}</span>}
-          </dd>
-        </div>
-      ))}
-    </dl>
+  <div class="competitive-feature__summary">
+    <h2 id="competitive-feature-title" class="display" data-work-title>{home.headline}</h2>
+    <p class="editorial competitive-feature__takeaway" data-work-takeaway>{home.takeaway}</p>
   </div>
 
   <section
-    class="competitive-data-story competitive-feature__data-story motion-reveal"
-    data-home-motion
+    class="competitive-data-story competitive-feature__data-story"
     aria-labelledby="competitive-data-title"
     data-competitive-data-story
   >
     <div class="competitive-data-story__header">
-      <p class="editorial competitive-data-story__kicker"><em>Comparative frame</em></p>
       <h3 id="competitive-data-title" class="display competitive-data-story__title">
         Mechanisms, not practices.
       </h3>
       <p class="body-copy competitive-data-story__intro">
-        Five recurring mechanisms from the archive. Open each one to read the conservative interpretation.
+        Five recurring mechanisms from the archive.
       </p>
     </div>
 
     <ol
-      class="competitive-data-story__mechanisms motion-assemble"
-      data-home-motion
+      class="competitive-data-story__mechanisms"
       aria-label="Five analytical mechanisms"
     >
       {COMPETITIVE_MECHANISMS.map((mechanism, index) => (
@@ -97,7 +70,6 @@ if (!sourceUrl) {
                 {String(index + 1).padStart(2, '0')}
               </span>
               <strong class="display competitive-data-story__mechanism-title">{mechanism.label}</strong>
-              <span class="data-copy">OPEN / CLOSE</span>
             </summary>
             <div class="competitive-data-story__mechanism-panel">
               <p class="competitive-data-story__mechanism-note body-copy">{mechanism.summary}</p>
@@ -110,8 +82,10 @@ if (!sourceUrl) {
     <div class="competitive-data-story__source">
       <p class="data-copy" data-competitive-boundary>INDEPENDENT COMPARATIVE ANALYSIS / NOT EMPLOYER-SPECIFIC</p>
       <a class="data-copy" href={sourceUrl} target="_blank" rel="noreferrer">
-        SOURCE / PORTFOLIO ANALYSIS
+        Source archive (access required)
       </a>
     </div>
   </section>
+
+  <WorkResearchNotes question={home.question} outcome={home.outcome} evidence={home.evidence} />
 </section>
