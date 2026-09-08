@@ -23,3 +23,25 @@ home:
       value: France/U.S. local list prices
       note: Descriptive only; prices are not FX/tax normalized.
 ---
+
+## Context
+
+A brand's visible price position is more than its most recognizable bag. Entry prices, the middle of the assortment and upper anchors answer different questions. This study compares those layers for Chanel, Louis Vuitton, Dior and Hermès within France and within the United States.
+
+The current evidence includes 161 accepted observations, of which 147 have numeric prices. The separate historical evidence contains 77 accepted observations across 13 product lines. The figure on this page describes the current numeric sample; it does not combine historical observations with today's assortment.
+
+## Analysis
+
+The sampled Chanel assortment has a higher visible entry threshold in both markets. Reading the minimum alongside the middle 50% helps distinguish access to the brand from the position of its central assortment. The median alone cannot describe that architecture.
+
+The broader project interprets Chanel's Classic line as a stable high-end anchor, with different competitive overlaps across tiers. The aggregate brand figure here supports a narrower task: examining the visible distribution. It does not independently establish a product-line history or an explanation for changes in demand.
+
+For a commercial reader, the useful distinction is between where an assortment starts, where its center sits and what anchors its upper end. Those are separate positioning questions and should remain separate when interpreting the evidence.
+
+## Limits
+
+These are descriptive observations of visible local list prices. They are not sales-weighted prices, transaction prices or evidence of willingness to pay. France and the United States are shown separately because the data have not been normalized for foreign exchange or taxes.
+
+The observed minimum is the lowest accepted price in this sample, not a guarantee of the cheapest product a brand sells. Unequal sample sizes and assortment visibility limit comparisons. The visible Hermès sample must not be treated as the brand's complete availability or product universe.
+
+The project remains ongoing. This page preserves the existing research snapshot; a stronger flagship will require additional verified product-level and historical evidence before making stronger strategic claims.

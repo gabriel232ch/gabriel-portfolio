@@ -1,0 +1,46 @@
+---
+import { LUXURY_PRICE_SUMMARY } from '../../data/luxury';
+interface Props { reading?: boolean }
+const { reading = false } = Astro.props;
+const money = (value: number, currency: string) => new Intl.NumberFormat('en-US', {
+  style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 2,
+}).format(value);
+const markets = [
+  { id: 'FR', name: 'France', ceiling: 15000 },
+  { id: 'US', name: 'United States', ceiling: 15000 },
+] as const;
+---
+<section class="price-evidence" aria-labelledby="price-evidence-title">
+  <p class="data-copy work-caption">Figure 01 / Visible price architecture</p>
+  <h3 id="price-evidence-title" class="editorial">A price range is a position, not a single number.</h3>
+  <p class="body-copy">Read each market separately. Thin lines show the sampled minimum and maximum; the thick band is the middle 50%; the vertical mark is the median. These are local list prices, without currency or tax normalization.</p>
+  {markets.map((market) => {
+    const rows = LUXURY_PRICE_SUMMARY.filter((row) => row.market === market.id);
+    const currency = rows[0].currency;
+    return <section class="price-market" aria-labelledby={`market-${market.id}`}>
+      <h4 id={`market-${market.id}`} class="display">{market.name} <span class="data-copy">{currency}</span></h4>
+      {!reading && <div data-price-chart>
+        <div class="price-axis data-copy" aria-hidden="true"><span>{money(0, currency)}</span><span>{money(market.ceiling, currency)}</span></div>
+        {rows.map((row) => <div class="price-row">
+          <div class="price-row__heading"><strong>{row.brand}</strong><span class="data-copy">MEDIAN {money(row.median, currency)}</span></div>
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none" role="img" aria-label={`${row.brand}: sampled range ${money(row.minimum, currency)} to ${money(row.maximum, currency)}; middle 50% ${money(row.lowerQuartile, currency)} to ${money(row.upperQuartile, currency)}; median ${money(row.median, currency)}; ${row.numericObservations} observations.`}>
+            <line class="price-track" x1="0" x2="600" y1="20" y2="20" />
+            <line class="price-range" x1={row.minimum / market.ceiling * 600} x2={row.maximum / market.ceiling * 600} y1="20" y2="20" />
+            <line class="price-band" x1={row.lowerQuartile / market.ceiling * 600} x2={row.upperQuartile / market.ceiling * 600} y1="20" y2="20" />
+            <line class="price-median" x1={row.median / market.ceiling * 600} x2={row.median / market.ceiling * 600} y1="7" y2="33" />
+          </svg>
+        </div>)}
+      </div>}
+      <details open={reading} class="price-values">
+        <summary>{market.name} — exact values</summary>
+        <div class="price-table-scroll" role="region" aria-label={`${market.name} price table`} tabindex="0">
+          <table data-price-table>
+            <caption>{market.name} / {currency} / sampled local list prices</caption>
+            <thead><tr><th scope="col">Brand</th><th scope="col">n</th><th scope="col">Min</th><th scope="col">P25</th><th scope="col">Median</th><th scope="col">P75</th><th scope="col">Max</th></tr></thead>
+            <tbody>{rows.map((row) => <tr><th scope="row">{row.brand}</th><td>{row.numericObservations}</td>{[row.minimum, row.lowerQuartile, row.median, row.upperQuartile, row.maximum].map((value) => <td>{money(value, row.currency)}</td>)}</tr>)}</tbody>
+          </table>
+        </div>
+      </details>
+    </section>;
+  })}
+</section>

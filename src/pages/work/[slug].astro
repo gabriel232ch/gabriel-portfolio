@@ -1,0 +1,10 @@
+---
+import { getCollection } from 'astro:content';
+import { isWorkRoutable } from '../../lib/content/work';
+import WorkLayout from '../../layouts/WorkLayout.astro';
+export async function getStaticPaths() {
+  return (await getCollection('work', isWorkRoutable)).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+---
+<WorkLayout entry={entry} />

@@ -1,0 +1,51 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import WorkNavigation from '../components/work/WorkNavigation.astro';
+import LuxuryEvidence from '../components/work/LuxuryEvidence.astro';
+import SectionLabel from '../components/editorial/SectionLabel.astro';
+import { isWorkRoutable } from '../lib/content/work';
+import { WORK_SOURCES } from '../data/work-sources';
+import '../styles/work.css';
+interface Props { entry: CollectionEntry<'work'>; reading?: boolean }
+const { entry, reading = false } = Astro.props;
+const { Content, headings } = await render(entry);
+const peers = (await getCollection('work', isWorkRoutable)).filter((item) => item.id !== entry.id);
+const luxury = entry.id === 'luxury-handbag-pricing-architecture';
+const root = `/work/${entry.id}/`;
+const sources = WORK_SOURCES[entry.id] ?? [];
+---
+<BaseLayout title={`${entry.data.title}${reading ? ' — Reading mode' : ''} — Gabriel Chen`} description={entry.data.summary}>
+  <main class:list={['work-shell', { 'work-shell--reading': reading }]}>
+    <WorkNavigation />
+    <article id="main-content" tabindex="-1">
+      <header class="work-open editorial-grid">
+        <div class="work-open__label"><SectionLabel label="WORK / CASE STUDY" /></div>
+        <div class="work-open__title">
+          <p class="editorial work-kicker"><em>{entry.data.disciplines.join(' / ')}</em></p>
+          <h1 class="display">{entry.data.title}</h1>
+          <p class="editorial work-question">{entry.data.home?.question ?? entry.data.summary}</p>
+          <div class="work-meta data-copy"><span>{entry.data.status}</span><span>Curated research snapshot</span>{entry.data.indexId && <span>{entry.data.indexId}</span>}</div>
+          {luxury && <nav class="work-modes data-copy" aria-label="Presentation mode"><a href={root} aria-current={!reading ? 'page' : undefined}>Visual essay</a><a href={`${root}reading/`} aria-current={reading ? 'page' : undefined}>Reading mode</a></nav>}
+        </div>
+      </header>
+      <div class="work-spread editorial-grid">
+        <aside class="work-contents">
+          <nav aria-label="On this page"><p class="data-copy work-caption">In this study</p><ol>
+            <li><a href="#conclusion">The finding</a></li>
+            {entry.data.home && <li><a href="#evidence">Evidence</a></li>}
+            {headings.filter((heading) => heading.depth === 2).map((heading) => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}
+            <li><a href="#sources">Sources</a></li>
+          </ol></nav>
+        </aside>
+        <div class="work-reading">
+          <section id="conclusion" class="work-conclusion"><p class="data-copy work-caption">The finding</p><h2 class="editorial">{entry.data.home?.outcome ?? entry.data.summary}</h2></section>
+          {entry.data.home && <section id="evidence" class="work-evidence" aria-labelledby="evidence-title"><h2 id="evidence-title" class="display">Evidence at a glance</h2><dl>{entry.data.home.evidence.map((item) => <div><dt class="data-copy">{item.label}</dt><dd>{item.value}{item.note && <p>{item.note}</p>}</dd></div>)}</dl>{luxury && <LuxuryEvidence reading={reading} />}</section>}
+          <div class="work-prose" data-case-body><Content /></div>
+          <section id="sources" class="work-sources"><h2 class="display">Sources & scope</h2><p class="body-copy">This is a curated reading of the existing project evidence, not a live data feed. The underlying research can evolve independently.</p><ol>{sources.map((source) => <li><a href={source.href}>{source.label} <span aria-hidden="true">↗</span></a><p>{source.note}</p></li>)}</ol></section>
+        </div>
+      </div>
+    </article>
+    <footer class="work-afterlife"><p class="editorial"><em>Continue reading</em></p><nav aria-label="Other work">{peers.map((peer) => <a href={`/work/${peer.id}/`}><span>{peer.data.title}</span><span aria-hidden="true">↗</span></a>)}</nav><a class="data-copy work-home" href="/">Return to Home</a></footer>
+  </main>
+</BaseLayout>

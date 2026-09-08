@@ -1598,3 +1598,6 @@
     transform: translateX(-50%) scale(1) !important;
   }
 }
+
+.home-case-link { margin: 1.5rem 0 0; font-size: .6rem; line-height: 1.6; }
+.home-case-link a { text-underline-offset: .3em; }

@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorkNavigation from '../../components/work/WorkNavigation.astro';
+import SectionLabel from '../../components/editorial/SectionLabel.astro';
+import { HOME_WORK_SLUGS } from '../../data/home';
+import { isWorkRoutable } from '../../lib/content/work';
+import '../../styles/work.css';
+const work = (await getCollection('work', isWorkRoutable)).sort((a, b) => {
+  const order = (id: string) => { const i = HOME_WORK_SLUGS.findIndex((slug) => slug === id); return i < 0 ? Infinity : i; };
+  return order(a.id) - order(b.id) || a.data.title.localeCompare(b.data.title);
+});
+---
+<BaseLayout title="Work — Gabriel Chen" description="Studies in markets, systems and competitive strategy.">
+  <main class="work-shell">
+    <WorkNavigation />
+    <div id="main-content" tabindex="-1">
+      <header class="work-index-open editorial-grid"><div><SectionLabel label="WORK / INDEX" /></div><div class="work-index-title"><h1 class="display">Work</h1><p class="editorial">Markets, systems,<br />and the decisions between them.</p><span class="data-copy work-caption">{work.length} studies / an evolving body of work</span></div></header>
+      <ol class="work-index-list">{work.map((entry, index) => <li class="editorial-grid"><span class="data-copy work-list-number" aria-label={`Study ${index + 1}`}>{String(index + 1).padStart(2, '0')}</span><div class="work-list-main"><p class="data-copy work-caption">{entry.data.disciplines.join(' / ')}</p><h2><a href={`/work/${entry.id}/`}>{entry.data.title}<span aria-hidden="true"> ↗</span></a></h2><p class="body-copy">{entry.data.summary}</p></div><span class="data-copy work-list-status">{entry.data.status}</span></li>)}</ol>
+      <footer class="work-index-end"><p class="editorial"><em>Each study is a way of looking more closely.</em></p><a class="data-copy" href="/">Return to Home</a></footer>
+    </div>
+  </main>
+</BaseLayout>
