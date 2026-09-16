@@ -944,6 +944,7 @@
   max-width: 46ch;
   margin: var(--space-3) 0 0;
   color: var(--ink-muted);
+  font-family: 'Newsreader Variable', var(--font-body);
   font-size: 1rem;
   line-height: 1.55;
 }
