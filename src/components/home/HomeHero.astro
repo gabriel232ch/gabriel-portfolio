@@ -1,6 +1,7 @@
 ---
 import FolioNumber from '../editorial/FolioNumber.astro';
 import type { HOME_STATE } from '../../data/home';
+import { GABRIEL_SIGNATURE_GLYPHS } from '../../data/signature';
 
 interface Props {
   state: typeof HOME_STATE;
@@ -11,7 +12,29 @@ const { state } = Astro.props;
 
 <section class="home-hero editorial-grid" aria-labelledby="home-title">
   <div class="home-hero__identity">
-    <h1 id="home-title" class="display">Gabriel Chen</h1>
+    <h1 id="home-title" class="home-hero__name" aria-label="Gabriel Chen">
+      <span class="home-hero__signature" data-signature-reveal>
+        <svg viewBox="0 0 1000 260" role="img" aria-label="Gabriel Chen" focusable="false">
+          {GABRIEL_SIGNATURE_GLYPHS.map((glyph) => (
+            <g style={`--signature-index: ${glyph.index};`}>
+              <path
+                class="home-hero__signature-draw"
+                d={glyph.path}
+                transform={glyph.transform}
+                pathLength="1"
+                aria-hidden="true"
+              />
+              <path
+                class="home-hero__signature-fill"
+                d={glyph.path}
+                transform={glyph.transform}
+                aria-hidden="true"
+              />
+            </g>
+          ))}
+        </svg>
+      </span>
+    </h1>
     <FolioNumber current="01" />
   </div>
 

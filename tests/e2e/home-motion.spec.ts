@@ -27,6 +27,20 @@ test('reduced motion preserves all Home information without displacement', async
   expect(states.length).toBeGreaterThan(0);
   expect(states.every((state) => state.opacity > 0)).toBe(true);
   expect(states.every((state) => state.transform === 'none')).toBe(true);
+  const signatureState = await page.locator('[data-signature-reveal]').evaluate((node) => ({
+    drawCount: node.querySelectorAll('.home-hero__signature-draw').length,
+    drawOffset: getComputedStyle(node.querySelector('.home-hero__signature-draw')!).strokeDashoffset,
+    drawAnimation: getComputedStyle(node.querySelector('.home-hero__signature-draw')!).animationName,
+    fillCount: node.querySelectorAll('.home-hero__signature-fill').length,
+    fillOpacity: getComputedStyle(node.querySelector('.home-hero__signature-fill')!).opacity,
+    fillAnimation: getComputedStyle(node.querySelector('.home-hero__signature-fill')!).animationName,
+  }));
+  expect(signatureState.drawCount).toBe(11);
+  expect(signatureState.drawOffset).toBe('0px');
+  expect(signatureState.drawAnimation).toBe('none');
+  expect(signatureState.fillCount).toBe(11);
+  expect(signatureState.fillOpacity).toBe('1');
+  expect(signatureState.fillAnimation).toBe('none');
   await expect(page.locator('[data-home-ambient]')).toHaveCount(0);
   const notes = page.locator('[data-research-notes]').first();
   await notes.locator('summary').click();

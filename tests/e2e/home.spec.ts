@@ -7,6 +7,8 @@ test('Home exposes lightweight navigation and the editorial Hero', async ({ page
   await expect(page.getByRole('link', { name: 'NOW', exact: true })).toHaveAttribute('href', '#about');
   await expect(page.getByRole('link', { name: 'INDEX', exact: true })).toHaveCount(0);
   await expect(page.getByRole('heading', { level: 1, name: 'Gabriel Chen' })).toBeVisible();
+  await expect(page.locator('[data-signature-reveal] svg')).toHaveCount(1);
+  await expect(page.locator('[data-signature-reveal] .home-hero__signature-draw')).toHaveCount(11);
   await expect(page.getByText('RESEARCH / SYSTEMS / NOTES')).toBeVisible();
   await expect(page.getByText('I explore how businesses work, and how research can become useful systems.')).toBeVisible();
   await expect(page.locator('[data-home-reading]')).toHaveCount(2);
