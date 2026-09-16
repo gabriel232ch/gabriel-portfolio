@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { HOME_STATE, HOME_WORK_SLUGS } from '../../src/data/home';
+import { LUXURY_FLAGSHIP } from '../../src/data/luxury';
 
 describe('Home content contract', () => {
   it('locks the approved Selected Work order', () => {
@@ -24,5 +25,13 @@ describe('Home content contract', () => {
   it('does not pretend a personal photo or archive entry exists', () => {
     expect(HOME_STATE.personalSnapshot).toBeNull();
     expect(HOME_STATE.archive).toBeNull();
+  });
+
+  it('keeps the flagship release facts source-backed and explicit', () => {
+    expect(LUXURY_FLAGSHIP.release.commit).toBe('b59f90e');
+    expect(LUXURY_FLAGSHIP.snapshot.acceptedObservations).toBe(41);
+    expect(LUXURY_FLAGSHIP.snapshot.numericPrices).toBe(35);
+    expect(LUXURY_FLAGSHIP.architecture.map((market) => market.market)).toEqual(['FR', 'US']);
+    expect(LUXURY_FLAGSHIP.financial.period).toBe('Chanel consolidated / FY2020–FY2025');
   });
 });

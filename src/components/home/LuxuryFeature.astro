@@ -3,6 +3,8 @@ import type { CollectionEntry } from 'astro:content';
 import SectionLabel from '../editorial/SectionLabel.astro';
 import WorkResearchNotes from './WorkResearchNotes.astro';
 import {
+  LUXURY_FLAGSHIP,
+  LUXURY_FLAGSHIP_SOURCES,
   LUXURY_PRICE_SOURCE,
   LUXURY_PRICE_SUMMARY,
   type LuxuryPriceSummary,
@@ -33,6 +35,8 @@ const formatCurrency = (value: number, currency: LuxuryPriceSummary['currency'])
     maximumFractionDigits: 2,
   }).format(value);
 
+const formatPercent = (value: number) => `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value).toFixed(1)}%`;
+
 const marketPanels = marketOrder.map((market) => {
   const rows = LUXURY_PRICE_SUMMARY.filter((row) => row.market === market);
   const scaleMin = Math.min(...rows.map((row) => row.minimum));
@@ -46,6 +50,11 @@ const marketPanels = marketOrder.map((market) => {
   };
 });
 
+const architectureScale = (market: (typeof LUXURY_FLAGSHIP.architecture)[number]) =>
+  Math.max(market.maximum * 1.05, market.maximum + 500);
+
+const architecturePosition = (value: number, market: (typeof LUXURY_FLAGSHIP.architecture)[number]) =>
+  `${(value / architectureScale(market)) * 100}%`;
 ---
 
 <section
@@ -56,16 +65,31 @@ const marketPanels = marketOrder.map((market) => {
 >
   <div class="luxury-feature__label">
     <SectionLabel index="01" label="VISUAL / MARKET" />
+    <p class="luxury-feature__label-note data-copy">CHANEL PREMIUMIZATION STRATEGY</p>
   </div>
 
   <div class="luxury-feature__summary">
+    <p class="luxury-feature__release-line data-copy motion-reveal" data-home-motion>
+      CURRENT SNAPSHOT <span aria-hidden="true">/</span> {LUXURY_FLAGSHIP.snapshot.capturedAt}
+    </p>
     <h2 id="luxury-feature-title" class="display" data-work-title>{home.headline}</h2>
     <p class="editorial luxury-feature__takeaway" data-work-takeaway>{home.takeaway}</p>
   </div>
 
   <div class="luxury-feature__scope">
-    <p class="data-copy">Observed price ranges</p>
-    <p class="body-copy">France/U.S. local list prices. Descriptive only; prices are not FX/tax normalized.</p>
+    <p class="data-copy">Price, history, performance</p>
+    <p class="body-copy">
+      Current price endpoints, historical repricing, financial performance, and competitive
+      context — brought together to show how Chanel’s ladder moves across markets.
+    </p>
+    <a
+      class="luxury-feature__release-link data-copy"
+      href={LUXURY_FLAGSHIP_SOURCES.readme}
+      target="_blank"
+      rel="noreferrer"
+    >
+      VIEW SOURCE <span aria-hidden="true">↗</span>
+    </a>
   </div>
 
   <section
@@ -73,83 +97,266 @@ const marketPanels = marketOrder.map((market) => {
     aria-labelledby="luxury-data-title"
     data-luxury-data-story
   >
-    <h3 id="luxury-data-title" class="display luxury-data-story__title">Observed price ranges</h3>
-    <p class="body-copy luxury-data-story__intro">
-      Open a market to inspect the observed range, middle 50%, and median for each brand.
-    </p>
-
-    <div class="luxury-data-story__legend data-copy" aria-label="Chart legend">
-      <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--range"></i>MIN–MAX</span>
-      <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--quartile"></i>P25–P75</span>
-      <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--median"></i>MEDIAN</span>
+    <div class="luxury-data-story__mast">
+      <div>
+        <p class="luxury-data-story__eyebrow data-copy">2026 PRICE ENDPOINT / CURRENT SNAPSHOT</p>
+        <h3 id="luxury-data-title" class="display luxury-data-story__title">
+          The visible ladder moves upward.
+        </h3>
+        <p class="body-copy luxury-data-story__intro">
+          Chanel’s current architecture reads as a higher visible entry threshold with a stable
+          Classic/icon anchor. The bars below show observed endpoints, not a complete product census.
+        </p>
+      </div>
+      <a
+        class="luxury-data-story__release data-copy"
+        href={LUXURY_FLAGSHIP_SOURCES.readme}
+        target="_blank"
+        rel="noreferrer"
+      >
+        VIEW REPOSITORY <span aria-hidden="true">↗</span>
+      </a>
     </div>
 
-    <div class="luxury-data-story__markets">
-      {marketPanels.map((panel) => (
-        <details
-          class="luxury-data-story__market"
-          data-market-panel
-          data-market={panel.market}
-          open={panel.market === 'US'}
-        >
-          <summary>
-            <span>
-              <strong class="display">{marketNames[panel.market]}</strong>
-              <span class="data-copy">{panel.market} / {panel.rows[0].currency}</span>
-            </span>
-            <span class="data-copy">{panel.rows.length} brands / expand</span>
-          </summary>
+    <div class="luxury-data-story__stats" aria-label="Snapshot statistics">
+      <div class="luxury-data-story__stat motion-reveal" data-home-motion>
+        <span class="data-copy">ACCEPTED OBSERVATIONS</span>
+        <strong class="display" data-count="41">41</strong>
+        <small class="data-copy">CURRENT / CHANEL</small>
+      </div>
+      <div class="luxury-data-story__stat motion-reveal" data-home-motion>
+        <span class="data-copy">NUMERIC PRICES</span>
+        <strong class="display" data-count="35">35</strong>
+        <small class="data-copy">FR + U.S. / LOCAL LIST</small>
+      </div>
+      <div class="luxury-data-story__stat motion-reveal" data-home-motion>
+        <span class="data-copy">FINANCIAL WINDOW</span>
+        <strong class="display luxury-data-story__stat-value">FY20–25</strong>
+        <small class="data-copy">CONSOLIDATED SIGNALS</small>
+      </div>
+    </div>
 
-          <div class="luxury-data-story__panel">
-            {panel.rows.map((row) => {
-              const rangeStart = ((row.minimum - panel.scaleMin) / panel.scaleSpan) * 100;
-              const rangeWidth = ((row.maximum - row.minimum) / panel.scaleSpan) * 100;
-              const quartileStart = ((row.lowerQuartile - panel.scaleMin) / panel.scaleSpan) * 100;
-              const quartileWidth =
-                ((row.upperQuartile - row.lowerQuartile) / panel.scaleSpan) * 100;
-              const medianPosition = ((row.median - panel.scaleMin) / panel.scaleSpan) * 100;
+    <div class="luxury-architecture" aria-labelledby="luxury-architecture-title" data-home-motion>
+      <div class="luxury-data-story__section-heading">
+        <div>
+          <p class="data-copy">VISIBLE PRICE ARCHITECTURE</p>
+          <h4 id="luxury-architecture-title" class="display">Entry to icon, by market.</h4>
+        </div>
+        <p class="body-copy">
+          The highest observed point is held apart from the entry tier by a deliberate, visible jump.
+        </p>
+      </div>
 
-              return (
-                <div class="luxury-data-story__row" data-brand-row={row.brand}>
-                  <div class="luxury-data-story__row-header">
-                    <strong class="luxury-data-story__brand">{row.brand}</strong>
-                    <span class="luxury-data-story__row-meta data-copy">
-                      {formatCurrency(row.minimum, row.currency)}–{formatCurrency(row.maximum, row.currency)}
-                      / {row.numericObservations} observations
-                    </span>
-                  </div>
-
-                  <div
-                    class="luxury-data-story__range"
-                    role="img"
-                    aria-label={`${row.brand}: ${formatCurrency(row.minimum, row.currency)} to ${formatCurrency(row.maximum, row.currency)}, median ${formatCurrency(row.median, row.currency)}`}
-                    style={`--range-start:${rangeStart}%;--range-width:${rangeWidth}%;--quartile-start:${quartileStart}%;--quartile-width:${quartileWidth}%;--median-position:${medianPosition}%;`}
-                  >
-                    <span class="luxury-data-story__range-line"></span>
-                    <span class="luxury-data-story__quartile-line"></span>
-                    <span class="luxury-data-story__median-line"></span>
-                  </div>
-
-                  <div class="luxury-data-story__values data-copy">
-                    <span>MIN {formatCurrency(row.minimum, row.currency)}</span>
-                    <span>P25 {formatCurrency(row.lowerQuartile, row.currency)}</span>
-                    <span>MEDIAN {formatCurrency(row.median, row.currency)}</span>
-                    <span>P75 {formatCurrency(row.upperQuartile, row.currency)}</span>
-                    <span>MAX {formatCurrency(row.maximum, row.currency)}</span>
-                  </div>
-                </div>
-              );
-            })}
+      <div class="luxury-architecture__markets">
+        {LUXURY_FLAGSHIP.architecture.map((market) => (
+          <div class="luxury-architecture__market" data-architecture-market={market.market}>
+            <div class="luxury-architecture__market-heading">
+              <strong class="display">{market.name}</strong>
+              <span class="data-copy">{market.market} / {market.currency} / {LUXURY_FLAGSHIP.snapshot.capturedAt}</span>
+            </div>
+            <div
+              class="luxury-architecture__rail"
+              role="img"
+              aria-label={`${market.name}: entry ${formatCurrency(market.minimum, market.currency)}, pre-icon ${formatCurrency(market.preIcon, market.currency)}, icon ${formatCurrency(market.icon, market.currency)}, maximum ${formatCurrency(market.maximum, market.currency)}`}
+            >
+              <span class="luxury-architecture__track"></span>
+              <span
+                class="luxury-architecture__node luxury-architecture__node--entry"
+                style={`--node-position:${architecturePosition(market.minimum, market)};`}
+              >
+                <i></i><b>ENTRY</b><em>{formatCurrency(market.minimum, market.currency)}</em>
+              </span>
+              <span
+                class="luxury-architecture__node luxury-architecture__node--pre-icon"
+                style={`--node-position:${architecturePosition(market.preIcon, market)};`}
+              >
+                <i></i><b>PRE-ICON</b><em>{formatCurrency(market.preIcon, market.currency)}</em>
+              </span>
+              <span
+                class="luxury-architecture__node luxury-architecture__node--icon"
+                style={`--node-position:${architecturePosition(market.icon, market)};`}
+              >
+                <i></i><b>ICON</b><em>{formatCurrency(market.icon, market.currency)}</em>
+              </span>
+              <span
+                class="luxury-architecture__node luxury-architecture__node--max"
+                style={`--node-position:${architecturePosition(market.maximum, market)};`}
+              >
+                <i></i><b>MAX</b><em>{formatCurrency(market.maximum, market.currency)}</em>
+              </span>
+            </div>
+            <p class="luxury-architecture__market-note data-copy">{market.observationNote}</p>
           </div>
-        </details>
-      ))}
+        ))}
+      </div>
+    </div>
+
+    <div class="luxury-data-story__evidence-grid">
+      <article class="luxury-evidence-card luxury-evidence-card--history motion-reveal" data-home-motion>
+        <div class="luxury-evidence-card__heading">
+          <p class="data-copy">HISTORICAL SIGNAL / 2022 → 2026</p>
+          <span class="luxury-evidence-card__index data-copy">01</span>
+        </div>
+        <h4 class="display">Broad repricing, with a little stretch.</h4>
+        <div class="luxury-evidence-card__stats">
+          <div>
+            <strong class="display">{formatPercent(LUXURY_FLAGSHIP.historical.classicShift)}</strong>
+            <span class="data-copy">CLASSIC MEDIAN</span>
+          </div>
+          <div>
+            <strong class="display">{formatPercent(LUXURY_FLAGSHIP.historical.miniShift)}</strong>
+            <span class="data-copy">MINI / ACCESS-CORE</span>
+          </div>
+        </div>
+        <div
+          class="luxury-evidence-card__ratio"
+          aria-label="Classic to Mini access core ratio increased from 2.052 times to 2.081 times"
+        >
+          <div class="luxury-evidence-card__ratio-line">
+            <span class="luxury-evidence-card__ratio-fill"></span>
+            <i></i>
+            <i></i>
+          </div>
+          <div class="luxury-evidence-card__ratio-labels data-copy">
+            <span>2.052× / 2022</span>
+            <span>2.081× / 2026</span>
+          </div>
+        </div>
+        <p class="body-copy">
+          The Classic-to-Mini ratio widens from {LUXURY_FLAGSHIP.historical.ratioFrom.toFixed(3)}× to {LUXURY_FLAGSHIP.historical.ratioTo.toFixed(3)}×; the absolute gap expands from €4,470 to €5,350.
+        </p>
+      </article>
+
+      <article class="luxury-evidence-card luxury-evidence-card--finance motion-reveal" data-home-motion>
+        <div class="luxury-evidence-card__heading">
+          <p class="data-copy">BUSINESS SIGNAL / {LUXURY_FLAGSHIP.financial.period.replace('Chanel consolidated / ', '')}</p>
+          <span class="luxury-evidence-card__index data-copy">02</span>
+        </div>
+        <h4 class="display">Performance recovered — not linearly.</h4>
+        <div class="luxury-evidence-card__financials">
+          <div>
+            <strong class="display">{formatPercent(LUXURY_FLAGSHIP.financial.revenueCagr)}</strong>
+            <span class="data-copy">NOMINAL REVENUE CAGR</span>
+          </div>
+          <div>
+            <strong class="display">{LUXURY_FLAGSHIP.financial.marginFrom.toFixed(1)} → {LUXURY_FLAGSHIP.financial.marginTo.toFixed(1)}%</strong>
+            <span class="data-copy">OPERATING MARGIN</span>
+          </div>
+        </div>
+        <div class="luxury-evidence-card__shock">
+          <span class="data-copy">{LUXURY_FLAGSHIP.financial.shockYear} / OPERATING WEATHER</span>
+          <div class="luxury-evidence-card__shock-grid">
+            <span><b>{formatPercent(LUXURY_FLAGSHIP.financial.comparableGrowth)}</b><small>COMPARABLE GROWTH</small></span>
+            <span><b>{formatPercent(LUXURY_FLAGSHIP.financial.operatingProfit)}</b><small>OPERATING PROFIT</small></span>
+            <span><b>{formatPercent(LUXURY_FLAGSHIP.financial.fcfChange)}</b><small>FCF</small></span>
+          </div>
+        </div>
+        <p class="body-copy">
+          FCF then rebounds {formatPercent(LUXURY_FLAGSHIP.financial.reboundFcf)} in {LUXURY_FLAGSHIP.financial.reboundYear}. Premiumization
+          and reinvestment coexist in the record; public evidence does not establish causality.
+        </p>
+      </article>
+    </div>
+
+    <div class="luxury-data-story__boundary">
+      <span class="luxury-data-story__boundary-mark" aria-hidden="true">↳</span>
+      <p class="body-copy">
+        <strong>SCOPE.</strong> Local list prices are descriptive, not FX/tax normalized.
+        Chanel figures are consolidated, not handbag-only; Hermès and LVMH benchmarks remain at their
+        disclosed reporting grain.
+      </p>
     </div>
 
     <div class="luxury-data-story__source">
-      <a class="data-copy" href={LUXURY_PRICE_SOURCE} target="_blank" rel="noreferrer">
-        SOURCE / BRAND PRICE SUMMARY CSV
-      </a>
-      <span class="data-copy">FRANCE/U.S. LOCAL LIST PRICES · DESCRIPTIVE ONLY · NOT FX/TAX NORMALIZED</span>
+      <div class="luxury-data-story__source-links">
+        <a class="data-copy" href="/work/luxury-handbag-pricing-architecture/">READ FULL REPORT <span aria-hidden="true">↗</span></a>
+        <a class="data-copy" href={LUXURY_FLAGSHIP_SOURCES.methodology} target="_blank" rel="noreferrer">METHODOLOGY <span aria-hidden="true">↗</span></a>
+        <a class="data-copy" href={LUXURY_FLAGSHIP_SOURCES.validation} target="_blank" rel="noreferrer">VALIDATION <span aria-hidden="true">↗</span></a>
+      </div>
+      <span class="data-copy">FRANCE / U.S. LOCAL LIST PRICES · DESCRIPTIVE ONLY · NOT FX/TAX NORMALIZED</span>
+    </div>
+
+    <div class="luxury-data-story__comparison">
+      <div class="luxury-data-story__comparison-heading">
+        <p class="data-copy">COMPARATIVE CONTEXT / FOUR-HOUSE SAMPLE</p>
+        <p class="body-copy">Chanel’s current endpoints lead the read; open a market to compare observed ranges across four houses.</p>
+      </div>
+
+      <div class="luxury-data-story__legend data-copy" aria-label="Chart legend">
+        <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--range"></i>MIN–MAX</span>
+        <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--quartile"></i>P25–P75</span>
+        <span><i class="luxury-data-story__legend-swatch luxury-data-story__legend-swatch--median"></i>MEDIAN</span>
+      </div>
+
+      <div class="luxury-data-story__markets">
+        {marketPanels.map((panel) => (
+          <details
+            class="luxury-data-story__market"
+            data-market-panel
+            data-market={panel.market}
+            open={panel.market === 'US'}
+          >
+            <summary>
+              <span>
+                <strong class="display">{marketNames[panel.market]}</strong>
+                <span class="data-copy">{panel.market} / {panel.rows[0].currency}</span>
+              </span>
+              <span class="data-copy">{panel.rows.length} brands / expand</span>
+            </summary>
+
+            <div class="luxury-data-story__panel">
+              {panel.rows.map((row) => {
+                const rangeStart = ((row.minimum - panel.scaleMin) / panel.scaleSpan) * 100;
+                const rangeWidth = ((row.maximum - row.minimum) / panel.scaleSpan) * 100;
+                const quartileStart = ((row.lowerQuartile - panel.scaleMin) / panel.scaleSpan) * 100;
+                const quartileWidth =
+                  ((row.upperQuartile - row.lowerQuartile) / panel.scaleSpan) * 100;
+                const medianPosition = ((row.median - panel.scaleMin) / panel.scaleSpan) * 100;
+
+                return (
+                  <div class="luxury-data-story__row" data-brand-row={row.brand}>
+                    <div class="luxury-data-story__row-header">
+                      <strong class="luxury-data-story__brand">{row.brand}</strong>
+                      <span class="luxury-data-story__row-meta data-copy">
+                        {formatCurrency(row.minimum, row.currency)}–{formatCurrency(row.maximum, row.currency)}
+                        / {row.numericObservations} observations
+                      </span>
+                    </div>
+
+                    <div
+                      class="luxury-data-story__range"
+                      role="img"
+                      aria-label={`${row.brand}: ${formatCurrency(row.minimum, row.currency)} to ${formatCurrency(row.maximum, row.currency)}, median ${formatCurrency(row.median, row.currency)}`}
+                      style={`--range-start:${rangeStart}%;--range-width:${rangeWidth}%;--quartile-start:${quartileStart}%;--quartile-width:${quartileWidth}%;--median-position:${medianPosition}%;`}
+                    >
+                      <span class="luxury-data-story__range-line"></span>
+                      <span class="luxury-data-story__quartile-line"></span>
+                      <span class="luxury-data-story__median-line"></span>
+                    </div>
+
+                    <div class="luxury-data-story__values data-copy">
+                      <span>MIN {formatCurrency(row.minimum, row.currency)}</span>
+                      <span>P25 {formatCurrency(row.lowerQuartile, row.currency)}</span>
+                      <span>MEDIAN {formatCurrency(row.median, row.currency)}</span>
+                      <span>P75 {formatCurrency(row.upperQuartile, row.currency)}</span>
+                      <span>MAX {formatCurrency(row.maximum, row.currency)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </details>
+        ))}
+      </div>
+
+      <div class="luxury-data-story__source luxury-data-story__source--comparison">
+        <a class="data-copy" href={LUXURY_PRICE_SOURCE} target="_blank" rel="noreferrer">
+          SOURCE / BRAND PRICE SUMMARY CSV <span aria-hidden="true">↗</span>
+        </a>
+        <a class="data-copy" href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">
+          CURRENT PANEL <span aria-hidden="true">↗</span>
+        </a>
+      </div>
     </div>
   </section>
 

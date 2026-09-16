@@ -3,16 +3,23 @@
 
   --paper: #f2efe7;
   --paper-raised: #f8f6f0;
+  --surface: #f8f6f0;
   --ink: #151515;
   --ink-muted: #69665f;
   --hairline: rgb(21 21 21 / 14%);
   --surface-soft: rgb(21 21 21 / 4%);
   --metal: #a8a39a;
+  --accent: #77544a;
+  --accent-strong: #69473d;
+  --accent-soft: rgb(119 84 74 / 14%);
+  --focus-ring: #77544a;
 
   --font-display: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-editorial: 'Cormorant Garamond Variable', Georgia, serif;
   --font-body: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-data: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-report-display: Didot, 'Bodoni 72', 'Bodoni Moda', 'Cormorant Garamond Variable', Georgia, serif;
+  --font-report-body: Baskerville, 'Libre Baskerville', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
 
   --page-max: 96rem;
   --gutter: clamp(1rem, 3vw, 3.5rem);
@@ -32,7 +39,9 @@
   --motion-fast: 160ms;
   --motion-editorial: 420ms;
   --motion-cinematic: 900ms;
+  --motion-signature: 1400ms;
   --ease-editorial: cubic-bezier(0.22, 0.8, 0.2, 1);
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root[data-theme='dark'] {
@@ -40,9 +49,14 @@
 
   --paper: #111214;
   --paper-raised: #17181b;
+  --surface: #17181b;
   --ink: #efede7;
   --ink-muted: #aaa69f;
   --hairline: rgb(255 255 255 / 14%);
   --surface-soft: rgb(255 255 255 / 5%);
   --metal: #7e7f83;
+  --accent: #b39a7e;
+  --accent-strong: #d1b08f;
+  --accent-soft: rgb(179 154 126 / 16%);
+  --focus-ring: #d1b08f;
 }

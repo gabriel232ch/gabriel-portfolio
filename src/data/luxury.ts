@@ -10,6 +10,97 @@ export interface LuxuryPriceSummary {
   maximum: number;
 }
 
+export interface LuxuryArchitectureEndpoint {
+  market: 'FR' | 'US';
+  name: string;
+  currency: 'EUR' | 'USD';
+  minimum: number;
+  preIcon: number;
+  icon: number;
+  maximum: number;
+  observationNote: string;
+}
+
+/**
+ * Public portfolio facts from the R1 release of the canonical repository.
+ * Keep the evidence boundary visible: these are observed endpoints and
+ * reported business signals, not causal estimates.
+ */
+export const LUXURY_FLAGSHIP = {
+  release: {
+    label: 'R1 portfolio release',
+    date: '14 SEP 2026',
+    commit: 'b59f90e',
+    commitUrl:
+      'https://github.com/gabriel232ch/luxury-handbag-price-architecture/commit/b59f90e9a4b34bcbf81eb626935396899982c832',
+  },
+  snapshot: {
+    year: '2026',
+    capturedAt: '2026-08-15',
+    acceptedObservations: 41,
+    numericPrices: 35,
+    financialWindow: 'FY2020–FY2025',
+  },
+  architecture: [
+    {
+      market: 'FR',
+      name: 'France',
+      currency: 'EUR',
+      minimum: 4850,
+      preIcon: 6700,
+      icon: 10000,
+      maximum: 12250,
+      observationNote: 'Largest visible pre-icon → icon gap: €3,300',
+    },
+    {
+      market: 'US',
+      name: 'United States',
+      currency: 'USD',
+      minimum: 5400,
+      preIcon: 7400,
+      icon: 11000,
+      maximum: 13500,
+      observationNote: 'Largest visible pre-icon → icon gap: $3,600',
+    },
+  ] satisfies readonly LuxuryArchitectureEndpoint[],
+  historical: {
+    period: '2022–2026 aligned Chanel France lines',
+    miniShift: 16.5,
+    classicShift: 18.1,
+    ratioFrom: 2.052,
+    ratioTo: 2.081,
+    gapFrom: 4470,
+    gapTo: 5350,
+  },
+  financial: {
+    period: 'Chanel consolidated / FY2020–FY2025',
+    revenueCagr: 13.8,
+    marginFrom: 20.0,
+    marginTo: 24.5,
+    shockYear: '2024',
+    comparableGrowth: -4.3,
+    operatingProfit: -30.1,
+    fcfChange: -50.9,
+    reboundYear: '2025',
+    reboundFcf: 43.6,
+    brandSupportRange: '11.5–13.5% of revenue',
+  },
+} as const;
+
+export const LUXURY_FLAGSHIP_SOURCES = {
+  readme: 'https://github.com/gabriel232ch/luxury-handbag-price-architecture',
+  report:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/FINAL_LUXURY_HANDBAG_PRICING_STRATEGY_CN.md',
+  methodology:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/docs/METHODOLOGY_CN.md',
+  validation:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/docs/VALIDATION.md',
+  currentPanel:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/tree/main/chanel_fr_us_handbags_current',
+  financialPanel:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/tree/main/financial_business_performance',
+} as const;
+
 /**
  * Curated verbatim from the canonical calculation output. This is a build-time
  * snapshot for the static Home; the source path remains visible in the UI.
