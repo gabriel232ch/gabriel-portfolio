@@ -112,6 +112,25 @@ test('Home renders Luxury as an expandable source-backed market story', async ({
   await expect(france).toHaveAttribute('open', '');
 });
 
+test('mobile Luxury architecture keeps adjacent price labels separated', async ({ page }) => {
+  await page.goto('/');
+  const market = page.locator('[data-architecture-market="US"]');
+
+  for (const width of [375, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    const nodes = await market.locator('.luxury-architecture__node').evaluateAll((elements) =>
+      elements.map((element) => {
+        const rect = element.getBoundingClientRect();
+        return { left: rect.left, right: rect.right };
+      }),
+    );
+
+    for (let index = 0; index < nodes.length - 1; index += 1) {
+      expect(nodes[index].right).toBeLessThanOrEqual(nodes[index + 1].left + 1);
+    }
+  }
+});
+
 test('Home renders Olist as a decision-intelligence feature after Luxury', async ({ page }) => {
   await page.goto('/');
 
