@@ -23,6 +23,37 @@ test('Home opens with Gabriel identity rather than a project index', async ({ pa
   await expect(page.locator('[data-home-reading]')).toHaveCount(0);
 });
 
+test('Chanel follows the approved question-first narrative', async ({ page }) => {
+  await page.goto('/');
+  const chanel = page.locator('[data-home-chapter="chanel"]');
+
+  await expect(chanel).toBeVisible();
+  await expect(chanel.getByText('MILAN · 2025 → NOW')).toBeVisible();
+  await expect(chanel.getByRole('heading', {
+    level: 2,
+    name: 'Luxury Was Slowing. Why Did Chanel Look Different?',
+  })).toBeVisible();
+  await expect(chanel.getByText('I started with what I could see.')).toBeVisible();
+  await expect(chanel.getByText('But something still felt missing.')).toBeVisible();
+  await expect(chanel.locator('[data-chanel-price-position]')).toBeVisible();
+  await expect(chanel.locator('[data-chanel-history]')).toBeVisible();
+  await expect(chanel.locator('[data-chanel-business]')).toBeVisible();
+  await expect(chanel.getByText('The question is still open.')).toBeVisible();
+  await expect(chanel.getByRole('link', { name: 'Explore the research →' })).toHaveAttribute(
+    'href',
+    '/work/luxury-handbag-pricing-architecture/',
+  );
+
+  for (const forbidden of [
+    'VISUAL / MARKET',
+    'CHANEL PREMIUMIZATION STRATEGY',
+    'CURRENT SNAPSHOT',
+    'Price, history, performance',
+  ]) {
+    await expect(chanel.getByText(forbidden, { exact: true })).toHaveCount(0);
+  }
+});
+
 test('Home exposes the Now layer and quieter editorial closing', async ({ page }) => {
   await page.goto('/');
 

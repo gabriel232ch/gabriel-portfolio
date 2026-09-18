@@ -1,0 +1,19 @@
+---
+import { LUXURY_FLAGSHIP } from '../../data/luxury';
+
+const signed = (value: number) => `${value > 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}%`;
+---
+
+<div class="chanel-business-signal" data-chanel-business data-home-motion>
+  <p class="chanel-question editorial">The business complicated the story.</p>
+  <div class="chanel-business-signal__baseline">
+    <span><small>Nominal revenue CAGR · FY20–25</small><strong>{signed(LUXURY_FLAGSHIP.financial.revenueCagr)}</strong></span>
+    <span><small>Operating margin</small><strong>{LUXURY_FLAGSHIP.financial.marginFrom.toFixed(1)} → {LUXURY_FLAGSHIP.financial.marginTo.toFixed(1)}%</strong></span>
+  </div>
+  <div class="chanel-business-signal__shock">
+    <span><small>2024 comparable revenue</small><strong>{signed(LUXURY_FLAGSHIP.financial.comparableGrowth)}</strong></span>
+    <span><small>2024 operating profit</small><strong>{signed(LUXURY_FLAGSHIP.financial.operatingProfit)}</strong></span>
+    <span><small>2024 free cash flow</small><strong>{signed(LUXURY_FLAGSHIP.financial.fcfChange)}</strong></span>
+    <span><small>2025 free cash flow</small><strong>{signed(LUXURY_FLAGSHIP.financial.reboundFcf)}</strong></span>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+---
+import { LUXURY_PRICE_SUMMARY, type LuxuryPriceSummary } from '../../data/luxury';
+
+const markets = ['FR', 'US'] as const;
+const formatCurrency = (value: number, currency: LuxuryPriceSummary['currency']) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+
+const panels = markets.map((market) => {
+  const rows = LUXURY_PRICE_SUMMARY.filter((row) => row.market === market);
+  const min = Math.min(...rows.map((row) => row.minimum));
+  const max = Math.max(...rows.map((row) => row.maximum));
+  return { market, rows, min, span: max - min };
+});
+---
+
+<div class="chanel-price-position" data-chanel-price-position>
+  <p class="chanel-question editorial">Where does Chanel actually sit?</p>
+  <div class="chanel-price-position__markets">
+    {panels.map((panel) => (
+      <div class="chanel-price-position__market">
+        <p class="data-copy">{panel.market === 'FR' ? 'France' : 'United States'}</p>
+        {panel.rows.map((row) => {
+          const left = ((row.minimum - panel.min) / panel.span) * 100;
+          const width = ((row.maximum - row.minimum) / panel.span) * 100;
+          const median = ((row.median - panel.min) / panel.span) * 100;
+          const rangeStyle = `--range-left:${left}%;--range-width:${width}%;--median:${median}%;`;
+          return (
+            <div class:list={['chanel-price-position__row', row.brand === 'CHANEL' && 'is-chanel']}>
+              <span class="data-copy">{row.brand}</span>
+                <span
+                class="chanel-price-position__rail"
+                role="img"
+                aria-label={`${row.brand}: ${formatCurrency(row.minimum, row.currency)} to ${formatCurrency(row.maximum, row.currency)}, median ${formatCurrency(row.median, row.currency)}`}
+                style={rangeStyle}
+              >
+                <i style={rangeStyle}></i>
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    ))}
+  </div>
+</div>

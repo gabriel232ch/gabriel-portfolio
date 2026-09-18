@@ -6,12 +6,13 @@ import HomeMotionController from '../components/home/HomeMotionController.astro'
 import HomeNavigation from '../components/home/HomeNavigation.astro';
 import NowSection from '../components/home/NowSection.astro';
 import EditorialClosing from '../components/home/EditorialClosing.astro';
-import LuxuryFeature from '../components/home/LuxuryFeature.astro';
+import ChanelChapter from '../components/home/ChanelChapter.astro';
 import OlistFeature from '../components/home/OlistFeature.astro';
 import CompetitiveFeature from '../components/home/CompetitiveFeature.astro';
 import { HOME_STATE, HOME_WORK_SLUGS } from '../data/home';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/home.css';
+import '../styles/home-chanel.css';
 
 const featuredWork = (await getCollection('work')).filter((entry) =>
   HOME_WORK_SLUGS.includes(entry.id as (typeof HOME_WORK_SLUGS)[number]),
@@ -42,7 +43,7 @@ const closingSources = [
   <main>
     <HomeNavigation />
     <HomeHero state={HOME_STATE} />
-    <LuxuryFeature entry={luxury} />
+    <ChanelChapter copy={HOME_STATE.projects.chanel} />
     <OlistFeature entry={olist} />
     <CompetitiveFeature entry={competitive} />
     <NowSection

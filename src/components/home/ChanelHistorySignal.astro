@@ -1,0 +1,20 @@
+---
+import { LUXURY_FLAGSHIP } from '../../data/luxury';
+---
+
+<div class="chanel-history-signal" data-chanel-history data-home-motion>
+  <p class="chanel-question editorial">Was this position new?</p>
+  <div class="chanel-history-signal__rows">
+    <div>
+      <span class="data-copy">Classic median · 2022 → 2026</span>
+      <strong class="display">+{LUXURY_FLAGSHIP.historical.classicShift.toFixed(1)}%</strong>
+    </div>
+    <div>
+      <span class="data-copy">Mini / access-core · 2022 → 2026</span>
+      <strong class="display">+{LUXURY_FLAGSHIP.historical.miniShift.toFixed(1)}%</strong>
+    </div>
+  </div>
+  <p class="body-copy">
+    The Classic-to-Mini ratio moved from {LUXURY_FLAGSHIP.historical.ratioFrom.toFixed(3)}× to {LUXURY_FLAGSHIP.historical.ratioTo.toFixed(3)}×, while the absolute gap expanded from €4,470 to €5,350.
+  </p>
+</div>
