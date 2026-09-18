@@ -132,6 +132,29 @@ test('smaller-company chapter stays open-ended and protects current-employer det
   await expect(inquiry.locator('[data-competitive-mechanism]')).toHaveCount(0);
 });
 
+test('Olist and smaller-company CTAs resolve to local expansion pages', async ({ page }) => {
+  await page.goto('/work/olist-marketplace-analysis/');
+  await expect(page.getByRole('heading', {
+    level: 1,
+    name: 'SQL Wasn’t the Hard Part. Knowing What to Ask Was.',
+  })).toBeVisible();
+  await expect(page.getByText('Analysis trail')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Source analysis on GitHub' })).toHaveAttribute(
+    'href',
+    'https://github.com/gabriel232ch/olist-marketplace-analytics/blob/main/README.md',
+  );
+
+  await page.goto('/work/why-some-people-choose-smaller-companies/');
+  await expect(page.getByRole('heading', {
+    level: 1,
+    name: 'Why Do Some People Choose Smaller Companies?',
+  })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Current research' })).toBeVisible();
+  await expect(page.getByText('I’m still trying to understand this.')).toBeVisible();
+  await expect(page.locator('body')).not.toContainText('JoinQuant');
+  await expect(page.locator('body')).not.toContainText('聚宽');
+});
+
 test('Home exposes the Now layer and quieter editorial closing', async ({ page }) => {
   await page.goto('/');
 
