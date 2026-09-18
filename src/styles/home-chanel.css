@@ -16,7 +16,7 @@
 .chanel-chapter__opening h2 {
   max-width: 14ch;
   margin: var(--space-4) 0 var(--space-6);
-  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-size: var(--font-size-project-title);
   font-weight: 300;
   line-height: 0.92;
   letter-spacing: -0.045em;

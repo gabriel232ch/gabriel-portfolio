@@ -98,7 +98,7 @@
   margin: 0;
   color: var(--ink);
   font-family: var(--font-editorial);
-  font-size: clamp(3.4rem, 8vw, 8rem);
+  font-size: var(--font-size-project-title);
   font-weight: 300;
   letter-spacing: -0.055em;
   line-height: 0.86;
@@ -217,9 +217,9 @@
   max-width: 60ch;
   color: var(--ink);
   font-family: var(--font-report-body);
-  font-size: 1.125rem;
+  font-size: var(--font-size-reading);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: var(--line-height-reading);
 }
 
 .report-section p {
@@ -1203,9 +1203,9 @@
 }
 
 .report-judgment p {
-  font-size: 1.125rem;
+  font-size: var(--font-size-reading);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: var(--line-height-reading);
 }
 
 .report-judgment .report-judgment__lead {
@@ -1364,7 +1364,6 @@
 
   .report-title {
     max-width: 11ch;
-    font-size: clamp(3.3rem, 17vw, 6rem);
   }
 
   .report-lede {
@@ -1401,15 +1400,6 @@
 
   .report-section h2 {
     font-size: clamp(2.6rem, 13vw, 4.5rem);
-  }
-
-  .report-section p,
-  .report-section li {
-    font-size: 1rem;
-  }
-
-  .report-judgment p {
-    font-size: 1rem;
   }
 
   .report-visual {

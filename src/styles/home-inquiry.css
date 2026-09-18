@@ -9,7 +9,7 @@
 .smaller-companies-chapter__question h2 {
   max-width: 18ch;
   margin: 0 0 var(--space-6);
-  font-size: clamp(2.7rem, 5.5vw, 5rem);
+  font-size: var(--font-size-project-title);
   font-weight: 300;
   line-height: 0.98;
 }

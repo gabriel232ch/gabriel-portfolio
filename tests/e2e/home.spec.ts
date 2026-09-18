@@ -100,7 +100,7 @@ test('Home typography uses Baskerville body, Didot metrics, and editorial displa
   expect(narrativeStyles.length).toBeGreaterThan(0);
   expect(narrativeStyles.every((style) => style.family.includes('Baskerville'))).toBe(true);
   expect(narrativeStyles.every((style) => style.weight === '400')).toBe(true);
-  expect(narrativeStyles.every((style) => style.size >= 18 && style.size <= 20)).toBe(true);
+  expect(narrativeStyles.every((style) => style.size >= 20 && style.size <= 22)).toBe(true);
   expect(narrativeStyles.every((style) => style.lineHeight / style.size >= 1.5)).toBe(true);
 
   const colors = await page.evaluate(() => {

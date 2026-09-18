@@ -11,6 +11,8 @@ test('approved typography roles are exposed through semantic tokens', async ({ p
       editorial: styles.getPropertyValue('--font-editorial').trim(),
       body: styles.getPropertyValue('--font-body').trim(),
       data: styles.getPropertyValue('--font-data').trim(),
+      readingSize: styles.getPropertyValue('--font-size-reading').trim(),
+      projectTitleSize: styles.getPropertyValue('--font-size-project-title').trim(),
     };
   });
 
@@ -18,6 +20,8 @@ test('approved typography roles are exposed through semantic tokens', async ({ p
   expect(roles.editorial).toContain('Cormorant Garamond Variable');
   expect(roles.body).toContain('Baskerville');
   expect(roles.data).toContain('IBM Plex Mono');
+  expect(roles.readingSize).toContain('clamp');
+  expect(roles.projectTitleSize).toContain('clamp');
 });
 
 test('Home and Chanel report resolve the approved visible typography roles', async ({ page }) => {
@@ -50,4 +54,25 @@ test('Home and Chanel report resolve the approved visible typography roles', asy
   expect(reportRoles.claim).toContain('Cormorant Garamond Variable');
   expect(reportRoles.sectionNumber).toContain('IBM Plex Mono');
   expect(reportRoles.data).toContain('IBM Plex Mono');
+});
+
+test('Home and Chanel report share the approved reading and project-title scales', async ({ page }) => {
+  await page.goto('/');
+
+  const homeSizes = await page.evaluate(() => ({
+    body: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening > .body-copy')!).fontSize),
+    title: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening h2')!).fontSize),
+  }));
+
+  await page.goto('/work/luxury-handbag-pricing-architecture/');
+
+  const reportSizes = await page.evaluate(() => ({
+    body: Number.parseFloat(getComputedStyle(document.querySelector('.report-section > p:not(.report-section__number):not(.report-claim):not(.report-note)')!).fontSize),
+    title: Number.parseFloat(getComputedStyle(document.querySelector('.report-title')!).fontSize),
+  }));
+
+  expect(homeSizes.body).toBeGreaterThanOrEqual(20);
+  expect(homeSizes.body).toBeLessThanOrEqual(22);
+  expect(reportSizes.body).toBe(homeSizes.body);
+  expect(reportSizes.title).toBe(homeSizes.title);
 });

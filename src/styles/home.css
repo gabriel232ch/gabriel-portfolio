@@ -13,9 +13,9 @@ main .display {
 
 main .body-copy {
   font-family: var(--font-body);
-  font-size: clamp(1.125rem, calc(1rem + 0.35vw), 1.25rem);
+  font-size: var(--font-size-reading);
   font-weight: 400;
-  line-height: 1.58;
+  line-height: var(--line-height-reading);
 }
 
 .home-navigation {
