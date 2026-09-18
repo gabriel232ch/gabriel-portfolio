@@ -24,7 +24,6 @@ const project = HOME_STATE.projects.olist;
       <p class="research-page__lede">{project.noQuestion}</p>
 
       <section aria-labelledby="analysis-trail-title">
-        <p class="research-page__section-label">01 / METHOD</p>
         <h2 id="analysis-trail-title">Analysis trail</h2>
         <ol class="research-page__trail">
           <li>Understand the available tables and their grain.</li>
@@ -36,7 +35,6 @@ const project = HOME_STATE.projects.olist;
       </section>
 
       <section aria-labelledby="evidence-title">
-        <p class="research-page__section-label">02 / OBSERVATIONS</p>
         <h2 id="evidence-title">What the current analysis found</h2>
         <div class="research-page__evidence">
           {OLIST_DATA_METRICS.map((metric) => (
@@ -60,7 +58,6 @@ const project = HOME_STATE.projects.olist;
       </section>
 
       <section aria-labelledby="limits-title">
-        <p class="research-page__section-label">03 / BOUNDARIES</p>
         <h2 id="limits-title">What the data cannot tell me</h2>
         <p>
           The dataset does not provide commission revenue, complete costs or margins, marketing exposure, seller acquisition cost,
@@ -80,8 +77,8 @@ const project = HOME_STATE.projects.olist;
   .research-page {
     min-height: 100vh;
     padding: 1.5rem clamp(1.25rem, 4vw, 5rem) 6rem;
-    color: var(--color-ink, #171717);
-    background: var(--color-paper, #f4f1eb);
+    color: var(--ink);
+    background: var(--paper);
   }
 
   .research-page__header,
@@ -109,10 +106,9 @@ const project = HOME_STATE.projects.olist;
   }
 
   .research-page__kicker,
-  .research-page__section-label,
   .research-page__eyebrow,
   .research-page__note {
-    color: var(--color-muted, #6f6b63);
+    color: var(--ink-muted);
     font-size: 0.72rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;

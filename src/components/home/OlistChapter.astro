@@ -36,11 +36,13 @@ if (!gmv || gmv.id !== 'gmv' || !onTime || onTime.id !== 'on-time') {
     <div>
       <span class="data-copy">{gmv.label}</span>
       <strong>{gmv.fromLabel} → {gmv.toLabel}</strong>
+      <small>{gmv.context}</small>
       <small>{gmv.note}</small>
     </div>
     <div>
       <span class="data-copy">{onTime.label}</span>
       <strong>{onTime.fromLabel} → {onTime.toLabel}</strong>
+      <small>{onTime.context}</small>
       <small>{onTime.note}</small>
     </div>
   </div>

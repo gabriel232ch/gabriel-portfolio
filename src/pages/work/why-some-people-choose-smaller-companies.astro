@@ -24,7 +24,6 @@ const project = HOME_STATE.projects.smallerCompanies;
       <p>{project.shift}</p>
 
       <section aria-labelledby="current-research-title">
-        <p class="inquiry-page__section-label">01 / CURRENT RESEARCH</p>
         <h2 id="current-research-title">Current research</h2>
         <p>
           One current research pass screened 28 organizations, structured 12 cases, completed six longitudinal deep dives,
@@ -37,7 +36,6 @@ const project = HOME_STATE.projects.smallerCompanies;
       </section>
 
       <section aria-labelledby="patterns-title">
-        <p class="inquiry-page__section-label">02 / OBSERVATIONS</p>
         <h2 id="patterns-title">Patterns I’m looking at</h2>
         <p class="inquiry-page__intro">
           These are current analytical patterns, not recipes. The question is whether they remain visible across different
@@ -62,8 +60,8 @@ const project = HOME_STATE.projects.smallerCompanies;
   .inquiry-page {
     min-height: 100vh;
     padding: 1.5rem clamp(1.25rem, 4vw, 5rem) 6rem;
-    color: var(--color-ink, #171717);
-    background: var(--color-paper, #f4f1eb);
+    color: var(--ink);
+    background: var(--paper);
   }
 
   .inquiry-page__header {
@@ -88,9 +86,8 @@ const project = HOME_STATE.projects.smallerCompanies;
     margin: 10rem auto 0;
   }
 
-  .inquiry-page__kicker,
-  .inquiry-page__section-label {
-    color: var(--color-muted, #6f6b63);
+  .inquiry-page__kicker {
+    color: var(--ink-muted);
     font-size: 0.72rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;

@@ -100,6 +100,7 @@ test('Olist shows capability growth rather than a SQL skill showcase', async ({ 
   await expect(olist.locator('[data-olist-tension]')).toContainText('R$7.22M');
   await expect(olist.locator('[data-olist-tension]')).toContainText('96.50%');
   await expect(olist.locator('[data-olist-tension]')).toContainText('92.27%');
+  await expect(olist.locator('[data-olist-tension]')).toContainText('JAN–AUG / 2017 → 2018');
   await expect(olist.getByText('SQL stopped being the task. It became the language I used to investigate a business.')).toBeVisible();
   await expect(olist.getByRole('link', { name: 'Explore the analysis →' })).toHaveAttribute(
     'href',
@@ -131,27 +132,50 @@ test('smaller-company chapter stays open-ended and protects current-employer det
   await expect(inquiry.locator('[data-competitive-mechanism]')).toHaveCount(0);
 });
 
-test('Olist and smaller-company CTAs resolve to local expansion pages', async ({ page }) => {
-  await page.goto('/work/olist-marketplace-analysis/');
-  await expect(page.getByRole('heading', {
-    level: 1,
-    name: 'SQL Wasn’t the Hard Part. Knowing What to Ask Was.',
-  })).toBeVisible();
-  await expect(page.getByText('Analysis trail')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Source analysis on GitHub' })).toHaveAttribute(
-    'href',
-    'https://github.com/gabriel232ch/olist-marketplace-analytics/blob/main/README.md',
-  );
+test('Olist and smaller-company CTAs resolve locally in light and dark themes', async ({ page }) => {
+  const themes = {
+    light: { background: 'rgb(242, 239, 231)', ink: 'rgb(21, 21, 21)' },
+    dark: { background: 'rgb(17, 18, 20)', ink: 'rgb(239, 237, 231)' },
+  } as const;
 
-  await page.goto('/work/why-some-people-choose-smaller-companies/');
-  await expect(page.getByRole('heading', {
-    level: 1,
-    name: 'Why Do Some People Choose Smaller Companies?',
-  })).toBeVisible();
-  await expect(page.getByRole('heading', { level: 2, name: 'Current research' })).toBeVisible();
-  await expect(page.getByText('I’m still trying to understand this.')).toBeVisible();
-  await expect(page.locator('body')).not.toContainText('JoinQuant');
-  await expect(page.locator('body')).not.toContainText('聚宽');
+  for (const [theme, colors] of Object.entries(themes)) {
+    await page.goto('/work/olist-marketplace-analysis/');
+    await page.evaluate((selectedTheme) => localStorage.setItem('theme', selectedTheme), theme);
+    await page.reload();
+    const olistPage = page.locator('.research-page');
+    await expect(olistPage).toHaveCSS('background-color', colors.background);
+    await expect(olistPage).toHaveCSS('color', colors.ink);
+    await expect(page.getByRole('heading', {
+      level: 1,
+      name: 'SQL Wasn’t the Hard Part. Knowing What to Ask Was.',
+    })).toBeVisible();
+    await expect(page.getByText('Analysis trail')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Source analysis on GitHub' })).toHaveAttribute(
+      'href',
+      'https://github.com/gabriel232ch/olist-marketplace-analytics/blob/main/README.md',
+    );
+    for (const retiredLabel of ['01 / METHOD', '02 / OBSERVATIONS', '03 / BOUNDARIES']) {
+      await expect(page.getByText(retiredLabel, { exact: true })).toHaveCount(0);
+    }
+
+    await page.goto('/work/why-some-people-choose-smaller-companies/');
+    await page.evaluate((selectedTheme) => localStorage.setItem('theme', selectedTheme), theme);
+    await page.reload();
+    const inquiryPage = page.locator('.inquiry-page');
+    await expect(inquiryPage).toHaveCSS('background-color', colors.background);
+    await expect(inquiryPage).toHaveCSS('color', colors.ink);
+    await expect(page.getByRole('heading', {
+      level: 1,
+      name: 'Why Do Some People Choose Smaller Companies?',
+    })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'Current research' })).toBeVisible();
+    await expect(page.getByText('I’m still trying to understand this.')).toBeVisible();
+    await expect(page.locator('body')).not.toContainText('JoinQuant');
+    await expect(page.locator('body')).not.toContainText('聚宽');
+    for (const retiredLabel of ['01 / CURRENT RESEARCH', '02 / OBSERVATIONS']) {
+      await expect(page.getByText(retiredLabel, { exact: true })).toHaveCount(0);
+    }
+  }
 });
 
 test('Now shows a life in progress and the page ends warmly', async ({ page }) => {
@@ -284,6 +308,13 @@ test('Home has no viewport overflows', async ({ page }) => {
 test('smaller-company research link can be reached with a keyboard', async ({ page }) => {
   await page.goto('/');
   const link = page.getByRole('link', { name: 'Explore the current research →' });
-  await link.focus();
+
+  for (let tab = 0; tab < 20; tab += 1) {
+    if (await link.evaluate((element) => element === document.activeElement)) break;
+    await page.keyboard.press('Tab');
+  }
+
   await expect(link).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/work\/why-some-people-choose-smaller-companies\/$/);
 });
