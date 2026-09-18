@@ -38,9 +38,6 @@ test('Home exposes the Now layer and quieter editorial closing', async ({ page }
   await page.getByRole('link', { name: 'NOW', exact: true }).click();
   await expect(page.locator('#about')).toBeInViewport();
 
-  await page.locator('[data-home-reading]').nth(1).click();
-  await expect(page.locator('#olist')).toBeInViewport();
-
   await page.locator('.editorial-closing a[href="#work"]').click();
   await expect(page.locator('#work')).toBeInViewport();
   await expect(page.locator('#index a[href="#index"]')).toHaveCount(0);
@@ -233,13 +230,8 @@ test('research remains readable with JavaScript disabled', async ({ browser, bas
   }
 });
 
-test('reading links resolve and no viewport overflows', async ({ page }) => {
+test('Home has no viewport overflows', async ({ page }) => {
   await page.goto('/');
-  for (const link of await page.locator('[data-home-reading]').all()) {
-    const href = await link.getAttribute('href');
-    expect(href).toMatch(/^#/);
-    await expect(page.locator(href!)).toHaveCount(1);
-  }
 
   for (const detail of await page.locator('details').all()) {
     if ((await detail.getAttribute('open')) === null) {

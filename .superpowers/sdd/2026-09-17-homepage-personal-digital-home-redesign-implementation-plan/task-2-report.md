@@ -29,3 +29,15 @@ After implementation, the focused Hero and reduced-motion tests were run. Both r
 ## Scope review
 
 Only the requested Hero component, Hero/shared CSS rules, focused Home E2E contract, and this report were changed. No Task 3 component, route, data, snapshot, or unrelated edit was modified.
+
+## Review fix
+
+Removed the remaining legacy `[data-home-reading]` click and link-resolution loop from `tests/e2e/home.spec.ts`. The viewport-overflow test now checks only its current responsibility, and the identity-only Hero contract retains the explicit zero-count assertion for the retired selector.
+
+Verification after the fix:
+
+- `git diff --check`: passed.
+- `npm run lint`: passed.
+- `npm run test`: passed — 16 tests.
+- Playwright discovery for the focused Hero test: passed — 2 projects listed.
+- Focused Hero Playwright run: still blocked before assertions by the pre-existing `NowSection.astro` runtime/schema mismatch documented above.
