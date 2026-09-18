@@ -18,7 +18,7 @@ body {
   min-height: 100vh;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-body);
+  font-family: var(--font-reading);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }

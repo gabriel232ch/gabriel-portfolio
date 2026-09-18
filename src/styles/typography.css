@@ -11,18 +11,20 @@
 }
 
 .editorial {
-  font-family: var(--font-editorial);
+  font-family: var(--font-display);
   font-weight: 300;
   line-height: 1.48;
 }
 
 .body-copy {
-  font-family: var(--font-body);
-  line-height: 1.58;
+  font-family: var(--font-reading);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-reading);
 }
 
 .data-copy {
-  font-family: var(--font-data);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
