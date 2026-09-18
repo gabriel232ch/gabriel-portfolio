@@ -1,19 +1,26 @@
 import { expect, test } from '@playwright/test';
 
-test('Home exposes lightweight navigation and the editorial Hero', async ({ page }) => {
+test('Home opens with Gabriel identity rather than a project index', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByRole('link', { name: 'WORK', exact: true })).toHaveAttribute('href', '#work');
   await expect(page.getByRole('link', { name: 'NOW', exact: true })).toHaveAttribute('href', '#about');
-  await expect(page.getByRole('link', { name: 'INDEX', exact: true })).toHaveCount(0);
   await expect(page.getByRole('heading', { level: 1, name: 'Gabriel Chen' })).toBeVisible();
   await expect(page.locator('[data-signature-reveal] svg')).toHaveCount(1);
-  await expect(page.locator('[data-signature-reveal] .home-hero__signature-draw')).toHaveCount(11);
-  await expect(page.getByText('RESEARCH / SYSTEMS / NOTES')).toBeVisible();
-  await expect(page.getByText('I explore how businesses work, and how research can become useful systems.')).toBeVisible();
-  await expect(page.locator('[data-home-reading]')).toHaveCount(2);
-  await expect(page.locator('[data-home-reading]').nth(0)).toHaveAttribute('href', '#work');
-  await expect(page.locator('[data-home-reading]').nth(1)).toHaveAttribute('href', '#olist');
+  await expect(page.getByText(
+    'I like following questions until they become clearer — and building things that help me think better.',
+  )).toBeVisible();
+
+  for (const retiredCopy of [
+    'RESEARCH / SYSTEMS / NOTES',
+    'START READING',
+    'PRICING RESEARCH',
+    'MARKETPLACE ANALYSIS',
+  ]) {
+    await expect(page.getByText(retiredCopy, { exact: true })).toHaveCount(0);
+  }
+  await expect(page.locator('.folio-number')).toHaveCount(0);
+  await expect(page.locator('[data-home-reading]')).toHaveCount(0);
 });
 
 test('Home exposes the Now layer and quieter editorial closing', async ({ page }) => {
