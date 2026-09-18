@@ -139,17 +139,27 @@ test('Home and Chanel report share the approved reading and project-title scales
 });
 
 for (const viewport of [
-  { name: 'mobile', width: 390, height: 844, bodySize: 20 },
-  { name: 'desktop', width: 1024, height: 900, bodySize: 22 },
+  { name: 'mobile', width: 390, height: 844 },
+  { name: 'desktop', width: 1024, height: 900 },
+  { name: 'wide desktop', width: 1440, height: 1000 },
 ]) {
   test(`Home and Chanel share detail roles at ${viewport.name}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto('/');
 
-    const home = await page.evaluate(() => ({
-      body: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening > .body-copy')!).fontSize),
-      title: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening h2')!).fontSize),
-    }));
+    const home = await page.evaluate(() => {
+      const probe = document.createElement('span');
+      probe.style.fontSize = 'var(--font-size-body)';
+      document.body.append(probe);
+      const bodyToken = Number.parseFloat(getComputedStyle(probe).fontSize);
+      probe.remove();
+
+      return {
+        body: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening > .body-copy')!).fontSize),
+        bodyToken,
+        title: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening h2')!).fontSize),
+      };
+    });
 
     await page.goto('/work/luxury-handbag-pricing-architecture/');
 
@@ -164,29 +174,48 @@ for (const viewport of [
       };
       const body = document.querySelector('.report-section > p:not(.report-section__number):not(.report-claim):not(.report-note)')!;
       const title = document.querySelector('.report-title')!;
+      const lead = document.querySelector('.report-lede')!;
+      const statement = document.querySelector('.report-claim')!;
       const sectionTitle = document.querySelector('.report-section h2')!;
       const kpi = document.querySelector('.report-kpi-card strong')!;
 
       return {
         body: Number.parseFloat(getComputedStyle(body).fontSize),
         title: Number.parseFloat(getComputedStyle(title).fontSize),
+        lead: Number.parseFloat(getComputedStyle(lead).fontSize),
+        statement: Number.parseFloat(getComputedStyle(statement).fontSize),
         sectionTitle: Number.parseFloat(getComputedStyle(sectionTitle).fontSize),
         kpiFamily: getComputedStyle(kpi).fontFamily,
         kpiSize: Number.parseFloat(getComputedStyle(kpi).fontSize),
+        bodyToken: resolveToken('--font-size-body'),
         projectTitleToken: resolveToken('--font-size-project-title'),
+        leadToken: resolveToken('--font-size-lead'),
         sectionTitleToken: resolveToken('--font-size-section-title'),
         statementToken: resolveToken('--font-size-statement'),
       };
     });
 
-    expect(home.body).toBe(viewport.bodySize);
-    expect(report.body).toBe(viewport.bodySize);
+    expect(home.body).toBe(home.bodyToken);
+    expect(report.body).toBe(report.bodyToken);
     expect(report.body).toBe(home.body);
     expect(report.title).toBe(report.projectTitleToken);
     expect(report.title).toBe(home.title);
+    expect(report.lead).toBe(report.leadToken);
+    expect(report.statement).toBe(report.statementToken);
     expect(report.sectionTitle).toBe(report.sectionTitleToken);
     expect(report.kpiFamily).toContain('Didot');
     expect([report.statementToken, report.sectionTitleToken]).toContain(report.kpiSize);
+
+    if (viewport.width === 390) {
+      expect(report.body).toBe(20);
+    }
+
+    if (viewport.width === 1440) {
+      expect(report.body).toBe(22);
+      expect(report.lead).toBe(26);
+      expect(report.statement).toBe(32);
+      expect(report.sectionTitle).toBe(40);
+    }
   });
 }
 
