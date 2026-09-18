@@ -155,30 +155,38 @@ test('Olist and smaller-company CTAs resolve to local expansion pages', async ({
   await expect(page.locator('body')).not.toContainText('聚宽');
 });
 
-test('Home exposes the Now layer and quieter editorial closing', async ({ page }) => {
+test('Now shows a life in progress and the page ends warmly', async ({ page }) => {
   await page.goto('/');
+  const now = page.locator('#about');
 
-  await expect(page.locator('#about')).toContainText('Employer Brand / GEO at JoinQuant');
-  await expect(page.locator('#about [data-now-side]')).toHaveCount(2);
-  await expect(page.locator('[data-author-note]')).toContainText('A place to keep thinking');
-  await expect(page.locator('[data-author-note]')).toContainText(
-    'This is a place for work, research, and ideas I want to return to.',
+  await expect(now.locator('[data-now-item]')).toHaveCount(4);
+  await expect(now).toContainText('Learning');
+  await expect(now).toContainText('Italian');
+  await expect(now).toContainText('Working on');
+  await expect(now).toContainText('gabrielchen.me');
+  await expect(now).toContainText('Playing');
+  await expect(now).toContainText('Baldur’s Gate 3');
+  await expect(now).toContainText('Thinking about');
+  await expect(now).toContainText('Why do some people choose smaller companies?');
+  await expect(now.locator('[data-personal-snapshot]')).toHaveCount(0);
+  await expect(now).not.toContainText('PRIMARY THREAD / CURRENT ATTENTION');
+  await expect(now).not.toContainText('Employer Brand / GEO at JoinQuant');
+
+  const closing = page.locator('[data-home-closing]');
+  await expect(closing).toContainText('I’ll keep adding things here as I go.');
+  await expect(closing.getByRole('link', { name: 'GitHub' })).toHaveAttribute(
+    'href',
+    'https://github.com/gabriel232ch',
   );
-  await expect(page.locator('[data-personal-snapshot]')).toHaveCount(0);
-  await expect(page.locator('#index')).toBeVisible();
-
-  await page.getByRole('link', { name: 'NOW', exact: true }).click();
-  await expect(page.locator('#about')).toBeInViewport();
-
-  await page.locator('.editorial-closing a[href="#work"]').click();
-  await expect(page.locator('#work')).toBeInViewport();
-  await expect(page.locator('#index a[href="#index"]')).toHaveCount(0);
+  await expect(closing).not.toContainText('CLOSING / SOURCES');
+  await expect(closing).not.toContainText('RETURN TO WORK');
+  await expect(closing).not.toContainText('PUBLIC SOURCE');
 });
 
 test('Home preserves the integrated editorial order and image-free work stories', async ({ page }) => {
   await page.goto('/');
 
-  const sections = page.locator('main > header, main > section');
+  const sections = page.locator('main > header, main > section, main > footer');
   await expect(sections).toHaveCount(7);
   await expect(sections.nth(0)).toHaveClass(/home-navigation/);
   await expect(sections.nth(1)).toHaveClass(/home-hero/);
@@ -192,7 +200,7 @@ test('Home preserves the integrated editorial order and image-free work stories'
     'competitive-positioning-against-giants',
   );
   await expect(sections.nth(5)).toHaveId('about');
-  await expect(sections.nth(6)).toHaveId('index');
+  await expect(sections.nth(6)).toHaveAttribute('data-home-closing', '');
 
   await expect(page.locator('[data-home-chapter="chanel"]')).toBeVisible();
   await expect(page.locator('[data-home-chapter="olist"]')).toBeVisible();
