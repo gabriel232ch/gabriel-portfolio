@@ -182,9 +182,11 @@
 
 .chanel-history-signal__rows strong,
 .chanel-business-signal strong {
-  font-family: var(--font-editorial);
+  font-family: var(--font-report-display);
   font-size: clamp(2rem, 4vw, 3.8rem);
-  font-weight: 300;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-weight: 400;
   letter-spacing: -0.045em;
   line-height: 0.95;
 }

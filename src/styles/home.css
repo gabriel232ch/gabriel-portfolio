@@ -1,6 +1,6 @@
 main {
   --font-display: var(--font-editorial);
-  --font-body: 'Newsreader Variable', Georgia, serif;
+  --font-body: var(--font-report-body);
   font-family: var(--font-body);
 }
 

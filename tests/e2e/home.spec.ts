@@ -82,7 +82,7 @@ test('Chanel follows the approved question-first narrative', async ({ page }) =>
   }
 });
 
-test('Home narrative copy uses Newsreader while display roles stay editorial', async ({ page }) => {
+test('Home typography uses Baskerville body, Didot metrics, and editorial display', async ({ page }) => {
   await page.goto('/');
 
   const narrativeStyles = await page.locator('.body-copy').evaluateAll((nodes) =>
@@ -98,7 +98,7 @@ test('Home narrative copy uses Newsreader while display roles stay editorial', a
   );
 
   expect(narrativeStyles.length).toBeGreaterThan(0);
-  expect(narrativeStyles.every((style) => style.family.includes('Newsreader Variable'))).toBe(true);
+  expect(narrativeStyles.every((style) => style.family.includes('Baskerville'))).toBe(true);
   expect(narrativeStyles.every((style) => style.weight === '400')).toBe(true);
   expect(narrativeStyles.every((style) => style.size >= 18 && style.size <= 20)).toBe(true);
   expect(narrativeStyles.every((style) => style.lineHeight / style.size >= 1.5)).toBe(true);
@@ -116,6 +116,28 @@ test('Home narrative copy uses Newsreader while display roles stay editorial', a
     'font-family',
     /Cormorant Garamond Variable/,
   );
+
+  const majorMetrics = await page.locator(
+    '.chanel-history-signal__rows strong, .chanel-business-signal strong, .olist-chapter__tension strong',
+  ).evaluateAll((nodes) => nodes.map((node) => {
+    const style = getComputedStyle(node);
+    return {
+      family: style.fontFamily,
+      weight: style.fontWeight,
+      featureSettings: style.fontFeatureSettings,
+      variant: style.fontVariantNumeric,
+      letterSpacing: style.letterSpacing,
+      lineHeight: style.lineHeight,
+    };
+  }));
+
+  expect(majorMetrics.length).toBeGreaterThan(0);
+  expect(majorMetrics.every((style) => style.family.includes('Didot'))).toBe(true);
+  expect(majorMetrics.every((style) => style.weight === '400')).toBe(true);
+  expect(majorMetrics.every((style) => style.featureSettings.includes('lnum'))).toBe(true);
+  expect(majorMetrics.every((style) => style.variant.includes('lining-nums'))).toBe(true);
+  expect(majorMetrics.every((style) => style.variant.includes('proportional-nums'))).toBe(true);
+  expect(majorMetrics.every((style) => style.letterSpacing !== 'normal')).toBe(true);
 });
 
 test('Olist shows capability growth rather than a SQL skill showcase', async ({ page }) => {

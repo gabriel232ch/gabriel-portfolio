@@ -14,9 +14,9 @@
   --accent-soft: rgb(119 84 74 / 14%);
   --focus-ring: #77544a;
 
-  --font-display: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Cormorant Garamond Variable', Georgia, serif;
   --font-editorial: 'Cormorant Garamond Variable', Georgia, serif;
-  --font-body: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-body: Baskerville, 'Libre Baskerville', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --font-data: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-report-display: Didot, 'Bodoni 72', 'Bodoni Moda', 'Cormorant Garamond Variable', Georgia, serif;
   --font-report-body: Baskerville, 'Libre Baskerville', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
