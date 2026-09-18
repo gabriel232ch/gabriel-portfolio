@@ -10,6 +10,13 @@ export interface PersonalSnapshot {
   caption?: string;
 }
 
+export interface HomeArchiveItem {
+  type: string;
+  date: string;
+  title: string;
+  note?: string;
+}
+
 export const HOME_STATE = {
   intro: {
     statement:

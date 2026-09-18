@@ -16,3 +16,11 @@
 - `npx playwright test tests/e2e/home.spec.ts --workers=1` passed: 24/24.
 - `git diff --check` passed.
 - `npm run check` remains blocked by the pre-existing retired `src/components/home/EditorialClosing.astro` import of the removed `HomeArchiveItem` type; that file was intentionally left untouched per Task 7 scope.
+
+## Compatibility fix
+
+- Restored the type-only `HomeArchiveItem` export in `src/data/home.ts` so the still-present retired component can type-check until Task 8 removes it.
+- No legacy `HOME_STATE` fields or rendered copy were restored, and `EditorialClosing.astro` was not modified.
+- `npm run check` passed with 0 errors, warnings, or hints.
+- `npm run lint` passed.
+- `npx playwright test tests/e2e/home.spec.ts -g "Now shows a life in progress" --workers=1` passed: 2/2.
