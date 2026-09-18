@@ -83,6 +83,35 @@ test('Chanel follows the approved question-first narrative', async ({ page }) =>
   }
 });
 
+test('Olist shows capability growth rather than a SQL skill showcase', async ({ page }) => {
+  await page.goto('/');
+  const olist = page.locator('[data-home-chapter="olist"]');
+
+  await expect(olist.getByText('SAMSUNG · 2025 → OLIST · 2026')).toBeVisible();
+  await expect(olist.getByRole('heading', {
+    level: 2,
+    name: 'SQL Wasn’t the Hard Part. Knowing What to Ask Was.',
+  })).toBeVisible();
+  await expect(olist.getByText('What I wanted to learn next was how to know what to ask.')).toBeVisible();
+  await expect(olist.getByText(
+    'There was no research question at the beginning. I started by understanding what was in the data — and what wasn’t.',
+  )).toBeVisible();
+  await expect(olist.locator('[data-olist-data-map]')).toBeVisible();
+  await expect(olist.locator('[data-olist-tension]')).toContainText('R$2.99M');
+  await expect(olist.locator('[data-olist-tension]')).toContainText('R$7.22M');
+  await expect(olist.locator('[data-olist-tension]')).toContainText('96.50%');
+  await expect(olist.locator('[data-olist-tension]')).toContainText('92.27%');
+  await expect(olist.getByText('SQL stopped being the task. It became the language I used to investigate a business.')).toBeVisible();
+  await expect(olist.getByRole('link', { name: 'Explore the analysis →' })).toHaveAttribute(
+    'href',
+    '/work/olist-marketplace-analysis/',
+  );
+  await expect(olist.getByText('GROW', { exact: true })).toHaveCount(0);
+  await expect(olist.getByText('DEFEND', { exact: true })).toHaveCount(0);
+  await expect(olist.getByText('FIX', { exact: true })).toHaveCount(0);
+  await expect(olist.getByText('INVESTIGATE', { exact: true })).toHaveCount(0);
+});
+
 test('Home exposes the Now layer and quieter editorial closing', async ({ page }) => {
   await page.goto('/');
 
@@ -122,8 +151,8 @@ test('Home preserves the integrated editorial order and image-free work stories'
   await expect(sections.nth(5)).toHaveId('about');
   await expect(sections.nth(6)).toHaveId('index');
 
-  const workStories = page.locator('[data-work-slug]:not([data-home-chapter="chanel"])');
-  await expect(workStories).toHaveCount(2);
+  const workStories = page.locator('[data-work-slug="competitive-positioning-against-giants"]');
+  await expect(workStories).toHaveCount(1);
   for (const story of await workStories.all()) {
     await expect(story.locator('img')).toHaveCount(0);
     await expect(story.locator('[data-work-title]')).toBeVisible();
@@ -137,7 +166,8 @@ test('Home preserves the integrated editorial order and image-free work stories'
   }
 
   await expect(page.locator('[data-home-chapter="chanel"]')).toBeVisible();
-  await expect(page.locator('[data-olist-data-story]')).toBeVisible();
+  await expect(page.locator('[data-home-chapter="olist"]')).toBeVisible();
+  await expect(page.locator('[data-olist-data-map]')).toBeVisible();
   await expect(page.locator('[data-competitive-data-story]')).toBeVisible();
 });
 
@@ -166,49 +196,6 @@ test('mobile Chanel price position keeps market rails within the viewport', asyn
       expect(row.railRight).toBeLessThanOrEqual(width);
     }
   }
-});
-
-test('Home renders Olist as a decision-intelligence feature after Chanel', async ({ page }) => {
-  await page.goto('/');
-
-  const slugs = await page.locator('[data-work-slug]').evaluateAll((nodes) =>
-    nodes.map((node) => node.getAttribute('data-work-slug')),
-  );
-  expect(slugs.slice(0, 2)).toEqual([
-    'luxury-handbag-pricing-architecture',
-    'olist-marketplace-analysis',
-  ]);
-
-  const olist = page.locator('[data-work-slug="olist-marketplace-analysis"]');
-  await expect(olist).toBeVisible();
-  await expect(olist.locator('[data-decision-signal]')).toHaveText([
-    'GROW',
-    'DEFEND',
-    'FIX',
-    'INVESTIGATE',
-  ]);
-  await expect(olist.locator('img')).toHaveCount(0);
-  await expect(olist.locator('[data-work-title]')).toHaveText('Growth and delivery, in tension');
-  await expect(olist.locator('[data-work-takeaway]')).toBeVisible();
-  await expect(olist.locator('[data-olist-data-story]')).toBeVisible();
-  const metrics = olist.locator('[data-olist-metric]');
-  await expect(metrics).toHaveCount(3);
-  await expect(metrics.nth(0)).toHaveAttribute('open', '');
-  await expect(metrics.nth(1)).toHaveAttribute('open', '');
-  await expect(metrics.nth(0)).toContainText('R$2.99M');
-  await expect(metrics.nth(0)).toContainText('R$7.22M');
-  await expect(metrics.nth(1)).toContainText('96.50%');
-  await expect(metrics.nth(1)).toContainText('92.27%');
-  await expect(metrics.nth(1).locator('[role="img"]')).toBeVisible();
-  await metrics.nth(2).locator('summary').click();
-  await expect(metrics.nth(2)).toHaveAttribute('open', '');
-  await expect(metrics.nth(2).locator('[data-olist-segment]')).toHaveCount(6);
-  await expect(metrics.nth(2).locator('[data-olist-segment-caption]')).toHaveText(
-    'ONE MARK = ONE MATERIAL FIX MARKET',
-  );
-  await expect(olist.locator('[data-olist-metric] a')).toHaveCount(0);
-  await expect(olist.locator('[data-olist-signal]')).toHaveCount(4);
-  await expect(olist.locator('[data-olist-data-story] a')).toHaveCount(2);
 });
 
 test('Home renders Competitive Positioning as a source-backed strategy feature after Olist', async ({ page }) => {
@@ -248,7 +235,7 @@ test('research remains readable with JavaScript disabled', async ({ browser, bas
   const page = await context.newPage();
   try {
     await page.goto('/');
-    for (const work of await page.locator('[data-work-slug]:not([data-home-chapter="chanel"])').all()) {
+    for (const work of await page.locator('[data-work-slug="competitive-positioning-against-giants"]').all()) {
       await expect(work.locator('[data-work-title]')).toBeVisible();
       await expect(work.locator('[data-work-takeaway]')).toBeVisible();
       await work.locator('[data-research-notes] > summary').click();
@@ -283,7 +270,7 @@ test('Home has no viewport overflows', async ({ page }) => {
 
 test('research notes can be opened with a keyboard', async ({ page }) => {
   await page.goto('/');
-  const notes = page.locator('[data-work-slug]:not([data-home-chapter="chanel"]) [data-research-notes]').first();
+  const notes = page.locator('[data-work-slug="competitive-positioning-against-giants"] [data-research-notes]').first();
   await notes.locator('summary').focus();
   await page.keyboard.press('Enter');
   await expect(notes).toHaveAttribute('open', '');

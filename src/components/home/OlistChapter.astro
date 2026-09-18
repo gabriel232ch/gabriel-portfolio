@@ -1,0 +1,55 @@
+---
+import { OLIST_DATA_METRICS } from '../../data/olist';
+import OlistDataMap from './OlistDataMap.astro';
+
+interface Props { copy: typeof import('../../data/home').HOME_STATE.projects.olist }
+const { copy } = Astro.props;
+const gmv = OLIST_DATA_METRICS.find((metric) => metric.id === 'gmv');
+const onTime = OLIST_DATA_METRICS.find((metric) => metric.id === 'on-time');
+if (!gmv || gmv.id !== 'gmv' || !onTime || onTime.id !== 'on-time') {
+  throw new Error('Olist homepage requires GMV and on-time comparison metrics.');
+}
+---
+
+<section
+  id="olist"
+  class="olist-chapter editorial-grid"
+  aria-labelledby="olist-title"
+  data-home-chapter="olist"
+  data-work-slug="olist-marketplace-analysis"
+>
+  <div class="olist-chapter__intro">
+    <p class="data-copy">{copy.context}</p>
+    <h2 id="olist-title" class="display">{copy.title}</h2>
+    <p class="editorial">{copy.samsung}</p>
+  </div>
+
+  <div class="olist-chapter__progression">
+    <p class="body-copy">{copy.learning}</p>
+    <p class="display olist-chapter__highlight">{copy.highlight}</p>
+    <p class="editorial">{copy.arrival}</p>
+    <p class="body-copy">{copy.noQuestion}</p>
+    <OlistDataMap />
+  </div>
+
+  <div class="olist-chapter__tension" data-olist-tension data-home-motion>
+    <div>
+      <span class="data-copy">{gmv.label}</span>
+      <strong>{gmv.fromLabel} → {gmv.toLabel}</strong>
+      <small>{gmv.note}</small>
+    </div>
+    <div>
+      <span class="data-copy">{onTime.label}</span>
+      <strong>{onTime.fromLabel} → {onTime.toLabel}</strong>
+      <small>{onTime.note}</small>
+    </div>
+  </div>
+
+  <blockquote class="olist-chapter__question">{copy.businessQuestion}</blockquote>
+
+  <div class="olist-chapter__end">
+    <p class="display">{copy.shift}</p>
+    <p class="body-copy">{copy.reflection}</p>
+    <a href={copy.href}>{copy.cta}</a>
+  </div>
+</section>
