@@ -89,17 +89,17 @@ test('fixed theme toggle never crosses the right-edge editorial label while scro
   expect(collision).toBeNull();
 });
 
-test('theme toggle uses the compact utility scale', async ({ page }) => {
+test('theme toggle uses the minimum readable utility scale', async ({ page }) => {
   await page.setViewportSize({ width: 440, height: 956 });
   await page.goto('/lab/design-system');
 
   const toggle = page.locator('[data-theme-toggle]');
 
-  await expect(toggle).toHaveCSS('font-size', '9px');
+  await expect(toggle).toHaveCSS('font-size', '14px');
 
   await page.setViewportSize({ width: 1280, height: 800 });
 
-  await expect(toggle).toHaveCSS('font-size', '10px');
+  await expect(toggle).toHaveCSS('font-size', '14px');
 });
 
 test('desktop design-system light world visual baseline', async ({ page }, testInfo) => {

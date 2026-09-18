@@ -148,16 +148,28 @@ for (const viewport of [
     await page.goto('/');
 
     const home = await page.evaluate(() => {
-      const probe = document.createElement('span');
-      probe.style.fontSize = 'var(--font-size-body)';
-      document.body.append(probe);
-      const bodyToken = Number.parseFloat(getComputedStyle(probe).fontSize);
-      probe.remove();
+      const resolveToken = (name: string) => {
+        const probe = document.createElement('span');
+        probe.style.fontSize = `var(${name})`;
+        document.body.append(probe);
+        const value = Number.parseFloat(getComputedStyle(probe).fontSize);
+        probe.remove();
+        return value;
+      };
+      const kpi = document.querySelector('.chanel-history-signal__rows strong')!;
+      const kpiStyle = getComputedStyle(kpi);
 
       return {
         body: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening > .body-copy')!).fontSize),
-        bodyToken,
+        bodyToken: resolveToken('--font-size-body'),
         title: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening h2')!).fontSize),
+        statementToken: resolveToken('--font-size-statement'),
+        sectionTitleToken: resolveToken('--font-size-section-title'),
+        kpiFamily: kpiStyle.fontFamily,
+        kpiWeight: kpiStyle.fontWeight,
+        kpiFeatures: kpiStyle.fontFeatureSettings,
+        kpiVariant: kpiStyle.fontVariantNumeric,
+        kpiSize: Number.parseFloat(kpiStyle.fontSize),
       };
     });
 
@@ -178,6 +190,7 @@ for (const viewport of [
       const statement = document.querySelector('.report-claim')!;
       const sectionTitle = document.querySelector('.report-section h2')!;
       const kpi = document.querySelector('.report-kpi-card strong')!;
+      const kpiStyle = getComputedStyle(kpi);
 
       return {
         body: Number.parseFloat(getComputedStyle(body).fontSize),
@@ -185,8 +198,11 @@ for (const viewport of [
         lead: Number.parseFloat(getComputedStyle(lead).fontSize),
         statement: Number.parseFloat(getComputedStyle(statement).fontSize),
         sectionTitle: Number.parseFloat(getComputedStyle(sectionTitle).fontSize),
-        kpiFamily: getComputedStyle(kpi).fontFamily,
-        kpiSize: Number.parseFloat(getComputedStyle(kpi).fontSize),
+        kpiFamily: kpiStyle.fontFamily,
+        kpiWeight: kpiStyle.fontWeight,
+        kpiFeatures: kpiStyle.fontFeatureSettings,
+        kpiVariant: kpiStyle.fontVariantNumeric,
+        kpiSize: Number.parseFloat(kpiStyle.fontSize),
         bodyToken: resolveToken('--font-size-body'),
         projectTitleToken: resolveToken('--font-size-project-title'),
         leadToken: resolveToken('--font-size-lead'),
@@ -203,11 +219,26 @@ for (const viewport of [
     expect(report.lead).toBe(report.leadToken);
     expect(report.statement).toBe(report.statementToken);
     expect(report.sectionTitle).toBe(report.sectionTitleToken);
+    expect(home.kpiFamily).toContain('Didot');
+    expect(home.kpiWeight).toBe('400');
+    expect(home.kpiFeatures).toContain('lnum');
+    expect(home.kpiFeatures).toContain('pnum');
+    expect(home.kpiVariant).toContain('lining-nums');
+    expect(home.kpiVariant).toContain('proportional-nums');
+    expect([home.statementToken, home.sectionTitleToken]).toContain(home.kpiSize);
     expect(report.kpiFamily).toContain('Didot');
+    expect(report.kpiWeight).toBe('400');
+    expect(report.kpiFeatures).toContain('lnum');
+    expect(report.kpiFeatures).toContain('pnum');
+    expect(report.kpiVariant).toContain('lining-nums');
+    expect(report.kpiVariant).toContain('proportional-nums');
     expect([report.statementToken, report.sectionTitleToken]).toContain(report.kpiSize);
 
     if (viewport.width === 390) {
       expect(report.body).toBe(20);
+      expect(report.lead).toBe(24);
+      expect(report.statement).toBe(30);
+      expect(report.sectionTitle).toBe(36);
     }
 
     if (viewport.width === 1440) {
@@ -268,7 +299,7 @@ for (const route of productionRoutes) {
     await page.goto(route);
 
     const undersized = await page.evaluate(() => Array.from(document.body.querySelectorAll<HTMLElement>('*'))
-      .filter((element) => !element.closest('svg, script, style, template'))
+      .filter((element) => !element.closest("script, style, svg, noscript, [aria-hidden='true']"))
       .filter((element) => Array.from(element.childNodes).some((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim()))
       .filter((element) => {
         const styles = getComputedStyle(element);
