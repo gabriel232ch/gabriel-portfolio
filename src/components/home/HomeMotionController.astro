@@ -1,37 +1,9 @@
 <script>
   const nodes = document.querySelectorAll<HTMLElement>('[data-home-motion]');
-  const counters = document.querySelectorAll<HTMLElement>('[data-count]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const revealCount = (node: HTMLElement) => {
-    if (node.dataset.counted === 'true') return;
-
-    const target = Number(node.dataset.count);
-    if (!Number.isFinite(target)) return;
-
-    node.dataset.counted = 'true';
-
-    if (reduceMotion) {
-      node.textContent = String(target);
-      return;
-    }
-
-    const start = performance.now();
-    const duration = 1100;
-
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      node.textContent = String(Math.round(target * eased));
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
-  };
 
   if (reduceMotion || typeof IntersectionObserver !== 'function') {
     nodes.forEach((node) => (node.dataset.motionState = 'entered'));
-    counters.forEach(revealCount);
   } else {
     nodes.forEach((node) => (node.dataset.motionState = 'pending'));
 
@@ -40,8 +12,6 @@
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           (entry.target as HTMLElement).dataset.motionState = 'entered';
-          const counter = (entry.target as HTMLElement).querySelector('[data-count]');
-          if (counter instanceof HTMLElement) revealCount(counter);
           observer.unobserve(entry.target);
         }
       },
@@ -49,18 +19,5 @@
     );
 
     nodes.forEach((node) => observer.observe(node));
-
-    const counterObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          revealCount(entry.target as HTMLElement);
-          counterObserver.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.4 },
-    );
-
-    counters.forEach((counter) => counterObserver.observe(counter));
   }
 </script>

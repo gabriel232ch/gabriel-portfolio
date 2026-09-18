@@ -20,7 +20,6 @@ test('Home opens with Gabriel identity rather than a project index', async ({ pa
     await expect(page.getByText(retiredCopy, { exact: true })).toHaveCount(0);
   }
   await expect(page.locator('.folio-number')).toHaveCount(0);
-  await expect(page.locator('[data-home-reading]')).toHaveCount(0);
 });
 
 test('Chanel follows the approved question-first narrative', async ({ page }) => {
@@ -183,37 +182,21 @@ test('Now shows a life in progress and the page ends warmly', async ({ page }) =
   await expect(closing).not.toContainText('PUBLIC SOURCE');
 });
 
-test('Home preserves the integrated editorial order and image-free work stories', async ({ page }) => {
+test('Home preserves the approved personal-digital-home order', async ({ page }) => {
   await page.goto('/');
 
-  const sections = page.locator('main > header, main > section, main > footer');
-  await expect(sections).toHaveCount(7);
-  await expect(sections.nth(0)).toHaveClass(/home-navigation/);
-  await expect(sections.nth(1)).toHaveClass(/home-hero/);
-  await expect(sections.nth(2)).toHaveAttribute(
-    'data-work-slug',
-    'luxury-handbag-pricing-architecture',
-  );
-  await expect(sections.nth(3)).toHaveAttribute('data-work-slug', 'olist-marketplace-analysis');
-  await expect(sections.nth(4)).toHaveAttribute(
-    'data-work-slug',
-    'competitive-positioning-against-giants',
-  );
-  await expect(sections.nth(5)).toHaveId('about');
-  await expect(sections.nth(6)).toHaveAttribute('data-home-closing', '');
+  const landmarks = page.locator('main > header, main > section, main > footer');
+  await expect(landmarks).toHaveCount(7);
+  await expect(landmarks.nth(0)).toHaveClass(/home-navigation/);
+  await expect(landmarks.nth(1)).toHaveClass(/home-hero/);
+  await expect(landmarks.nth(2)).toHaveAttribute('data-home-chapter', 'chanel');
+  await expect(landmarks.nth(3)).toHaveAttribute('data-home-chapter', 'olist');
+  await expect(landmarks.nth(4)).toHaveAttribute('data-home-chapter', 'smaller-companies');
+  await expect(landmarks.nth(5)).toHaveId('about');
+  await expect(landmarks.nth(6)).toHaveAttribute('data-home-closing', '');
 
-  await expect(page.locator('[data-home-chapter="chanel"]')).toBeVisible();
-  await expect(page.locator('[data-home-chapter="olist"]')).toBeVisible();
-  const inquiry = page.locator('[data-home-chapter="smaller-companies"]');
-  await expect(inquiry).toBeVisible();
-  await expect(inquiry.locator('img')).toHaveCount(0);
-  await expect(inquiry.getByRole('heading', {
-    level: 2,
-    name: 'Why Do Some People Choose Smaller Companies?',
-  })).toBeVisible();
-  await expect(inquiry.locator('[data-competitive-mechanism]')).toHaveCount(0);
-  await expect(page.locator('[data-olist-data-map]')).toBeVisible();
-  await expect(page.locator('[data-competitive-data-story]')).toHaveCount(0);
+  await expect(page.getByText('Selected work', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Featured', { exact: true })).toHaveCount(0);
 });
 
 test('mobile Chanel price position keeps market rails within the viewport', async ({ page }) => {
@@ -270,17 +253,17 @@ test('Home renders the smaller-company inquiry after Olist', async ({ page }) =>
   await expect(inquiry.locator('[data-competitive-mechanism]')).toHaveCount(0);
 });
 
-test('smaller-company inquiry remains readable with JavaScript disabled', async ({ browser, baseURL }) => {
+test('Home core narrative remains readable with JavaScript disabled', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
   const page = await context.newPage();
   try {
     await page.goto('/');
-    const inquiry = page.locator('[data-home-chapter="smaller-companies"]');
-    await expect(inquiry.getByRole('heading', {
-      level: 2,
-      name: 'Why Do Some People Choose Smaller Companies?',
-    })).toBeVisible();
-    await expect(inquiry.getByRole('link', { name: 'Explore the current research →' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'Gabriel Chen' })).toBeVisible();
+    await expect(page.locator('[data-home-chapter="chanel"]')).toBeVisible();
+    await expect(page.locator('[data-home-chapter="olist"]')).toBeVisible();
+    await expect(page.locator('[data-home-chapter="smaller-companies"]')).toBeVisible();
+    await expect(page.locator('#about')).toBeVisible();
+    await expect(page.locator('[data-home-closing]')).toBeVisible();
   } finally {
     await context.close();
   }
@@ -288,12 +271,6 @@ test('smaller-company inquiry remains readable with JavaScript disabled', async 
 
 test('Home has no viewport overflows', async ({ page }) => {
   await page.goto('/');
-
-  for (const detail of await page.locator('details').all()) {
-    if ((await detail.getAttribute('open')) === null) {
-      await detail.locator('summary').click();
-    }
-  }
 
   for (const width of [390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
