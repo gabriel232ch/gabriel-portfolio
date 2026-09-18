@@ -33,11 +33,40 @@ test('Chanel follows the approved question-first narrative', async ({ page }) =>
     level: 2,
     name: 'Luxury Was Slowing. Why Did Chanel Look Different?',
   })).toBeVisible();
+  await expect(chanel.locator('.chanel-chapter__opening > .editorial')).toHaveText(
+    'I first started thinking about this while studying luxury at Bocconi in Milan. The market was slowing, and I kept coming across brands like Gucci and Zegna trying to adapt in very different ways.',
+  );
+  await expect(chanel.locator('.chanel-chapter__return > .editorial')).toHaveText(
+    'Later, a passing conversation brought Chanel to mind. It seemed to be holding up differently. I wanted to understand whether that impression was real — and, if it was, why.',
+  );
+  await expect(chanel.locator('.chanel-chapter__visible')).toBeVisible();
   await expect(chanel.getByText('I started with what I could see.')).toBeVisible();
+  await expect(chanel.locator('.chanel-chapter__turn')).toBeVisible();
   await expect(chanel.getByText('But something still felt missing.')).toBeVisible();
-  await expect(chanel.locator('[data-chanel-price-position]')).toBeVisible();
-  await expect(chanel.locator('[data-chanel-history]')).toBeVisible();
   await expect(chanel.locator('[data-chanel-business]')).toBeVisible();
+  await expect(chanel.locator('.chanel-chapter__current')).toBeVisible();
+  await expect(chanel.locator('.chanel-chapter__current > .editorial')).toHaveText(
+    'I no longer think Chanel’s relative resilience can be explained by a single price move or campaign. What I see now is a system: pricing, product, desirability, investment, client experience and brand identity all have to keep reinforcing one another.',
+  );
+  await expect(chanel.locator(
+    '.chanel-chapter__opening, .chanel-chapter__return, .chanel-chapter__visible, .chanel-chapter__turn, .chanel-chapter__current',
+  )).toHaveCount(5);
+
+  const pricePosition = chanel.locator('[data-chanel-price-position]');
+  await expect(pricePosition).toBeVisible();
+  await expect(pricePosition.locator('.chanel-price-position__market')).toHaveCount(2);
+  await expect(pricePosition.locator('.chanel-price-position__row')).toHaveCount(8);
+  const rails = pricePosition.locator('.chanel-price-position__rail');
+  await expect(rails).toHaveCount(8);
+  for (const rail of await rails.all()) {
+    await expect(rail).toHaveAttribute('role', 'img');
+    await expect(rail).toHaveAttribute('aria-label', /to .+, median/);
+  }
+
+  await expect(chanel.locator('[data-chanel-history]')).toBeVisible();
+  await expect(chanel.locator('[data-chanel-history] .chanel-history-signal__rows > div')).toHaveCount(2);
+  await expect(chanel.locator('[data-chanel-business] .chanel-business-signal__baseline > span')).toHaveCount(2);
+  await expect(chanel.locator('[data-chanel-business] .chanel-business-signal__shock > span')).toHaveCount(4);
   await expect(chanel.getByText('The question is still open.')).toBeVisible();
   await expect(chanel.getByRole('link', { name: 'Explore the research →' })).toHaveAttribute(
     'href',
@@ -93,8 +122,8 @@ test('Home preserves the integrated editorial order and image-free work stories'
   await expect(sections.nth(5)).toHaveId('about');
   await expect(sections.nth(6)).toHaveId('index');
 
-  const workStories = page.locator('[data-work-slug]');
-  await expect(workStories).toHaveCount(3);
+  const workStories = page.locator('[data-work-slug]:not([data-home-chapter="chanel"])');
+  await expect(workStories).toHaveCount(2);
   for (const story of await workStories.all()) {
     await expect(story.locator('img')).toHaveCount(0);
     await expect(story.locator('[data-work-title]')).toBeVisible();
@@ -107,66 +136,39 @@ test('Home preserves the integrated editorial order and image-free work stories'
     await expect(story.locator('[data-work-evidence]')).toHaveCount(3);
   }
 
-  await expect(page.locator('[data-luxury-data-story]')).toBeVisible();
+  await expect(page.locator('[data-home-chapter="chanel"]')).toBeVisible();
   await expect(page.locator('[data-olist-data-story]')).toBeVisible();
   await expect(page.locator('[data-competitive-data-story]')).toBeVisible();
 });
 
-test('Home renders Luxury as an expandable source-backed market story', async ({ page }) => {
+test('mobile Chanel price position keeps market rails within the viewport', async ({ page }) => {
   await page.goto('/');
-
-  const luxury = page.locator('[data-work-slug="luxury-handbag-pricing-architecture"]');
-  await expect(luxury).toBeVisible();
-  await expect(luxury.locator('img')).toHaveCount(0);
-  await expect(luxury.locator('[data-work-title]')).toHaveText('Luxury pricing, compared');
-  await expect(luxury.locator('[data-work-takeaway]')).toBeVisible();
-  const notes = luxury.locator('[data-research-notes]');
-  await expect(notes).not.toHaveAttribute('open', '');
-  await notes.locator('summary').click();
-  await expect(luxury.locator('[data-work-question]')).toBeVisible();
-  await expect(luxury.locator('[data-work-outcome]')).toBeVisible();
-  await expect(luxury.locator('[data-work-evidence]')).toHaveCount(3);
-  await expect(luxury.locator('[data-luxury-data-story]')).toBeVisible();
-
-  const markets = luxury.locator('details[data-market-panel]');
-  await expect(markets).toHaveCount(2);
-
-  const france = luxury.locator('details[data-market="FR"]');
-  const unitedStates = luxury.locator('details[data-market="US"]');
-  await expect(france.locator('[data-brand-row]')).toHaveCount(4);
-  await expect(unitedStates.locator('[data-brand-row]')).toHaveCount(4);
-  await expect(france.locator('[data-brand-row="CHANEL"]')).toContainText(
-    '€4,850–€12,250',
-  );
-  await expect(unitedStates.locator('[data-brand-row="Hermès"]')).toContainText(
-    '$3,075–$13,200',
-  );
-
-  await expect(france).not.toHaveAttribute('open', '');
-  await france.locator('summary').click();
-  await expect(france).toHaveAttribute('open', '');
-});
-
-test('mobile Luxury architecture keeps adjacent price labels separated', async ({ page }) => {
-  await page.goto('/');
-  const market = page.locator('[data-architecture-market="US"]');
+  const position = page.locator('[data-chanel-price-position]');
+  await expect(position).toBeVisible();
 
   for (const width of [375, 390]) {
     await page.setViewportSize({ width, height: 900 });
-    const nodes = await market.locator('.luxury-architecture__node').evaluateAll((elements) =>
+    const rows = await position.locator('.chanel-price-position__row').evaluateAll((elements) =>
       elements.map((element) => {
-        const rect = element.getBoundingClientRect();
-        return { left: rect.left, right: rect.right };
+        const label = element.querySelector('.data-copy')?.getBoundingClientRect();
+        const rail = element.querySelector('.chanel-price-position__rail')?.getBoundingClientRect();
+        return {
+          labelRight: label?.right ?? 0,
+          railLeft: rail?.left ?? 0,
+          railRight: rail?.right ?? 0,
+        };
       }),
     );
 
-    for (let index = 0; index < nodes.length - 1; index += 1) {
-      expect(nodes[index].right).toBeLessThanOrEqual(nodes[index + 1].left + 1);
+    for (const row of rows) {
+      expect(row.labelRight).toBeLessThanOrEqual(row.railLeft + 1);
+      expect(row.railLeft).toBeGreaterThanOrEqual(0);
+      expect(row.railRight).toBeLessThanOrEqual(width);
     }
   }
 });
 
-test('Home renders Olist as a decision-intelligence feature after Luxury', async ({ page }) => {
+test('Home renders Olist as a decision-intelligence feature after Chanel', async ({ page }) => {
   await page.goto('/');
 
   const slugs = await page.locator('[data-work-slug]').evaluateAll((nodes) =>
@@ -246,7 +248,7 @@ test('research remains readable with JavaScript disabled', async ({ browser, bas
   const page = await context.newPage();
   try {
     await page.goto('/');
-    for (const work of await page.locator('[data-work-slug]').all()) {
+    for (const work of await page.locator('[data-work-slug]:not([data-home-chapter="chanel"])').all()) {
       await expect(work.locator('[data-work-title]')).toBeVisible();
       await expect(work.locator('[data-work-takeaway]')).toBeVisible();
       await work.locator('[data-research-notes] > summary').click();
@@ -281,7 +283,7 @@ test('Home has no viewport overflows', async ({ page }) => {
 
 test('research notes can be opened with a keyboard', async ({ page }) => {
   await page.goto('/');
-  const notes = page.locator('[data-research-notes]').first();
+  const notes = page.locator('[data-work-slug]:not([data-home-chapter="chanel"]) [data-research-notes]').first();
   await notes.locator('summary').focus();
   await page.keyboard.press('Enter');
   await expect(notes).toHaveAttribute('open', '');

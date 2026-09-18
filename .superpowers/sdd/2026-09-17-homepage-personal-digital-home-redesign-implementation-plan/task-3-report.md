@@ -28,3 +28,17 @@ After implementation, the focused test was run for desktop and mobile. Both proj
 ## Scope review
 
 Changed only the requested Chanel components, `home-chanel.css`, the `index.astro` component replacement/import, the specified Chanel E2E addition, and this report. No Olist, smaller-company, Now, route, or retired-component cleanup work was started.
+
+## Review fixes
+
+- Replaced the old LuxuryFeature-specific Home test and mobile architecture test with the Chanel narrative and mobile price-position contracts.
+- Scoped shared research-story assertions to the remaining Olist and competitive stories so they no longer require removed Chanel selectors such as `data-work-title` or `data-research-notes`.
+- Strengthened the Chanel contract with exact opening/return/current copy, five beat containers, two markets, eight labeled price rails, and evidence metric counts.
+- Rendered the historical gap from `LUXURY_FLAGSHIP.historical.gapFrom` and `.gapTo`.
+
+## Review-fix verification
+
+- `npm run lint`: passed.
+- `npm run test -- tests/unit/home.test.ts`: passed — 7 tests.
+- `npx playwright test tests/e2e/home.spec.ts --list`: passed — 20 tests discovered.
+- Focused Chanel and mobile price-position browser tests completed without hanging but remain blocked before assertions by the pre-existing `NowSection.astro` schema/runtime mismatch in all four browser-project cases.
