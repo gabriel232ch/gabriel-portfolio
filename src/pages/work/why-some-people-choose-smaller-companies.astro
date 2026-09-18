@@ -62,6 +62,7 @@ const project = HOME_STATE.projects.smallerCompanies;
     padding: 1.5rem clamp(1.25rem, 4vw, 5rem) 6rem;
     color: var(--ink);
     background: var(--paper);
+    font-family: var(--font-reading);
   }
 
   .inquiry-page__header {
@@ -76,7 +77,8 @@ const project = HOME_STATE.projects.smallerCompanies;
   .inquiry-page__identity,
   .inquiry-page__back {
     color: inherit;
-    font-size: 0.7rem;
+    font-family: var(--font-metadata);
+    font-size: var(--font-size-micro);
     letter-spacing: 0.11em;
     text-transform: uppercase;
   }
@@ -86,9 +88,10 @@ const project = HOME_STATE.projects.smallerCompanies;
     margin: 10rem auto 0;
   }
 
-  .inquiry-page__kicker {
+  .inquiry-page .inquiry-page__kicker {
     color: var(--ink-muted);
-    font-size: 0.72rem;
+    font-family: var(--font-metadata);
+    font-size: var(--font-size-micro);
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
@@ -96,7 +99,7 @@ const project = HOME_STATE.projects.smallerCompanies;
   .inquiry-page h1,
   .inquiry-page h2,
   .inquiry-page h3 {
-    font-family: var(--font-display, Georgia, serif);
+    font-family: var(--font-display);
     font-weight: 400;
     letter-spacing: -0.035em;
   }
@@ -104,34 +107,35 @@ const project = HOME_STATE.projects.smallerCompanies;
   .inquiry-page h1 {
     max-width: 13ch;
     margin: 1.5rem 0;
-    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-size: var(--font-size-project-title);
     line-height: 0.95;
   }
 
   .inquiry-page h2 {
     margin: 0.5rem 0 1.5rem;
-    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-size: var(--font-size-section-title);
     line-height: 1;
   }
 
   .inquiry-page h3 {
     margin: 0;
-    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    font-size: var(--font-size-statement);
     line-height: 1.1;
   }
 
-  .inquiry-page p {
+  .inquiry-page :where(p) {
     max-width: 42rem;
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
-    line-height: 1.65;
+    font-family: var(--font-reading);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-reading);
   }
 
-  .inquiry-page__opening {
+  .inquiry-page .inquiry-page__opening {
     max-width: 38rem;
     margin-bottom: 1.5rem;
-    font-family: var(--font-display, Georgia, serif);
-    font-size: clamp(1.4rem, 2.5vw, 2rem) !important;
-    line-height: 1.25 !important;
+    font-family: var(--font-display);
+    font-size: var(--font-size-lead);
+    line-height: 1.25;
   }
 
   .inquiry-page section {
@@ -161,10 +165,10 @@ const project = HOME_STATE.projects.smallerCompanies;
     margin: 0;
   }
 
-  .inquiry-page__status {
+  .inquiry-page .inquiry-page__status {
     margin: 0;
-    font-family: var(--font-display, Georgia, serif);
-    font-size: clamp(1.8rem, 4vw, 3.25rem);
+    font-family: var(--font-display);
+    font-size: var(--font-size-statement);
     line-height: 1.1;
   }
 

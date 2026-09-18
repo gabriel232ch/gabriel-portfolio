@@ -1,5 +1,29 @@
 import { expect, test } from '@playwright/test';
 
+const productionRoutes = [
+  '/',
+  '/work/luxury-handbag-pricing-architecture/',
+  '/work/olist-marketplace-analysis/',
+  '/work/why-some-people-choose-smaller-companies/',
+];
+
+const detailRoleSelectors = {
+  '/work/olist-marketplace-analysis/': {
+    title: '.research-page h1',
+    lead: '.research-page__lede',
+    sectionTitle: '.research-page h2',
+    body: '.research-page section > p',
+    metadata: '.research-page__kicker',
+  },
+  '/work/why-some-people-choose-smaller-companies/': {
+    title: '.inquiry-page h1',
+    lead: '.inquiry-page__opening',
+    sectionTitle: '.inquiry-page h2',
+    body: '.inquiry-page__article > p:not(.inquiry-page__kicker):not(.inquiry-page__opening):not(.inquiry-page__status)',
+    metadata: '.inquiry-page__kicker',
+  },
+} as const;
+
 test('approved typography roles are exposed through semantic tokens', async ({ page }) => {
   await page.goto('/');
 
@@ -8,19 +32,19 @@ test('approved typography roles are exposed through semantic tokens', async ({ p
 
     return {
       display: styles.getPropertyValue('--font-display').trim(),
-      editorial: styles.getPropertyValue('--font-editorial').trim(),
-      body: styles.getPropertyValue('--font-body').trim(),
-      data: styles.getPropertyValue('--font-data').trim(),
-      readingSize: styles.getPropertyValue('--font-size-reading').trim(),
+      reading: styles.getPropertyValue('--font-reading').trim(),
+      numeric: styles.getPropertyValue('--font-numeric').trim(),
+      metadata: styles.getPropertyValue('--font-metadata').trim(),
+      bodySize: styles.getPropertyValue('--font-size-body').trim(),
       projectTitleSize: styles.getPropertyValue('--font-size-project-title').trim(),
     };
   });
 
   expect(roles.display).toContain('Cormorant Garamond Variable');
-  expect(roles.editorial).toContain('Cormorant Garamond Variable');
-  expect(roles.body).toContain('Baskerville');
-  expect(roles.data).toContain('IBM Plex Mono');
-  expect(roles.readingSize).toContain('clamp');
+  expect(roles.reading).toContain('Baskerville');
+  expect(roles.numeric).toContain('Didot');
+  expect(roles.metadata).toContain('IBM Plex Mono');
+  expect(roles.bodySize).toContain('clamp');
   expect(roles.projectTitleSize).toContain('clamp');
 });
 
@@ -113,3 +137,120 @@ test('Home and Chanel report share the approved reading and project-title scales
   expect(reportSizes.body).toBe(homeSizes.body);
   expect(reportSizes.title).toBe(homeSizes.title);
 });
+
+for (const viewport of [
+  { name: 'mobile', width: 390, height: 844, bodySize: 20 },
+  { name: 'desktop', width: 1024, height: 900, bodySize: 22 },
+]) {
+  test(`Home and Chanel share detail roles at ${viewport.name}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+
+    const home = await page.evaluate(() => ({
+      body: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening > .body-copy')!).fontSize),
+      title: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening h2')!).fontSize),
+    }));
+
+    await page.goto('/work/luxury-handbag-pricing-architecture/');
+
+    const report = await page.evaluate(() => {
+      const resolveToken = (name: string) => {
+        const probe = document.createElement('span');
+        probe.style.fontSize = `var(${name})`;
+        document.body.append(probe);
+        const value = Number.parseFloat(getComputedStyle(probe).fontSize);
+        probe.remove();
+        return value;
+      };
+      const body = document.querySelector('.report-section > p:not(.report-section__number):not(.report-claim):not(.report-note)')!;
+      const title = document.querySelector('.report-title')!;
+      const sectionTitle = document.querySelector('.report-section h2')!;
+      const kpi = document.querySelector('.report-kpi-card strong')!;
+
+      return {
+        body: Number.parseFloat(getComputedStyle(body).fontSize),
+        title: Number.parseFloat(getComputedStyle(title).fontSize),
+        sectionTitle: Number.parseFloat(getComputedStyle(sectionTitle).fontSize),
+        kpiFamily: getComputedStyle(kpi).fontFamily,
+        kpiSize: Number.parseFloat(getComputedStyle(kpi).fontSize),
+        projectTitleToken: resolveToken('--font-size-project-title'),
+        sectionTitleToken: resolveToken('--font-size-section-title'),
+        statementToken: resolveToken('--font-size-statement'),
+      };
+    });
+
+    expect(home.body).toBe(viewport.bodySize);
+    expect(report.body).toBe(viewport.bodySize);
+    expect(report.body).toBe(home.body);
+    expect(report.title).toBe(report.projectTitleToken);
+    expect(report.title).toBe(home.title);
+    expect(report.sectionTitle).toBe(report.sectionTitleToken);
+    expect(report.kpiFamily).toContain('Didot');
+    expect([report.statementToken, report.sectionTitleToken]).toContain(report.kpiSize);
+  });
+}
+
+for (const [route, selectors] of Object.entries(detailRoleSelectors)) {
+  for (const viewport of [
+    { name: 'mobile', width: 390, height: 844 },
+    { name: 'desktop', width: 1024, height: 900 },
+  ]) {
+    test(`${route} assigns shared detail roles at ${viewport.name}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto(route);
+
+      const sizes = await page.evaluate((pageSelectors) => {
+        const resolveToken = (name: string) => {
+          const probe = document.createElement('span');
+          probe.style.fontSize = `var(${name})`;
+          document.body.append(probe);
+          const value = Number.parseFloat(getComputedStyle(probe).fontSize);
+          probe.remove();
+          return value;
+        };
+        const size = (selector: string) => Number.parseFloat(getComputedStyle(document.querySelector(selector)!).fontSize);
+
+        return {
+          title: size(pageSelectors.title),
+          lead: size(pageSelectors.lead),
+          sectionTitle: size(pageSelectors.sectionTitle),
+          body: size(pageSelectors.body),
+          metadata: size(pageSelectors.metadata),
+          titleToken: resolveToken('--font-size-project-title'),
+          leadToken: resolveToken('--font-size-lead'),
+          sectionTitleToken: resolveToken('--font-size-section-title'),
+          bodyToken: resolveToken('--font-size-body'),
+          metadataToken: resolveToken('--font-size-micro'),
+        };
+      }, selectors);
+
+      expect(sizes.title).toBe(sizes.titleToken);
+      expect(sizes.lead).toBe(sizes.leadToken);
+      expect(sizes.sectionTitle).toBe(sizes.sectionTitleToken);
+      expect(sizes.body).toBe(sizes.bodyToken);
+      expect(sizes.metadata).toBe(sizes.metadataToken);
+    });
+  }
+}
+
+for (const route of productionRoutes) {
+  test(`${route} keeps meaningful visible text at 14px or larger`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(route);
+
+    const undersized = await page.evaluate(() => Array.from(document.body.querySelectorAll<HTMLElement>('*'))
+      .filter((element) => !element.closest('svg, script, style, template'))
+      .filter((element) => Array.from(element.childNodes).some((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim()))
+      .filter((element) => {
+        const styles = getComputedStyle(element);
+        return styles.display !== 'none' && styles.visibility !== 'hidden' && Number.parseFloat(styles.fontSize) < 14;
+      })
+      .map((element) => ({
+        selector: `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ''}${Array.from(element.classList).map((name) => `.${name}`).join('')}`,
+        size: getComputedStyle(element).fontSize,
+        text: element.textContent?.trim().slice(0, 80),
+      })));
+
+    expect(undersized).toEqual([]);
+  });
+}
