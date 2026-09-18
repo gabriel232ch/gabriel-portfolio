@@ -21,7 +21,7 @@
 
 .smaller-companies-chapter__status .display {
   max-width: 18ch;
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-size: var(--font-size-statement);
   font-weight: 300;
   line-height: 1;
 }

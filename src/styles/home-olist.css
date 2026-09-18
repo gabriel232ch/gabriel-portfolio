@@ -24,8 +24,8 @@
 .olist-data-map__node {
   border-top: 1px solid var(--hairline);
   padding-block: var(--space-3);
-  font-family: var(--font-data);
-  font-size: 0.75rem;
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
 }
 
 .olist-data-map__node.is-core {
@@ -36,7 +36,7 @@
 .olist-chapter__highlight {
   max-width: 18ch;
   margin-block: clamp(2rem, 4vw, 4rem);
-  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-size: var(--font-size-section-title);
   font-weight: 300;
   line-height: 1;
 }
@@ -49,8 +49,8 @@
 .olist-chapter__tension strong {
   display: block;
   margin-top: var(--space-2);
-  font-family: var(--font-report-display);
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-family: var(--font-numeric);
+  font-size: var(--font-size-statement);
   font-feature-settings: 'lnum' 1, 'pnum' 1;
   font-variant-numeric: lining-nums proportional-nums;
   font-weight: 400;
@@ -63,7 +63,8 @@
   max-width: 28rem;
   margin-top: var(--space-2);
   color: var(--ink-muted);
-  font-size: 0.75rem;
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
   line-height: 1.45;
 }
 
@@ -71,8 +72,8 @@
   max-width: 42rem;
   margin: 0;
   color: var(--ink-muted);
-  font-family: var(--font-editorial);
-  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-family: var(--font-display);
+  font-size: var(--font-size-lead);
   font-weight: 300;
   line-height: 1.05;
 }
@@ -86,7 +87,7 @@
 
 .olist-chapter__end .display {
   max-width: 22ch;
-  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-size: var(--font-size-section-title);
   font-weight: 300;
   line-height: 1;
 }

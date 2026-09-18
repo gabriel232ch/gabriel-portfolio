@@ -1,19 +1,17 @@
 main {
-  --font-display: var(--font-editorial);
-  --font-body: var(--font-report-body);
-  font-family: var(--font-body);
+  font-family: var(--font-reading);
 }
 
 main .display {
-  font-family: var(--font-editorial);
+  font-family: var(--font-display);
   font-weight: 300;
   letter-spacing: -0.045em;
   line-height: 0.92;
 }
 
 main .body-copy {
-  font-family: var(--font-body);
-  font-size: var(--font-size-reading);
+  font-family: var(--font-reading);
+  font-size: var(--font-size-body);
   font-weight: 400;
   line-height: var(--line-height-reading);
 }
@@ -27,7 +25,8 @@ main .body-copy {
   grid-column: 1 / -1;
   display: flex;
   gap: clamp(1.25rem, 3vw, 2.5rem);
-  font-size: 0.8125rem;
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
 }
 
 .home-navigation__links a {
@@ -126,7 +125,7 @@ main .body-copy {
 .home-hero__intro {
   max-width: 30ch;
   margin: 0;
-  font-size: clamp(1.375rem, 2.2vw, 1.875rem);
+  font-size: var(--font-size-lead);
   line-height: 1.22;
 }
 
@@ -183,7 +182,7 @@ main .body-copy {
 
 .home-now__heading h2 {
   margin: 0;
-  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  font-size: var(--font-size-section-title);
   font-weight: 300;
 }
 
@@ -204,7 +203,7 @@ main .body-copy {
 
 .home-now__item .editorial {
   margin-top: var(--space-2);
-  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+  font-size: var(--font-size-statement);
 }
 
 .home-now__snapshot {
@@ -220,7 +219,7 @@ main .body-copy {
 .home-now__snapshot figcaption {
   margin-top: var(--space-2);
   color: var(--ink-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-supporting);
 }
 
 .home-closing {
@@ -238,7 +237,7 @@ main .body-copy {
 .home-closing__message {
   max-width: 22ch;
   margin: 0;
-  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  font-size: var(--font-size-section-title);
   line-height: 1.02;
 }
 
@@ -246,6 +245,8 @@ main .body-copy {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
 }
 
 @media (min-width: 48rem) {
