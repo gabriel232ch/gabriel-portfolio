@@ -112,6 +112,26 @@ test('Olist shows capability growth rather than a SQL skill showcase', async ({ 
   await expect(olist.getByText('INVESTIGATE', { exact: true })).toHaveCount(0);
 });
 
+test('smaller-company chapter stays open-ended and protects current-employer details', async ({ page }) => {
+  await page.goto('/');
+  const inquiry = page.locator('[data-home-chapter="smaller-companies"]');
+
+  await expect(inquiry.getByRole('heading', {
+    level: 2,
+    name: 'Why Do Some People Choose Smaller Companies?',
+  })).toBeVisible();
+  await expect(inquiry).toContainText('a quantitative investment firm');
+  await expect(inquiry).toContainText('So I started looking elsewhere.');
+  await expect(inquiry).toContainText('I’m still trying to understand this.');
+  await expect(inquiry.getByRole('link', { name: 'Explore the current research →' })).toHaveAttribute(
+    'href',
+    '/work/why-some-people-choose-smaller-companies/',
+  );
+  await expect(inquiry).not.toContainText('JoinQuant');
+  await expect(inquiry).not.toContainText('聚宽');
+  await expect(inquiry.locator('[data-competitive-mechanism]')).toHaveCount(0);
+});
+
 test('Home exposes the Now layer and quieter editorial closing', async ({ page }) => {
   await page.goto('/');
 
@@ -151,24 +171,18 @@ test('Home preserves the integrated editorial order and image-free work stories'
   await expect(sections.nth(5)).toHaveId('about');
   await expect(sections.nth(6)).toHaveId('index');
 
-  const workStories = page.locator('[data-work-slug="competitive-positioning-against-giants"]');
-  await expect(workStories).toHaveCount(1);
-  for (const story of await workStories.all()) {
-    await expect(story.locator('img')).toHaveCount(0);
-    await expect(story.locator('[data-work-title]')).toBeVisible();
-    await expect(story.locator('[data-work-takeaway]')).toBeVisible();
-    const notes = story.locator('[data-research-notes]');
-    await expect(notes).not.toHaveAttribute('open', '');
-    await notes.locator('summary').click();
-    await expect(story.locator('[data-work-question]')).toBeVisible();
-    await expect(story.locator('[data-work-outcome]')).toBeVisible();
-    await expect(story.locator('[data-work-evidence]')).toHaveCount(3);
-  }
-
   await expect(page.locator('[data-home-chapter="chanel"]')).toBeVisible();
   await expect(page.locator('[data-home-chapter="olist"]')).toBeVisible();
+  const inquiry = page.locator('[data-home-chapter="smaller-companies"]');
+  await expect(inquiry).toBeVisible();
+  await expect(inquiry.locator('img')).toHaveCount(0);
+  await expect(inquiry.getByRole('heading', {
+    level: 2,
+    name: 'Why Do Some People Choose Smaller Companies?',
+  })).toBeVisible();
+  await expect(inquiry.locator('[data-competitive-mechanism]')).toHaveCount(0);
   await expect(page.locator('[data-olist-data-map]')).toBeVisible();
-  await expect(page.locator('[data-competitive-data-story]')).toBeVisible();
+  await expect(page.locator('[data-competitive-data-story]')).toHaveCount(0);
 });
 
 test('mobile Chanel price position keeps market rails within the viewport', async ({ page }) => {
@@ -198,7 +212,7 @@ test('mobile Chanel price position keeps market rails within the viewport', asyn
   }
 });
 
-test('Home renders Competitive Positioning as a source-backed strategy feature after Olist', async ({ page }) => {
+test('Home renders the smaller-company inquiry after Olist', async ({ page }) => {
   await page.goto('/');
 
   const slugs = await page.locator('[data-work-slug]').evaluateAll((nodes) =>
@@ -210,41 +224,32 @@ test('Home renders Competitive Positioning as a source-backed strategy feature a
     'competitive-positioning-against-giants',
   ]);
 
-  const competitive = page.locator('[data-work-slug="competitive-positioning-against-giants"]');
-  await expect(competitive).toBeVisible();
-  await expect(competitive.locator('img')).toHaveCount(0);
-  await expect(competitive.locator('[data-work-title]')).toHaveText('Smallness is not an advantage');
-  await expect(competitive.locator('[data-work-takeaway]')).toBeVisible();
-  await expect(competitive.locator('[data-competitive-data-story]')).toBeVisible();
-  const mechanisms = competitive.locator('[data-competitive-mechanism]');
-  await expect(mechanisms).toHaveCount(5);
-  await expect(mechanisms.nth(0)).toContainText('Deliberate Constraint Advantage');
-  await expect(mechanisms.nth(4)).toContainText('Selective Fit Flywheel');
-  await mechanisms.nth(1).locator('summary').click();
-  await expect(mechanisms.nth(1).locator('details')).toHaveAttribute('open', '');
-  await expect(mechanisms.nth(1).locator('.competitive-data-story__mechanism-note')).toBeVisible();
-  await expect(competitive.locator('[data-competitive-boundary]')).toHaveText(
-    'INDEPENDENT COMPARATIVE ANALYSIS / NOT EMPLOYER-SPECIFIC',
+  const inquiry = page.locator('[data-home-chapter="smaller-companies"]');
+  await expect(inquiry).toBeVisible();
+  await expect(inquiry.getByRole('heading', {
+    level: 2,
+    name: 'Why Do Some People Choose Smaller Companies?',
+  })).toBeVisible();
+  await expect(inquiry).toContainText('So I started looking elsewhere.');
+  await expect(inquiry).toContainText('I’m still trying to understand this.');
+  await expect(inquiry.getByRole('link', { name: 'Explore the current research →' })).toHaveAttribute(
+    'href',
+    '/work/why-some-people-choose-smaller-companies/',
   );
-  await expect(competitive.locator('[data-competitive-data-story]')).not.toContainText('OPEN / CLOSE');
-  await expect(competitive.locator('[data-competitive-data-story] a')).toHaveCount(1);
+  await expect(inquiry.locator('[data-competitive-mechanism]')).toHaveCount(0);
 });
 
-test('research remains readable with JavaScript disabled', async ({ browser, baseURL }) => {
+test('smaller-company inquiry remains readable with JavaScript disabled', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
   const page = await context.newPage();
   try {
     await page.goto('/');
-    for (const work of await page.locator('[data-work-slug="competitive-positioning-against-giants"]').all()) {
-      await expect(work.locator('[data-work-title]')).toBeVisible();
-      await expect(work.locator('[data-work-takeaway]')).toBeVisible();
-      await work.locator('[data-research-notes] > summary').click();
-      await expect(work.locator('[data-work-question]')).toBeVisible();
-      await expect(work.locator('[data-work-outcome]')).toBeVisible();
-      for (const evidence of await work.locator('[data-work-evidence]').all()) {
-        await expect(evidence).toBeVisible();
-      }
-    }
+    const inquiry = page.locator('[data-home-chapter="smaller-companies"]');
+    await expect(inquiry.getByRole('heading', {
+      level: 2,
+      name: 'Why Do Some People Choose Smaller Companies?',
+    })).toBeVisible();
+    await expect(inquiry.getByRole('link', { name: 'Explore the current research →' })).toBeVisible();
   } finally {
     await context.close();
   }
@@ -268,11 +273,9 @@ test('Home has no viewport overflows', async ({ page }) => {
   }
 });
 
-test('research notes can be opened with a keyboard', async ({ page }) => {
+test('smaller-company research link can be reached with a keyboard', async ({ page }) => {
   await page.goto('/');
-  const notes = page.locator('[data-work-slug="competitive-positioning-against-giants"] [data-research-notes]').first();
-  await notes.locator('summary').focus();
-  await page.keyboard.press('Enter');
-  await expect(notes).toHaveAttribute('open', '');
-  await expect(notes.locator('[data-work-question]')).toBeVisible();
+  const link = page.getByRole('link', { name: 'Explore the current research →' });
+  await link.focus();
+  await expect(link).toBeFocused();
 });

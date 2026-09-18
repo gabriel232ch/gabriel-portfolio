@@ -8,19 +8,19 @@ import NowSection from '../components/home/NowSection.astro';
 import EditorialClosing from '../components/home/EditorialClosing.astro';
 import ChanelChapter from '../components/home/ChanelChapter.astro';
 import OlistChapter from '../components/home/OlistChapter.astro';
-import CompetitiveFeature from '../components/home/CompetitiveFeature.astro';
+import SmallerCompaniesChapter from '../components/home/SmallerCompaniesChapter.astro';
 import { HOME_STATE, HOME_WORK_SLUGS } from '../data/home';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/home.css';
 import '../styles/home-chanel.css';
 import '../styles/home-olist.css';
+import '../styles/home-inquiry.css';
 
 const featuredWork = (await getCollection('work')).filter((entry) =>
   HOME_WORK_SLUGS.includes(entry.id as (typeof HOME_WORK_SLUGS)[number]),
 );
 const luxury = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[0]);
 const olist = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[1]);
-const competitive = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[2]);
 
 if (!luxury) {
   throw new Error('Luxury Handbag Pricing Architecture Home entry is missing.');
@@ -28,10 +28,6 @@ if (!luxury) {
 
 if (!olist) {
   throw new Error('Olist Marketplace Analysis Home entry is missing.');
-}
-
-if (!competitive) {
-  throw new Error('Competitive Positioning Against Giants Home entry is missing.');
 }
 
 const closingSources = [
@@ -46,7 +42,7 @@ const closingSources = [
     <HomeHero state={HOME_STATE} />
     <ChanelChapter copy={HOME_STATE.projects.chanel} />
     <OlistChapter copy={HOME_STATE.projects.olist} />
-    <CompetitiveFeature entry={competitive} />
+    <SmallerCompaniesChapter copy={HOME_STATE.projects.smallerCompanies} />
     <NowSection
       now={HOME_STATE.now}
       authorNote={HOME_STATE.authorNote}
