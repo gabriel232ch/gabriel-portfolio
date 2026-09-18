@@ -1,3 +1,27 @@
+main {
+  --font-display: var(--font-editorial);
+  --font-body: var(--font-report-body);
+  font-family: var(--font-report-body);
+}
+
+main .display {
+  font-family: var(--font-editorial);
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+}
+
+main .chanel-chapter p.editorial,
+main .chanel-chapter p.body-copy,
+main .olist-chapter p.editorial,
+main .olist-chapter p.body-copy,
+main .smaller-companies-chapter p.editorial,
+main .smaller-companies-chapter p.body-copy,
+main .home-now__item p.editorial {
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
 .home-navigation {
   align-items: start;
   padding-top: var(--space-6);
