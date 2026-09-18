@@ -1,56 +1,29 @@
 ---
-import { getCollection } from 'astro:content';
-import '@fontsource-variable/newsreader/wght.css';
-import HomeHero from '../components/home/HomeHero.astro';
-import HomeMotionController from '../components/home/HomeMotionController.astro';
-import HomeNavigation from '../components/home/HomeNavigation.astro';
-import NowSection from '../components/home/NowSection.astro';
-import EditorialClosing from '../components/home/EditorialClosing.astro';
-import LuxuryFeature from '../components/home/LuxuryFeature.astro';
-import OlistFeature from '../components/home/OlistFeature.astro';
-import CompetitiveFeature from '../components/home/CompetitiveFeature.astro';
-import { HOME_STATE, HOME_WORK_SLUGS } from '../data/home';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeNavigation from '../components/home/HomeNavigation.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import ChanelChapter from '../components/home/ChanelChapter.astro';
+import OlistChapter from '../components/home/OlistChapter.astro';
+import SmallerCompaniesChapter from '../components/home/SmallerCompaniesChapter.astro';
+import NowSection from '../components/home/NowSection.astro';
+import HomeClosing from '../components/home/HomeClosing.astro';
+import HomeMotionController from '../components/home/HomeMotionController.astro';
+import { HOME_STATE } from '../data/home';
 import '../styles/home.css';
-
-const featuredWork = (await getCollection('work')).filter((entry) =>
-  HOME_WORK_SLUGS.includes(entry.id as (typeof HOME_WORK_SLUGS)[number]),
-);
-const luxury = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[0]);
-const olist = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[1]);
-const competitive = featuredWork.find((entry) => entry.id === HOME_WORK_SLUGS[2]);
-
-if (!luxury) {
-  throw new Error('Luxury Handbag Pricing Architecture Home entry is missing.');
-}
-
-if (!olist) {
-  throw new Error('Olist Marketplace Analysis Home entry is missing.');
-}
-
-if (!competitive) {
-  throw new Error('Competitive Positioning Against Giants Home entry is missing.');
-}
-
-const closingSources = [
-  { label: 'Luxury pricing repository', href: luxury.data.source.github },
-  { label: 'Olist analysis repository', href: olist.data.source.github },
-].filter((item): item is { label: string; href: string } => Boolean(item.href));
+import '../styles/home-chanel.css';
+import '../styles/home-olist.css';
+import '../styles/home-inquiry.css';
 ---
 
 <BaseLayout title="Gabriel Chen">
   <main>
     <HomeNavigation />
     <HomeHero state={HOME_STATE} />
-    <LuxuryFeature entry={luxury} />
-    <OlistFeature entry={olist} />
-    <CompetitiveFeature entry={competitive} />
-    <NowSection
-      now={HOME_STATE.now}
-      authorNote={HOME_STATE.authorNote}
-      personalSnapshot={HOME_STATE.personalSnapshot}
-    />
-    <EditorialClosing archive={HOME_STATE.archive} sources={closingSources} />
+    <ChanelChapter copy={HOME_STATE.projects.chanel} />
+    <OlistChapter copy={HOME_STATE.projects.olist} />
+    <SmallerCompaniesChapter copy={HOME_STATE.projects.smallerCompanies} />
+    <NowSection now={HOME_STATE.now} />
+    <HomeClosing closing={HOME_STATE.closing} />
     <HomeMotionController />
   </main>
 </BaseLayout>

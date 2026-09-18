@@ -1,5 +1,4 @@
 ---
-import FolioNumber from '../editorial/FolioNumber.astro';
 import type { HOME_STATE } from '../../data/home';
 import { GABRIEL_SIGNATURE_GLYPHS } from '../../data/signature';
 
@@ -35,25 +34,9 @@ const { state } = Astro.props;
         </svg>
       </span>
     </h1>
-    <FolioNumber current="01" />
   </div>
 
   <div class="home-hero__context">
-    <p class="home-hero__intro-label data-copy">{state.intro.label}</p>
     <p class="home-hero__intro editorial">{state.intro.statement}</p>
-
-    <div class="home-hero__reading" aria-label="Starting points for reading">
-      <p class="home-hero__reading-label data-copy">START READING</p>
-      <ul>
-        {state.reading.map((item) => (
-          <li>
-            <a data-home-reading href={item.href}>
-              <span class="home-hero__reading-title editorial">{item.title}</span>
-              <span class="home-hero__reading-meta data-copy">{item.label}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
   </div>
 </section>

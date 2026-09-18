@@ -1,0 +1,31 @@
+---
+interface Props { copy: typeof import('../../data/home').HOME_STATE.projects.smallerCompanies }
+const { copy } = Astro.props;
+---
+
+<section
+  id="smaller-companies"
+  class="smaller-companies-chapter editorial-grid"
+  aria-labelledby="smaller-companies-title"
+  data-home-chapter="smaller-companies"
+  data-work-slug="competitive-positioning-against-giants"
+>
+  <div class="smaller-companies-chapter__question">
+    <h2 id="smaller-companies-title" class="display">{copy.title}</h2>
+    <p class="body-copy">{copy.opening}</p>
+  </div>
+
+  <div class="smaller-companies-chapter__shift motion-reveal" data-home-motion>
+    <p class="body-copy">{copy.shift}</p>
+  </div>
+
+  <div class="smaller-companies-chapter__trail">
+    <p class="display">{copy.turn}</p>
+    <p class="body-copy">{copy.research}</p>
+  </div>
+
+  <div class="smaller-companies-chapter__status motion-reveal" data-home-motion>
+    <p class="display">{copy.status}</p>
+    <a href={copy.href}>{copy.cta}</a>
+  </div>
+</section>

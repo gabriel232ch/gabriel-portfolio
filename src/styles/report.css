@@ -98,7 +98,7 @@
   margin: 0;
   color: var(--ink);
   font-family: var(--font-editorial);
-  font-size: clamp(3.4rem, 8vw, 8rem);
+  font-size: var(--font-size-project-title);
   font-weight: 300;
   letter-spacing: -0.055em;
   line-height: 0.86;
@@ -183,9 +183,10 @@
   padding-top: clamp(4rem, 8vw, 8rem);
 }
 
-.report-section__number {
+.report-section .report-section__number {
   margin: 0 0 var(--space-6);
   color: var(--accent-strong);
+  font-family: var(--font-data);
   font-size: 0.68rem;
 }
 
@@ -216,16 +217,16 @@
   max-width: 60ch;
   color: var(--ink);
   font-family: var(--font-report-body);
-  font-size: 1.125rem;
+  font-size: var(--font-size-reading);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: var(--line-height-reading);
 }
 
 .report-section p {
   margin-block: var(--space-6);
 }
 
-.report-claim {
+.report-section .report-claim {
   max-width: 40rem !important;
   margin-block: var(--space-8) !important;
   color: var(--accent-strong) !important;
@@ -1158,7 +1159,7 @@
   margin-block: 0;
 }
 
-.report-chain {
+.report-section .report-chain {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -1190,7 +1191,7 @@
   border-top: 1px solid var(--hairline);
 }
 
-.report-judgment__number {
+.report-judgment .report-judgment__number {
   margin: 0 0 var(--space-4) !important;
   color: var(--accent-strong) !important;
   font-size: 0.68rem !important;
@@ -1202,12 +1203,12 @@
 }
 
 .report-judgment p {
-  font-size: 1.125rem;
+  font-size: var(--font-size-reading);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: var(--line-height-reading);
 }
 
-.report-judgment__lead {
+.report-judgment .report-judgment__lead {
   color: var(--accent-strong) !important;
   font-family: var(--font-editorial);
   font-size: 1.35rem !important;
@@ -1263,7 +1264,7 @@
   padding-left: 1.2rem;
 }
 
-.report-boundary {
+.report-section .report-boundary {
   margin-top: var(--space-8) !important;
   padding: var(--space-6);
   border-left: 2px solid var(--accent);
@@ -1304,7 +1305,7 @@
   text-underline-offset: 0.2rem;
 }
 
-.report-final {
+.report-section .report-final {
   margin-top: clamp(4rem, 8vw, 8rem) !important;
   padding-top: var(--space-6);
   border-top: 1px solid var(--ink);
@@ -1363,7 +1364,6 @@
 
   .report-title {
     max-width: 11ch;
-    font-size: clamp(3.3rem, 17vw, 6rem);
   }
 
   .report-lede {
@@ -1400,15 +1400,6 @@
 
   .report-section h2 {
     font-size: clamp(2.6rem, 13vw, 4.5rem);
-  }
-
-  .report-section p,
-  .report-section li {
-    font-size: 1rem;
-  }
-
-  .report-judgment p {
-    font-size: 1rem;
   }
 
   .report-visual {

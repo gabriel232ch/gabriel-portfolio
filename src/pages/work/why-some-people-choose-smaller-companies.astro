@@ -1,0 +1,189 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { HOME_STATE } from '../../data/home';
+import { COMPETITIVE_MECHANISMS } from '../../data/competitive';
+
+const project = HOME_STATE.projects.smallerCompanies;
+---
+
+<BaseLayout
+  title={`${project.title} — Gabriel Chen`}
+  description="A current research note about why people may choose smaller companies and which patterns are worth examining."
+  noindex={false}
+>
+  <main class="inquiry-page">
+    <header class="inquiry-page__header">
+      <a class="inquiry-page__identity" href="/">GABRIEL CHEN</a>
+      <a class="inquiry-page__back" href="/#work">← BACK TO WORK</a>
+    </header>
+
+    <article class="inquiry-page__article">
+      <p class="inquiry-page__kicker">CURRENT RESEARCH · OPEN QUESTION</p>
+      <h1>{project.title}</h1>
+      <p class="inquiry-page__opening">{project.opening}</p>
+      <p>{project.shift}</p>
+
+      <section aria-labelledby="current-research-title">
+        <h2 id="current-research-title">Current research</h2>
+        <p>
+          One current research pass screened 28 organizations, structured 12 cases, completed six longitudinal deep dives,
+          and used two counterexamples to test whether recurring mechanisms survived a wider comparison.
+        </p>
+        <p>
+          The deep-dive cases were Linear, 37signals, XTX Markets, Pentagram, Midjourney, and DeepSeek.
+          Allbirds and IDEO were used as counterexamples.
+        </p>
+      </section>
+
+      <section aria-labelledby="patterns-title">
+        <h2 id="patterns-title">Patterns I’m looking at</h2>
+        <p class="inquiry-page__intro">
+          These are current analytical patterns, not recipes. The question is whether they remain visible across different
+          organizations and contexts, and what each pattern leaves out.
+        </p>
+        <div class="inquiry-page__patterns">
+          {COMPETITIVE_MECHANISMS.map((mechanism) => (
+            <article class="inquiry-page__pattern" data-competitive-mechanism>
+              <h3>{mechanism.label}</h3>
+              <p>{mechanism.summary}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <p class="inquiry-page__status">{project.status}</p>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .inquiry-page {
+    min-height: 100vh;
+    padding: 1.5rem clamp(1.25rem, 4vw, 5rem) 6rem;
+    color: var(--ink);
+    background: var(--paper);
+  }
+
+  .inquiry-page__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    max-width: 74rem;
+    margin: 0 auto;
+  }
+
+  .inquiry-page__identity,
+  .inquiry-page__back {
+    color: inherit;
+    font-size: 0.7rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .inquiry-page__article {
+    max-width: 54rem;
+    margin: 10rem auto 0;
+  }
+
+  .inquiry-page__kicker {
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .inquiry-page h1,
+  .inquiry-page h2,
+  .inquiry-page h3 {
+    font-family: var(--font-display, Georgia, serif);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+  }
+
+  .inquiry-page h1 {
+    max-width: 13ch;
+    margin: 1.5rem 0;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 0.95;
+  }
+
+  .inquiry-page h2 {
+    margin: 0.5rem 0 1.5rem;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1;
+  }
+
+  .inquiry-page h3 {
+    margin: 0;
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    line-height: 1.1;
+  }
+
+  .inquiry-page p {
+    max-width: 42rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .inquiry-page__opening {
+    max-width: 38rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(1.4rem, 2.5vw, 2rem) !important;
+    line-height: 1.25 !important;
+  }
+
+  .inquiry-page section {
+    margin: 8rem 0;
+    padding-top: 2rem;
+    border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  .inquiry-page__intro {
+    margin-bottom: 2.5rem;
+  }
+
+  .inquiry-page__patterns {
+    display: grid;
+    gap: 0;
+  }
+
+  .inquiry-page__pattern {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.8fr) 1fr;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .inquiry-page__pattern p {
+    margin: 0;
+  }
+
+  .inquiry-page__status {
+    margin: 0;
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(1.8rem, 4vw, 3.25rem);
+    line-height: 1.1;
+  }
+
+  @media (max-width: 640px) {
+    .inquiry-page__header {
+      align-items: flex-start;
+    }
+
+    .inquiry-page__article {
+      margin-top: 6rem;
+    }
+
+    .inquiry-page section {
+      margin: 5rem 0;
+    }
+
+    .inquiry-page__pattern {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+</style>

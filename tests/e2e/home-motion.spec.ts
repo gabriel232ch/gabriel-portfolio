@@ -42,9 +42,9 @@ test('reduced motion preserves all Home information without displacement', async
   expect(signatureState.fillOpacity).toBe('1');
   expect(signatureState.fillAnimation).toBe('none');
   await expect(page.locator('[data-home-ambient]')).toHaveCount(0);
-  const notes = page.locator('[data-research-notes]').first();
-  await notes.locator('summary').click();
-  await expect(notes.locator('[data-work-question]')).toHaveCSS('opacity', '1');
+  await expect(page.locator('[data-home-chapter="chanel"]')).toBeVisible();
+  await expect(page.locator('[data-home-chapter="olist"]')).toBeVisible();
+  await expect(page.locator('[data-home-chapter="smaller-companies"]')).toBeVisible();
 });
 
 test('unsupported IntersectionObserver browsers enter Home stages immediately', async ({ page }) => {

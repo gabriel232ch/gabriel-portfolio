@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { HOME_STATE } from '../../data/home';
+import { OLIST_DATA_METRICS, OLIST_DATA_SOURCES } from '../../data/olist';
+import '../../styles/report.css';
+
+const project = HOME_STATE.projects.olist;
+---
+
+<BaseLayout
+  title={`${project.title} — Gabriel Chen`}
+  description="An evidence-led Olist marketplace analysis about growth, fulfillment reliability, and the questions that connect them."
+  noindex={false}
+>
+  <main class="research-page">
+    <header class="research-page__header">
+      <a class="research-page__identity" href="/">GABRIEL CHEN</a>
+      <a class="research-page__back" href="/#work">← BACK TO WORK</a>
+    </header>
+
+    <article class="research-page__article">
+      <p class="research-page__kicker">SAMSUNG · 2025 → OLIST · 2026</p>
+      <h1>{project.title}</h1>
+      <p class="research-page__lede">{project.noQuestion}</p>
+
+      <section aria-labelledby="analysis-trail-title">
+        <h2 id="analysis-trail-title">Analysis trail</h2>
+        <ol class="research-page__trail">
+          <li>Understand the available tables and their grain.</li>
+          <li>Test how marketplace growth changed over time.</li>
+          <li>Separate order-volume growth from value growth.</li>
+          <li>Compare scale with delivery reliability and review outcomes.</li>
+          <li>Translate the observed tension into market and route priorities.</li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="evidence-title">
+        <h2 id="evidence-title">What the current analysis found</h2>
+        <div class="research-page__evidence">
+          {OLIST_DATA_METRICS.map((metric) => (
+            <article class="research-page__evidence-card">
+              <p class="research-page__eyebrow">{metric.label}</p>
+              {metric.id === 'fix' ? (
+                <>
+                  <p class="research-page__metric">{metric.segments} material markets</p>
+                  <p>{metric.orders} · {metric.gmvExposure} · {metric.lateOrders}</p>
+                </>
+              ) : (
+                <>
+                  <p class="research-page__metric">{metric.fromLabel} → {metric.toLabel}</p>
+                  <p>{metric.context}</p>
+                </>
+              )}
+              <p class="research-page__note">{metric.note}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="limits-title">
+        <h2 id="limits-title">What the data cannot tell me</h2>
+        <p>
+          The dataset does not provide commission revenue, complete costs or margins, marketing exposure, seller acquisition cost,
+          inventory availability, carrier identity, complete refunds, or experiment assignment. The analysis is observational and does
+          not establish causal impact.
+        </p>
+      </section>
+
+      <footer class="research-page__footer">
+        <a href={OLIST_DATA_SOURCES.readme} target="_blank" rel="noreferrer">Source analysis on GitHub</a>
+      </footer>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .research-page {
+    min-height: 100vh;
+    padding: 1.5rem clamp(1.25rem, 4vw, 5rem) 6rem;
+    color: var(--ink);
+    background: var(--paper);
+  }
+
+  .research-page__header,
+  .research-page__footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    max-width: 74rem;
+    margin: 0 auto;
+  }
+
+  .research-page__identity,
+  .research-page__back,
+  .research-page__footer a {
+    color: inherit;
+    font-size: 0.7rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .research-page__article {
+    max-width: 54rem;
+    margin: 10rem auto 0;
+  }
+
+  .research-page__kicker,
+  .research-page__eyebrow,
+  .research-page__note {
+    color: var(--ink-muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .research-page h1,
+  .research-page h2 {
+    font-family: var(--font-display, Georgia, serif);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+  }
+
+  .research-page h1 {
+    max-width: 15ch;
+    margin: 1.5rem 0;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 0.95;
+  }
+
+  .research-page h2 {
+    margin: 0.5rem 0 1.5rem;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1;
+  }
+
+  .research-page p,
+  .research-page li {
+    max-width: 42rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .research-page__lede {
+    max-width: 38rem;
+    margin: 0 0 8rem;
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(1.4rem, 2.5vw, 2rem) !important;
+    line-height: 1.25 !important;
+  }
+
+  .research-page section {
+    margin: 0 0 8rem;
+    padding-top: 2rem;
+    border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  .research-page__trail {
+    display: grid;
+    gap: 0.85rem;
+    padding-left: 1.5rem;
+  }
+
+  .research-page__evidence {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .research-page__evidence-card {
+    padding: 1.25rem 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .research-page__evidence-card p {
+    margin: 0.25rem 0;
+  }
+
+  .research-page__metric {
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(1.8rem, 4vw, 3rem) !important;
+    line-height: 1.05 !important;
+  }
+
+  .research-page__note {
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .research-page__footer {
+    justify-content: flex-start;
+    padding-top: 2rem;
+    border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  @media (max-width: 640px) {
+    .research-page__header {
+      align-items: flex-start;
+    }
+
+    .research-page__article {
+      margin-top: 6rem;
+    }
+
+    .research-page__lede,
+    .research-page section {
+      margin-bottom: 5rem;
+    }
+  }
+</style>
