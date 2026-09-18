@@ -32,10 +32,10 @@ test('Chanel follows the approved question-first narrative', async ({ page }) =>
     level: 2,
     name: 'Luxury Was Slowing. Why Did Chanel Look Different?',
   })).toBeVisible();
-  await expect(chanel.locator('.chanel-chapter__opening > .editorial')).toHaveText(
+  await expect(chanel.locator('.chanel-chapter__opening > .body-copy')).toHaveText(
     'I first started thinking about this while studying luxury at Bocconi in Milan. The market was slowing, and I kept coming across brands like Gucci and Zegna trying to adapt in very different ways.',
   );
-  await expect(chanel.locator('.chanel-chapter__return > .editorial')).toHaveText(
+  await expect(chanel.locator('.chanel-chapter__return > .body-copy')).toHaveText(
     'Later, a passing conversation brought Chanel to mind. It seemed to be holding up differently. I wanted to understand whether that impression was real — and, if it was, why.',
   );
   await expect(chanel.locator('.chanel-chapter__visible')).toBeVisible();
@@ -44,7 +44,7 @@ test('Chanel follows the approved question-first narrative', async ({ page }) =>
   await expect(chanel.getByText('But something still felt missing.')).toBeVisible();
   await expect(chanel.locator('[data-chanel-business]')).toBeVisible();
   await expect(chanel.locator('.chanel-chapter__current')).toBeVisible();
-  await expect(chanel.locator('.chanel-chapter__current > .editorial')).toHaveText(
+  await expect(chanel.locator('.chanel-chapter__current > .body-copy').first()).toHaveText(
     'I no longer think Chanel’s relative resilience can be explained by a single price move or campaign. What I see now is a system: pricing, product, desirability, investment, client experience and brand identity all have to keep reinforcing one another.',
   );
   await expect(chanel.locator(
@@ -80,6 +80,42 @@ test('Chanel follows the approved question-first narrative', async ({ page }) =>
   ]) {
     await expect(chanel.getByText(forbidden, { exact: true })).toHaveCount(0);
   }
+});
+
+test('Home narrative copy uses Newsreader while display roles stay editorial', async ({ page }) => {
+  await page.goto('/');
+
+  const narrativeStyles = await page.locator('.body-copy').evaluateAll((nodes) =>
+    nodes.map((node) => {
+      const style = getComputedStyle(node);
+      return {
+        family: style.fontFamily,
+        weight: style.fontWeight,
+        size: Number.parseFloat(style.fontSize),
+        lineHeight: Number.parseFloat(style.lineHeight),
+      };
+    }),
+  );
+
+  expect(narrativeStyles.length).toBeGreaterThan(0);
+  expect(narrativeStyles.every((style) => style.family.includes('Newsreader Variable'))).toBe(true);
+  expect(narrativeStyles.every((style) => style.weight === '400')).toBe(true);
+  expect(narrativeStyles.every((style) => style.size >= 18 && style.size <= 20)).toBe(true);
+  expect(narrativeStyles.every((style) => style.lineHeight / style.size >= 1.5)).toBe(true);
+
+  const colors = await page.evaluate(() => {
+    const returnCopy = document.querySelector('.chanel-chapter__return .body-copy');
+    const root = getComputedStyle(document.documentElement);
+    return {
+      returnColor: returnCopy ? getComputedStyle(returnCopy).color : '',
+      ink: root.color,
+    };
+  });
+  expect(colors.returnColor).toBe(colors.ink);
+  await expect(page.locator('.chanel-chapter__opening h2')).toHaveCSS(
+    'font-family',
+    /Cormorant Garamond Variable/,
+  );
 });
 
 test('Olist shows capability growth rather than a SQL skill showcase', async ({ page }) => {

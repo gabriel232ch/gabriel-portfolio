@@ -21,11 +21,11 @@ const { copy } = Astro.props;
   <div class="chanel-chapter__opening">
     <p class="data-copy">{copy.context}</p>
     <h2 id="chanel-title" class="display">{copy.title}</h2>
-    <p class="editorial">{copy.opening}</p>
+    <p class="body-copy">{copy.opening}</p>
   </div>
 
   <div class="chanel-chapter__return motion-reveal" data-home-motion>
-    <p class="editorial">{copy.return}</p>
+    <p class="body-copy">{copy.return}</p>
   </div>
 
   <div class="chanel-chapter__visible">
@@ -37,13 +37,13 @@ const { copy } = Astro.props;
 
   <div class="chanel-chapter__turn motion-reveal" data-home-motion>
     <h3 class="display">{copy.missing}</h3>
-    <p class="editorial">{copy.missingBody}</p>
+    <p class="body-copy">{copy.missingBody}</p>
   </div>
 
   <ChanelBusinessSignal />
 
   <div class="chanel-chapter__current motion-reveal" data-home-motion>
-    <p class="editorial">{copy.current}</p>
+    <p class="body-copy">{copy.current}</p>
     <p class="body-copy">{copy.unresolved}</p>
     <p class="display chanel-chapter__status">{copy.status}</p>
     <a href={copy.href}>{copy.cta}</a>

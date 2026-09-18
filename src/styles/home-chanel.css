@@ -16,18 +16,18 @@
 .chanel-chapter__opening h2 {
   max-width: 14ch;
   margin: var(--space-4) 0 var(--space-6);
-  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 300;
-  line-height: 0.94;
+  line-height: 0.92;
   letter-spacing: -0.045em;
 }
 
-.chanel-chapter__opening > .editorial {
+.chanel-chapter__opening > .body-copy {
   max-width: 40rem;
 }
 
 .chanel-chapter__return {
-  color: var(--ink-muted);
+  color: var(--ink);
 }
 
 .chanel-chapter__visible {
@@ -66,6 +66,8 @@
 .chanel-question {
   margin: 0 0 var(--space-4);
   color: var(--ink-muted);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.15;
 }
 
 .chanel-price-position,
@@ -96,7 +98,7 @@
 
 .chanel-price-position__row > .data-copy {
   color: var(--ink-muted);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
 }
 
 .chanel-price-position__row.is-chanel > .data-copy {
@@ -174,12 +176,13 @@
 .chanel-history-signal__rows span,
 .chanel-business-signal small {
   color: var(--ink-muted);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   line-height: 1.4;
 }
 
 .chanel-history-signal__rows strong,
 .chanel-business-signal strong {
+  font-family: var(--font-editorial);
   font-size: clamp(2rem, 4vw, 3.8rem);
   font-weight: 300;
   letter-spacing: -0.045em;
