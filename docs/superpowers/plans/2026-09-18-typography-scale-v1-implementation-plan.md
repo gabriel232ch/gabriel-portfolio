@@ -223,7 +223,7 @@ const routes = [
 ];
 ```
 
-For Home and Chanel, compare the computed body and project-title pixel sizes at 390px and 1024px. On Chanel, assert the report body is 20px at 390px and 22px at 1024px, the title equals `getComputedStyle(document.documentElement).getPropertyValue('--font-size-project-title')` after resolving the same token, report section headings use the Section Title value, and a representative KPI uses Didot plus Statement or Section Title. For Olist and smaller-companies, assert the `h1`, lede/opening, `h2`, body paragraphs, and metadata are assigned to the shared role sizes and that no computed meaningful text is below 14px.
+For Home and Chanel, compare the computed body and project-title pixel sizes at 390px, 1024px, and 1440px. On Chanel, assert the report body is 20px at 390px and reaches the approved 22px cap at 1440px; at 1024px assert Home and Chanel resolve the same shared Body token rather than requiring a page-local size. The title equals `getComputedStyle(document.documentElement).getPropertyValue('--font-size-project-title')` after resolving the same token, report section headings use the Section Title value, and a representative KPI uses Didot plus Statement or Section Title. For Olist and smaller-companies, assert the `h1`, lede/opening, `h2`, body paragraphs, and metadata are assigned to the shared role sizes and that no computed meaningful text is below 14px.
 
 - [ ] **Step 2: Run the focused detail E2E test to verify it fails**
 
@@ -300,7 +300,7 @@ Expected: the new guard fails against the remaining arbitrary local declarations
 In `tests/e2e/typography-system.spec.ts`:
 
 - Set viewport to 390px and assert representative Body is 20px, Lead is 24px, Statement is 30px, and Section Title is 36px.
-- Set viewport to 1024px and assert representative Body is 22px, Lead is 26px, Statement is 32px, and Section Title is 40px.
+- Set viewport to 1024px and assert the representative Home and Chanel Body values are equal and still resolve from the shared token; set viewport to 1440px and assert Body is 22px, Lead is 26px, Statement is 32px, and Section Title is 40px.
 - Visit all four migrated routes and collect elements with meaningful direct text, excluding `script`, `style`, `svg`, `noscript`, `[aria-hidden='true']`, and elements with `display:none` or `visibility:hidden`; assert each computed font size is at least 14px.
 - Assert Home and Chanel body/title computed pixel sizes match at both viewports.
 - Assert Home and Chanel representative KPI values use `Didot`, `font-weight: 400`, lining/proportional numerals, and either the Statement or Section Title computed size.
