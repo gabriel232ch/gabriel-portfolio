@@ -47,10 +47,10 @@ const panels = markets.map((market) => {
                 class="chanel-price-position__rail"
                 role="img"
                 aria-label={`${row.brand}: ${formatCurrency(row.minimum, row.currency)} to ${formatCurrency(row.maximum, row.currency)}, median ${formatCurrency(row.median, row.currency)}`}
-                style={`${rangeStyle}--motion-delay:${motionDelay + 70}ms;`}
+                style={rangeStyle}
               >
-                <span class="chanel-price-position__range" data-motion-part="draw" style={`--motion-delay:${motionDelay}ms;`} aria-hidden="true"></span>
-                <i data-motion-part="point" style={`--motion-delay:${motionDelay + 70}ms;`} aria-hidden="true"></i>
+                <span class="chanel-price-position__range" data-motion-part="draw" style={`--motion-delay:${motionDelay + 80}ms;`} aria-hidden="true"></span>
+                <i data-motion-part="point" style={`--motion-delay:${motionDelay + 150}ms;`} aria-hidden="true"></i>
               </span>
             </div>
           );

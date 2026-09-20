@@ -161,59 +161,72 @@
   background: repeating-linear-gradient(to right, transparent 0, transparent calc(25% - 1px), var(--hairline) 25%);
 }
 
-.chanel-price-position__rail::after,
-.chanel-price-position__rail i {
+.chanel-price-position__rail i,
+.chanel-price-position__rail i::before {
   position: absolute;
   display: block;
 }
 
 .chanel-price-position__range {
   position: absolute;
-  top: 0.45rem;
+  top: 0.5rem;
   left: var(--range-left);
   width: var(--range-width);
-  height: 0.25rem;
+  height: 0.1rem;
   background: var(--ink-muted);
+  color: var(--ink-muted);
+  border-radius: 999px;
 }
+
+.chanel-price-position__range::before,
+.chanel-price-position__range::after {
+  position: absolute;
+  top: -0.2rem;
+  width: 1px;
+  height: 0.5rem;
+  background: currentColor;
+  content: '';
+}
+
+.chanel-price-position__range::before { left: 0; }
+.chanel-price-position__range::after { right: 0; }
 
 .chanel-price-position__row.is-chanel .chanel-price-position__range {
   background: var(--ink);
-}
-
-.chanel-price-position__rail::after {
-  top: 0.18rem;
-  left: var(--median);
-  width: 1px;
-  height: 0.8rem;
-  background: var(--ink);
-  content: '';
-  transform-origin: center;
-  transition:
-    opacity 360ms var(--ease-editorial),
-    transform 360ms var(--ease-cinematic);
-  transition-delay: var(--motion-delay, 0ms);
-}
-
-[data-motion-sequence][data-motion-state='pending'] .chanel-price-position__rail::after {
-  opacity: 0;
-  transform: scaleY(0.7);
-}
-
-[data-motion-sequence][data-motion-state='entered'] .chanel-price-position__rail::after {
-  opacity: 1;
-  transform: scaleY(1);
+  color: var(--ink);
+  height: 0.14rem;
+  top: 0.48rem;
 }
 
 .chanel-price-position__rail i {
-  top: 0.28rem;
   left: var(--median);
-  width: 0.55rem;
-  height: 0.55rem;
-  border: 1px solid var(--ink);
+  top: 0.4rem;
+  width: 0.25rem;
+  height: 0.25rem;
   border-radius: 50%;
-  background: var(--paper-raised);
+  background: var(--ink);
   content: '';
   transform: translateX(-50%);
+}
+
+.chanel-price-position__rail i::before {
+  top: -0.3rem;
+  left: 50%;
+  width: 1px;
+  height: 0.85rem;
+  background: var(--ink);
+  content: '';
+  transform: translateX(-50%);
+}
+
+[data-motion-sequence='price-position'] [data-motion-part='draw'] {
+  transition-duration: 920ms;
+  transition-timing-function: var(--ease-editorial);
+}
+
+[data-motion-sequence='price-position'] [data-motion-part='point'] {
+  transition-duration: 420ms;
+  transition-timing-function: var(--ease-editorial);
 }
 
 .chanel-history-signal__rows,
