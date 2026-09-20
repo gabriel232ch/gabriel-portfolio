@@ -1356,6 +1356,33 @@
   .report-body {
     grid-column: 4 / span 9;
   }
+
+  .report-visual--architecture,
+  .report-data-dashboard {
+    overflow-x: auto;
+  }
+
+  .report-price-lanes {
+    min-width: 36rem;
+    padding-inline: var(--space-4) var(--space-16);
+  }
+
+  .report-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-kpi-card {
+    min-width: 0;
+  }
+
+  .report-growth-heatmap {
+    min-width: 36rem;
+  }
+
+  .report-growth-heatmap__years,
+  .report-growth-heatmap__row {
+    grid-template-columns: 8rem repeat(6, minmax(3.5rem, 1fr));
+  }
 }
 
 @media (max-width: 47.99rem) {

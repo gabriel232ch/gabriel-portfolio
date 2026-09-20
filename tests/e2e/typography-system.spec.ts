@@ -117,6 +117,75 @@ test('Home resolves semantic body, metadata, and KPI scales at mobile', async ({
   expect(sizes.metadata).toBeGreaterThanOrEqual(14);
 });
 
+test('Home expressive passages resolve the Statement role', async ({ page }) => {
+  await page.goto('/');
+
+  const sizes = await page.evaluate(() => {
+    const statementToken = document.createElement('span');
+    statementToken.style.fontSize = 'var(--font-size-statement)';
+    document.body.append(statementToken);
+    const resolvedStatement = Number.parseFloat(getComputedStyle(statementToken).fontSize);
+    statementToken.remove();
+
+    const passages = [
+      document.querySelector('.olist-chapter__arrival')!,
+      document.querySelector('.smaller-companies-chapter__turn')!,
+    ];
+
+    return {
+      resolvedStatement,
+      passages: passages.map((element) => ({
+        className: element.className,
+        size: Number.parseFloat(getComputedStyle(element).fontSize),
+      })),
+    };
+  });
+
+  expect(sizes.passages).toEqual([
+    { className: 'editorial statement olist-chapter__arrival', size: sizes.resolvedStatement },
+    { className: 'display statement smaller-companies-chapter__turn', size: sizes.resolvedStatement },
+  ]);
+});
+
+for (const width of [768, 1024]) {
+  test(`pricing report keeps tablet chart labels and values legible at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/work/luxury-handbag-pricing-architecture/');
+
+    const geometry = await page.evaluate(() => {
+      const endpointLabels = Array.from(document.querySelectorAll<HTMLElement>('.report-price-lane__node--max em'));
+      const endpointContainment = endpointLabels.map((label) => {
+        const chart = label.closest('.report-price-lanes')!.getBoundingClientRect();
+        const bounds = label.getBoundingClientRect();
+        return bounds.left >= chart.left && bounds.right <= chart.right;
+      });
+
+      const kpiValues = Array.from(document.querySelectorAll<HTMLElement>('.report-kpi-card strong'));
+      const kpiSeparation = kpiValues.map((value) => {
+        const card = value.closest('.report-kpi-card')!.getBoundingClientRect();
+        const bounds = value.getBoundingClientRect();
+        return bounds.left >= card.left && bounds.right <= card.right;
+      });
+
+      const heatmapCells = Array.from(document.querySelectorAll<HTMLElement>('.report-growth-cell'));
+      const heatmapContainment = heatmapCells.map((cell) => cell.scrollWidth <= cell.clientWidth);
+
+      return {
+        endpointScroll: document.querySelector<HTMLElement>('.report-visual--architecture')!.scrollWidth,
+        endpointViewport: document.querySelector<HTMLElement>('.report-visual--architecture')!.clientWidth,
+        endpointContainment,
+        kpiSeparation,
+        heatmapContainment,
+      };
+    });
+
+    expect(geometry.endpointContainment).toEqual([true, true]);
+    expect(geometry.kpiSeparation.every(Boolean)).toBe(true);
+    expect(geometry.heatmapContainment.every(Boolean)).toBe(true);
+    expect(geometry.endpointScroll).toBeGreaterThanOrEqual(geometry.endpointViewport);
+  });
+}
+
 test('Home and Chanel report share the approved reading and project-title scales', async ({ page }) => {
   await page.goto('/');
 
