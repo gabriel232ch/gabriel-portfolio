@@ -80,7 +80,7 @@ describe('Typography Scale v1 tokens', () => {
 
 - [ ] **Step 2: Run the focused test and verify it fails**
 
-Run: `npx vitest run tests/unit/typography-contract.test.ts`  
+Run: `npx vitest run tests/unit/typography-contract.test.ts`
 Expected: FAIL because the current code still exposes `--font-body`, `--font-data`, `--font-size-reading`, and report-specific aliases instead of the frozen global contract.
 
 - [ ] **Step 3: Implement the global tokens and family primitives**
@@ -111,7 +111,7 @@ In `src/styles/global.css`, set the body family to `var(--font-reading)`.
 
 - [ ] **Step 4: Run the focused test and project unit suite**
 
-Run: `npx vitest run tests/unit/typography-contract.test.ts tests/unit`  
+Run: `npx vitest run tests/unit/typography-contract.test.ts tests/unit`
 Expected: the new contract test and all existing unit tests pass.
 
 - [ ] **Step 5: Commit**
@@ -164,7 +164,7 @@ Assert body is 20px, body equals the body token, metadata is at least 14px, and 
 
 - [ ] **Step 2: Run the focused E2E test to verify the new assertions fail**
 
-Run: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:4331 npx playwright test tests/e2e/typography-system.spec.ts --project=desktop-chromium` against a built/static server when browser tooling is available.  
+Run: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:4331 npx playwright test tests/e2e/typography-system.spec.ts --project=desktop-chromium` against a built/static server when browser tooling is available.
 Expected: the current Home body resolves from the old reading token and Home KPI selectors use local clamps rather than the new semantic tokens.
 
 - [ ] **Step 3: Replace Home/shared local sizes with semantic roles**
@@ -187,7 +187,7 @@ The theme control must use Micro at both widths so its meaningful label is not b
 
 - [ ] **Step 4: Run Home unit/check and focused browser tests**
 
-Run: `npm run check && npm run lint && npx vitest run tests/unit && npx playwright test tests/e2e/home.spec.ts tests/e2e/typography-system.spec.ts --project=desktop-chromium`  
+Run: `npm run check && npm run lint && npx vitest run tests/unit && npx playwright test tests/e2e/home.spec.ts tests/e2e/typography-system.spec.ts --project=desktop-chromium`
 Expected: Astro check, lint, unit tests, and the focused Home/typography tests pass; any browser failure must be reported with its environment cause rather than hidden.
 
 - [ ] **Step 5: Commit**
@@ -227,7 +227,7 @@ For Home and Chanel, compare the computed body and project-title pixel sizes at 
 
 - [ ] **Step 2: Run the focused detail E2E test to verify it fails**
 
-Run: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:4331 npx playwright test tests/e2e/typography-system.spec.ts --project=desktop-chromium`  
+Run: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:4331 npx playwright test tests/e2e/typography-system.spec.ts --project=desktop-chromium`
 Expected: legacy report clamps and inline page styles produce mismatched title, lede, section, body, table, chart, and metadata sizes.
 
 - [ ] **Step 3: Map shared report styles to semantic roles**
@@ -251,7 +251,7 @@ At mobile widths, keep layout adjustments that are necessary for the 14px chart 
 
 - [ ] **Step 4: Run report/detail checks**
 
-Run: `npm run check && npm run lint && npx vitest run tests/unit && npx playwright test tests/e2e/typography-system.spec.ts tests/e2e/foundation.spec.ts --project=desktop-chromium`  
+Run: `npm run check && npm run lint && npx vitest run tests/unit && npx playwright test tests/e2e/typography-system.spec.ts tests/e2e/foundation.spec.ts --project=desktop-chromium`
 Expected: source compiles, lint and unit tests pass, and all detail typography assertions pass when browser execution is available.
 
 - [ ] **Step 5: Commit**
@@ -292,7 +292,7 @@ Also assert the production source does not contain `--font-report-display`, `--f
 
 - [ ] **Step 2: Run the source-contract and all unit tests to verify the guard is meaningful**
 
-Run: `npx vitest run tests/unit/typography-source-contract.test.ts tests/unit`  
+Run: `npx vitest run tests/unit/typography-source-contract.test.ts tests/unit`
 Expected: the new guard fails against the remaining arbitrary local declarations before the final migration, then passes after Tasks 2–3 have completed.
 
 - [ ] **Step 3: Add computed minimum-size and responsive contract coverage**

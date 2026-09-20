@@ -1,7 +1,7 @@
 # Gabriel Portfolio — Typography Scale v1
 
-**Status:** Approved and frozen for implementation  
-**Date:** 2026-09-18  
+**Status:** Approved and frozen for implementation
+**Date:** 2026-09-18
 **Authority:** This specification supersedes older Gabriel Portfolio typography-size and role assignments. It does not reopen or rewrite unrelated visual, content, color, motion, data, privacy, or layout decisions.
 
 ## Purpose
