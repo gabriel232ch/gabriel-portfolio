@@ -29,21 +29,37 @@ if (!gmv || gmv.id !== 'gmv' || !onTime || onTime.id !== 'on-time') {
     <p class="display olist-chapter__highlight">{copy.highlight}</p>
     <p class="editorial statement olist-chapter__arrival">{copy.arrival}</p>
     <p class="body-copy">{copy.noQuestion}</p>
-    <OlistDataMap />
+    <div class="olist-data-map-block" data-home-motion data-motion-sequence="olist-data-map">
+      <div class="olist-data-map-block__tools">
+        <button class="home-motion-replay" type="button" data-motion-replay aria-label="Replay animation">↻</button>
+      </div>
+      <OlistDataMap />
+    </div>
   </div>
 
-  <div class="olist-chapter__tension" data-olist-tension data-home-motion>
-    <div>
-      <span class="data-copy">{gmv.label}</span>
-      <strong>{gmv.fromLabel} → {gmv.toLabel}</strong>
-      <small>{gmv.context}</small>
-      <small>{gmv.note}</small>
+  <div class="olist-chapter__tension" data-olist-tension data-home-motion data-motion-sequence="olist-metrics">
+    <div class="olist-chapter__tension-tools">
+      <button class="home-motion-replay" type="button" data-motion-replay aria-label="Replay animation">↻</button>
     </div>
     <div>
-      <span class="data-copy">{onTime.label}</span>
-      <strong>{onTime.fromLabel} → {onTime.toLabel}</strong>
-      <small>{onTime.context}</small>
-      <small>{onTime.note}</small>
+      <span class="data-copy" data-motion-part="label" style="--motion-delay:90ms;">{gmv.label}</span>
+      <span class="home-motion-number-mask" style="--motion-delay:155ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay delivered GMV animation">
+          <strong data-motion-part="number">{gmv.fromLabel} → {gmv.toLabel}</strong>
+        </button>
+      </span>
+      <small data-motion-part="label" style="--motion-delay:260ms;">{gmv.context}</small>
+      <small data-motion-part="label" style="--motion-delay:320ms;">{gmv.note}</small>
+    </div>
+    <div>
+      <span class="data-copy" data-motion-part="label" style="--motion-delay:220ms;">{onTime.label}</span>
+      <span class="home-motion-number-mask" style="--motion-delay:285ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay on-time delivery animation">
+          <strong data-motion-part="number">{onTime.fromLabel} → {onTime.toLabel}</strong>
+        </button>
+      </span>
+      <small data-motion-part="label" style="--motion-delay:390ms;">{onTime.context}</small>
+      <small data-motion-part="label" style="--motion-delay:450ms;">{onTime.note}</small>
     </div>
   </div>
 

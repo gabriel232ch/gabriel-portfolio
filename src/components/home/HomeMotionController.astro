@@ -1,18 +1,50 @@
 <script>
-  const nodes = document.querySelectorAll<HTMLElement>('[data-home-motion]');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const nodes = [...document.querySelectorAll<HTMLElement>('[data-home-motion]')];
+  const sequences = [...document.querySelectorAll<HTMLElement>('[data-motion-sequence]')];
+  const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const replayFrames = new WeakMap<HTMLElement, number>();
 
-  if (reduceMotion || typeof IntersectionObserver !== 'function') {
-    nodes.forEach((node) => (node.dataset.motionState = 'entered'));
+  const enter = (node: HTMLElement) => {
+    node.dataset.motionState = 'entered';
+  };
+
+  const replay = (block: HTMLElement) => {
+    const previousFrame = replayFrames.get(block);
+    if (previousFrame !== undefined) cancelAnimationFrame(previousFrame);
+
+    block.dataset.motionReset = 'true';
+    block.dataset.motionState = 'pending';
+
+    if (reduceMotionQuery.matches) {
+      block.removeAttribute('data-motion-reset');
+      enter(block);
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      block.removeAttribute('data-motion-reset');
+      enter(block);
+      replayFrames.delete(block);
+    });
+    replayFrames.set(block, frame);
+  };
+
+  const setInitialState = (node: HTMLElement) => {
+    node.dataset.motionState = reduceMotionQuery.matches ? 'entered' : 'pending';
+  };
+
+  nodes.forEach(setInitialState);
+
+  if (reduceMotionQuery.matches || typeof IntersectionObserver !== 'function') {
+    nodes.forEach(enter);
   } else {
-    nodes.forEach((node) => (node.dataset.motionState = 'pending'));
-
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          (entry.target as HTMLElement).dataset.motionState = 'entered';
-          observer.unobserve(entry.target);
+          const node = entry.target as HTMLElement;
+          enter(node);
+          observer.unobserve(node);
         }
       },
       { threshold: 0.22 },
@@ -20,4 +52,14 @@
 
     nodes.forEach((node) => observer.observe(node));
   }
+
+  sequences.forEach((block) => {
+    block.querySelectorAll<HTMLElement>('[data-motion-replay]').forEach((control) => {
+      control.addEventListener('click', () => replay(block));
+    });
+
+    block.querySelectorAll<HTMLElement>('[data-motion-replay-number]').forEach((number) => {
+      number.addEventListener('click', () => replay(block));
+    });
+  });
 </script>

@@ -21,6 +21,18 @@
   margin-top: var(--space-6);
 }
 
+.olist-data-map-block {
+  position: relative;
+}
+
+.olist-data-map-block__tools {
+  display: flex;
+  height: 0;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 1;
+}
+
 .olist-data-map__node {
   border-top: 1px solid var(--hairline);
   padding-block: var(--space-3);
@@ -31,6 +43,16 @@
 .olist-data-map__node.is-core {
   border-top-color: var(--ink);
   font-weight: 600;
+}
+
+.olist-data-map-block[data-motion-state='pending'] .olist-data-map__node[data-motion-part='point'] {
+  opacity: 0;
+  transform: translateY(0.125rem) scale(0.55);
+}
+
+.olist-data-map-block[data-motion-state='entered'] .olist-data-map__node[data-motion-part='point'] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .olist-chapter__highlight {
@@ -44,6 +66,13 @@
 .olist-chapter__tension {
   display: grid;
   gap: var(--space-6);
+}
+
+.olist-chapter__tension-tools {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  margin-bottom: calc(var(--space-4) * -1);
 }
 
 .olist-chapter__tension strong {
@@ -118,5 +147,9 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+
+  .olist-data-map-block[data-motion-state='entered'] .olist-data-map__node[data-motion-part='point'] {
+    transform: none !important;
   }
 }

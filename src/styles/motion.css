@@ -54,6 +54,68 @@
   transform: scaleX(1);
 }
 
+/* Homepage data construction: label → draw → locate → reveal. */
+[data-motion-sequence] [data-motion-part] {
+  transition:
+    opacity 420ms var(--ease-editorial),
+    transform 700ms var(--ease-cinematic),
+    filter 700ms var(--ease-cinematic);
+  transition-delay: var(--motion-delay, 0ms);
+}
+
+[data-motion-sequence][data-motion-reset] [data-motion-part] {
+  transition: none !important;
+}
+
+[data-motion-sequence] [data-motion-part='draw'] {
+  transform-origin: left center;
+}
+
+[data-motion-sequence][data-motion-state='pending'] [data-motion-part='label'] {
+  opacity: 0;
+  transform: translateY(0.375rem);
+}
+
+[data-motion-sequence][data-motion-state='entered'] [data-motion-part='label'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-motion-sequence][data-motion-state='pending'] [data-motion-part='draw'] {
+  transform: scaleX(0);
+}
+
+[data-motion-sequence][data-motion-state='entered'] [data-motion-part='draw'] {
+  transform: scaleX(1);
+}
+
+[data-motion-sequence][data-motion-state='pending'] [data-motion-part='point'] {
+  opacity: 0;
+  transform: translateX(-50%) translateY(0.125rem) scale(0.55);
+}
+
+[data-motion-sequence][data-motion-state='entered'] [data-motion-part='point'] {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+[data-motion-sequence][data-motion-state='pending'] [data-motion-part='number'] {
+  opacity: 0;
+  filter: blur(0.17rem);
+  transform: translateY(1rem);
+}
+
+[data-motion-sequence][data-motion-state='entered'] [data-motion-part='number'] {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.home-motion-number-mask {
+  display: block;
+  overflow: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-reveal,
   .motion-assemble,
@@ -66,6 +128,13 @@
   }
 
   .motion-assemble .motion-segment {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  [data-motion-sequence] [data-motion-part] {
+    opacity: 1 !important;
+    filter: none !important;
     transform: none !important;
     transition: none !important;
   }

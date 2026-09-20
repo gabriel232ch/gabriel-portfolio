@@ -70,6 +70,54 @@
   line-height: 1.15;
 }
 
+.home-motion-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.home-motion-heading .chanel-question {
+  margin-bottom: 0;
+}
+
+.home-motion-replay {
+  flex: 0 0 auto;
+  border: 0;
+  padding: 0.2rem;
+  color: var(--ink-muted);
+  background: transparent;
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.home-motion-replay:hover {
+  color: var(--ink);
+}
+
+.home-motion-replay:focus-visible,
+.home-motion-kpi:focus-visible {
+  outline: 1px solid var(--focus-ring);
+  outline-offset: 0.18rem;
+}
+
+.home-motion-kpi {
+  display: inline-block;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.home-motion-kpi:hover {
+  color: var(--ink-muted);
+}
+
 .chanel-price-position,
 .chanel-history-signal,
 .chanel-business-signal {
@@ -113,23 +161,22 @@
   background: repeating-linear-gradient(to right, transparent 0, transparent calc(25% - 1px), var(--hairline) 25%);
 }
 
-.chanel-price-position__rail::before,
 .chanel-price-position__rail::after,
 .chanel-price-position__rail i {
   position: absolute;
   display: block;
 }
 
-.chanel-price-position__rail::before {
+.chanel-price-position__range {
+  position: absolute;
   top: 0.45rem;
   left: var(--range-left);
   width: var(--range-width);
   height: 0.25rem;
   background: var(--ink-muted);
-  content: '';
 }
 
-.chanel-price-position__row.is-chanel .chanel-price-position__rail::before {
+.chanel-price-position__row.is-chanel .chanel-price-position__range {
   background: var(--ink);
 }
 
@@ -140,6 +187,21 @@
   height: 0.8rem;
   background: var(--ink);
   content: '';
+  transform-origin: center;
+  transition:
+    opacity 360ms var(--ease-editorial),
+    transform 360ms var(--ease-cinematic);
+  transition-delay: var(--motion-delay, 0ms);
+}
+
+[data-motion-sequence][data-motion-state='pending'] .chanel-price-position__rail::after {
+  opacity: 0;
+  transform: scaleY(0.7);
+}
+
+[data-motion-sequence][data-motion-state='entered'] .chanel-price-position__rail::after {
+  opacity: 1;
+  transform: scaleY(1);
 }
 
 .chanel-price-position__rail i {
@@ -273,5 +335,9 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+
+  .chanel-price-position[data-motion-state='entered'] .chanel-price-position__rail i[data-motion-part='point'] {
+    transform: translateX(-50%) !important;
   }
 }

@@ -2,19 +2,30 @@
 import { LUXURY_FLAGSHIP } from '../../data/luxury';
 ---
 
-<div class="chanel-history-signal" data-chanel-history data-home-motion>
-  <p class="chanel-question editorial">Was this position new?</p>
+<div class="chanel-history-signal" data-chanel-history data-home-motion data-motion-sequence="history-signal">
+  <div class="home-motion-heading">
+    <p class="chanel-question editorial" data-motion-part="label">Was this position new?</p>
+    <button class="home-motion-replay" type="button" data-motion-replay aria-label="Replay animation">↻</button>
+  </div>
   <div class="chanel-history-signal__rows">
     <div>
-      <span class="data-copy">Classic median · 2022 → 2026</span>
-      <strong class="display">+{LUXURY_FLAGSHIP.historical.classicShift.toFixed(1)}%</strong>
+      <span class="data-copy" data-motion-part="label" style="--motion-delay:110ms;">Classic median · 2022 → 2026</span>
+      <span class="home-motion-number-mask" style="--motion-delay:175ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay Classic median animation">
+          <strong class="display" data-motion-part="number">+{LUXURY_FLAGSHIP.historical.classicShift.toFixed(1)}%</strong>
+        </button>
+      </span>
     </div>
     <div>
-      <span class="data-copy">Mini / access-core · 2022 → 2026</span>
-      <strong class="display">+{LUXURY_FLAGSHIP.historical.miniShift.toFixed(1)}%</strong>
+      <span class="data-copy" data-motion-part="label" style="--motion-delay:250ms;">Mini / access-core · 2022 → 2026</span>
+      <span class="home-motion-number-mask" style="--motion-delay:315ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay Mini access-core animation">
+          <strong class="display" data-motion-part="number">+{LUXURY_FLAGSHIP.historical.miniShift.toFixed(1)}%</strong>
+        </button>
+      </span>
     </div>
   </div>
-  <p class="body-copy">
+  <p class="body-copy" data-motion-part="label" style="--motion-delay:450ms;">
     The Classic-to-Mini ratio moved from {LUXURY_FLAGSHIP.historical.ratioFrom.toFixed(3)}× to {LUXURY_FLAGSHIP.historical.ratioTo.toFixed(3)}×, while the absolute gap expanded from €{LUXURY_FLAGSHIP.historical.gapFrom.toLocaleString('en-US')} to €{LUXURY_FLAGSHIP.historical.gapTo.toLocaleString('en-US')}.
   </p>
 </div>

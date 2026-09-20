@@ -4,16 +4,61 @@ import { LUXURY_FLAGSHIP } from '../../data/luxury';
 const signed = (value: number) => `${value > 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}%`;
 ---
 
-<div class="chanel-business-signal" data-chanel-business data-home-motion>
-  <p class="chanel-question editorial">The business complicated the story.</p>
+<div class="chanel-business-signal" data-chanel-business data-home-motion data-motion-sequence="business-signal">
+  <div class="home-motion-heading">
+    <p class="chanel-question editorial" data-motion-part="label">The business complicated the story.</p>
+    <button class="home-motion-replay" type="button" data-motion-replay aria-label="Replay animation">↻</button>
+  </div>
   <div class="chanel-business-signal__baseline">
-    <span><small>Nominal revenue CAGR · FY20–25</small><strong>{signed(LUXURY_FLAGSHIP.financial.revenueCagr)}</strong></span>
-    <span><small>Operating margin</small><strong>{LUXURY_FLAGSHIP.financial.marginFrom.toFixed(1)} → {LUXURY_FLAGSHIP.financial.marginTo.toFixed(1)}%</strong></span>
+    <span>
+      <small data-motion-part="label" style="--motion-delay:80ms;">Nominal revenue CAGR · FY20–25</small>
+      <span class="home-motion-number-mask" style="--motion-delay:145ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay revenue CAGR animation">
+          <strong data-motion-part="number">{signed(LUXURY_FLAGSHIP.financial.revenueCagr)}</strong>
+        </button>
+      </span>
+    </span>
+    <span>
+      <small data-motion-part="label" style="--motion-delay:150ms;">Operating margin</small>
+      <span class="home-motion-number-mask" style="--motion-delay:215ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay operating margin animation">
+          <strong data-motion-part="number">{LUXURY_FLAGSHIP.financial.marginFrom.toFixed(1)} → {LUXURY_FLAGSHIP.financial.marginTo.toFixed(1)}%</strong>
+        </button>
+      </span>
+    </span>
   </div>
   <div class="chanel-business-signal__shock">
-    <span><small>2024 comparable revenue</small><strong>{signed(LUXURY_FLAGSHIP.financial.comparableGrowth)}</strong></span>
-    <span><small>2024 operating profit</small><strong>{signed(LUXURY_FLAGSHIP.financial.operatingProfit)}</strong></span>
-    <span><small>2024 free cash flow</small><strong>{signed(LUXURY_FLAGSHIP.financial.fcfChange)}</strong></span>
-    <span><small>2025 free cash flow</small><strong>{signed(LUXURY_FLAGSHIP.financial.reboundFcf)}</strong></span>
+    <span>
+      <small data-motion-part="label" style="--motion-delay:260ms;">2024 comparable revenue</small>
+      <span class="home-motion-number-mask" style="--motion-delay:325ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay 2024 comparable revenue animation">
+          <strong data-motion-part="number">{signed(LUXURY_FLAGSHIP.financial.comparableGrowth)}</strong>
+        </button>
+      </span>
+    </span>
+    <span>
+      <small data-motion-part="label" style="--motion-delay:320ms;">2024 operating profit</small>
+      <span class="home-motion-number-mask" style="--motion-delay:385ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay 2024 operating profit animation">
+          <strong data-motion-part="number">{signed(LUXURY_FLAGSHIP.financial.operatingProfit)}</strong>
+        </button>
+      </span>
+    </span>
+    <span>
+      <small data-motion-part="label" style="--motion-delay:380ms;">2024 free cash flow</small>
+      <span class="home-motion-number-mask" style="--motion-delay:445ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay 2024 free cash flow animation">
+          <strong data-motion-part="number">{signed(LUXURY_FLAGSHIP.financial.fcfChange)}</strong>
+        </button>
+      </span>
+    </span>
+    <span>
+      <small data-motion-part="label" style="--motion-delay:440ms;">2025 free cash flow</small>
+      <span class="home-motion-number-mask" style="--motion-delay:505ms;">
+        <button class="home-motion-kpi" type="button" data-motion-replay-number aria-label="Replay 2025 free cash flow animation">
+          <strong data-motion-part="number">{signed(LUXURY_FLAGSHIP.financial.reboundFcf)}</strong>
+        </button>
+      </span>
+    </span>
   </div>
 </div>

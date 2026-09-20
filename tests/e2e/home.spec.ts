@@ -367,7 +367,7 @@ test('smaller-company research link can be reached with a keyboard', async ({ pa
   await page.goto('/');
   const link = page.getByRole('link', { name: 'Explore the current research →' });
 
-  for (let tab = 0; tab < 20; tab += 1) {
+  for (let tab = 0; tab < 60; tab += 1) {
     if (await link.evaluate((element) => element === document.activeElement)) break;
     await page.keyboard.press('Tab');
   }

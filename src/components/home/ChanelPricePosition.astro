@@ -18,27 +18,39 @@ const panels = markets.map((market) => {
 });
 ---
 
-<div class="chanel-price-position" data-chanel-price-position>
-  <p class="chanel-question editorial">Where does Chanel actually sit?</p>
+<div
+  class="chanel-price-position"
+  data-chanel-price-position
+  data-home-motion
+  data-motion-sequence="price-position"
+>
+  <div class="home-motion-heading">
+    <p class="chanel-question editorial" data-motion-part="label">Where does Chanel actually sit?</p>
+    <button class="home-motion-replay" type="button" data-motion-replay aria-label="Replay animation">↻</button>
+  </div>
   <div class="chanel-price-position__markets">
     {panels.map((panel) => (
       <div class="chanel-price-position__market">
-        <p class="data-copy">{panel.market === 'FR' ? 'France' : 'United States'}</p>
-        {panel.rows.map((row) => {
+        <p class="data-copy" data-motion-part="label" style={`--motion-delay:${panel.market === 'US' ? 60 : 0}ms;`}>
+          {panel.market === 'FR' ? 'France' : 'United States'}
+        </p>
+        {panel.rows.map((row, rowIndex) => {
           const left = ((row.minimum - panel.min) / panel.span) * 100;
           const width = ((row.maximum - row.minimum) / panel.span) * 100;
           const median = ((row.median - panel.min) / panel.span) * 100;
           const rangeStyle = `--range-left:${left}%;--range-width:${width}%;--median:${median}%;`;
+          const motionDelay = (panel.market === 'US' ? 60 : 0) + 110 + rowIndex * 65;
           return (
             <div class:list={['chanel-price-position__row', row.brand === 'CHANEL' && 'is-chanel']}>
-              <span class="data-copy">{row.brand}</span>
-                <span
+              <span class="data-copy" data-motion-part="label" style={`--motion-delay:${motionDelay}ms;`}>{row.brand}</span>
+              <span
                 class="chanel-price-position__rail"
                 role="img"
                 aria-label={`${row.brand}: ${formatCurrency(row.minimum, row.currency)} to ${formatCurrency(row.maximum, row.currency)}, median ${formatCurrency(row.median, row.currency)}`}
-                style={rangeStyle}
+                style={`${rangeStyle}--motion-delay:${motionDelay + 70}ms;`}
               >
-                <i style={rangeStyle}></i>
+                <span class="chanel-price-position__range" data-motion-part="draw" style={`--motion-delay:${motionDelay}ms;`} aria-hidden="true"></span>
+                <i data-motion-part="point" style={`--motion-delay:${motionDelay + 70}ms;`} aria-hidden="true"></i>
               </span>
             </div>
           );
