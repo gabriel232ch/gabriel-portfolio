@@ -1,6 +1,4 @@
 ---
-import FolioNumber from '../../components/editorial/FolioNumber.astro';
-import SectionLabel from '../../components/editorial/SectionLabel.astro';
 import ThemeToggle from '../../components/system/ThemeToggle.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { LUXURY_FLAGSHIP, LUXURY_FLAGSHIP_SOURCES } from '../../data/luxury';
@@ -127,12 +125,12 @@ const judgments = [
   {
     title: 'Chanel and LVMH F&LG Followed Different Paths',
     lead: 'LVMH F&LG was strong in 2020–2023 and slowed in 2024–2025; Chanel reported a recovery in 2025.',
-    body: 'Chanel’s performance cannot be assigned entirely to the industry cycle, nor treated as independent of it. The supported conclusion is narrower: the trajectories differ, and the difference is shaped by reporting level, brand mix, foreign exchange, and geographic exposure.',
+    body: 'Chanel’s performance cannot be assigned entirely to the industry cycle, nor treated as independent of it. The supported conclusion is narrower: the trajectories differ, but they are reported at different levels and reflect different brand mixes, currencies, and geographic exposure. The comparison cannot isolate one factor behind the difference.',
   },
   {
-    title: 'Premiumization Came with Continued Reinvestment',
+    title: 'Premiumization Coincided with Continued Reinvestment',
     lead: 'Public financial materials show sustained capex and high brand-support investment.',
-    body: 'The disclosed investment spans boutiques, client experience, craftsmanship, supplier capacity, and real estate. This supports an interpretation of premiumization as requiring reinvestment. It does not support treating brand-support investment as handbag marketing expense or proving that investment caused price or profit outcomes.',
+    body: 'The disclosed investment spans boutiques, client experience, craftsmanship, supplier capacity, and real estate. These disclosures are consistent with price elevation alongside continued reinvestment. They do not support treating brand-support investment as handbag marketing expense or show that investment caused price or profit outcomes.',
   },
 ];
 
@@ -145,11 +143,11 @@ const tensions = [
 ];
 
 const implications = [
-  'Manage the ladder, not only the Classic anchor. The Classic position is clear, but the visible middle gap is now an architecture issue to monitor. Without behavioral evidence, it should not trigger a product or price change on its own.',
-  'Monitor middle-ladder continuity. Track the entry → core → icon family steps, price visibility, and future assortment coverage. First establish whether a gap is a real portfolio issue or a limitation of the public sample.',
-  'Benchmark competitors by tier and reporting level. Use Louis Vuitton and Dior for the lower/core battleground, Hermès Leather Goods & Saddlery for leather-goods context, and LVMH F&LG for the broader multi-brand environment. A single global price ranking would obscure these differences.',
-  'Evaluate premiumization alongside growth quality and investment. Each pricing decision should be read with revenue growth, margin, FCF, capex, brand-support intensity, and regional commentary. Price is not a success metric by itself.',
-  'Use customer and transaction data before intervening. Validate migration, conversion, volume/mix, stock availability, realized price, SKU economics, and willingness to pay before deciding whether to repair the middle of the ladder or change the entry architecture.',
+  'I would test whether the visible pre-icon → icon gap corresponds to a change in customer migration or conversion between product families. That requires customer-funnel data and full assortment coverage; the public sample alone cannot establish a portfolio problem or justify a product or price change.',
+  'I would map entry → core → icon steps within each family and across markets, then compare them with the full assortment. That would help separate a real ladder gap from a limit in public price visibility.',
+  'I would compare matched products within tiers and keep each financial benchmark at its reporting level: Louis Vuitton and Dior for lower/core price context, Hermès Leather Goods & Saddlery for leather-goods economics, and LVMH F&LG for the multi-brand environment. A single global ranking would obscure these differences.',
+  'I would read repricing alongside revenue growth, margin, FCF, capex, brand-support intensity, and regional commentary, then test product mix, geography, and foreign exchange separately. Public data shows these signals coexisting; it cannot isolate a pricing effect.',
+  'Before drawing conclusions about demand or price realization, I would need customer and transaction measures of migration, conversion, volume/mix, availability, realized price, SKU economics, and willingness to pay. Those measures are not present in the public evidence used here.',
 ];
 
 const canJudge = [
@@ -188,8 +186,8 @@ const businessChart = [
 ---
 
 <BaseLayout
-  title="Chanel Premiumization Strategy — Gabriel Chen"
-  description="A complete analysis of Chanel handbag price architecture, historical repricing, business performance and competitive positioning."
+  title="Chanel Handbag Price Architecture — Gabriel Chen"
+  description="A public-evidence analysis of Chanel handbag prices from 2022 to 2026, with historical repricing, company-level financial context, competitor comparisons, methods and limits."
   noindex={false}
   lang="en"
 >
@@ -197,7 +195,6 @@ const businessChart = [
     <header class="report-topline">
       <a class="report-topline__identity" href="/">
         <span>GABRIEL CHEN</span>
-        <span class="data-copy">WORK / RESEARCH</span>
       </a>
       <div class="report-topline__tools">
         <a class="data-copy" href="/#work">← BACK TO WORK</a>
@@ -209,47 +206,47 @@ const businessChart = [
     </div>
 
     <section class="report-hero" aria-labelledby="report-title">
-      <div class="report-hero__label">
-        <SectionLabel index="01" label="RESEARCH / PRICING" />
-        <FolioNumber current="01" />
+      <div class="report-hero__context">
+        <p class="report-origin">
+          At Bocconi in Milan, I studied luxury as the market slowed. Later, a conversation brought Chanel to mind; I wanted public evidence to explain why it seemed different.
+        </p>
       </div>
       <div class="report-hero__main">
-        <p class="report-kicker editorial"><em>Chanel Handbag Pricing</em></p>
-        <h1 id="report-title" class="report-title">Price Architecture, Business Performance, and Competitive Position</h1>
+        <h1 id="report-title" class="report-title">Chanel Handbag Price Architecture</h1>
         <p class="report-lede">
-          How does Chanel build and move its handbag price ladder? This report traces visible list prices, aligned historical lines, consolidated financial results, and comparable luxury-leather-goods context.
+          What changed between 2022 and 2026 — and what public evidence can and cannot show.
         </p>
         <p class="report-meta data-copy">
           PRICE WINDOW: 2020–2026 <span aria-hidden="true">/</span>
-          CURRENT SNAPSHOT: {LUXURY_FLAGSHIP.snapshot.capturedAt} <span aria-hidden="true">/</span>
-          FINANCIAL CORE: FY2020–FY2025
+          PRICE SNAPSHOT CAPTURED: {LUXURY_FLAGSHIP.snapshot.capturedAt} <span aria-hidden="true">/</span>
+          FINANCIAL PERIOD: FY2020–FY2025 <span aria-hidden="true">/</span>
+          R1 RELEASED: {LUXURY_FLAGSHIP.release.date}
         </p>
       </div>
     </section>
 
     <div class="report-layout">
-      <aside class="report-index" aria-label="Report contents">
+      <aside class="report-index" aria-label="Page contents">
         <p class="data-copy">ON THIS PAGE</p>
         <ol>
-          <li><a href="#thesis">01 / Conclusion</a></li>
-          <li><a href="#architecture">02 / Price architecture</a></li>
-          <li><a href="#history">03 / Historical change</a></li>
-          <li><a href="#business">04 / Business performance</a></li>
-          <li><a href="#competition">05 / Competitive context</a></li>
-          <li><a href="#judgments">06 / Six insights</a></li>
-          <li><a href="#tensions">07 / Strategic tensions</a></li>
-          <li><a href="#implications">08 / Implications</a></li>
-          <li><a href="#boundaries">09 / Evidence boundaries</a></li>
-          <li><a href="#sources">10 / Sources</a></li>
+          <li><a href="#thesis">What the evidence supports</a></li>
+          <li><a href="#architecture">Price architecture</a></li>
+          <li><a href="#history">Historical change</a></li>
+          <li><a href="#business">Business performance</a></li>
+          <li><a href="#competition">Competitive context</a></li>
+          <li><a href="#judgments">Findings</a></li>
+          <li><a href="#tensions">What remains unresolved</a></li>
+          <li><a href="#implications">What I would test next</a></li>
+          <li><a href="#boundaries">Evidence boundaries</a></li>
+          <li><a href="#sources">Sources</a></li>
         </ol>
       </aside>
 
       <article class="report-body">
         <section id="thesis" class="report-section report-section--opening">
-          <p class="report-section__number data-copy">01 / CONCLUSION</p>
-          <h2>Conclusion</h2>
+          <h2>What the evidence supports</h2>
           <p class="report-claim">
-            Chanel’s premiumization is a shift in the full price architecture, not only a higher Classic ticket.
+            The public price evidence points to change across the ladder, not only a higher Classic ticket.
           </p>
           <ul class="report-bullets">
             <li>The current sample shows a high visible entry/core floor, a concentrated premium zone, and a clear Classic/icon anchor.</li>
@@ -258,12 +255,11 @@ const businessChart = [
             <li>Revenue, operating profit, and FCF all came under pressure in 2024, then partly recovered in 2025. Price elevation is not a validated growth engine, and it does not remove cycle, regional-demand, or reinvestment risk.</li>
           </ul>
           <p>
-            The supported interpretation is that premiumization depends on the price ladder, the Classic anchor, desirability, distribution and client experience, craftsmanship and supply, and cash and profit performance holding together. Public evidence shows these factors coexisting and reveals tensions between them; it does not establish that price changes caused the operating results.
+            The price ladder, Classic anchor, desirability, distribution and client experience, craftsmanship and supply, and cash and profit performance offer a useful frame for reading the evidence. Public data shows these factors coexisting; it does not establish that price changes caused the operating results.
           </p>
         </section>
 
         <section id="architecture" class="report-section">
-          <p class="report-section__number data-copy">02 / PRICE ARCHITECTURE</p>
           <h2>How Chanel’s Handbag Price Architecture Works</h2>
           <p>
             The current snapshot contains 41 accepted observations, 35 with numeric prices: 17 of 20 in France and 18 of 21 in the United States. Folded into the existing market bands, the sample forms four analytical tiers:
@@ -332,7 +328,6 @@ const businessChart = [
         </section>
 
         <section id="history" class="report-section">
-          <p class="report-section__number data-copy">03 / HISTORICAL CHANGE</p>
           <h2>How the Architecture Has Changed</h2>
           <p>
             The rerun historical panel tracks four selected continuous lines in Chanel France across the common years 2022, 2023, 2024, and 2026:
@@ -386,7 +381,6 @@ const businessChart = [
         </section>
 
         <section id="business" class="report-section">
-          <p class="report-section__number data-copy">04 / BUSINESS PERFORMANCE</p>
           <h2>What Happened to the Business While This Occurred</h2>
           <h3>Chanel Consolidated Company</h3>
           <p>
@@ -480,12 +474,11 @@ const businessChart = [
           </p>
           <p class="report-chain">Pricing <span>↕</span> Desirability <span>↕</span> Distribution / client experience <span>↕</span> Craftsmanship / supply <span>↕</span> Brand investment <span>↕</span> Cash generation / profitability</p>
           <p>
-            This is an explanatory framework, not a causal model tested by this analysis. Public data shows price elevation and continued reinvestment occurring together; it cannot identify which investment produced which demand or profit outcome.
+            This is an explanatory framework, not a causal model tested by this analysis. Public data shows price elevation and continued reinvestment occurring together; it cannot identify whether, or how, a specific investment changed demand or profit.
           </p>
         </section>
 
         <section id="competition" class="report-section">
-          <p class="report-section__number data-copy">05 / COMPETITIVE CONTEXT</p>
           <h2>Competitive Context</h2>
           <h3>Hermès: A Leather-Goods Benchmark</h3>
           <p>
@@ -720,12 +713,10 @@ const businessChart = [
         </section>
 
         <section id="judgments" class="report-section">
-          <p class="report-section__number data-copy">06 / SIX INSIGHTS</p>
-          <h2>Six Insights</h2>
+          <h2>Findings</h2>
           <div class="report-judgments">
-            {judgments.map((judgment, index) => (
+            {judgments.map((judgment) => (
               <article class="report-judgment">
-                <p class="report-judgment__number data-copy">0{index + 1}</p>
                 <h3>{judgment.title}</h3>
                 <p class="report-judgment__lead">{judgment.lead}</p>
                 <p>{judgment.body}</p>
@@ -735,8 +726,7 @@ const businessChart = [
         </section>
 
         <section id="tensions" class="report-section">
-          <p class="report-section__number data-copy">07 / STRATEGIC TENSIONS</p>
-          <h2>Strategic Tensions</h2>
+          <h2>What remains unresolved</h2>
           <div class="report-table-wrap">
             <table class="report-table--wide">
               <thead>
@@ -753,15 +743,14 @@ const businessChart = [
         </section>
 
         <section id="implications" class="report-section">
-          <p class="report-section__number data-copy">08 / IMPLICATIONS</p>
-          <h2>Implications</h2>
+          <h2>What I would test next</h2>
+          <p>If I continued this analysis, these are the questions I would try to answer before drawing a portfolio conclusion:</p>
           <ol class="report-implications">
             {implications.map((implication) => <li>{implication}</li>)}
           </ol>
         </section>
 
         <section id="boundaries" class="report-section">
-          <p class="report-section__number data-copy">09 / EVIDENCE BOUNDARIES</p>
           <h2>Evidence Boundaries</h2>
           <div class="report-boundaries">
             <div>
@@ -779,7 +768,6 @@ const businessChart = [
         </section>
 
         <section id="sources" class="report-section report-section--sources">
-          <p class="report-section__number data-copy">10 / SOURCES &amp; REPRODUCIBILITY</p>
           <h2>Sources and Reproducibility</h2>
           <p>
             This page contains the full analysis. The links below provide the underlying project, method, validation, and source panels so readers can review definitions and calculation boundaries.
@@ -808,8 +796,8 @@ const businessChart = [
     </div>
 
     <footer class="report-footer">
-      <span class="data-copy">GABRIEL CHEN / CHANEL PREMIUMIZATION STRATEGY</span>
-      <span class="data-copy">UPDATED 2026-08-15</span>
+      <span class="data-copy">GABRIEL CHEN / CHANEL HANDBAG PRICE ARCHITECTURE</span>
+      <span class="data-copy">R1 RELEASED {LUXURY_FLAGSHIP.release.date} / SNAPSHOT CAPTURED {LUXURY_FLAGSHIP.snapshot.capturedAt}</span>
     </footer>
 </main>
 </BaseLayout>

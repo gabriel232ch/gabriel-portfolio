@@ -66,17 +66,17 @@ test('Home and Chanel report resolve the approved visible typography roles', asy
   await page.goto('/work/luxury-handbag-pricing-architecture/');
 
   const reportRoles = await page.evaluate(() => ({
-    body: getComputedStyle(document.querySelector('.report-section > p:not(.report-section__number):not(.report-claim):not(.report-note)')!).fontFamily,
+    body: getComputedStyle(document.querySelector('.report-section > p:not(.report-claim):not(.report-note)')!).fontFamily,
     metric: getComputedStyle(document.querySelector('.report-kpi-card strong')!).fontFamily,
     claim: getComputedStyle(document.querySelector('.report-claim')!).fontFamily,
-    sectionNumber: getComputedStyle(document.querySelector('.report-section__number')!).fontFamily,
+    origin: getComputedStyle(document.querySelector('.report-origin')!).fontFamily,
     data: getComputedStyle(document.querySelector('.report-meta')!).fontFamily,
   }));
 
   expect(reportRoles.body).toContain('Baskerville');
   expect(reportRoles.metric).toContain('Didot');
   expect(reportRoles.claim).toContain('Cormorant Garamond Variable');
-  expect(reportRoles.sectionNumber).toContain('IBM Plex Mono');
+  expect(reportRoles.origin).toContain('Baskerville');
   expect(reportRoles.data).toContain('IBM Plex Mono');
 });
 
@@ -197,7 +197,7 @@ test('Home and Chanel report share the approved reading and project-title scales
   await page.goto('/work/luxury-handbag-pricing-architecture/');
 
   const reportSizes = await page.evaluate(() => ({
-    body: Number.parseFloat(getComputedStyle(document.querySelector('.report-section > p:not(.report-section__number):not(.report-claim):not(.report-note)')!).fontSize),
+    body: Number.parseFloat(getComputedStyle(document.querySelector('.report-section > p:not(.report-claim):not(.report-note)')!).fontSize),
     title: Number.parseFloat(getComputedStyle(document.querySelector('.report-title')!).fontSize),
   }));
 
@@ -253,7 +253,7 @@ for (const viewport of [
         probe.remove();
         return value;
       };
-      const body = document.querySelector('.report-section > p:not(.report-section__number):not(.report-claim):not(.report-note)')!;
+      const body = document.querySelector('.report-section > p:not(.report-claim):not(.report-note)')!;
       const title = document.querySelector('.report-title')!;
       const lead = document.querySelector('.report-lede')!;
       const statement = document.querySelector('.report-claim')!;
