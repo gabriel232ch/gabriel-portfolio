@@ -56,7 +56,7 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
 
         <p class="research-page__note">
           Item and payment totals are aggregated before joining at order level, so one order with several items does not count as several orders.
-          <a href={OLIST_DATA_SOURCES.measurementSql} target="_blank" rel="noreferrer">Measurement definitions ↗</a>
+          {' '}<a href={OLIST_DATA_SOURCES.measurementSql} target="_blank" rel="noreferrer">Measurement definitions ↗</a>
         </p>
       </section>
 
@@ -99,7 +99,7 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
           <figcaption id="scale-caption" class="research-page__note">
             Both comparisons use delivered orders from matched Jan–Aug cohorts. GMV is the value of delivered items in the dataset,
             a sales-value proxy rather than audited Olist revenue.
-            <a href={OLIST_DATA_SOURCES.executiveKpisCsv} target="_blank" rel="noreferrer">Matched-period figures ↗</a>
+            {' '}<a href={OLIST_DATA_SOURCES.executiveKpisCsv} target="_blank" rel="noreferrer">Matched-period figures ↗</a>
           </figcaption>
         </figure>
       </section>
@@ -125,7 +125,7 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
         </div>
         <p class="research-page__note">
           This is an arithmetic allocation of the matched-period difference, not a causal explanation of why demand changed.
-          <a href={OLIST_DATA_SOURCES.baselineSql} target="_blank" rel="noreferrer">Decomposition method ↗</a>
+          {' '}<a href={OLIST_DATA_SOURCES.baselineSql} target="_blank" rel="noreferrer">Decomposition method ↗</a>
         </p>
       </section>
 
@@ -147,7 +147,7 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
         </dl>
         <p class="research-page__note">
           On-time rate uses delivered orders with eligible delivery dates. Low-review rate uses orders with a selected review score of 1–2.
-          <a href={OLIST_DATA_SOURCES.executiveKpisCsv} target="_blank" rel="noreferrer">Definitions and cohort values ↗</a>
+          {' '}<a href={OLIST_DATA_SOURCES.executiveKpisCsv} target="_blank" rel="noreferrer">Definitions and cohort values ↗</a>
         </p>
       </section>
 
@@ -170,7 +170,7 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
           The rule requires at least 100 delivered orders and 95% review coverage. Fix means current GMV at or above the qualified
           peer 75th percentile, plus on-time below the 25th percentile or low-review above the 75th percentile. It is a relative
           triage rule, not an estimate of what caused the marketplace-level change.
-          <a href={OLIST_DATA_SOURCES.prioritySql} target="_blank" rel="noreferrer">Portfolio rule ↗</a>
+          {' '}<a href={OLIST_DATA_SOURCES.prioritySql} target="_blank" rel="noreferrer">Portfolio rule ↗</a>
         </p>
 
         <ol class="research-page__fix-list" aria-label="Six category and customer-state Fix-before-growth segments">
@@ -189,15 +189,15 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
         </ol>
         <p class="research-page__note">
           Segment rates use eligible delivered orders for on-time and reviewed orders for low-review.
-          <a href={OLIST_DATA_SOURCES.categoryStateCsv} target="_blank" rel="noreferrer">Category × state evidence ↗</a>
+          {' '}<a href={OLIST_DATA_SOURCES.categoryStateCsv} target="_blank" rel="noreferrer">Category × state evidence ↗</a>
         </p>
 
         <div class="research-page__route">
           <p class="research-page__eyebrow">ROUTE DIAGNOSTIC · {route.name}</p>
           <p>
             This route carried substantial late-order exposure: {route.lateOrders} of {route.orders} orders were late,
-            a {route.lateRate} late rate against a {route.routeMedian} eligible-route median. It represented {route.highLateRouteShare}
-            of observed late orders across the 13 routes classified as high-late.
+            a {route.lateRate} late rate against a {route.routeMedian} eligible-route median. It represented {route.highLateRouteShare}&nbsp;of
+            observed late orders across the 13 routes classified as high-late.
           </p>
           <dl>
             <div><dt>DELIVERED GMV PROXY</dt><dd class="research-page__metric">{route.gmv}</dd></div>
@@ -206,7 +206,7 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
           <p class="research-page__note">
             This makes SP → RJ a diagnostic priority, not a proven cause. Promise-date calibration, category mix, seller mix,
             and carrier execution remain open explanations.
-            <a href={OLIST_DATA_SOURCES.routeCsv} target="_blank" rel="noreferrer">Route evidence ↗</a>
+            {' '}<a href={OLIST_DATA_SOURCES.routeCsv} target="_blank" rel="noreferrer">Route evidence ↗</a>
           </p>
         </div>
       </section>
@@ -231,7 +231,7 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
           <figcaption id="delay-caption" class="research-page__note">
             Observational association; low-review means selected review score ≤2, with each rate calculated among reviewed orders in that band.
             Other contributors are not isolated by this comparison.
-            <a href={OLIST_DATA_SOURCES.delayBandCsv} target="_blank" rel="noreferrer">Delay-band evidence ↗</a>
+            {' '}<a href={OLIST_DATA_SOURCES.delayBandCsv} target="_blank" rel="noreferrer">Delay-band evidence ↗</a>
           </figcaption>
         </figure>
       </section>
@@ -394,6 +394,11 @@ const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
   .research-page .research-page__note {
     margin-top: 1.25rem;
     font-size: var(--font-size-micro);
+  }
+
+  .research-page .research-page__note a {
+    display: inline-block;
+    margin-inline-start: 0.35em;
   }
 
   .research-page__grain-map {
