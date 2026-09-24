@@ -1,15 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { HOME_STATE } from '../../data/home';
-import { OLIST_DATA_METRICS, OLIST_DATA_SOURCES } from '../../data/olist';
+import { OLIST_ANALYSIS, OLIST_DATA_SOURCES } from '../../data/olist';
 import '../../styles/report.css';
 
 const project = HOME_STATE.projects.olist;
+const { growth, fixPortfolio, route, delayReview } = OLIST_ANALYSIS;
 ---
 
 <BaseLayout
   title={`${project.title} — Gabriel Chen`}
-  description="An evidence-led Olist marketplace analysis about growth, fulfillment reliability, and the questions that connect them."
+  description="How a matched-period Olist analysis moved from marketplace growth to fulfillment and customer-experience questions."
   noindex={false}
 >
   <main class="research-page">
@@ -19,55 +20,258 @@ const project = HOME_STATE.projects.olist;
     </header>
 
     <article class="research-page__article">
-      <p class="research-page__kicker">SAMSUNG · 2025 → OLIST · 2026</p>
+      <p class="research-page__kicker">OLIST MARKETPLACE · JAN–AUG COMPARISON</p>
       <h1>{project.title}</h1>
       <p class="research-page__lede">{project.noQuestion}</p>
 
-      <section aria-labelledby="analysis-trail-title">
-        <h2 id="analysis-trail-title">Analysis trail</h2>
-        <ol class="research-page__trail">
-          <li>Understand the available tables and their grain.</li>
-          <li>Test how marketplace growth changed over time.</li>
-          <li>Separate order-volume growth from value growth.</li>
-          <li>Compare scale with delivery reliability and review outcomes.</li>
-          <li>Translate the observed tension into market and route priorities.</li>
-        </ol>
-      </section>
-
-      <section aria-labelledby="evidence-title">
-        <h2 id="evidence-title">What the current analysis found</h2>
-        <div class="research-page__evidence">
-          {OLIST_DATA_METRICS.map((metric) => (
-            <article class="research-page__evidence-card">
-              <p class="research-page__eyebrow">{metric.label}</p>
-              {metric.id === 'fix' ? (
-                <>
-                  <p class="research-page__metric">{metric.segments} material markets</p>
-                  <p>{metric.orders} · {metric.gmvExposure} · {metric.lateOrders}</p>
-                </>
-              ) : (
-                <>
-                  <p class="research-page__metric">{metric.fromLabel} → {metric.toLabel}</p>
-                  <p>{metric.context}</p>
-                </>
-              )}
-              <p class="research-page__note">{metric.note}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="limits-title">
-        <h2 id="limits-title">What the data cannot tell me</h2>
+      <section aria-labelledby="grain-title" id="data-grain">
+        <h2 id="grain-title">First, I had to understand what each row meant</h2>
         <p>
-          The dataset does not provide commission revenue, complete costs or margins, marketing exposure, seller acquisition cost,
-          inventory availability, carrier identity, complete refunds, or experiment assignment. The analysis is observational and does
-          not establish causal impact.
+          I began with the data, not a hypothesis. Items carry sales value, orders carry fulfillment outcomes,
+          and selected reviews carry customer feedback. Each question needs its own grain and eligible population.
+        </p>
+
+        <dl class="research-page__grain-map">
+          <div>
+            <dt>Delivered order</dt>
+            <dd>One order after item and payment totals are prepared; used for order growth, delivery timing, and order-level reviews.</dd>
+          </div>
+          <div>
+            <dt>Order item</dt>
+            <dd>One item within an order; carries delivered item GMV proxy and the category and seller attached to that value.</dd>
+          </div>
+          <div>
+            <dt>Category × customer state</dt>
+            <dd>One market segment in a matched period; used to compare commercial scale with service guardrails.</dd>
+          </div>
+          <div>
+            <dt>Seller state → customer state</dt>
+            <dd>One fulfillment route for an order; used to locate route-level late-delivery exposure.</dd>
+          </div>
+          <div>
+            <dt>Reviewed order × delay band</dt>
+            <dd>One eligible delivered order with its selected review; used to compare low-review rates across delay severity.</dd>
+          </div>
+        </dl>
+
+        <p class="research-page__note">
+          Item and payment totals are aggregated before joining at order level, so one order with several items does not count as several orders.
+          <a href={OLIST_DATA_SOURCES.measurementSql} target="_blank" rel="noreferrer">Measurement definitions ↗</a>
         </p>
       </section>
 
+      <section aria-labelledby="growth-title" id="growth">
+        <h2 id="growth-title">The marketplace was growing quickly</h2>
+        <p>
+          Across matched January–August periods, delivered GMV proxy rose 141.13% while delivered orders rose 139.94%.
+          The near-parallel movement made order volume the next thing to examine.
+        </p>
+
+        <figure class="research-page__scale-figure" aria-labelledby="scale-caption">
+          <div class="research-page__scale-group">
+            <p class="research-page__eyebrow">DELIVERED ITEM GMV PROXY</p>
+            <div class="research-page__scale-periods">
+              {growth.periods.map((period, index) => (
+                <div class="research-page__scale-period">
+                  <p class="research-page__period">{period}</p>
+                  <p class="research-page__metric">{growth.gmv[index]}</p>
+                  <div class="research-page__bar-track" aria-hidden="true">
+                    <span style={`width: ${growth.gmvWidths[index]}%`}></span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div class="research-page__scale-group">
+            <p class="research-page__eyebrow">DELIVERED ORDERS</p>
+            <div class="research-page__scale-periods">
+              {growth.periods.map((period, index) => (
+                <div class="research-page__scale-period">
+                  <p class="research-page__period">{period}</p>
+                  <p class="research-page__metric">{growth.orders[index]}</p>
+                  <div class="research-page__bar-track" aria-hidden="true">
+                    <span style={`width: ${growth.orderWidths[index]}%`}></span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <figcaption id="scale-caption" class="research-page__note">
+            Both comparisons use delivered orders from matched Jan–Aug cohorts. GMV is the value of delivered items in the dataset,
+            a sales-value proxy rather than audited Olist revenue.
+            <a href={OLIST_DATA_SOURCES.executiveKpisCsv} target="_blank" rel="noreferrer">Matched-period figures ↗</a>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="decomposition-title" id="growth-drivers">
+        <h2 id="decomposition-title">Almost all of that increase came from more orders</h2>
+        <p>
+          A symmetric volume-and-value decomposition allocates the change between order count and delivered average order value.
+          It attributes 99.40% of the GMV change to volume and 0.60% to AOV and mix; delivered AOV itself rose just 0.49%.
+        </p>
+
+        <div class="research-page__decomposition" aria-label="Decomposition of delivered GMV change">
+          <div>
+            <p class="research-page__eyebrow">ORDER-VOLUME SHARE</p>
+            <p class="research-page__metric">{growth.decomposition.orderVolume}</p>
+            <p>of the delivered GMV change</p>
+          </div>
+          <div>
+            <p class="research-page__eyebrow">AOV / MIX SHARE</p>
+            <p class="research-page__metric">{growth.decomposition.aovMix}</p>
+            <p>of the delivered GMV change</p>
+          </div>
+        </div>
+        <p class="research-page__note">
+          This is an arithmetic allocation of the matched-period difference, not a causal explanation of why demand changed.
+          <a href={OLIST_DATA_SOURCES.baselineSql} target="_blank" rel="noreferrer">Decomposition method ↗</a>
+        </p>
+      </section>
+
+      <section aria-labelledby="service-title" id="service-quality">
+        <h2 id="service-title">Then the service measures moved the other way</h2>
+        <p>
+          In the same matched comparison, on-time delivery fell while the share of low reviews rose. Growth and weaker service
+          measures coexisted; this comparison does not show that one caused the other.
+        </p>
+
+        <dl class="research-page__service-list">
+          {growth.service.map((measure) => (
+            <div>
+              <dt>{measure.label}</dt>
+              <dd class="research-page__metric">{measure.from} <span aria-hidden="true">→</span> {measure.to}</dd>
+              <dd class="research-page__note">{measure.change} · Jan–Aug 2017 to Jan–Aug 2018</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="research-page__note">
+          On-time rate uses delivered orders with eligible delivery dates. Low-review rate uses orders with a selected review score of 1–2.
+          <a href={OLIST_DATA_SOURCES.executiveKpisCsv} target="_blank" rel="noreferrer">Definitions and cohort values ↗</a>
+        </p>
+      </section>
+
+      <section class="research-page__question" aria-labelledby="question-title" id="business-question">
+        <p class="research-page__eyebrow">THE QUESTION THAT EMERGED</p>
+        <h2 id="question-title">That changed what I wanted to understand</h2>
+        <blockquote>{project.businessQuestion}</blockquote>
+        <a class="research-page__inline-link" href="#where-first">Where I looked first ↓</a>
+      </section>
+
+      <section aria-labelledby="where-title" id="where-first">
+        <h2 id="where-title">I started with markets where scale and service risk overlapped</h2>
+        <p>
+          The category × customer-state view surfaced six Fix-before-growth segments: commercially material markets that also
+          missed a relative service guardrail. Together they contain {fixPortfolio.orders} delivered orders, {fixPortfolio.gmv} in
+          current delivered GMV proxy, and {fixPortfolio.lateOrders} observed late orders.
+        </p>
+
+        <p class="research-page__note research-page__rule-note">
+          The rule requires at least 100 delivered orders and 95% review coverage. Fix means current GMV at or above the qualified
+          peer 75th percentile, plus on-time below the 25th percentile or low-review above the 75th percentile. It is a relative
+          triage rule, not an estimate of what caused the marketplace-level change.
+          <a href={OLIST_DATA_SOURCES.prioritySql} target="_blank" rel="noreferrer">Portfolio rule ↗</a>
+        </p>
+
+        <ol class="research-page__fix-list" aria-label="Six category and customer-state Fix-before-growth segments">
+          {fixPortfolio.markets.map((market) => (
+            <li>
+              <h3>{market.market}</h3>
+              <dl>
+                <div><dt>ORDERS</dt><dd>{market.orders}</dd></div>
+                <div><dt>GMV PROXY</dt><dd>{market.gmv}</dd></div>
+                <div><dt>ON TIME</dt><dd>{market.onTime}</dd></div>
+                <div><dt>LOW REVIEW</dt><dd>{market.lowReview}</dd></div>
+                <div><dt>LATE ORDERS</dt><dd>{market.late}</dd></div>
+              </dl>
+            </li>
+          ))}
+        </ol>
+        <p class="research-page__note">
+          Segment rates use eligible delivered orders for on-time and reviewed orders for low-review.
+          <a href={OLIST_DATA_SOURCES.categoryStateCsv} target="_blank" rel="noreferrer">Category × state evidence ↗</a>
+        </p>
+
+        <div class="research-page__route">
+          <p class="research-page__eyebrow">ROUTE DIAGNOSTIC · {route.name}</p>
+          <p>
+            This route carried substantial late-order exposure: {route.lateOrders} of {route.orders} orders were late,
+            a {route.lateRate} late rate against a {route.routeMedian} eligible-route median. It represented {route.highLateRouteShare}
+            of observed late orders across the 13 routes classified as high-late.
+          </p>
+          <dl>
+            <div><dt>DELIVERED GMV PROXY</dt><dd class="research-page__metric">{route.gmv}</dd></div>
+            <div><dt>LATE RATE / ROUTE MEDIAN</dt><dd class="research-page__metric">{route.lateRate} / {route.routeMedian}</dd></div>
+          </dl>
+          <p class="research-page__note">
+            This makes SP → RJ a diagnostic priority, not a proven cause. Promise-date calibration, category mix, seller mix,
+            and carrier execution remain open explanations.
+            <a href={OLIST_DATA_SOURCES.routeCsv} target="_blank" rel="noreferrer">Route evidence ↗</a>
+          </p>
+        </div>
+      </section>
+
+      <section aria-labelledby="delay-title" id="customer-experience">
+        <h2 id="delay-title">More severe delays were associated with more low reviews</h2>
+        <p>
+          Among eligible delivered orders with a selected review, the low-review share rose across delay bands—from 9.90% on time
+          or within six days of estimate to 80.21% at eight or more days late.
+        </p>
+
+        <figure class="research-page__delay-figure" aria-labelledby="delay-caption">
+          {delayReview.map((band) => (
+            <div class="research-page__delay-row">
+              <span>{band.label}</span>
+              <div class="research-page__bar-track" aria-hidden="true">
+                <span style={`width: ${band.rate}%`}></span>
+              </div>
+              <strong class="research-page__metric">{band.display}</strong>
+            </div>
+          ))}
+          <figcaption id="delay-caption" class="research-page__note">
+            Observational association; low-review means selected review score ≤2, with each rate calculated among reviewed orders in that band.
+            Other contributors are not isolated by this comparison.
+            <a href={OLIST_DATA_SOURCES.delayBandCsv} target="_blank" rel="noreferrer">Delay-band evidence ↗</a>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="next-title" id="next-tests">
+        <h2 id="next-title">What I would test next</h2>
+        <p>The public data shows where to investigate. It does not establish which intervention would improve the outcome.</p>
+        <ul class="research-page__next-list">
+          <li>Trace promise dates, category mix, seller mix, and fulfillment execution inside the six Fix cells before adding demand.</li>
+          <li>Test those same mechanisms separately on SP → RJ rather than treating the route label as an explanation.</li>
+          <li>Run controlled growth tests only in segments already meeting service guardrails, then remeasure on post-action cohorts.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="limits-title" id="limits">
+        <h2 id="limits-title">What this dataset cannot tell me</h2>
+        <p>
+          Delivered item GMV is a sales-value proxy, not audited company revenue. These records do not establish commission revenue,
+          full costs, margin or profit, marketing exposure, inventory or capacity, complete refund outcomes, carrier identity, or causal treatment assignment.
+          The observed segment and route exposures identify where to investigate; they do not measure intervention impact.
+        </p>
+      </section>
+
+      <section aria-labelledby="sources-title" id="sources">
+        <h2 id="sources-title">Follow the evidence</h2>
+        <p>The portfolio findings link to the source definitions, cohort outputs, diagnostic logic, and independent headline checks.</p>
+        <ul class="research-page__sources">
+          <li><a href={OLIST_DATA_SOURCES.readme} target="_blank" rel="noreferrer">Project README ↗</a></li>
+          <li><a href={OLIST_DATA_SOURCES.executiveSummary} target="_blank" rel="noreferrer">Executive summary ↗</a></li>
+          <li><a href={OLIST_DATA_SOURCES.measurementSql} target="_blank" rel="noreferrer">Measurement foundations · SQL 08 ↗</a></li>
+          <li><a href={OLIST_DATA_SOURCES.baselineSql} target="_blank" rel="noreferrer">Matched-period decomposition · SQL 10 ↗</a></li>
+          <li><a href={OLIST_DATA_SOURCES.diagnosticsSql} target="_blank" rel="noreferrer">Market, route, and delay diagnostics · SQL 12 ↗</a></li>
+          <li><a href={OLIST_DATA_SOURCES.prioritySql} target="_blank" rel="noreferrer">Priority portfolio rules · SQL 14 ↗</a></li>
+          <li><a href={OLIST_DATA_SOURCES.validationSql} target="_blank" rel="noreferrer">Headline validation · SQL 16 ↗</a></li>
+        </ul>
+      </section>
+
       <footer class="research-page__footer">
-        <a href={OLIST_DATA_SOURCES.readme} target="_blank" rel="noreferrer">Source analysis on GitHub</a>
+        <a href="/#work">← BACK TO WORK</a>
+        <a href="#data-grain">BACK TO THE BEGINNING ↑</a>
       </footer>
     </article>
   </main>
@@ -98,13 +302,14 @@ const project = HOME_STATE.projects.olist;
     color: inherit;
     font-family: var(--font-metadata);
     font-size: var(--font-size-micro);
-    letter-spacing: 0.11em;
+    letter-spacing: 0.08em;
+    text-decoration: none;
     text-transform: uppercase;
   }
 
   .research-page__article {
-    max-width: 54rem;
-    margin: 10rem auto 0;
+    width: min(100%, 62rem);
+    margin: clamp(6rem, 12vw, 10rem) auto 0;
   }
 
   .research-page .research-page__kicker,
@@ -113,8 +318,8 @@ const project = HOME_STATE.projects.olist;
     color: var(--ink-muted);
     font-family: var(--font-metadata);
     font-size: var(--font-size-micro);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
   }
 
   .research-page h1,
@@ -132,13 +337,21 @@ const project = HOME_STATE.projects.olist;
   }
 
   .research-page h2 {
+    max-width: 21ch;
     margin: 0.5rem 0 1.5rem;
     font-size: var(--font-size-section-title);
     line-height: 1;
   }
 
-  .research-page :where(p, li) {
-    max-width: 42rem;
+  .research-page h3 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-statement);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+
+  .research-page :where(p, li, dd) {
     font-family: var(--font-reading);
     font-size: var(--font-size-body);
     line-height: var(--line-height-reading);
@@ -146,72 +359,425 @@ const project = HOME_STATE.projects.olist;
 
   .research-page .research-page__lede {
     max-width: 38rem;
-    margin: 0 0 8rem;
+    margin: 0 0 clamp(5rem, 10vw, 8rem);
     font-family: var(--font-display);
     font-size: var(--font-size-lead);
     line-height: 1.25;
   }
 
   .research-page section {
-    margin: 0 0 8rem;
+    margin: 0 0 clamp(5rem, 10vw, 8rem);
     padding-top: 2rem;
     border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+    scroll-margin-top: 2rem;
   }
 
-  .research-page__trail {
+  .research-page section > p {
+    max-width: 48rem;
+  }
+
+  .research-page a {
+    color: inherit;
+    text-decoration-color: color-mix(in srgb, currentColor 42%, transparent);
+    text-underline-offset: 0.2em;
+  }
+
+  .research-page a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .research-page a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .research-page .research-page__note {
+    margin-top: 1.25rem;
+    font-size: var(--font-size-micro);
+  }
+
+  .research-page__grain-map {
+    margin: 2.5rem 0 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  }
+
+  .research-page__grain-map > div {
     display: grid;
-    gap: 0.85rem;
-    padding-left: 1.5rem;
+    grid-template-columns: minmax(12rem, 0.8fr) minmax(0, 2fr);
+    gap: 1.5rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
   }
 
-  .research-page__evidence {
+  .research-page__grain-map dt,
+  .research-page__fix-list dt,
+  .research-page__route dt {
+    color: var(--ink-muted);
+    font-family: var(--font-metadata);
+    font-size: var(--font-size-micro);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .research-page__grain-map dt {
+    font-family: var(--font-display);
+    font-size: var(--font-size-statement);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-transform: none;
+  }
+
+  .research-page__grain-map dd {
+    margin: 0;
+  }
+
+  .research-page__scale-figure {
+    margin: 2.5rem 0 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  }
+
+  .research-page__scale-group {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .research-page__scale-periods {
     display: grid;
-    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
   }
 
-  .research-page__evidence-card {
-    padding: 1.25rem 0;
-    border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
-  }
-
-  .research-page__evidence-card p {
-    margin: 0.25rem 0;
+  .research-page__period {
+    margin: 0.5rem 0;
+    color: var(--ink-muted);
+    font-family: var(--font-metadata);
+    font-size: var(--font-size-micro);
+    letter-spacing: 0.04em;
   }
 
   .research-page .research-page__metric {
+    margin: 0.35rem 0;
     font-family: var(--font-numeric);
     font-size: var(--font-size-statement);
     font-feature-settings: 'lnum' 1, 'pnum' 1;
     font-variant-numeric: lining-nums proportional-nums;
     font-weight: 400;
     letter-spacing: -0.035em;
-    line-height: 1.05;
+    line-height: 1.1;
   }
 
-  .research-page .research-page__note {
+  .research-page__bar-track {
+    height: 0.6rem;
+    margin-top: 0.65rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  .research-page__bar-track span {
+    display: block;
+    height: 100%;
+    background: currentColor;
+  }
+
+  .research-page__scale-figure figcaption {
+    max-width: 55rem;
+    padding-top: 1rem;
+  }
+
+  .research-page__decomposition {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 2.5rem;
+    border-block: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  }
+
+  .research-page__decomposition > div {
+    padding: 1.5rem 1rem 1.5rem 0;
+  }
+
+  .research-page__decomposition > div + div {
+    padding-left: 1.5rem;
+    border-left: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .research-page__decomposition p:not(.research-page__eyebrow, .research-page__metric) {
+    margin: 0.5rem 0 0;
+  }
+
+  .research-page__service-list {
+    margin: 2.5rem 0 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  }
+
+  .research-page__service-list > div {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.7fr) minmax(0, 1.6fr) minmax(12rem, 1fr);
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .research-page__service-list dt {
+    font-family: var(--font-reading);
+    font-size: var(--font-size-body);
+  }
+
+  .research-page__service-list dd {
+    margin: 0;
+  }
+
+  .research-page__service-list dd:last-child {
+    color: var(--ink-muted);
     font-family: var(--font-metadata);
     font-size: var(--font-size-micro);
-    line-height: 1.4;
+  }
+
+  .research-page .research-page__question {
+    padding: clamp(2.5rem, 6vw, 5rem) 0;
+    border-block: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  }
+
+  .research-page__question h2 {
+    margin-top: 1.5rem;
+  }
+
+  .research-page__question blockquote {
+    max-width: 52rem;
+    margin: 2.5rem 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-statement);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  .research-page__inline-link {
+    font-family: var(--font-metadata);
+    font-size: var(--font-size-micro);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .research-page__rule-note {
+    max-width: 55rem;
+  }
+
+  .research-page__fix-list {
+    margin: 2.5rem 0 0;
+    padding: 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+    list-style: none;
+  }
+
+  .research-page__fix-list > li {
+    padding: 1.25rem 0 1.5rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .research-page__fix-list h3 {
+    margin: 0 0 1rem;
+  }
+
+  .research-page__fix-list dl {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .research-page__fix-list dl > div {
+    min-width: 0;
+  }
+
+  .research-page__fix-list dd,
+  .research-page__route dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-numeric);
+    font-size: var(--font-size-body);
+    font-variant-numeric: lining-nums tabular-nums;
+    overflow-wrap: anywhere;
+  }
+
+  .research-page__route {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  }
+
+  .research-page__route dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .research-page__route dd.research-page__metric {
+    margin-top: 0.4rem;
+  }
+
+  .research-page__delay-figure {
+    margin: 2.5rem 0 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  }
+
+  .research-page__delay-row {
+    display: grid;
+    grid-template-columns: minmax(11rem, 0.8fr) minmax(5rem, 1.6fr) minmax(5.5rem, 0.45fr);
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  }
+
+  .research-page__delay-row > span:first-child {
+    font-family: var(--font-metadata);
+    font-size: var(--font-size-micro);
+  }
+
+  .research-page__delay-row .research-page__bar-track {
+    margin: 0;
+  }
+
+  .research-page__delay-row .research-page__metric {
+    text-align: right;
+  }
+
+  .research-page__delay-figure figcaption {
+    max-width: 55rem;
+    padding-top: 1rem;
+  }
+
+  .research-page__next-list,
+  .research-page__sources {
+    display: grid;
+    gap: 1rem;
+    max-width: 55rem;
+    margin: 2rem 0 0;
+    padding-left: 1.25rem;
+  }
+
+  .research-page__sources {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .research-page__sources a {
+    overflow-wrap: anywhere;
   }
 
   .research-page__footer {
-    justify-content: flex-start;
     padding-top: 2rem;
     border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 760px) {
+    .research-page__grain-map > div {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+      gap: 1rem;
+    }
+
+    .research-page__service-list > div {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    }
+
+    .research-page__service-list dd:last-child {
+      grid-column: 2;
+    }
+
+    .research-page__fix-list dl {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      row-gap: 1rem;
+    }
+
+    .research-page__delay-row {
+      grid-template-columns: minmax(8rem, 1fr) minmax(4rem, 1.5fr) minmax(5rem, 0.45fr);
+      gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .research-page {
+      padding-inline: 1.1rem;
+    }
+
+    .research-page__article {
+      margin-top: 5rem;
+    }
+
     .research-page__header {
       align-items: flex-start;
     }
 
-    .research-page__article {
-      margin-top: 6rem;
+    .research-page__grain-map > div {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
     }
 
-    .research-page__lede,
-    .research-page section {
-      margin-bottom: 5rem;
+    .research-page__scale-periods {
+      gap: 1rem;
+    }
+
+    .research-page__metric {
+      overflow-wrap: anywhere;
+    }
+
+    .research-page__decomposition {
+      grid-template-columns: 1fr;
+    }
+
+    .research-page__decomposition > div {
+      padding: 1.25rem 0;
+    }
+
+    .research-page__decomposition > div + div {
+      padding-left: 0;
+      border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+      border-left: 0;
+    }
+
+    .research-page__service-list > div {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+
+    .research-page__service-list dd:last-child {
+      grid-column: auto;
+    }
+
+    .research-page__fix-list dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 0.75rem;
+    }
+
+    .research-page__route dl {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .research-page__delay-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.35rem 0.75rem;
+    }
+
+    .research-page__delay-row .research-page__bar-track {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .research-page__delay-row .research-page__metric {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .research-page__sources {
+      grid-template-columns: 1fr;
+      gap: 0.65rem;
+    }
+
+    .research-page__footer {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>

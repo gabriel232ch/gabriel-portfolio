@@ -207,8 +207,8 @@ test('Olist and smaller-company CTAs resolve locally in light and dark themes', 
       level: 1,
       name: 'SQL Wasn’t the Hard Part. Knowing What to Ask Was.',
     })).toBeVisible();
-    await expect(page.getByText('Analysis trail')).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Source analysis on GitHub' })).toHaveAttribute(
+    await expect(page.getByRole('heading', { level: 2, name: 'First, I had to understand what each row meant' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Project README ↗' })).toHaveAttribute(
       'href',
       'https://github.com/gabriel232ch/olist-marketplace-analytics/blob/main/README.md',
     );
