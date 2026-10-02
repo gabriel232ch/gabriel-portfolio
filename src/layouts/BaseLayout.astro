@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/interactions.css';
 
 interface Props {
   title: string;
@@ -26,14 +27,21 @@ const {
     <title>{title}</title>
     <script is:inline>
       (() => {
-        const stored = localStorage.getItem('theme');
+        let stored, userQuiet = false;
+        try { stored = localStorage.getItem('theme'); userQuiet = localStorage.getItem('quiet-motion') === 'true'; } catch { /* Storage is optional; preferences still work in memory. */ }
         const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.dataset.theme =
-          stored === 'light' || stored === 'dark' ? stored : dark ? 'dark' : 'light';
+        const quiet = userQuiet || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : dark ? 'dark' : 'light';
+        document.documentElement.dataset.userQuiet = String(userQuiet);
+        document.documentElement.dataset.quiet = String(quiet);
+        const navigation = performance.getEntriesByType('navigation')[0];
+        const returning = location.hash || navigation?.type === 'back_forward' || (document.referrer && new URL(document.referrer).origin === location.origin && new URL(document.referrer).pathname.startsWith('/work/'));
+        document.documentElement.dataset.signature = quiet || returning ? 'complete' : 'animate';
       })();
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <slot />
   </body>
 </html>

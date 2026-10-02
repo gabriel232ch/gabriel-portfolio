@@ -5,7 +5,7 @@ dist/
 .astro/
 
 # dependencies
-node_modules/
+node_modules
 
 # logs
 npm-debug.log*
@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # Playwright test artifacts
 test-results/
+
+# Isolated implementation workspaces
+.worktrees/
+.superpowers/sdd/2026-10-02-site-interaction-upgrade-implementation-plan/

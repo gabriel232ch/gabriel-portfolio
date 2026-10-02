@@ -4,10 +4,6 @@
 
 <style>
   [data-theme-toggle] {
-    position: fixed;
-    top: max(0.75rem, env(safe-area-inset-top));
-    right: max(0.75rem, env(safe-area-inset-right));
-    z-index: 100;
     padding: 0;
     border: 0;
     background: transparent;
@@ -20,13 +16,6 @@
     text-transform: uppercase;
   }
 
-  @media (min-width: 48rem) {
-    [data-theme-toggle] {
-      top: 1.25rem;
-      right: 1.25rem;
-      letter-spacing: 0.08em;
-    }
-  }
 </style>
 
 <script>
@@ -42,12 +31,12 @@
   const toggleTheme = () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
-    localStorage.setItem('theme', next);
+    try { localStorage.setItem('theme', next); } catch { /* In-memory theme remains usable. */ }
     syncLabel();
   };
 
   button?.addEventListener('click', () => {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduceMotion = document.documentElement.dataset.quiet === 'true';
 
     if (
       !reduceMotion &&

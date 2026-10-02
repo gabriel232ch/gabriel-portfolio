@@ -1,4 +1,7 @@
 ---
+import ReadingContents from '../../components/research/ReadingContents.astro';
+import SiteHeader from '../../components/system/SiteHeader.astro';
+import ResearchFooter from '../../components/research/ResearchFooter.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { HOME_STATE } from '../../data/home';
 import { COMPETITIVE_MECHANISMS } from '../../data/competitive';
@@ -11,11 +14,10 @@ const project = HOME_STATE.projects.smallerCompanies;
   description="A current research note about why people may choose smaller companies and which patterns are worth examining."
   noindex={false}
 >
-  <main class="inquiry-page">
-    <header class="inquiry-page__header">
-      <a class="inquiry-page__identity" href="/">GABRIEL CHEN</a>
-      <a class="inquiry-page__back" href="/#work">← BACK TO WORK</a>
-    </header>
+  <main id="main-content" tabindex="-1" class="inquiry-page">
+    <SiteHeader researchId="smaller-companies" />
+
+    <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
 
     <article class="inquiry-page__article">
       <p class="inquiry-page__kicker">CURRENT RESEARCH · OPEN QUESTION</p>
@@ -23,6 +25,8 @@ const project = HOME_STATE.projects.smallerCompanies;
       <p class="inquiry-page__opening">{project.opening}</p>
       <p>{project.shift}</p>
 
+    <ReadingContents sections={[{'id': 'current-research-title', 'label': 'Current research'}, {'id': 'patterns-title', 'label': 'Patterns'}]} />
+      <div data-reading-article>
       <section aria-labelledby="current-research-title">
         <h2 id="current-research-title">Current research</h2>
         <p>
@@ -51,8 +55,10 @@ const project = HOME_STATE.projects.smallerCompanies;
         </div>
       </section>
 
+      </div>
       <p class="inquiry-page__status">{project.status}</p>
     </article>
+    <ResearchFooter current="smaller-companies" />
   </main>
 </BaseLayout>
 

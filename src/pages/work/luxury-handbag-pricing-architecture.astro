@@ -1,7 +1,7 @@
 ---
-import FolioNumber from '../../components/editorial/FolioNumber.astro';
-import SectionLabel from '../../components/editorial/SectionLabel.astro';
-import ThemeToggle from '../../components/system/ThemeToggle.astro';
+import ReadingContents from '../../components/research/ReadingContents.astro';
+import SiteHeader from '../../components/system/SiteHeader.astro';
+import ResearchFooter from '../../components/research/ResearchFooter.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { LUXURY_FLAGSHIP, LUXURY_FLAGSHIP_SOURCES } from '../../data/luxury';
 import '../../styles/report.css';
@@ -193,26 +193,14 @@ const businessChart = [
   noindex={false}
   lang="en"
 >
-  <main class="report-page">
-    <header class="report-topline">
-      <a class="report-topline__identity" href="/">
-        <span>GABRIEL CHEN</span>
-        <span class="data-copy">WORK / RESEARCH</span>
-      </a>
-      <div class="report-topline__tools">
-        <a class="data-copy" href="/#work">← BACK TO WORK</a>
-        <ThemeToggle />
-      </div>
-    </header>
+  <main id="main-content" tabindex="-1" class="report-page">
+    <SiteHeader researchId="chanel" />
     <div class="report-progress" aria-hidden="true">
-      <span data-report-progress></span>
+      <span data-reading-progress></span>
     </div>
 
     <section class="report-hero" aria-labelledby="report-title">
-      <div class="report-hero__label">
-        <SectionLabel index="01" label="RESEARCH / PRICING" />
-        <FolioNumber current="01" />
-      </div>
+
       <div class="report-hero__main">
         <p class="report-kicker editorial"><em>Chanel Handbag Pricing</em></p>
         <h1 id="report-title" class="report-title">Price Architecture, Business Performance, and Competitive Position</h1>
@@ -228,23 +216,15 @@ const businessChart = [
     </section>
 
     <div class="report-layout">
-      <aside class="report-index" aria-label="Report contents">
-        <p class="data-copy">ON THIS PAGE</p>
-        <ol>
-          <li><a href="#thesis">01 / Conclusion</a></li>
-          <li><a href="#architecture">02 / Price architecture</a></li>
-          <li><a href="#history">03 / Historical change</a></li>
-          <li><a href="#business">04 / Business performance</a></li>
-          <li><a href="#competition">05 / Competitive context</a></li>
-          <li><a href="#judgments">06 / Six insights</a></li>
-          <li><a href="#tensions">07 / Strategic tensions</a></li>
-          <li><a href="#implications">08 / Implications</a></li>
-          <li><a href="#boundaries">09 / Evidence boundaries</a></li>
-          <li><a href="#sources">10 / Sources</a></li>
-        </ol>
-      </aside>
+      <ReadingContents class="report-index" sections={[
+        {id:'thesis',label:'Conclusion'},{id:'architecture',label:'Price architecture'},
+        {id:'history',label:'Historical change'},{id:'business',label:'Business performance'},
+        {id:'competition',label:'Competitive context'},{id:'judgments',label:'Six insights'},
+        {id:'tensions',label:'Strategic tensions'},{id:'implications',label:'Implications'},
+        {id:'boundaries',label:'Evidence boundaries'},{id:'sources',label:'Sources'}
+      ]} />
 
-      <article class="report-body">
+      <article class="report-body" data-reading-article>
         <section id="thesis" class="report-section report-section--opening">
           <p class="report-section__number data-copy">01 / CONCLUSION</p>
           <h2>Conclusion</h2>
@@ -268,7 +248,7 @@ const businessChart = [
           <p>
             The current snapshot contains 41 accepted observations, 35 with numeric prices: 17 of 20 in France and 18 of 21 in the United States. Folded into the existing market bands, the sample forms four analytical tiers:
           </p>
-          <div class="report-table-wrap">
+          <div class="report-table-wrap" tabindex="0" role="region" aria-label="Scrollable data table"><p class="report-scroll-hint">Scroll horizontally to inspect every column.</p>
             <table>
               <thead>
                 <tr><th>Analytical Tier</th><th>France / EUR</th><th>United States / USD</th><th>Chanel Observed Role</th></tr>
@@ -339,7 +319,7 @@ const businessChart = [
           </p>
           <details class="report-details">
             <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">4 YEARS / 4 SIGNALS</span></summary>
-            <div class="report-table-wrap">
+            <div class="report-table-wrap" tabindex="0" role="region" aria-label="Scrollable data table"><p class="report-scroll-hint">Scroll horizontally to inspect every column.</p>
               <table>
                 <thead>
                   <tr><th>FY / Observed Year</th><th>Classic / Icon Median</th><th>Mini / Access-Core Median</th><th>Relative Ratio</th><th>Absolute Gap</th></tr>
@@ -422,7 +402,7 @@ const businessChart = [
           </div>
           <details class="report-details">
             <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 7 METRICS</span></summary>
-            <div class="report-table-wrap">
+            <div class="report-table-wrap" tabindex="0" role="region" aria-label="Scrollable data table"><p class="report-scroll-hint">Scroll horizontally to inspect every column.</p>
               <table class="report-table--wide">
                 <thead>
                   <tr><th>FY</th><th>Revenue</th><th>Comparable Growth</th><th>Operating Profit</th><th>Operating Margin*</th><th>FCF</th><th>Capex / Revenue</th><th>Brand-Support / Revenue</th></tr>
@@ -450,7 +430,7 @@ const businessChart = [
                   </div>
                   <div class="report-business-row__bars">
                     {metric.values.map((value, index) => (
-                      <button type="button" class="report-business-bar" data-chart-bar data-series={metric.label.toLowerCase()} data-year={String(2020 + index)} aria-label={`${metric.label} ${2020 + index}: ${metric.unit === '%' ? `${value}%` : value.toLocaleString('en-US')}`} aria-pressed="false" style={`--bar-height:${(value / metric.max) * 100}%;`}>
+                      <button type="button" class="report-business-bar" data-chart-bar data-series={metric.label.toLowerCase()} data-year={String(2020 + index)} aria-label={`${metric.label} ${2020 + index}: ${metric.unit === '%' ? `${value}%` : `USD ${value.toLocaleString('en-US')} million`}`} aria-pressed="false" style={`--bar-height:${(value / metric.max) * 100}%;`}>
                         <b>{metric.unit === '%' ? `${value}%` : value.toLocaleString('en-US')}</b>
                       </button>
                     ))}
@@ -584,7 +564,7 @@ const businessChart = [
           </div>
           <details class="report-details">
             <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 5 SIGNALS</span></summary>
-            <div class="report-table-wrap">
+            <div class="report-table-wrap" tabindex="0" role="region" aria-label="Scrollable data table"><p class="report-scroll-hint">Scroll horizontally to inspect every column.</p>
               <table class="report-table--wide">
                 <thead>
                   <tr><th>FY</th><th>Group Revenue (€m)</th><th>Group Recurring Op Margin</th><th>Leather Goods &amp; Saddlery Revenue (€m)</th><th>Leather Segment Constant-Currency Growth</th><th>Leather Share of Group</th></tr>
@@ -668,7 +648,7 @@ const businessChart = [
                   <div class="report-margin-chart__grid"></div>
                   <div class="report-margin-chart__points">
                     {lvmhDashboardRows.map((row) => (
-                      <button type="button" class="report-margin-point" data-chart-bar data-series="margin" data-year={row.year} aria-label={`Derived operating margin ${row.year}: ${row.margin.toFixed(1)} percent`} aria-pressed="false" style={`--point-position:${((row.margin - lvmhMarginMin) / (lvmhMarginMax - lvmhMarginMin)) * 100}%;`}>
+                      <button type="button" class="report-margin-point" data-chart-bar data-series="margin" data-year={row.year} aria-label={`Derived LVMH F&LG operating margin ${row.year}: ${row.margin.toFixed(1)} percent`} aria-pressed="false" style={`--point-position:${((row.margin - lvmhMarginMin) / (lvmhMarginMax - lvmhMarginMin)) * 100}%;`}>
                         <i></i><b>{row.margin.toFixed(1)}%</b><span class="data-copy">{row.year}</span>
                       </button>
                     ))}
@@ -686,18 +666,18 @@ const businessChart = [
                 <div class="report-growth-heatmap__years data-copy"><span></span>{lvmhDashboardRows.map((row) => <span>{row.year}</span>)}</div>
                 <div class="report-growth-heatmap__row">
                   <strong class="data-copy">REPORTED</strong>
-                  {lvmhDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="reported-growth" data-year={row.year} data-direction={row.reported < 0 ? 'negative' : 'positive'} aria-label={`Reported growth ${row.year}: ${row.reported}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.reported) / 50, 1)};`}>{row.reported > 0 ? '+' : ''}{row.reported}%</button>)}
+                  {lvmhDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="reported-growth" data-year={row.year} data-direction={row.reported < 0 ? 'negative' : 'positive'} aria-label={`LVMH F&LG reported growth ${row.year}: ${row.reported}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.reported) / 50, 1)};`}>{row.reported > 0 ? '+' : ''}{row.reported}%</button>)}
                 </div>
                 <div class="report-growth-heatmap__row">
                   <strong class="data-copy">ORGANIC</strong>
-                  {lvmhDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="organic-growth" data-year={row.year} data-direction={row.organic < 0 ? 'negative' : 'positive'} aria-label={`Organic growth ${row.year}: ${row.organic}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.organic) / 50, 1)};`}>{row.organic > 0 ? '+' : ''}{row.organic}%</button>)}
+                  {lvmhDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="organic-growth" data-year={row.year} data-direction={row.organic < 0 ? 'negative' : 'positive'} aria-label={`LVMH F&LG organic growth ${row.year}: ${row.organic}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.organic) / 50, 1)};`}>{row.organic > 0 ? '+' : ''}{row.organic}%</button>)}
                 </div>
               </div>
             </div>
           </div>
           <details class="report-details">
             <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 5 METRICS</span></summary>
-            <div class="report-table-wrap">
+            <div class="report-table-wrap" tabindex="0" role="region" aria-label="Scrollable data table"><p class="report-scroll-hint">Scroll horizontally to inspect every column.</p>
               <table>
                 <thead>
                   <tr><th>FY</th><th>F&amp;LG Revenue (€m)</th><th>Reported Growth</th><th>Organic Growth</th><th>Recurring Operating Profit (€m)</th><th>Derived Margin</th></tr>
@@ -737,7 +717,7 @@ const businessChart = [
         <section id="tensions" class="report-section">
           <p class="report-section__number data-copy">07 / STRATEGIC TENSIONS</p>
           <h2>Strategic Tensions</h2>
-          <div class="report-table-wrap">
+          <div class="report-table-wrap" tabindex="0" role="region" aria-label="Scrollable data table"><p class="report-scroll-hint">Scroll horizontally to inspect every column.</p>
             <table class="report-table--wide">
               <thead>
                 <tr><th>Tension</th><th>Evidence-Supported Observation</th><th>What Remains Unproven / Required Data</th></tr>
@@ -811,102 +791,23 @@ const businessChart = [
       <span class="data-copy">GABRIEL CHEN / CHANEL PREMIUMIZATION STRATEGY</span>
       <span class="data-copy">UPDATED 2026-08-15</span>
     </footer>
+  <ResearchFooter current="chanel" />
 </main>
 </BaseLayout>
 
 <script>
-  const motionNodes = document.querySelectorAll<HTMLElement>('[data-report-motion]');
-  const progress = document.querySelector<HTMLElement>('[data-report-progress]');
-  const links = [...document.querySelectorAll<HTMLAnchorElement>('.report-index a')];
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (reduceMotion || typeof IntersectionObserver !== 'function') {
-    motionNodes.forEach((node) => {
-      node.dataset.motionState = 'entered';
-    });
-  } else {
-    motionNodes.forEach((node) => {
-      node.dataset.motionState = 'pending';
-    });
-
-    const motionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const node = entry.target as HTMLElement;
-          node.dataset.motionState = 'entered';
-          motionObserver.unobserve(node);
-        });
-      },
-      { threshold: 0.12 },
-    );
-
-    motionNodes.forEach((node) => motionObserver.observe(node));
-  }
-
-  const updateProgress = () => {
-    if (!progress) return;
-    const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
-    const amount = scrollRange > 0 ? window.scrollY / scrollRange : 0;
-    progress.style.transform = `scaleX(${amount})`;
-  };
-
-  window.addEventListener('scroll', updateProgress, { passive: true });
-  window.addEventListener('resize', updateProgress, { passive: true });
-  updateProgress();
-
-  const interactiveCharts = document.querySelectorAll<HTMLElement>('[data-interactive-chart]');
-
-  interactiveCharts.forEach((chart) => {
-    const bars = [...chart.querySelectorAll<HTMLButtonElement>('[data-chart-bar]')];
-
-    const clearSelection = () => {
-      chart.removeAttribute('data-has-selection');
-      bars.forEach((bar) => {
-        bar.dataset.selected = 'false';
-        bar.setAttribute('aria-pressed', 'false');
-      });
-    };
-
-    bars.forEach((bar) => {
-      bar.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const wasSelected = bar.dataset.selected === 'true';
-        bars.forEach((item) => {
-          const isSelected = item === bar && !wasSelected;
-          item.dataset.selected = String(isSelected);
-          item.setAttribute('aria-pressed', String(isSelected));
-        });
-
-        if (wasSelected) chart.removeAttribute('data-has-selection');
-        else chart.dataset.hasSelection = 'true';
-      });
-    });
-
-    chart.addEventListener('click', clearSelection);
+  import {initReveal} from '../../lib/interactions/reveal';
+  initReveal('[data-report-motion]');
+  import {initChartSelection} from '../../lib/interactions/chart-selection';
+  document.querySelectorAll<HTMLElement>('[data-interactive-chart]').forEach(initChartSelection);
+  const tables=[...document.querySelectorAll<HTMLElement>('.report-table-wrap')];
+  const syncTables=()=>tables.forEach(table=>{
+    const overflowing=table.scrollWidth>table.clientWidth;
+    table.dataset.overflow=String(overflowing);
+    table.tabIndex=overflowing?0:-1;
+    const title=table.closest('section')?.querySelector('h2')?.textContent;
+    table.setAttribute('aria-label',`${title ?? 'Research'} data table${overflowing ? ', scroll horizontally' : ''}`);
   });
-
-  if (typeof IntersectionObserver === 'function') {
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const activeId = entry.target.id;
-          links.forEach((link) => {
-            const isActive = link.getAttribute('href') === `#${activeId}`;
-            link.dataset.active = String(isActive);
-            if (isActive) link.setAttribute('aria-current', 'location');
-            else link.removeAttribute('aria-current');
-          });
-        });
-      },
-      { rootMargin: '-18% 0px -65% 0px', threshold: 0 },
-    );
-
-    links.forEach((link) => {
-      const id = link.getAttribute('href')?.slice(1);
-      const section = id ? document.getElementById(id) : null;
-      if (section) sectionObserver.observe(section);
-    });
-  }
+  if(typeof ResizeObserver==='function') {const observer=new ResizeObserver(syncTables);tables.forEach(table=>observer.observe(table));}
+  syncTables();
 </script>

@@ -1,0 +1,15 @@
+---
+export interface ReadingSection {id:string; label:string}
+interface Props { sections: readonly ReadingSection[]; class?:string }
+const {sections,class:className=''} = Astro.props;
+---
+<aside class:list={['reading-contents',className]} data-reading-contents aria-label="Page contents">
+  <details><summary><span>On this page</span><span data-reading-current></span></summary><nav aria-label="Reading sections"><ol>{sections.map(section=><li><a href={`#${section.id}`}>{section.label}</a></li>)}</ol></nav></details>
+</aside>
+<script>
+  import {initReading} from '../../lib/interactions/reading';
+  const article=document.querySelector<HTMLElement>('[data-reading-article]');
+  const contents=document.querySelector<HTMLElement>('[data-reading-contents]');
+  const progress=document.querySelector<HTMLElement>('[data-reading-progress]');
+  if(article && contents) initReading(article,contents,progress ?? undefined);
+</script>

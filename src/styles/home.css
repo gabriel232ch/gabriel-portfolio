@@ -82,16 +82,13 @@ main .body-copy {
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: home-signature-draw 720ms var(--ease-cinematic)
-    calc(var(--signature-index) * 230ms + 180ms) both;
+  stroke-dashoffset: 0;
+
 }
 
 .home-hero__signature-fill {
   fill: currentColor;
-  opacity: 0;
-  animation: home-signature-fill 160ms ease-out
-    calc(var(--signature-index) * 230ms + 820ms) both;
+  opacity: 1;
 }
 
 @keyframes home-signature-draw {
@@ -260,3 +257,6 @@ main .body-copy {
   .home-closing__links { grid-column: 3 / span 8; }
   .home-closing__name { grid-column: 3 / span 8; }
 }
+
+html[data-signature='animate'] .home-hero__signature-draw { stroke-dashoffset: 1; animation: home-signature-draw 720ms var(--ease-cinematic) calc(var(--signature-index) * 230ms + 180ms) both; }
+html[data-signature='animate'] .home-hero__signature-fill { opacity: 0; animation: home-signature-fill 160ms ease-out calc(var(--signature-index) * 230ms + 820ms) both; }

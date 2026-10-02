@@ -1,0 +1,16 @@
+---
+import QuietToggle from './QuietToggle.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { SITE_RESEARCH, type ResearchId } from '../../data/site-navigation';
+interface Props { home?: boolean; researchId?: ResearchId }
+const {researchId} = Astro.props;
+const research = SITE_RESEARCH.find(item => item.id === researchId);
+---
+<header class="site-header" data-site-header>
+  <a class="site-header__identity" href="/">Gabriel Chen</a>
+  <div class="site-header__tools">
+    <a href={research?.homeHref ?? '/'}>Back to home</a>
+    <ThemeToggle />
+    <QuietToggle />
+  </div>
+</header>

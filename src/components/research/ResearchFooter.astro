@@ -1,0 +1,12 @@
+---
+import { SITE_RESEARCH, type ResearchId } from '../../data/site-navigation';
+interface Props { current: ResearchId }
+const {current} = Astro.props;
+---
+<footer class="research-footer">
+  <p>Other questions</p>
+  <nav aria-label="Other questions">
+    {SITE_RESEARCH.filter(item => item.id !== current).map(item => <a href={item.detailHref}>{item.title}<span aria-hidden="true"> ↗</span></a>)}
+  </nav>
+  <a class="research-footer__home" href={SITE_RESEARCH.find(item => item.id === current)?.homeHref}>Back to home ↑</a>
+</footer>

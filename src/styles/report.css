@@ -1601,3 +1601,23 @@
     transform: scale(1) !important;
   }
 }
+/* Preserve readable values rather than compressing six years into narrow cells. */
+.report-growth-heatmap { min-width: 42rem; }
+.report-growth-heatmap__years, .report-growth-heatmap__row { grid-template-columns: 8rem repeat(6,minmax(4.5rem,1fr)); }
+.chart-inspector { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; margin-top:2rem; padding-top:1rem; border-top:1px solid var(--hairline); }
+.chart-inspector p { margin:0; font-family:var(--font-metadata); font-size:var(--font-size-micro); }
+.chart-inspector button { min-width:44px; min-height:44px; padding:.5rem .75rem; border:1px solid var(--hairline); background:var(--paper); color:var(--ink); font-family:var(--font-metadata); font-size:var(--font-size-micro); cursor:pointer; }
+.chart-inspector button:disabled { opacity:.5; cursor:default; }
+[data-chart-bar][data-selected='true'] { outline:2px solid currentColor; outline-offset:3px; }
+[data-interactive-chart] [data-chart-bar] { min-width:44px; }
+.report-price-lane__node, .report-margin-point { min-height:44px; }
+:is(.report-history-bar,.report-business-bar,.report-dashboard-bar)::after { content:""; position:absolute; left:0; right:0; top:50%; min-height:44px; height:100%; transform:translateY(-50%); }
+[data-report-motion]:not([data-motion-state]) .report-price-lane__node { opacity:1; }
+[data-report-motion]:not([data-motion-state]) .report-price-lane__line { transform:scaleX(1); }
+[data-report-motion]:not([data-motion-state]) :is(.report-history-bar,.report-business-bar,.report-dashboard-bar), html[data-quiet='true'] :is(.report-history-bar,.report-business-bar,.report-dashboard-bar) { transform:scaleY(1); }
+html[data-quiet='true'] .report-price-lane__node { opacity:1; }
+html[data-quiet='true'] .report-price-lane__line { transform:scaleX(1); }
+
+[data-report-motion]:not([data-motion-state]) .report-price-lane__node i, html[data-quiet='true'] .report-price-lane__node i { transform:scale(1); }
+.report-scroll-hint { color:var(--ink-muted); font-family:var(--font-metadata); font-size:var(--font-size-micro); line-height:1.4; }
+.report-table-wrap[data-overflow='false'] .report-scroll-hint { display:none; }

@@ -1,11 +1,22 @@
 ---
+import QuietToggle from '../system/QuietToggle.astro';
 import ThemeToggle from '../system/ThemeToggle.astro';
+import { SITE_RESEARCH } from '../../data/site-navigation';
 ---
-
-<header class="home-navigation editorial-grid" aria-label="Home navigation">
-  <nav class="home-navigation__links data-copy" aria-label="Home sections">
-    <a href="#work">WORK</a>
-    <a href="#about">NOW</a>
+<header class="home-navigation editorial-grid" aria-label="Home navigation" data-home-navigation data-compact="false">
+  <nav class="home-navigation__links data-copy" aria-label="Home sections"><a href="#work">WORK</a><a href="#about">NOW</a></nav>
+  <nav class="home-navigation__compact" aria-label="Explore home">
+    <a href="#main-content" class="site-header__identity">Gabriel</a>
+    <details class="chapter-disclosure"><summary>Explore</summary><div class="chapter-disclosure__links">
+      {SITE_RESEARCH.map(item => <a href={item.homeHref.slice(1)} data-chapter-link>{item.title}</a>)}
+      <a href="#about" data-chapter-link>Now</a>
+    </div></details>
+    <span data-current-chapter aria-label="Current chapter"></span>
   </nav>
-  <ThemeToggle />
+  <div class="site-header__tools"><ThemeToggle /><QuietToggle /></div>
 </header>
+<script>
+  import { initNavigation } from '../../lib/interactions/navigation';
+  const root = document.querySelector<HTMLElement>('[data-home-navigation]');
+  if (root) initNavigation(root);
+</script>
