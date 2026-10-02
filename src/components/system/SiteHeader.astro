@@ -1,4 +1,5 @@
 ---
+import QuietToggle from './QuietToggle.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import { SITE_RESEARCH, type ResearchId } from '../../data/site-navigation';
 interface Props { home?: boolean; researchId?: ResearchId }
@@ -10,5 +11,6 @@ const research = SITE_RESEARCH.find(item => item.id === researchId);
   <div class="site-header__tools">
     <a href={research?.homeHref ?? '/'}>Back to home</a>
     <ThemeToggle />
+    <QuietToggle />
   </div>
 </header>

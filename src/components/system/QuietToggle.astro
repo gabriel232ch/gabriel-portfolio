@@ -1,0 +1,20 @@
+<button type="button" data-quiet-toggle aria-label="Quiet motion" aria-pressed="false" aria-describedby="quiet-hint">
+  <span data-quiet-label>Quiet</span>
+</button>
+<span id="quiet-hint" class="visually-hidden" data-quiet-hint>Reduce decorative motion.</span>
+<script>
+  import {readMotionPreference,setUserQuiet} from '../../lib/motion-preference';
+  const button=document.querySelector<HTMLButtonElement>('[data-quiet-toggle]');
+  const sync=()=>{
+    const {quiet,systemReduced}=readMotionPreference();
+    button?.setAttribute('aria-pressed',String(quiet));
+    button?.setAttribute('aria-disabled',String(systemReduced));
+    const label=document.querySelector('[data-quiet-label]');
+    if(label) label.textContent=systemReduced ? 'Quiet · system' : quiet ? 'Quiet · on' : 'Quiet';
+    const hint=document.querySelector('[data-quiet-hint]');
+    if(hint) hint.textContent=systemReduced ? 'Your system preference reduces motion.' : 'Reduce decorative motion.';
+  };
+  button?.addEventListener('click',()=>{ const state=readMotionPreference(); if(!state.systemReduced) setUserQuiet(!state.userQuiet); });
+  document.addEventListener('site:motion-change',sync);
+  sync();
+</script>

@@ -31,12 +31,12 @@
   const toggleTheme = () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
-    localStorage.setItem('theme', next);
+    try { localStorage.setItem('theme', next); } catch { /* In-memory theme remains usable. */ }
     syncLabel();
   };
 
   button?.addEventListener('click', () => {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduceMotion = document.documentElement.dataset.quiet === 'true';
 
     if (
       !reduceMotion &&

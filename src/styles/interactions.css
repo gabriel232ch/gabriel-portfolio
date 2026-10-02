@@ -35,3 +35,13 @@ a:active, button:active { opacity: .75; }
   .site-header { flex-wrap: wrap; gap: 0; }
   .site-header__tools { justify-content: flex-end; flex: 1; }
 }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+[data-quiet-toggle] { border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; min-height: 44px; min-width: 44px; }
+[data-quiet-toggle][aria-pressed='true'] { text-decoration: underline; text-underline-offset: .25em; }
+.home-navigation { display: flex; align-items: center; gap: .5rem; }
+.home-navigation__links { margin-right: auto; }
+html[data-quiet='true'] *, html[data-quiet='true'] *::before, html[data-quiet='true'] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+html[data-quiet='true'] [data-motion-state] { opacity: 1 !important; transform: none !important; }
+html[data-quiet='true'] .home-hero__signature-draw { stroke-dashoffset: 0 !important; }
+html[data-quiet='true'] .home-hero__signature-fill { opacity: 1 !important; }

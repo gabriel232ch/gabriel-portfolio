@@ -803,34 +803,10 @@ const businessChart = [
 </BaseLayout>
 
 <script>
-  const motionNodes = document.querySelectorAll<HTMLElement>('[data-report-motion]');
+  import {initReveal} from '../../lib/interactions/reveal';
+  initReveal('[data-report-motion]');
   const progress = document.querySelector<HTMLElement>('[data-report-progress]');
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.report-index a')];
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (reduceMotion || typeof IntersectionObserver !== 'function') {
-    motionNodes.forEach((node) => {
-      node.dataset.motionState = 'entered';
-    });
-  } else {
-    motionNodes.forEach((node) => {
-      node.dataset.motionState = 'pending';
-    });
-
-    const motionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const node = entry.target as HTMLElement;
-          node.dataset.motionState = 'entered';
-          motionObserver.unobserve(node);
-        });
-      },
-      { threshold: 0.12 },
-    );
-
-    motionNodes.forEach((node) => motionObserver.observe(node));
-  }
 
   const updateProgress = () => {
     if (!progress) return;
