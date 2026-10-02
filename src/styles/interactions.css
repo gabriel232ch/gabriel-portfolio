@@ -45,3 +45,25 @@ html[data-quiet='true'] *, html[data-quiet='true'] *::before, html[data-quiet='t
 html[data-quiet='true'] [data-motion-state] { opacity: 1 !important; transform: none !important; }
 html[data-quiet='true'] .home-hero__signature-draw { stroke-dashoffset: 0 !important; }
 html[data-quiet='true'] .home-hero__signature-fill { opacity: 1 !important; }
+.home-navigation { position: sticky; top: 0; z-index: 90; background: var(--paper); min-height: 4.5rem; }
+.home-navigation__compact { display: none; align-items: center; gap: 1rem; margin-right: auto; font-family: var(--font-metadata); font-size: var(--font-size-micro); }
+.home-navigation[data-compact='true'] .home-navigation__links { display: none; }
+.home-navigation[data-compact='true'] .home-navigation__compact { display: flex; }
+.home-navigation :is(a, summary) { min-height:44px; display:flex; align-items:center; padding:.5rem; }
+.chapter-disclosure { position: relative; }
+.chapter-disclosure summary { cursor:pointer; list-style:none; }
+.chapter-disclosure summary::after { content:' +'; margin-left:.5rem; }
+.chapter-disclosure[open] summary::after { content:' −'; }
+.chapter-disclosure__links { position:absolute; top:100%; left:0; width:min(28rem,calc(100vw - 3rem)); padding:1rem; background:var(--paper); border:1px solid var(--rule); box-shadow:0 .75rem 2rem #0001; }
+.chapter-disclosure__links a { line-height:1.4; border-bottom:1px solid var(--rule); text-decoration:none; }
+@media(max-width:640px) {
+  .home-navigation[data-compact='true'] { flex-wrap:wrap; }
+  .home-navigation__compact { width:100%; }
+  .home-navigation[data-compact='true'] .site-header__tools { margin-left:auto; }
+  .chapter-disclosure__links { left:-5rem; }
+  [data-current-chapter] { margin-left:auto; }
+}
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration:220ms; }
+@media(prefers-reduced-motion:reduce) { ::view-transition-old(root), ::view-transition-new(root) { animation:none; } }
+html[data-quiet='true']::view-transition-old(root), html[data-quiet='true']::view-transition-new(root) { animation:none; }

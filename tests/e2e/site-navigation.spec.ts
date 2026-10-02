@@ -32,3 +32,18 @@ test('all home destinations preserve old and new anchors', async ({ page }) => {
   await page.goto('/');
   for (const id of ['work','about','chanel','olist','smaller-companies']) await expect(page.locator(`[id="${id}"]`)).toHaveCount(1);
 });
+
+test('Explore tracks location and restores focus on Escape',async ({page})=>{
+  await page.goto('/');
+  await page.locator('#olist').scrollIntoViewIfNeeded();
+  const nav=page.locator('[data-home-navigation]');
+  await expect(nav.locator('[data-current-chapter]')).toHaveText('Olist');
+  const trigger=nav.getByText('Explore',{exact:true});
+  await trigger.click();
+  await expect(nav.getByRole('link',{name:'Why Do Some People Choose Smaller Companies?',exact:true})).toBeVisible();
+  await trigger.press('Escape');
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await nav.getByRole('link',{name:'Why Do Some People Choose Smaller Companies?',exact:true}).click();
+  await expect(page.locator('#smaller-companies-title')).toBeFocused();
+});

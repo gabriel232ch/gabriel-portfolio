@@ -34,7 +34,9 @@ const {
         document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : dark ? 'dark' : 'light';
         document.documentElement.dataset.userQuiet = String(userQuiet);
         document.documentElement.dataset.quiet = String(quiet);
-        document.documentElement.dataset.signature = quiet ? 'complete' : 'animate';
+        const navigation = performance.getEntriesByType('navigation')[0];
+        const returning = location.hash || navigation?.type === 'back_forward' || (document.referrer && new URL(document.referrer).origin === location.origin && new URL(document.referrer).pathname.startsWith('/work/'));
+        document.documentElement.dataset.signature = quiet || returning ? 'complete' : 'animate';
       })();
     </script>
   </head>
