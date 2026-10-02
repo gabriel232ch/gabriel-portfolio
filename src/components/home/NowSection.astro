@@ -1,5 +1,5 @@
 ---
-import type { HOME_STATE } from '../../data/home';
+import { HOME_STATE } from '../../data/home';
 
 interface Props {
   now: typeof HOME_STATE.now;
@@ -17,7 +17,7 @@ const { now } = Astro.props;
     {now.items.map((item) => (
       <article class="home-now__item motion-reveal" data-home-motion data-now-item={item.id}>
         <p class="data-copy">{item.label}</p>
-        <p class="editorial">{item.value}</p>
+        <p class="editorial">{item.id === 'thinking' ? <a href={HOME_STATE.projects.smallerCompanies.href}>{item.value}</a> : item.value}</p>
       </article>
     ))}
   </div>

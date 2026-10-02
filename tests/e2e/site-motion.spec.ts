@@ -45,3 +45,8 @@ test('without script all research and the signature remain visible', async ({bro
   expect(await page.locator('.home-hero__signature-fill').first().evaluate(n=>Number(getComputedStyle(n).opacity))).toBe(1);
   await context.close();
 });
+test('missing IntersectionObserver leaves narrative and report values visible',async({page})=>{
+ await page.addInitScript(()=>Object.defineProperty(window,'IntersectionObserver',{value:undefined}));
+ await page.goto('/#olist');await expect(page.locator('#olist h2')).toBeVisible();
+ await page.goto('/work/luxury-handbag-pricing-architecture/');await expect(page.locator('.report-price-lane__node').first()).toHaveCSS('opacity','1');
+});

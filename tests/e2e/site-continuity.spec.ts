@@ -13,10 +13,11 @@ test('history returns to the original reading position',async ({page})=>{
   const link=page.getByRole('link',{name:'Explore the current research →',exact:true});
   await link.scrollIntoViewIfNeeded();
   await link.click({trial:true});
-  const y=await page.evaluate(()=>scrollY);
+  // Measure departure after the browser has positioned the activated link.
+  await page.evaluate(()=>window.addEventListener('pagehide',()=>sessionStorage.setItem('test-departure-scroll',String(scrollY)),{once:true}));
   await link.click();
   await page.goBack();
-  await expect.poll(async()=>Math.abs((await page.evaluate(()=>scrollY))-y)).toBeLessThan(100);
+  await expect.poll(()=>page.evaluate(()=>Math.abs(scrollY-Number(sessionStorage.getItem('test-departure-scroll'))))).toBeLessThan(100);
 });
 test('deep-linked home chapter is visible without replaying the identity',async ({page})=>{
   await page.goto('/#olist');

@@ -28,7 +28,7 @@ const {
     <script is:inline>
       (() => {
         let stored, userQuiet = false;
-        try { stored = localStorage.getItem('theme'); userQuiet = localStorage.getItem('quiet-motion') === 'true'; } catch {}
+        try { stored = localStorage.getItem('theme'); userQuiet = localStorage.getItem('quiet-motion') === 'true'; } catch { /* Storage is optional; preferences still work in memory. */ }
         const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const quiet = userQuiet || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : dark ? 'dark' : 'light';

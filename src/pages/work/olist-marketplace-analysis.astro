@@ -1,7 +1,9 @@
 ---
+import ReadingContents from '../../components/research/ReadingContents.astro';
 import SiteHeader from '../../components/system/SiteHeader.astro';
 import ResearchFooter from '../../components/research/ResearchFooter.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { OLIST_TRAIL } from '../../data/olist-trail';
 import { HOME_STATE } from '../../data/home';
 import { OLIST_DATA_METRICS, OLIST_DATA_SOURCES } from '../../data/olist';
 import '../../styles/report.css';
@@ -17,19 +19,27 @@ const project = HOME_STATE.projects.olist;
   <main id="main-content" tabindex="-1" class="research-page">
     <SiteHeader researchId="olist" />
 
+    <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+
     <article class="research-page__article">
       <p class="research-page__kicker">SAMSUNG · 2025 → OLIST · 2026</p>
       <h1>{project.title}</h1>
       <p class="research-page__lede">{project.noQuestion}</p>
 
+    <ReadingContents sections={[{'id': 'analysis-trail-title', 'label': 'Analysis trail'}, {'id': 'evidence-title', 'label': 'Findings'}, {'id': 'limits-title', 'label': 'Limits'}]} />
+      <div data-reading-article>
       <section aria-labelledby="analysis-trail-title">
         <h2 id="analysis-trail-title">Analysis trail</h2>
-        <ol class="research-page__trail">
-          <li>Understand the available tables and their grain.</li>
-          <li>Test how marketplace growth changed over time.</li>
-          <li>Separate order-volume growth from value growth.</li>
-          <li>Compare scale with delivery reliability and review outcomes.</li>
-          <li>Translate the observed tension into market and route priorities.</li>
+        <ol class="analysis-trail">
+          {OLIST_TRAIL.map((step)=><li data-analysis-step id={`trail-${step.id}`}>
+            <h3>{step.question}</h3>
+            <p><strong>Why this mattered</strong> — {step.rationale}</p>
+            <p><strong>Observation</strong> — {step.observation}</p>
+            <details><summary>Method and source</summary>
+              <p><strong>Method</strong> — {step.method}</p>
+              <a href={step.source} target="_blank" rel="noreferrer">Inspect the source →</a>
+            </details>
+          </li>)}
         </ol>
       </section>
 
@@ -65,6 +75,7 @@ const project = HOME_STATE.projects.olist;
         </p>
       </section>
 
+      </div>
       <footer class="research-page__footer">
         <a href={OLIST_DATA_SOURCES.readme} target="_blank" rel="noreferrer">Source analysis on GitHub</a>
       </footer>
