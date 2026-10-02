@@ -11,6 +11,7 @@ interface Props {
 const { copy } = Astro.props;
 ---
 
+<span id="chanel" class="chapter-anchor" aria-hidden="true"></span>
 <section
   id="work"
   class="chanel-chapter editorial-grid"
@@ -20,7 +21,7 @@ const { copy } = Astro.props;
 >
   <div class="chanel-chapter__opening">
     <p class="data-copy">{copy.context}</p>
-    <h2 id="chanel-title" class="display">{copy.title}</h2>
+    <h2 id="chanel-title" tabindex="-1" class="display">{copy.title}</h2>
     <p class="body-copy">{copy.opening}</p>
   </div>
 

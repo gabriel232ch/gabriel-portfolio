@@ -1,7 +1,6 @@
 ---
-import FolioNumber from '../../components/editorial/FolioNumber.astro';
-import SectionLabel from '../../components/editorial/SectionLabel.astro';
-import ThemeToggle from '../../components/system/ThemeToggle.astro';
+import SiteHeader from '../../components/system/SiteHeader.astro';
+import ResearchFooter from '../../components/research/ResearchFooter.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { LUXURY_FLAGSHIP, LUXURY_FLAGSHIP_SOURCES } from '../../data/luxury';
 import '../../styles/report.css';
@@ -193,26 +192,14 @@ const businessChart = [
   noindex={false}
   lang="en"
 >
-  <main class="report-page">
-    <header class="report-topline">
-      <a class="report-topline__identity" href="/">
-        <span>GABRIEL CHEN</span>
-        <span class="data-copy">WORK / RESEARCH</span>
-      </a>
-      <div class="report-topline__tools">
-        <a class="data-copy" href="/#work">← BACK TO WORK</a>
-        <ThemeToggle />
-      </div>
-    </header>
+  <main id="main-content" tabindex="-1" class="report-page">
+    <SiteHeader researchId="chanel" />
     <div class="report-progress" aria-hidden="true">
       <span data-report-progress></span>
     </div>
 
     <section class="report-hero" aria-labelledby="report-title">
-      <div class="report-hero__label">
-        <SectionLabel index="01" label="RESEARCH / PRICING" />
-        <FolioNumber current="01" />
-      </div>
+
       <div class="report-hero__main">
         <p class="report-kicker editorial"><em>Chanel Handbag Pricing</em></p>
         <h1 id="report-title" class="report-title">Price Architecture, Business Performance, and Competitive Position</h1>
@@ -811,6 +798,7 @@ const businessChart = [
       <span class="data-copy">GABRIEL CHEN / CHANEL PREMIUMIZATION STRATEGY</span>
       <span class="data-copy">UPDATED 2026-08-15</span>
     </footer>
+  <ResearchFooter current="chanel" />
 </main>
 </BaseLayout>
 

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/interactions.css';
 
 interface Props {
   title: string;
@@ -34,6 +35,7 @@ const {
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <slot />
   </body>
 </html>

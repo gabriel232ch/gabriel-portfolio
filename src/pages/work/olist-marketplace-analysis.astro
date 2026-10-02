@@ -1,4 +1,6 @@
 ---
+import SiteHeader from '../../components/system/SiteHeader.astro';
+import ResearchFooter from '../../components/research/ResearchFooter.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { HOME_STATE } from '../../data/home';
 import { OLIST_DATA_METRICS, OLIST_DATA_SOURCES } from '../../data/olist';
@@ -12,11 +14,8 @@ const project = HOME_STATE.projects.olist;
   description="An evidence-led Olist marketplace analysis about growth, fulfillment reliability, and the questions that connect them."
   noindex={false}
 >
-  <main class="research-page">
-    <header class="research-page__header">
-      <a class="research-page__identity" href="/">GABRIEL CHEN</a>
-      <a class="research-page__back" href="/#work">← BACK TO WORK</a>
-    </header>
+  <main id="main-content" tabindex="-1" class="research-page">
+    <SiteHeader researchId="olist" />
 
     <article class="research-page__article">
       <p class="research-page__kicker">SAMSUNG · 2025 → OLIST · 2026</p>
@@ -70,6 +69,7 @@ const project = HOME_STATE.projects.olist;
         <a href={OLIST_DATA_SOURCES.readme} target="_blank" rel="noreferrer">Source analysis on GitHub</a>
       </footer>
     </article>
+    <ResearchFooter current="olist" />
   </main>
 </BaseLayout>
 
