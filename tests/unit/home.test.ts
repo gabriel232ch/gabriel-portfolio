@@ -36,6 +36,18 @@ describe('Home content contract', () => {
     expect(publicCopy).not.toContain('聚宽');
   });
 
+  it('keeps the inquiry concise while hinting at the expanded candidate question', () => {
+    const inquiry = HOME_STATE.projects.smallerCompanies;
+
+    expect(inquiry.status).toBe('I’m still trying to understand this.');
+    expect(inquiry.href).toBe('/work/why-some-people-choose-smaller-companies/');
+    expect(inquiry.research).toContain(
+      'what information helps someone decide whether a smaller company is right for them',
+    );
+    expect(inquiry.research.length).toBeLessThan(190);
+    expect(JSON.stringify(inquiry)).not.toMatch(/7 of 30|13 of 60|40 of 60|Golden Samples|crossroads prototype/i);
+  });
+
   it('exposes four human Now items and no required photo', () => {
     expect(HOME_STATE.now.items.map((item) => item.id)).toEqual([
       'learning',

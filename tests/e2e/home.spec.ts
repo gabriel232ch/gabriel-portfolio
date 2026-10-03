@@ -180,6 +180,9 @@ test('smaller-company chapter stays open-ended and protects current-employer det
   })).toBeVisible();
   await expect(inquiry).toContainText('a quantitative investment firm');
   await expect(inquiry).toContainText('So I started looking elsewhere.');
+  await expect(inquiry).toContainText(
+    'what information helps someone decide whether a smaller company is right for them',
+  );
   await expect(inquiry).toContainText('I’m still trying to understand this.');
   await expect(inquiry.getByRole('link', { name: 'Explore the current research →' })).toHaveAttribute(
     'href',
@@ -226,8 +229,9 @@ test('Olist and smaller-company CTAs resolve locally in light and dark themes', 
       level: 1,
       name: 'Why Do Some People Choose Smaller Companies?',
     })).toBeVisible();
-    await expect(page.getByRole('heading', { level: 2, name: 'Current research' })).toBeVisible();
-    await expect(page.getByText('I’m still trying to understand this.')).toBeVisible();
+    await expect(page.locator('#evaluation')).toBeVisible();
+    await expect(page.locator('#evaluation')).toContainText('12 prompts across five platforms');
+    await expect(page.locator('.inquiry-page__status')).toContainText('so far');
     await expect(page.locator('body')).not.toContainText('JoinQuant');
     await expect(page.locator('body')).not.toContainText('聚宽');
     for (const retiredLabel of ['01 / CURRENT RESEARCH', '02 / OBSERVATIONS']) {
