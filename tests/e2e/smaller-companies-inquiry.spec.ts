@@ -95,6 +95,12 @@ test('renders the evolving inquiry in the approved evidence sequence', async ({ 
   const evaluation = article.locator('#evaluation');
   await expect(evaluation).toContainText('six story drafts');
   await expect(evaluation).toContainText('separate research moments');
+  const findings = evaluation.locator('.inquiry-page__findings li');
+  await expect(findings).toHaveCount(3);
+  await expect(findings.nth(0)).toContainText('7 of 30');
+  await expect(findings.nth(1)).toContainText('13 of 60');
+  await expect(findings.nth(2)).toContainText('40 of 60');
+  await expect(evaluation).toContainText('not repeated independent trials');
   await expect(evaluation.locator('table')).toHaveCount(0);
   await expect(article.locator('#first-landing-page')).toBeVisible();
   await expect(article.locator('#case-studies')).toContainText('five-case');

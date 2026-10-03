@@ -91,6 +91,41 @@ describe('smaller-companies inquiry public content', () => {
     expect(synthesis).not.toContain('is a universal theory');
   });
 
+  it('publishes three scoped, descriptive findings from the later query-content evaluation', () => {
+    const findings = SMALLER_COMPANIES_INQUIRY.evaluation.findings;
+    const evaluation = SMALLER_COMPANIES_INQUIRY.chapters.find(
+      ({ id }) => id === 'evaluation',
+    );
+
+    expect(findings).toHaveLength(3);
+    expect(findings.map(({ observation }) => observation)).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('7 of 30'),
+        expect.stringContaining('13 of 60'),
+        expect.stringContaining('40 of 60'),
+      ]),
+    );
+    for (const finding of findings) {
+      expect(finding.observation.length).toBeGreaterThan(0);
+      expect(finding.scope.length).toBeGreaterThan(0);
+      expect(finding.archiveHref).toMatch(
+        /^https:\/\/github\.com\/gabriel232ch\/candidate-information-research\//,
+      );
+    }
+
+    const publicFindings = JSON.stringify(findings);
+    expect(publicFindings).not.toMatch(/\b(?:caused|causes|proved|proves)\b|therefore AI will/i);
+    expect(publicFindings).not.toMatch(/\/(?:Users|private|tmp)\/|[A-Z]:\\/i);
+    expect(publicFindings).not.toMatch(/JoinQuant|聚宽|employer[-_ ]?id/i);
+    expect(evaluation?.body.join(' ').toLowerCase()).toContain('12 prompts');
+    expect(evaluation?.body.join(' ').toLowerCase()).toContain('five platforms');
+    expect(evaluation?.body.join(' ').toLowerCase()).toContain(
+      'not repeated independent trials',
+    );
+    expect(findings[1].scope.toLowerCase()).toContain('accurate');
+    expect(findings[2].scope.toLowerCase()).toContain('inter-rater');
+  });
+
   it('keeps employer identity and private project assets out of public content', () => {
     const publicContent = JSON.stringify(SMALLER_COMPANIES_INQUIRY);
 

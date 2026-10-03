@@ -105,6 +105,32 @@ const stages: InquiryStage[] = inquiry.chapters.flatMap((chapter) => {
                   <p class="body-copy">{stage.chapter.reframe}</p>
                 </div>
 
+                {stage.chapter.id === 'evaluation' && (
+                  <aside
+                    class="inquiry-page__findings"
+                    aria-labelledby="evaluation-findings-title"
+                  >
+                    <h3 id="evaluation-findings-title">What the later matrix recorded</h3>
+                    <ol>
+                      {inquiry.evaluation.findings.map((finding, index) => (
+                        <li>
+                          <p class="inquiry-page__finding-observation">{finding.observation}</p>
+                          <p class="inquiry-page__finding-scope data-copy">Scope: {finding.scope}</p>
+                          <a
+                            class="inquiry-page__finding-method data-copy"
+                            href={finding.archiveHref}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`Method details for finding ${index + 1}`}
+                          >
+                            Method details <span aria-hidden="true">↗</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  </aside>
+                )}
+
                 {stage.chapter.id === 'decision-support' && (
                   <aside class="inquiry-page__synthesis" aria-labelledby="inquiry-synthesis-title">
                     <h3 id="inquiry-synthesis-title">A working interpretation</h3>
