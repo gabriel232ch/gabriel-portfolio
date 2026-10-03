@@ -149,6 +149,7 @@ export const SMALLER_COMPANIES_INQUIRY = {
         'Once six story drafts existed, the question was no longer simply whether AI could mention the company. I wanted to inspect what answers surfaced, cited, omitted, or could not verify.',
         'This later structured evaluation used multiple prompts and platforms. Its raw dataset remains private, and the observations are a diagnostic snapshot rather than proof that the content changed model behavior.',
         'The early GEO exploration and this later query-content evaluation are separate research moments. The early test and information review contributed to the Source-of-Truth shift; the later matrix evaluated candidate-oriented content.',
+        'The matrix contains 12 prompts across five platforms, with one recorded row per prompt/platform cell. Model labels, web-search settings, and rerun status varied, so these are descriptive observations from a mixed-condition snapshot, not repeated independent trials or evidence that the content caused model behavior.',
       ],
       archiveHref: evaluationUrl,
     },
@@ -236,7 +237,29 @@ export const SMALLER_COMPANIES_INQUIRY = {
     },
   ] satisfies readonly SystemizationNode[],
   evaluation: {
-    findings: [] as InquiryFinding[],
+    findings: [
+      {
+        observation:
+          'The company appeared spontaneously in 7 of 30 outputs to prompts that did not name it: six Discovery outputs and one contextual Consideration mention.',
+        scope:
+          'The 30 outputs cover six unnamed-company prompts across five platforms. The Consideration mention was contextual, not a recommendation.',
+        archiveHref: evaluationUrl,
+      },
+      {
+        observation:
+          '13 of 60 outputs were coded as citing an official company source with a URL; all 13 also mentioned the company.',
+        scope:
+          'This is a citation-presence code in one mixed-condition matrix. A cited URL does not establish that the answer’s claims were accurate.',
+        archiveHref: evaluationUrl,
+      },
+      {
+        observation:
+          '40 of 60 outputs were manually coded as expressing at least one information limitation; each positive code had an explanatory note.',
+        scope:
+          'These are manual codes from the 60-row matrix. The checked source files record no inter-rater reliability measure.',
+        archiveHref: evaluationUrl,
+      },
+    ] satisfies readonly InquiryFinding[],
   },
   currentSynthesis:
     'I now see employer information as a way to reduce information asymmetry and support mutual selection. Companies can make the work, expectations, organizational mechanisms, and relevant evidence easier to inspect. This remains a working interpretation, not a universal theory of why people choose companies.',
