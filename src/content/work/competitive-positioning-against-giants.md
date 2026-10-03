@@ -1,6 +1,6 @@
 ---
 title: Competitive Positioning Against Giants
-summary: An independent comparative business analysis of how relatively small organizations create disproportionate impact.
+summary: An earlier comparative analysis of smaller organizations, preserved as one research artifact within a broader inquiry into why people choose smaller companies.
 publication: review
 visibility: public
 curation: featured
@@ -11,7 +11,7 @@ disciplines:
   - organization design
   - talent systems
 source:
-  originalReport: https://github.com/gabriel232ch/small-high-impact-companies/tree/main/06_outputs/portfolio_analysis.md
+  originalReport: https://github.com/gabriel232ch/candidate-information-research/blob/main/research/01_smaller_high_impact_companies/public_synthesis.md
 home:
   headline: "Smallness is not an advantage"
   takeaway: "The archive points to leverage, organizational alignment, mission-critical talent, and visible output as the mechanisms that matter."
