@@ -117,7 +117,7 @@ export const SMALLER_COMPANIES_INQUIRY = {
       reframe:
         'Employee stories could help future candidates inspect reality and reduce avoidable information gaps.',
       body: [
-        'Some interview evidence suggested that clearer job information had helped people decide whether to apply. I do not treat those accounts as representative of every employee or candidate.',
+        'Some interview evidence suggested that clearer job information had helped people decide whether to apply. These accounts are not representative of every employee or candidate.',
         'That changed the role of employee content in my mind. It was not only a way to prove a positioning; it could offer evidence that helps someone understand what a role may actually involve.',
       ],
     },
@@ -194,7 +194,7 @@ export const SMALLER_COMPANIES_INQUIRY = {
         'The concept starts at a career crossroads and surfaces relevant evidence and comparable lived experience.',
       body: [
         'I explored an interactive concept that begins with the candidate’s decision context, then connects it to relevant evidence and comparable lived experience.',
-        'The concept and interactive prototype are complete, and a direction was selected for continued internal work. It has not shipped publicly or been validated through live candidate outcomes.',
+        'The concept and interactive prototype are complete, and a direction was selected for continued internal work. It has not shipped publicly. It has not been validated through live candidate outcomes.',
       ],
     },
   ] satisfies readonly InquiryChapter[],
@@ -241,7 +241,7 @@ export const SMALLER_COMPANIES_INQUIRY = {
   currentSynthesis:
     'I now see employer information as a way to reduce information asymmetry and support mutual selection. Companies can make the work, expectations, organizational mechanisms, and relevant evidence easier to inspect. This remains a working interpretation, not a universal theory of why people choose companies.',
   currentDesign:
-    'The current design is an interactive crossroads concept with a completed prototype and a direction selected for continued internal work. It has not shipped publicly or been evaluated through live candidate outcomes.',
+    'The current design is an interactive crossroads concept with a completed prototype and a direction selected for continued internal work. It has not shipped publicly. It has not been evaluated through live candidate outcomes.',
   closing: 'This is where the question has taken me so far.',
   evidenceLinks: [
     { label: 'Project timeline', href: timelineUrl },

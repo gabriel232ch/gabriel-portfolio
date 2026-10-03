@@ -1,0 +1,301 @@
+.inquiry-page {
+  min-height: 100vh;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-reading);
+}
+
+.inquiry-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  max-width: 74rem;
+  margin: 0 auto;
+  padding-top: 1.5rem;
+}
+
+.inquiry-page__identity,
+.inquiry-page__back {
+  color: inherit;
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  letter-spacing: 0.11em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-transform: uppercase;
+}
+
+.inquiry-page__article {
+  width: min(100%, 56rem);
+  margin: clamp(5rem, 12vw, 10rem) auto 0;
+  padding-bottom: clamp(5rem, 12vw, 10rem);
+}
+
+.inquiry-page__hero {
+  max-width: 48rem;
+  margin-bottom: clamp(5rem, 10vw, 8rem);
+}
+
+.inquiry-page__kicker,
+.inquiry-page__stage-label,
+.inquiry-page__question-label,
+.inquiry-page__evidence-label {
+  margin: 0 0 1rem;
+  color: var(--ink-muted);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.inquiry-page h1,
+.inquiry-page h2,
+.inquiry-page h3 {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+
+.inquiry-page h1 {
+  max-width: 16ch;
+  margin: 1.25rem 0 1.5rem;
+  font-size: var(--font-size-project-title);
+  line-height: 0.98;
+}
+
+.inquiry-page__dek {
+  max-width: 42rem;
+  margin: 0 0 1rem;
+  color: var(--ink-muted);
+  font-family: var(--font-reading);
+  font-size: var(--font-size-secondary-reading);
+  line-height: var(--line-height-reading);
+}
+
+.inquiry-page__opening {
+  max-width: 40rem;
+  margin: 2rem 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-lead);
+  line-height: 1.25;
+}
+
+.inquiry-page__contents {
+  max-width: 42rem;
+  margin-top: 2.5rem;
+  border-block: 1px solid var(--hairline);
+}
+
+.inquiry-page__contents summary {
+  padding: 0.9rem 0;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.inquiry-page__contents ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 2rem;
+  margin: 0;
+  padding: 0 0 1rem 1.5rem;
+}
+
+.inquiry-page__contents li {
+  padding-left: 0.25rem;
+  color: var(--ink-muted);
+}
+
+.inquiry-page__contents a {
+  color: var(--ink);
+  font-family: var(--font-reading);
+  font-size: var(--font-size-supporting);
+  line-height: 1.4;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.inquiry-page__story {
+  width: 100%;
+}
+
+.inquiry-page__stage {
+  min-width: 0;
+}
+
+.inquiry-page__chapter {
+  margin: 0 0 clamp(5rem, 10vw, 8rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hairline);
+  scroll-margin-top: 2rem;
+}
+
+.inquiry-page__section-header {
+  max-width: 44rem;
+  margin-bottom: 2.5rem;
+}
+
+.inquiry-page__section-header h2 {
+  max-width: 19ch;
+  margin: 0;
+  font-size: var(--font-size-section-title);
+  line-height: 1.08;
+}
+
+.inquiry-page__question-label,
+.inquiry-page__evidence-label {
+  margin: 2rem 0 0.5rem;
+}
+
+.inquiry-page__question {
+  max-width: 42rem;
+  margin: 0;
+  padding: 0 0 0 1.25rem;
+  border-left: 2px solid var(--accent);
+}
+
+.inquiry-page__question p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-lead);
+  line-height: 1.32;
+}
+
+.inquiry-page__evidence,
+.inquiry-page__body,
+.inquiry-page__reframe,
+.inquiry-page__transition,
+.inquiry-page__systemization,
+.inquiry-page__synthesis,
+.inquiry-page__design-status {
+  max-width: 43rem;
+}
+
+.inquiry-page__evidence,
+.inquiry-page__body p,
+.inquiry-page__transition p,
+.inquiry-page__systemization p,
+.inquiry-page__reframe p,
+.inquiry-page__synthesis p,
+.inquiry-page__design-status p {
+  margin-top: 0;
+  margin-bottom: 1.4rem;
+  color: var(--ink);
+}
+
+.inquiry-page__reframe {
+  margin: 2rem 0 0;
+  padding: 1.25rem 0 0 1.25rem;
+  border-left: 1px solid var(--accent);
+}
+
+.inquiry-page__reframe .data-copy {
+  color: var(--accent-strong);
+}
+
+.inquiry-page__reframe p {
+  margin: 0.6rem 0 0;
+}
+
+.inquiry-page__transition,
+.inquiry-page__systemization {
+  max-width: 46rem;
+  margin: 0 auto clamp(5rem, 10vw, 8rem);
+  padding: 1.5rem 0 0 1.5rem;
+  border-top: 1px solid var(--hairline);
+  border-left: 2px solid var(--accent);
+}
+
+.inquiry-page__transition h3,
+.inquiry-page__systemization h3,
+.inquiry-page__synthesis h3,
+.inquiry-page__design-status h3 {
+  max-width: 28ch;
+  margin: 0 0 1.25rem;
+  font-size: var(--font-size-statement);
+  line-height: 1.12;
+}
+
+.inquiry-page__transition p,
+.inquiry-page__systemization p {
+  max-width: 41rem;
+}
+
+.inquiry-page__synthesis,
+.inquiry-page__design-status {
+  margin: 2.5rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.inquiry-page__archive-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  color: var(--accent-strong);
+  font-size: var(--font-size-micro);
+  letter-spacing: 0.06em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+.inquiry-page__archive-link span {
+  font-size: 1.1em;
+}
+
+.inquiry-page__footer {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: start;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.inquiry-page .inquiry-page__status {
+  max-width: 36rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-statement);
+  line-height: 1.16;
+}
+
+.inquiry-page a {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .inquiry-page__header {
+    align-items: flex-start;
+  }
+
+  .inquiry-page__article {
+    width: 100%;
+    margin-top: 5rem;
+  }
+
+  .inquiry-page__contents ol {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .inquiry-page__chapter {
+    margin-bottom: 5rem;
+  }
+
+  .inquiry-page__section-header {
+    margin-bottom: 2rem;
+  }
+
+  .inquiry-page__transition,
+  .inquiry-page__systemization {
+    margin-bottom: 5rem;
+    padding-left: 1rem;
+  }
+
+  .inquiry-page__reframe {
+    padding-left: 1rem;
+  }
+}
