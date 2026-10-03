@@ -152,3 +152,114 @@ test('keeps private employer material out of rendered page text', async ({ page 
     expect(pattern.test(publicText), 'page text must pass the local privacy scan').toBe(false);
   }
 });
+
+test('uses the existing paper and ink tokens in light and dark themes', async ({ page }) => {
+  const themes = {
+    light: { background: 'rgb(242, 239, 231)', ink: 'rgb(21, 21, 21)' },
+    dark: { background: 'rgb(17, 18, 20)', ink: 'rgb(239, 237, 231)' },
+  } as const;
+
+  for (const [theme, expected] of Object.entries(themes)) {
+    await page.goto(route);
+    await page.evaluate((selectedTheme) => localStorage.setItem('theme', selectedTheme), theme);
+    await page.reload();
+
+    const tokenColors = await page.locator('.inquiry-page').evaluate((element) => {
+      const tokenProbe = document.createElement('div');
+      tokenProbe.style.backgroundColor = 'var(--paper)';
+      tokenProbe.style.color = 'var(--ink)';
+      document.body.append(tokenProbe);
+      const pageStyle = getComputedStyle(element);
+      const tokenStyle = getComputedStyle(tokenProbe);
+      const result = {
+        theme: document.documentElement.dataset.theme,
+        pageBackground: pageStyle.backgroundColor,
+        pageInk: pageStyle.color,
+        tokenBackground: tokenStyle.backgroundColor,
+        tokenInk: tokenStyle.color,
+      };
+      tokenProbe.remove();
+      return result;
+    });
+
+    expect(tokenColors.theme).toBe(theme);
+    expect(tokenColors.pageBackground).toBe(expected.background);
+    expect(tokenColors.pageInk).toBe(expected.ink);
+    expect(tokenColors.pageBackground).toBe(tokenColors.tokenBackground);
+    expect(tokenColors.pageInk).toBe(tokenColors.tokenInk);
+  }
+});
+
+test('has no horizontal overflow at narrow, tablet, or desktop widths', async ({ page }) => {
+  await page.goto(route);
+
+  for (const width of [320, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const overflow = await page.evaluate(() => ({
+      document: document.documentElement.scrollWidth > window.innerWidth,
+      body: document.body.scrollWidth > window.innerWidth,
+    }));
+    expect(overflow.document, `document overflow at ${width}px`).toBe(false);
+    expect(overflow.body, `body overflow at ${width}px`).toBe(false);
+  }
+});
+
+test('keeps archive links valid and reachable by keyboard focus', async ({ page }) => {
+  await page.goto(route);
+
+  const archiveLinks = page.locator(`main article a[href^="${archiveRoot}"]`);
+  const count = await archiveLinks.count();
+  expect(count).toBeGreaterThan(0);
+
+  for (let index = 0; index < count; index += 1) {
+    const link = archiveLinks.nth(index);
+    await expect(link).toHaveAttribute(
+      'href',
+      /^https:\/\/github\.com\/gabriel232ch\/candidate-information-research(?:\/|$)/,
+    );
+    expect(await link.evaluate((node) => (node as HTMLAnchorElement).tabIndex)).toBeGreaterThanOrEqual(0);
+    await link.focus();
+    await expect(link).toBeFocused();
+  }
+});
+
+test('uses a semantic heading order and renders without JavaScript or motion', async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    javaScriptEnabled: false,
+    reducedMotion: 'reduce',
+  });
+  const page = await context.newPage();
+
+  try {
+    await page.goto(route);
+    const article = page.locator('main article');
+    await expect(article.getByRole('heading', {
+      level: 1,
+      name: 'Why Do Some People Choose Smaller Companies?',
+    })).toBeVisible();
+    await expect(article.locator('[data-inquiry-stage]')).toHaveCount(13);
+    await expect(article.locator('#evaluation')).toContainText('7 of 30');
+
+    const headingLevels = await article.locator('h1, h2, h3, h4, h5, h6').evaluateAll((nodes) =>
+      nodes.map((node) => Number(node.tagName.slice(1))),
+    );
+    expect(headingLevels[0]).toBe(1);
+    for (let index = 1; index < headingLevels.length; index += 1) {
+      expect(headingLevels[index]).toBeLessThanOrEqual(headingLevels[index - 1] + 1);
+    }
+
+    const hiddenStages = await article.locator('[data-inquiry-stage]').evaluateAll((nodes) =>
+      nodes.filter((node) => {
+        const style = getComputedStyle(node);
+        return style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0';
+      }).length,
+    );
+    expect(hiddenStages).toBe(0);
+  } finally {
+    await context.close();
+  }
+});
