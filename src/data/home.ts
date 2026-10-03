@@ -72,7 +72,7 @@ export const HOME_STATE = {
         'The more I worked on it, the less convincing that idea became. A company does not become compelling because it finds the right sentence. Whatever makes people choose it has to exist before the sentence does.',
       turn: 'So I started looking elsewhere.',
       research:
-        'One place I started was smaller organizations already creating outsized impact — trying to understand what they actually offered people, how those qualities became visible, and whether any recurring patterns existed.',
+        'I began by looking at smaller organizations creating outsized impact. The question widened: what information helps someone decide whether a smaller company is right for them?',
       status: 'I’m still trying to understand this.',
       cta: 'Explore the current research →',
       href: '/work/why-some-people-choose-smaller-companies/',
