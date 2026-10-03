@@ -19,7 +19,7 @@ const detailRoleSelectors = {
     title: '.inquiry-page h1',
     lead: '.inquiry-page__opening',
     sectionTitle: '.inquiry-page h2',
-    body: '.inquiry-page__article > p:not(.inquiry-page__kicker):not(.inquiry-page__opening):not(.inquiry-page__status)',
+    body: '.inquiry-page__body > p',
     metadata: '.inquiry-page__kicker',
   },
 } as const;
