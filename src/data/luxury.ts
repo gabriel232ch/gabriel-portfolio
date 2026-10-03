@@ -89,6 +89,8 @@ export const LUXURY_FLAGSHIP = {
 
 export const LUXURY_FLAGSHIP_SOURCES = {
   readme: 'https://github.com/gabriel232ch/luxury-handbag-price-architecture',
+  websiteHandoff:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/website_handoff/README.md',
   report:
     'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/FINAL_LUXURY_HANDBAG_PRICING_STRATEGY_CN.md',
   methodology:
@@ -99,7 +101,34 @@ export const LUXURY_FLAGSHIP_SOURCES = {
     'https://github.com/gabriel232ch/luxury-handbag-price-architecture/tree/main/chanel_fr_us_handbags_current',
   financialPanel:
     'https://github.com/gabriel232ch/luxury-handbag-price-architecture/tree/main/financial_business_performance',
+  slowdownPeerReview:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/reports/RELATIVE_RESILIENCE_REVIEW_CN.md',
+  slowdownRegionReview:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/reports/SLOWDOWN_LOCATION_REVIEW_CN.md',
+  slowdownChannelReview:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/reports/CHANNEL_PRODUCT_REVIEW_CN.md',
+  slowdownProfitReview:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/reports/PROFIT_RECOVERY_REVIEW_CN.md',
+  slowdownCustomerReview:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/reports/CUSTOMER_BEAUTY_REVIEW_CN.md',
+  slowdownFinancialInputs:
+    'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/chanel_profit_bridge_inputs.csv',
 } as const;
+
+/** Exact consolidated Chanel values used for the FY2023–FY2025 slowdown test. */
+export const LUXURY_SLOWDOWN_CHANEL = [
+  { year: 'FY2023', revenue: 19743.9, operatingProfit: 6407.0 },
+  { year: 'FY2024', revenue: 18699.3, operatingProfit: 4478.6 },
+  { year: 'FY2025', revenue: 19269.1, operatingProfit: 4711.5 },
+] as const;
+
+/** Disclosed comparison rates; the basis differs by company and is shown in the page. */
+export const LUXURY_SLOWDOWN_PEERS = [
+  { entity: 'Chanel', fy2024: '−4.3%', fy2025: '+1.8%', basis: 'Comparable revenue' },
+  { entity: 'LVMH Fashion & Leather Goods', fy2024: '−1%', fy2025: '−5%', basis: 'Organic revenue' },
+  { entity: 'Gucci', fy2024: '−21%', fy2025: '−19%', basis: 'Comparable revenue' },
+  { entity: 'Hermès', fy2024: '+14.7%', fy2025: '+8.9%', basis: 'Constant-currency revenue' },
+] as const;
 
 /**
  * Curated verbatim from the canonical calculation output. This is a build-time

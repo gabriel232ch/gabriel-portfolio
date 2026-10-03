@@ -37,10 +37,10 @@ export const HOME_STATE = {
       missingBody:
         'By then, the pricing work was largely complete. I could see how Chanel was positioning itself. I still couldn’t tell whether that positioning was actually supported by the business.',
       current:
-        'I no longer think Chanel’s relative resilience can be explained by a single price move or campaign. What I see now is a system: pricing, product, desirability, investment, client experience and brand identity all have to keep reinforcing one another.',
+        'The slowdown analysis gave me a narrower answer. Chanel’s visible handbag price ladder moved higher, but the business did not recover evenly: FY2025 brought partial group-revenue recovery while operating profit remained well below FY2023. Public disclosures show where the recovery appeared; they do not show that handbag pricing or marketing caused it.',
       unresolved:
-        'I still don’t know which part of that system matters most. That is the part I am still trying to understand.',
-      status: 'The question is still open.',
+        'Public accounts do not isolate handbag sales, customer migration, or the return on individual investments. Those outcomes stay outside this conclusion.',
+      status: 'A narrower answer, with a clear evidence boundary.',
       cta: 'Explore the research →',
       href: '/work/luxury-handbag-pricing-architecture/',
     },
