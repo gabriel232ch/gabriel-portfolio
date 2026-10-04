@@ -7,7 +7,7 @@ visibility: public
 curation: featured
 status: ongoing
 language: en
-updatedAt: 2026-10-03
+updatedAt: 2026-10-04
 disciplines:
   - pricing analysis
   - luxury strategy

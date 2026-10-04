@@ -1,0 +1,382 @@
+---
+const financialRows = [
+  ['2020', '10,108', '-18.0%', '2,018', '20.0%', '679', '10.7%', '13.5%'],
+  ['2021', '15,639', '+49.6%', '5,461', '34.9%', '4,540', '4.8%', '11.5%'],
+  ['2022', '17,200', '+17.0%', '5,776', '33.6%', '3,534', '3.9%', '11.9%'],
+  ['2023', '19,743.9', '+16.0%', '6,407', '32.5%', '3,755', '6.2%', '12.5%'],
+  ['2024', '18,699.3', '-4.3%', '4,478.6', '24.0%', '1,842', '9.4%', '13.1%'],
+  ['2025', '19,269.1', '+1.8% comparable / +3.0% reported', '4,711.5', '24.5%', '2,646', '7.5%', '12.4%'],
+];
+
+const financialDashboardRows = [
+  { year: '2020', revenue: 10108, growth: -18, profit: 2018, margin: 20, fcf: 679 },
+  { year: '2021', revenue: 15639, growth: 49.6, profit: 5461, margin: 34.9, fcf: 4540 },
+  { year: '2022', revenue: 17200, growth: 17, profit: 5776, margin: 33.6, fcf: 3534 },
+  { year: '2023', revenue: 19743.9, growth: 16, profit: 6407, margin: 32.5, fcf: 3755 },
+  { year: '2024', revenue: 18699.3, growth: -4.3, profit: 4478.6, margin: 24, fcf: 1842 },
+  { year: '2025', revenue: 19269.1, growth: 3, profit: 4711.5, margin: 24.5, fcf: 2646 },
+];
+
+const hermesRows = [
+  ['2020', '6,389.4', '31.0%', '3,209.2', '-4.8%', '50.2%'],
+  ['2021', '8,982', '39.3%', '4,091', '+29.0%', '45.5%'],
+  ['2022', '11,602', '40.5%', '4,963', '+15.6%', '42.8%'],
+  ['2023', '13,427', '42.1%', '5,547', '+16.7%', '41.3%'],
+  ['2024', '15,170', '40.5%', '6,457', '+18.3%', '42.6%'],
+  ['2025', '16,002', '41.0%', '7,070', '+13.1%', '44.2%'],
+];
+
+const hermesDashboardRows = [
+  { year: '2020', group: 6389.4, leather: 3209.2, margin: 31, growth: -4.8, share: 50.2 },
+  { year: '2021', group: 8982, leather: 4091, margin: 39.3, growth: 29, share: 45.5 },
+  { year: '2022', group: 11602, leather: 4963, margin: 40.5, growth: 15.6, share: 42.8 },
+  { year: '2023', group: 13427, leather: 5547, margin: 42.1, growth: 16.7, share: 41.3 },
+  { year: '2024', group: 15170, leather: 6457, margin: 40.5, growth: 18.3, share: 42.6 },
+  { year: '2025', group: 16002, leather: 7070, margin: 41, growth: 13.1, share: 44.2 },
+];
+
+const financial2025 = financialDashboardRows[financialDashboardRows.length - 1];
+const hermes2025 = hermesDashboardRows[hermesDashboardRows.length - 1];
+const hermesMarginMin = 30;
+const hermesMarginMax = 45;
+
+const lvmhRows = [
+  ['2020', '21,207', '-5%', '-3%', '7,188', '33.9%'],
+  ['2021', '30,896', '+46%', '+47%', '12,842', '41.6%'],
+  ['2022', '38,648', '+25%', '+20%', '15,709', '40.6%'],
+  ['2023', '42,169', '+9%', '+14%', '16,836', '39.9%'],
+  ['2024', '41,060', '-3%', '-1%', '15,230', '37.1%'],
+  ['2025', '37,770', '-8%', '-5%', '13,209', '35.0%'],
+];
+
+const lvmhDashboardRows = [
+  { year: '2020', revenue: 21207, reported: -5, organic: -3, profit: 7188, margin: 33.9 },
+  { year: '2021', revenue: 30896, reported: 46, organic: 47, profit: 12842, margin: 41.6 },
+  { year: '2022', revenue: 38648, reported: 25, organic: 20, profit: 15709, margin: 40.6 },
+  { year: '2023', revenue: 42169, reported: 9, organic: 14, profit: 16836, margin: 39.9 },
+  { year: '2024', revenue: 41060, reported: -3, organic: -1, profit: 15230, margin: 37.1 },
+  { year: '2025', revenue: 37770, reported: -8, organic: -5, profit: 13209, margin: 35.0 },
+];
+
+const lvmh2025 = lvmhDashboardRows.at(-1)!;
+const lvmhMarginMin = 30;
+const lvmhMarginMax = 45;
+
+const businessChart = [
+  { label: 'REVENUE', values: [10108, 15639, 17200, 19743.9, 18699.3, 19269.1], max: 20000, unit: '$m' },
+  { label: 'OPERATING MARGIN', values: [20, 34.9, 33.6, 32.5, 24, 24.5], max: 40, unit: '%' },
+  { label: 'FCF', values: [679, 4540, 3534, 3755, 1842, 2646], max: 5000, unit: '$m' },
+];
+---
+<details class="report-details report-appendix" data-motion-state="entered"><summary><span class="data-copy">CHANEL: LONGER FINANCIAL HISTORY</span><span class="data-copy">FY2020–FY2025</span></summary>
+<p>The pandemic shock and rebound frame the later slowdown. Free cash flow fell from $3,755m in FY2023 to $1,842m in FY2024, then rose to $2,646m in FY2025. These longer series provide context for the FY2023 baseline used in the main analysis.</p>
+          
+          
+          <p class="report-note">USD millions. FY2023–FY2025 revenue and operating profit use exact filed-account inputs; older values and investment ratios retain the original disclosure precision. FY2020 operating profit and capex use the restated FY2021 comparative. Operating margin is derived.</p>
+          
+          <div class="report-data-dashboard report-data-dashboard--summary" >
+            <div class="report-dashboard__heading">
+              <span class="data-copy">CHANEL / FY2025 SNAPSHOT</span>
+              <span class="data-copy">SELECTED SIGNALS</span>
+            </div>
+            <div class="report-kpi-grid">
+              <article class="report-kpi-card">
+                <span class="data-copy">REVENUE</span>
+                <strong>${financial2025.revenue.toLocaleString('en-US')}m</strong>
+                <em class="data-copy">+3% REPORTED</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">OPERATING PROFIT</span>
+                <strong>${financial2025.profit.toLocaleString('en-US')}m</strong>
+                <em class="data-copy">+5.2% VS FY2024</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">OPERATING MARGIN</span>
+                <strong>{financial2025.margin.toFixed(1)}%</strong>
+                <em class="data-copy">DERIVED</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">FREE CASH FLOW</span>
+                <strong>${financial2025.fcf.toLocaleString('en-US')}m</strong>
+                <em class="data-copy">+43.6% VS FY2024</em>
+              </article>
+            </div>
+          </div>
+          <details class="report-details">
+            <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 7 METRICS</span></summary>
+            <div class="report-table-wrap">
+              <table class="report-table--wide">
+                <thead>
+                  <tr><th>FY</th><th>Revenue</th><th>Disclosed Growth</th><th>Operating Profit</th><th>Operating Margin*</th><th>FCF</th><th>Capex / Revenue</th><th>Brand-Support / Revenue</th></tr>
+                </thead>
+                <tbody>
+                  {financialRows.map((row) => (
+                    <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+          <div class="report-visual report-visual--business"  data-interactive-chart aria-label="Chanel revenue, operating margin and free cash flow from 2020 to 2025">
+            <div class="report-visual__heading">
+              <span class="data-copy">APPENDIX / BUSINESS TRAJECTORY</span>
+              <span class="data-copy">HOVER / CLICK TO INSPECT</span>
+            </div>
+            <div class="report-business-chart">
+              <div class="report-business-chart__years data-copy"><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span></div>
+              {businessChart.map((metric) => (
+                <div class="report-business-row">
+                  <div class="report-business-row__label">
+                    <strong class="data-copy">{metric.label}</strong>
+                    <span class="data-copy">{metric.unit}</span>
+                  </div>
+                  <div class="report-business-row__bars">
+                    {metric.values.map((value, index) => (
+                      <button type="button" class="report-business-bar" data-chart-bar data-series={metric.label.toLowerCase()} data-year={String(2020 + index)} aria-label={`${metric.label} ${2020 + index}: ${metric.unit === '%' ? `${value}%` : value.toLocaleString('en-US')}`} aria-pressed="false" style={`--bar-height:${(value / metric.max) * 100}%;`}>
+                        <b>{metric.unit === '%' ? `${value}%` : value.toLocaleString('en-US')}</b>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          
+          
+          
+          <p>In FY2025, capital expenditure was $1,449m and brand-support investment was $2,395m. The longer table preserves their intensity alongside cash generation. Brand support covers the group; it is not a handbag advertising budget.</p>
+          
+          
+          
+        </details>
+
+        <details class="report-details report-appendix" data-motion-state="entered"><summary><span class="data-copy">HERMÈS AND LVMH: LONGER BENCHMARK HISTORY</span><span class="data-copy">FY2020–FY2025</span></summary>
+<p>Hermès pairs group revenue and recurring operating margin with Leather Goods &amp; Saddlery revenue, growth and mix. LVMH figures cover Fashion &amp; Leather Goods, a multi-brand business group. Each chart retains its own currency and reporting level.</p>
+          
+          
+          <h3>Hermès: A Leather-Goods Benchmark</h3>
+          
+          <div class="report-data-dashboard report-data-dashboard--summary" >
+            <div class="report-dashboard__heading">
+              <span class="data-copy">HERMÈS / FY2025 SNAPSHOT</span>
+              <span class="data-copy">LEATHER-GOODS CONTEXT</span>
+            </div>
+            <div class="report-kpi-grid">
+              <article class="report-kpi-card">
+                <span class="data-copy">GROUP REVENUE</span>
+                <strong>€{hermes2025.group.toLocaleString('en-US')}m</strong>
+                <em class="data-copy">FY2025</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">LEATHER GOODS</span>
+                <strong>€{hermes2025.leather.toLocaleString('en-US')}m</strong>
+                <em class="data-copy">+13.1% CC</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">GROUP OP MARGIN</span>
+                <strong>{hermes2025.margin.toFixed(1)}%</strong>
+                <em class="data-copy">RECURRING</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">LEATHER SHARE</span>
+                <strong>{hermes2025.share.toFixed(1)}%</strong>
+                <em class="data-copy">OF GROUP REVENUE</em>
+              </article>
+            </div>
+            <div class="report-dashboard-panel report-dashboard-panel--scale" data-interactive-chart>
+              <div class="report-dashboard-panel__heading">
+                <span class="data-copy">GROUP VS LEATHER GOODS</span>
+                <span class="data-copy">HOVER / CLICK TO INSPECT</span>
+              </div>
+              <div class="report-dashboard-metric">
+                <div class="report-dashboard-metric__label"><strong class="data-copy">GROUP</strong><span class="data-copy">€M</span></div>
+                <div class="report-dashboard-bars">
+                  {hermesDashboardRows.map((row) => (
+                    <button type="button" class="report-dashboard-bar report-dashboard-bar--revenue" data-chart-bar data-series="group-revenue" data-year={row.year} aria-label={`Hermès group revenue ${row.year}: €${row.group.toLocaleString('en-US')} million`} aria-pressed="false" style={`--bar-height:${(row.group / 18000) * 100}%;`}>
+                      <b>€{row.group.toLocaleString('en-US')}</b>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div class="report-dashboard-metric">
+                <div class="report-dashboard-metric__label"><strong class="data-copy">LEATHER GOODS</strong><span class="data-copy">€M</span></div>
+                <div class="report-dashboard-bars">
+                  {hermesDashboardRows.map((row) => (
+                    <button type="button" class="report-dashboard-bar report-dashboard-bar--profit" data-chart-bar data-series="leather-goods" data-year={row.year} aria-label={`Hermès Leather Goods and Saddlery revenue ${row.year}: €${row.leather.toLocaleString('en-US')} million`} aria-pressed="false" style={`--bar-height:${(row.leather / 8000) * 100}%;`}>
+                      <b>€{row.leather.toLocaleString('en-US')}</b>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div class="report-dashboard-years data-copy">{hermesDashboardRows.map((row) => <span>{row.year}</span>)}</div>
+            </div>
+            <div class="report-dashboard-panel report-dashboard-panel--margin" data-interactive-chart>
+              <div class="report-dashboard-panel__heading">
+                <span class="data-copy">MARGIN TRAJECTORY</span>
+                <span class="data-copy">DERIVED GROUP OPERATING MARGIN</span>
+              </div>
+              <div class="report-margin-chart">
+                <div class="report-margin-chart__axis data-copy"><span>45%</span><span>40%</span><span>35%</span><span>30%</span></div>
+                <div class="report-margin-chart__plot">
+                  <div class="report-margin-chart__grid"></div>
+                  <div class="report-margin-chart__points">
+                    {hermesDashboardRows.map((row) => (
+                      <button type="button" class="report-margin-point" data-chart-bar data-series="margin" data-year={row.year} aria-label={`Derived Hermès group operating margin ${row.year}: ${row.margin.toFixed(1)} percent`} aria-pressed="false" style={`--point-position:${((row.margin - hermesMarginMin) / (hermesMarginMax - hermesMarginMin)) * 100}%;`}>
+                        <i></i><b>{row.margin.toFixed(1)}%</b><span class="data-copy">{row.year}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="report-dashboard-panel report-dashboard-panel--heatmap" data-interactive-chart>
+              <div class="report-dashboard-panel__heading">
+                <span class="data-copy">MIX &amp; MOMENTUM</span>
+                <span class="data-copy">LEATHER GOODS SIGNALS</span>
+              </div>
+              <div class="report-growth-heatmap report-growth-heatmap--hermes">
+                <div class="report-growth-heatmap__years data-copy"><span></span>{hermesDashboardRows.map((row) => <span>{row.year}</span>)}</div>
+                <div class="report-growth-heatmap__row">
+                  <strong class="data-copy">CC GROWTH</strong>
+                  {hermesDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="leather-growth" data-year={row.year} data-direction={row.growth < 0 ? 'negative' : 'positive'} aria-label={`Hermès Leather Goods constant-currency growth ${row.year}: ${row.growth}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.growth) / 30, 1)};`}>{row.growth > 0 ? '+' : ''}{row.growth}%</button>)}
+                </div>
+                <div class="report-growth-heatmap__row">
+                  <strong class="data-copy">GROUP SHARE</strong>
+                  {hermesDashboardRows.map((row) => <button type="button" class="report-growth-cell report-growth-cell--share" data-chart-bar data-series="leather-share" data-year={row.year} aria-label={`Hermès Leather Goods share of group revenue ${row.year}: ${row.share}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(row.share / 60, 1)};`}>{row.share}%</button>)}
+                </div>
+              </div>
+            </div>
+          </div>
+          <details class="report-details">
+            <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 5 SIGNALS</span></summary>
+            <div class="report-table-wrap">
+              <table class="report-table--wide">
+                <thead>
+                  <tr><th>FY</th><th>Group Revenue (€m)</th><th>Group Recurring Op Margin</th><th>Leather Goods &amp; Saddlery Revenue (€m)</th><th>Leather Segment Constant-Currency Growth</th><th>Leather Share of Group</th></tr>
+                </thead>
+                <tbody>
+                  {hermesRows.map((row) => (
+                    <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+          
+          <h3>LVMH Fashion & Leather Goods: Broad Market Context</h3>
+          <div class="report-data-dashboard" >
+            <div class="report-dashboard__heading">
+              <span class="data-copy">APPENDIX / LVMH F&amp;LG SNAPSHOT</span>
+              <span class="data-copy">FY2025 / SELECTED SIGNALS</span>
+            </div>
+            <div class="report-kpi-grid">
+              <article class="report-kpi-card">
+                <span class="data-copy">REVENUE</span>
+                <strong>€{lvmh2025.revenue.toLocaleString('en-US')}m</strong>
+                <em class="data-copy">−8% REPORTED</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">ORGANIC GROWTH</span>
+                <strong>−5%</strong>
+                <em class="data-copy">FY2025</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">OPERATING PROFIT</span>
+                <strong>€{lvmh2025.profit.toLocaleString('en-US')}m</strong>
+                <em class="data-copy">RECURRING</em>
+              </article>
+              <article class="report-kpi-card">
+                <span class="data-copy">DERIVED MARGIN</span>
+                <strong>{lvmh2025.margin.toFixed(1)}%</strong>
+                <em class="data-copy">−2.1 PP VS FY2024</em>
+              </article>
+            </div>
+
+            <div class="report-dashboard-panel report-dashboard-panel--scale" data-interactive-chart>
+              <div class="report-dashboard-panel__heading">
+                <span class="data-copy">APPENDIX / SCALE &amp; PROFIT</span>
+                <span class="data-copy">HOVER / CLICK TO INSPECT</span>
+              </div>
+              <div class="report-dashboard-metric">
+                <div class="report-dashboard-metric__label"><strong class="data-copy">REVENUE</strong><span class="data-copy">€M</span></div>
+                <div class="report-dashboard-bars">
+                  {lvmhDashboardRows.map((row) => (
+                    <button type="button" class="report-dashboard-bar report-dashboard-bar--revenue" data-chart-bar data-series="revenue" data-year={row.year} aria-label={`LVMH F&LG revenue ${row.year}: €${row.revenue.toLocaleString('en-US')} million`} aria-pressed="false" style={`--bar-height:${(row.revenue / 45000) * 100}%;`}>
+                      <b>€{row.revenue.toLocaleString('en-US')}</b>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div class="report-dashboard-metric">
+                <div class="report-dashboard-metric__label"><strong class="data-copy">OPERATING PROFIT</strong><span class="data-copy">€M</span></div>
+                <div class="report-dashboard-bars">
+                  {lvmhDashboardRows.map((row) => (
+                    <button type="button" class="report-dashboard-bar report-dashboard-bar--profit" data-chart-bar data-series="operating-profit" data-year={row.year} aria-label={`LVMH F&LG recurring operating profit ${row.year}: €${row.profit.toLocaleString('en-US')} million`} aria-pressed="false" style={`--bar-height:${(row.profit / 18000) * 100}%;`}>
+                      <b>€{row.profit.toLocaleString('en-US')}</b>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div class="report-dashboard-years data-copy">{lvmhDashboardRows.map((row) => <span>{row.year}</span>)}</div>
+            </div>
+
+            <div class="report-dashboard-panel report-dashboard-panel--margin" data-interactive-chart>
+              <div class="report-dashboard-panel__heading">
+                <span class="data-copy">APPENDIX / MARGIN TRAJECTORY</span>
+                <span class="data-copy">DERIVED OPERATING MARGIN</span>
+              </div>
+              <div class="report-margin-chart">
+                <div class="report-margin-chart__axis data-copy"><span>45%</span><span>40%</span><span>35%</span><span>30%</span></div>
+                <div class="report-margin-chart__plot">
+                  <div class="report-margin-chart__grid"></div>
+                  <div class="report-margin-chart__points">
+                    {lvmhDashboardRows.map((row) => (
+                      <button type="button" class="report-margin-point" data-chart-bar data-series="margin" data-year={row.year} aria-label={`Derived operating margin ${row.year}: ${row.margin.toFixed(1)} percent`} aria-pressed="false" style={`--point-position:${((row.margin - lvmhMarginMin) / (lvmhMarginMax - lvmhMarginMin)) * 100}%;`}>
+                        <i></i><b>{row.margin.toFixed(1)}%</b><span class="data-copy">{row.year}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="report-dashboard-panel report-dashboard-panel--heatmap" data-interactive-chart>
+              <div class="report-dashboard-panel__heading">
+                <span class="data-copy">APPENDIX / GROWTH HEATMAP</span>
+                <span class="data-copy">REPORTED VS ORGANIC</span>
+              </div>
+              <div class="report-growth-heatmap">
+                <div class="report-growth-heatmap__years data-copy"><span></span>{lvmhDashboardRows.map((row) => <span>{row.year}</span>)}</div>
+                <div class="report-growth-heatmap__row">
+                  <strong class="data-copy">REPORTED</strong>
+                  {lvmhDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="reported-growth" data-year={row.year} data-direction={row.reported < 0 ? 'negative' : 'positive'} aria-label={`Reported growth ${row.year}: ${row.reported}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.reported) / 50, 1)};`}>{row.reported > 0 ? '+' : ''}{row.reported}%</button>)}
+                </div>
+                <div class="report-growth-heatmap__row">
+                  <strong class="data-copy">ORGANIC</strong>
+                  {lvmhDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="organic-growth" data-year={row.year} data-direction={row.organic < 0 ? 'negative' : 'positive'} aria-label={`Organic growth ${row.year}: ${row.organic}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.organic) / 50, 1)};`}>{row.organic > 0 ? '+' : ''}{row.organic}%</button>)}
+                </div>
+              </div>
+            </div>
+          </div>
+          <details class="report-details">
+            <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 5 METRICS</span></summary>
+            <div class="report-table-wrap">
+              <table>
+                <thead>
+                  <tr><th>FY</th><th>F&amp;LG Revenue (€m)</th><th>Reported Growth</th><th>Organic Growth</th><th>Recurring Operating Profit (€m)</th><th>Derived Margin</th></tr>
+                </thead>
+                <tbody>
+                  {lvmhRows.map((row) => (
+                    <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+          
+          
+          
+        </details>
+
+        

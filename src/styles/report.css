@@ -1167,8 +1167,20 @@
   line-height: 0.7;
 }
 
-.report-details[open] summary::after {
+.report-details[open] > summary::after {
   content: '−';
+}
+
+.report-appendix > p:first-of-type {
+  margin-top: var(--space-5);
+}
+
+.report-band-count {
+  display: block;
+  min-width: 3rem;
+  padding: 0.35rem 0.6rem;
+  background: linear-gradient(to right, color-mix(in srgb, var(--accent) 18%, transparent) var(--band-fill), transparent var(--band-fill));
+  font-variant-numeric: tabular-nums;
 }
 
 .report-details summary:hover,
