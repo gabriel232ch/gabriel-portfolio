@@ -1,10 +1,10 @@
 ---
 const financialRows = [
-  ['2020', '10,108', '-18.0%', '2,018', '20.0%', '679', '10.7%', '13.5%'],
-  ['2021', '15,639', '+49.6%', '5,461', '34.9%', '4,540', '4.8%', '11.5%'],
-  ['2022', '17,200', '+17.0%', '5,776', '33.6%', '3,534', '3.9%', '11.9%'],
-  ['2023', '19,743.9', '+16.0%', '6,407', '32.5%', '3,755', '6.2%', '12.5%'],
-  ['2024', '18,699.3', '-4.3%', '4,478.6', '24.0%', '1,842', '9.4%', '13.1%'],
+  ['2020', '10,108', '-18.0% comparable', '2,018', '20.0%', '679', '10.7%', '13.5%'],
+  ['2021', '15,639', '+49.6% comparable', '5,461', '34.9%', '4,540', '4.8%', '11.5%'],
+  ['2022', '17,200', '+17.0% comparable', '5,776', '33.6%', '3,534', '3.9%', '11.9%'],
+  ['2023', '19,743.9', '+16.0% comparable', '6,407', '32.5%', '3,755', '6.2%', '12.5%'],
+  ['2024', '18,699.3', '-4.3% comparable', '4,478.6', '24.0%', '1,842', '9.4%', '13.1%'],
   ['2025', '19,269.1', '+1.8% comparable / +3.0% reported', '4,711.5', '24.5%', '2,646', '7.5%', '12.4%'],
 ];
 
@@ -107,7 +107,7 @@ const businessChart = [
             <div class="report-table-wrap">
               <table class="report-table--wide">
                 <thead>
-                  <tr><th>FY</th><th>Revenue</th><th>Disclosed Growth</th><th>Operating Profit</th><th>Operating Margin*</th><th>FCF</th><th>Capex / Revenue</th><th>Brand-Support / Revenue</th></tr>
+                  <tr><th>FY</th><th>Revenue</th><th>Revenue Growth / Basis</th><th>Operating Profit</th><th>Operating Margin*</th><th>FCF</th><th>Capex / Revenue</th><th>Brand-Support / Revenue</th></tr>
                 </thead>
                 <tbody>
                   {financialRows.map((row) => (
