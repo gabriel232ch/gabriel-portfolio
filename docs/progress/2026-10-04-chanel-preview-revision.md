@@ -31,6 +31,14 @@ Examples:
 
 Review result: ready for preview review. Claims, dates and quantities remain traceable to the handoff and research tables; no interview, category contribution, marketing ROI or pricing causality is asserted. The prose retains analytical restraint without requiring an invented emotional moment.
 
+## Implementation checks
+
+- `npm run build`: passed.
+- `npm run check`: passed, zero errors, warnings or hints.
+- `git diff --check`: passed.
+- Browser preview: confirmed main narrative, exact regional/channel tables, peer indices and expandable Chanel appendix. Restored revenue, operating-margin and FCF bars display correctly.
+- Existing empty `src/content/phases` build notice remains unrelated to this revision.
+
 ## Evidence provenance
 
 Repository: https://github.com/gabriel232ch/luxury-handbag-price-architecture
