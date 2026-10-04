@@ -10,8 +10,8 @@
 - [x] 首页移除先行价格/历史图，其完整证据仍在已认可案例页；组件文件保留。
 - [x] humanize-ai 与 writing-analyst-prose 审阅。
 - [x] 类型、构建、桌面/窄屏及详情入口核对；不添加或运行自动化测试。
-- [x] 可审阅提交与最终独立审阅；发布前更新 PR。
-- [ ] 发布同一构建至官网，核对实际主页与案例页。
+- [x] 可审阅提交、最终独立审阅及 PR 更新。
+- [x] 发布同一构建至官网，核对实际主页与案例页。
 
 ## 决定与边界
 
@@ -39,3 +39,14 @@ humanize-ai：按个人项目介绍处理，保护 Bocconi/Milan 与 passing con
 独立审阅覆盖 c443cab..aa3d1a0：无 Critical / Important；数据口径、比例、移动布局、入口与案例保护符合范围。发现一处 Minor：新增 basis 样式意外切断原开篇/转折/结尾的 max-width 选择器组。该问题影响需保留的开篇呈现，发布前已修正并重新构建；实际桌面 computed styles 确认四个正文区恢复 768px max-width 和正常正文色，页面无横向溢出。
 
 aa3d1a0 已提交并推送。首次候选 d774fb86 因上述样式修正弃用，不提升至生产。接下来上传修正版并发布该同一版本。
+
+
+## 发布结果
+
+- 修正提交：`1ac1a00`；此前主页实现提交：`aa3d1a0`，均在 PR #4 可审阅。
+- 最终版本：`7e1bfb3d-eaef-46c4-89bc-59456899fe71`，由 `1ac1a00` 构建；候选主页实际核对开篇宽度、三段标题与三个财务比例正确。
+- `wrangler versions deploy ...@100% --yes` 返回 SUCCESS；官网已使用该版本 100% 流量。
+- 实际 `https://gabrielchen.me/#work` 展示新叙述与正确比例；Results and sources 实际导航到官网案例 `#performance`。
+- 官网详情标题为 How Chanel Navigated the Luxury Slowdown；八节顺序、FY2023–FY2025 三指标图和来源/附录存在，与认可版本一致。
+- 截图：`/private/tmp/chanel-home-production.png`。
+- PR 说明已记录最新认可和发布授权。远端 main 的额外三个提交仅为其他研究的 docs，合并时保留。
