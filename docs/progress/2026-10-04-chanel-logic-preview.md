@@ -52,3 +52,14 @@
 另一个原标 Minor 的 FCF 来源表述问题，本轮按证据边界要求一并提升为需修正：结论现在分别说明报表收入/利润与公司披露 FCF，避免暗示相同输入来源。
 
 审阅未独立判断的项目：公开自述交易真实性（保留未核验）；所有远程数据与链接的穷尽核验（本轮只核对选用材料，仍提供来源）；作者记录之外的浏览器渲染（以实际人工检查范围为准）；发布前版本身份（上传后另核对实际 URL）。没有因此扩展研究或声称验证范围更大。
+
+### 已发布 Preview
+
+- 页面提交：`334e577`；审阅修正：`0b9d964`；均已推送审阅分支。
+- Worker version：`0eded1c3-711a-40da-b38d-41bba973c1bc`。
+- [新版案例 Preview](https://0eded1c3-gabriel-portfolio.gabrielchen.workers.dev/work/luxury-handbag-pricing-architecture/)。
+- [可审阅 PR #4](https://github.com/gabriel232ch/gabriel-portfolio/pull/4)。
+- 使用 `wrangler versions upload`，未使用生产流量部署、路由部署或 PR 合并。
+- 实际线上标题、8 个锚点、FY2024 comparable 标签与结论 FCF 来源文字均已在浏览器核对。
+- 保存截图：`/private/tmp/chanel-logic-preview-hero.png`、`/private/tmp/chanel-logic-preview-context.png`。
+- 预览正文及资源对应 `0b9d964`；后续提交仅补发布记录和计划完成状态。

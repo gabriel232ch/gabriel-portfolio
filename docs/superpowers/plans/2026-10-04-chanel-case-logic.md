@@ -1,6 +1,6 @@
 # Chanel Case Logic Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** 将 Chanel 项目页改为从行业疑问逐步进入经营诊断和有限解释的案例，并交付可审阅提交及 Preview。
 
@@ -80,11 +80,11 @@
 
 **Interfaces:** 消费 Task 2–3 的完整改动；产出本地提交、现有 PR #4 更新、Cloudflare 新版本 URL、progress 记录。生产部署和合并均不在本任务中。
 
-- [ ] 运行 `npm run check`，记录类型/内容诊断；运行 `npm run build`，确认输出成功，区分已有空 phases 警告。
-- [ ] 在本地构建或新版本页面人工核对：桌面/窄屏顺序、目录跳转、图表交互、表格滚动、两层附录展开、来源链接及所有原证据位置；记录 Review Focus 第五项结果。
-- [ ] 查阅 diff，将页面、数据、摘要、研究和 progress 的指定文件提交为 `feat: rebuild Chanel case around its slowdown question`；推送当前 `codex/chanel-slowdown-case-study` 分支，更新现有 PR #4 的说明。
-- [ ] 通过 `npm run deploy:preview` 上传 Cloudflare 版本，记录版本 ID/URL；禁止使用 `npm run deploy`。
-- [ ] 从新版本 URL 核对构建内容与提交一致，记录截图和必要的人工修正；向用户提供 PR、Preview 和一句话概括，并等待 Preview 认可。
+- [x] 运行 `npm run check`，记录类型/内容诊断；运行 `npm run build`，确认输出成功，区分已有空 phases 警告。
+- [x] 在本地构建或新版本页面人工核对：桌面/窄屏顺序、目录跳转、图表交互、表格滚动、两层附录展开、来源链接及所有原证据位置；记录 Review Focus 第五项结果。
+- [x] 查阅 diff，将页面、数据、摘要、研究和 progress 的指定文件提交为 `feat: rebuild Chanel case around its slowdown question`；推送当前 `codex/chanel-slowdown-case-study` 分支，更新现有 PR #4 的说明。
+- [x] 通过 `npm run deploy:preview` 上传 Cloudflare 版本，记录版本 ID/URL；禁止使用 `npm run deploy`。
+- [x] 从新版本 URL 核对构建内容与提交一致，记录截图和必要的人工修正；向用户提供 PR、Preview 和一句话概括，并等待 Preview 认可。
 
 ## Self-review
 
