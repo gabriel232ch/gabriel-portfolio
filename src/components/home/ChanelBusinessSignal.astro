@@ -1,19 +1,27 @@
 ---
-import { LUXURY_FLAGSHIP } from '../../data/luxury';
+import { LUXURY_SLOWDOWN_CHANEL, LUXURY_SLOWDOWN_PEERS } from '../../data/luxury';
 
-const signed = (value: number) => `${value > 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}%`;
+const baseline = LUXURY_SLOWDOWN_CHANEL[0];
+const latest = LUXURY_SLOWDOWN_CHANEL[LUXURY_SLOWDOWN_CHANEL.length - 1];
+const chanelGrowth = LUXURY_SLOWDOWN_PEERS[0];
+const measures = [
+  { label: 'Revenue', value: latest.revenue / baseline.revenue * 100 },
+  { label: 'Operating profit', value: latest.operatingProfit / baseline.operatingProfit * 100 },
+  { label: 'Free cash flow', value: latest.freeCashFlow / baseline.freeCashFlow * 100 },
+];
 ---
 
 <div class="chanel-business-signal" data-chanel-business data-home-motion>
-  <p class="chanel-question editorial">The business complicated the story.</p>
+  <p class="chanel-question editorial">Growth returned after a decline.</p>
   <div class="chanel-business-signal__baseline">
-    <span><small>Nominal revenue CAGR · FY20–25</small><strong>{signed(LUXURY_FLAGSHIP.financial.revenueCagr)}</strong></span>
-    <span><small>Operating margin</small><strong>{LUXURY_FLAGSHIP.financial.marginFrom.toFixed(1)} → {LUXURY_FLAGSHIP.financial.marginTo.toFixed(1)}%</strong></span>
+    <span><small>FY2024 comparable revenue growth</small><strong>{chanelGrowth.fy2024}</strong></span>
+    <span><small>FY2025 comparable revenue growth</small><strong>{chanelGrowth.fy2025}</strong></span>
   </div>
+  <p class="data-copy chanel-business-signal__basis">FY2025 as a share of FY2023 · reported USD · Chanel group</p>
   <div class="chanel-business-signal__shock">
-    <span><small>2024 comparable revenue</small><strong>{signed(LUXURY_FLAGSHIP.financial.comparableGrowth)}</strong></span>
-    <span><small>2024 operating profit</small><strong>{signed(LUXURY_FLAGSHIP.financial.operatingProfit)}</strong></span>
-    <span><small>2024 free cash flow</small><strong>{signed(LUXURY_FLAGSHIP.financial.fcfChange)}</strong></span>
-    <span><small>2025 free cash flow</small><strong>{signed(LUXURY_FLAGSHIP.financial.reboundFcf)}</strong></span>
+    {measures.map((measure) => (
+      <span><small>{measure.label}</small><strong>{measure.value.toFixed(1)}%</strong></span>
+    ))}
   </div>
+  <p class="body-copy chanel-business-signal__note">Revenue was closest to its earlier level. Profit and cash generation still had larger gaps. <a href="/work/luxury-handbag-pricing-architecture/#performance">Results and sources →</a></p>
 </div>

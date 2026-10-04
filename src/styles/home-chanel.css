@@ -9,6 +9,21 @@
 .chanel-chapter__opening,
 .chanel-chapter__return,
 .chanel-chapter__turn,
+.chanel-business-signal__basis {
+  margin: 0 0 var(--space-4);
+  color: var(--ink-muted);
+}
+
+.chanel-business-signal__note {
+  max-width: 42rem;
+  margin: var(--space-6) 0 0;
+}
+
+.chanel-business-signal__note a {
+  color: var(--ink);
+  text-underline-offset: 0.2rem;
+}
+
 .chanel-chapter__current {
   max-width: 48rem;
 }
@@ -32,10 +47,17 @@
 
 .chanel-chapter__visible {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
 }
 
-.chanel-chapter__visible > h3 {
+.chanel-chapter__visible > *,
+.chanel-chapter__visible > .chanel-business-signal {
+  grid-column: 1 / -1;
+}
+
+.chanel-chapter__visible > h3,
+.chanel-chapter__current > h3 {
   max-width: 22ch;
   margin: 0;
   font-size: var(--font-size-section-title);
@@ -203,7 +225,7 @@
 }
 
 .chanel-business-signal__shock {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--hairline);
   padding-top: var(--space-4);
 }
@@ -264,7 +286,8 @@
   }
 
   .chanel-business-signal__shock {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
   }
 }
 

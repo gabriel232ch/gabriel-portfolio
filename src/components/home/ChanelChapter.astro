@@ -1,8 +1,6 @@
 ---
 import { HOME_STATE } from '../../data/home';
 import ChanelBusinessSignal from './ChanelBusinessSignal.astro';
-import ChanelHistorySignal from './ChanelHistorySignal.astro';
-import ChanelPricePosition from './ChanelPricePosition.astro';
 
 interface Props {
   copy: (typeof HOME_STATE.projects)['chanel'];
@@ -29,21 +27,19 @@ const { copy } = Astro.props;
   </div>
 
   <div class="chanel-chapter__visible">
-    <h3 class="editorial">{copy.visibleStart}</h3>
-    <p class="body-copy">{copy.marketing}</p>
-    <ChanelPricePosition />
-    <ChanelHistorySignal />
+    <h3 class="editorial">{copy.resultsTitle}</h3>
+    <p class="body-copy">{copy.results}</p>
+    <ChanelBusinessSignal />
   </div>
 
   <div class="chanel-chapter__turn motion-reveal" data-home-motion>
-    <h3 class="display">{copy.missing}</h3>
-    <p class="body-copy">{copy.missingBody}</p>
+    <h3 class="display">{copy.recoveryTitle}</h3>
+    <p class="body-copy">{copy.recovery}</p>
   </div>
 
-  <ChanelBusinessSignal />
-
   <div class="chanel-chapter__current motion-reveal" data-home-motion>
-    <p class="body-copy">{copy.current}</p>
+    <h3 class="editorial">{copy.explanationsTitle}</h3>
+    <p class="body-copy">{copy.explanations}</p>
     <p class="body-copy">{copy.unresolved}</p>
     <p class="display chanel-chapter__status">{copy.status}</p>
     <a href={copy.href}>{copy.cta}</a>
