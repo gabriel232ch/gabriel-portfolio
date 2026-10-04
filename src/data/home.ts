@@ -30,17 +30,18 @@ export const HOME_STATE = {
         'I first started thinking about this while studying luxury at Bocconi in Milan. The market was slowing, and I kept coming across brands like Gucci and Zegna trying to adapt in very different ways.',
       return:
         'Later, a passing conversation brought Chanel to mind. It seemed to be holding up differently. I wanted to understand whether that impression was real — and, if it was, why.',
-      visibleStart: 'I started with what I could see.',
-      marketing:
-        'At first, I looked at the most visible explanations — what Chanel had been doing, how it was showing up, and whether recent brand activity could explain the difference I thought I was seeing. But public activity could tell me what the brand was doing — not whether those actions were actually driving the business.',
-      missing: 'But something still felt missing.',
-      missingBody:
-        'By then, the pricing work was largely complete. I could see how Chanel was positioning itself. I still couldn’t tell whether that positioning was actually supported by the business.',
-      current:
-        'I no longer think Chanel’s relative resilience can be explained by a single price move or campaign. What I see now is a system: pricing, product, desirability, investment, client experience and brand identity all have to keep reinforcing one another.',
+      resultsTitle: 'What actually recovered?',
+      results:
+        'Chanel also declined in 2024. Revenue returned to growth in 2025, but profit and cash flow remained much further below their 2023 levels. The difference I had noticed was a partial recovery.',
+      recoveryTitle: 'Where did revenue return?',
+      recovery:
+        'Europe and the Americas added reported revenue in 2025, while Asia Pacific continued to decline. Retail and wholesale both improved. Those figures locate the recovery, but they cover several businesses: Fashion, Fragrance & Beauty, and Watches & Fine Jewellery.',
+      explanationsTitle: 'What could explain it?',
+      explanations:
+        'That business scope changes how I read the possible explanations. Beauty has substantial scale. Selected public accounts describe CHANEL 25 as an everyday-use option. Chanel also continued updating products, stores and client services. The price study shows positioning and selected price increases; it does not measure how much pricing added to the recovery.',
       unresolved:
-        'I still don’t know which part of that system matters most. That is the part I am still trying to understand.',
-      status: 'The question is still open.',
+        'These are possible links to purchase and ownership. Public evidence has not measured their individual contributions or shown that a campaign caused the recovery.',
+      status: 'An uneven, partial recovery.',
       cta: 'Explore the research →',
       href: '/work/luxury-handbag-pricing-architecture/',
     },

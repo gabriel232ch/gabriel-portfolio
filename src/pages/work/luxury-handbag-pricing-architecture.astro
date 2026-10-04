@@ -3,193 +3,47 @@ import FolioNumber from '../../components/editorial/FolioNumber.astro';
 import SectionLabel from '../../components/editorial/SectionLabel.astro';
 import ThemeToggle from '../../components/system/ThemeToggle.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { LUXURY_FLAGSHIP, LUXURY_FLAGSHIP_SOURCES } from '../../data/luxury';
+import {
+  LUXURY_FLAGSHIP,
+  LUXURY_FLAGSHIP_SOURCES,
+  LUXURY_SLOWDOWN_CHANEL,
+  LUXURY_SLOWDOWN_PEERS,
+} from '../../data/luxury';
+import LuxuryFinancialAppendix from '../../components/editorial/LuxuryFinancialAppendix.astro';
+import { peerRevenue, regionalRevenue, channelRevenue, priceBands } from '../../data/luxury-evidence';
 import '../../styles/report.css';
-
-const architectureTiers = [
-  {
-    tier: 'Entry / Lower',
-    france: '< €3,000',
-    unitedStates: '< $4,000',
-    role: 'No numeric observation in the current Chanel snapshot',
-  },
-  {
-    tier: 'Core',
-    france: '€3,000–€4,999',
-    unitedStates: '$4,000–$5,999',
-    role: 'Lower end of Mini Classic and selected Shopping Bags',
-  },
-  {
-    tier: 'Premium',
-    france: '€5,000–€9,999',
-    unitedStates: '$6,000–$10,999',
-    role: 'Shopping / Bowling and higher core offerings',
-  },
-  {
-    tier: 'Icon / Exceptional',
-    france: '≥ €10,000',
-    unitedStates: '≥ $11,000',
-    role: 'Classic 11.12, Small Classic, and higher-priced variants',
-  },
-];
-
-const historicalRows = [
-  ['2022', '€8,720', '€4,250', '2.052×', '€4,470'],
-  ['2023', '€9,500', '€4,600', '2.065×', '€4,900'],
-  ['2024', '€10,100', '€4,850', '2.082×', '€5,250'],
-  ['2026', '€10,300', '€4,950', '2.081×', '€5,350'],
-];
-
-const financialRows = [
-  ['2020', '10,108', '-18.0%', '2,018', '20.0%', '679', '10.7%', '13.5%'],
-  ['2021', '15,639', '+49.6%', '5,461', '34.9%', '4,540', '4.8%', '11.5%'],
-  ['2022', '17,200', '+17.0%', '5,776', '33.6%', '3,534', '3.9%', '11.9%'],
-  ['2023', '19,700', '+16.0%', '6,407', '32.5%', '3,755', '6.2%', '12.5%'],
-  ['2024', '18,699', '-4.3%', '4,479', '24.0%', '1,842', '9.4%', '13.1%'],
-  ['2025', '19,269', '+1.8% comparable / +3.0% reported', '4,712', '24.5%', '2,646', '7.5%', '12.4%'],
-];
-
-const financialDashboardRows = [
-  { year: '2020', revenue: 10108, growth: -18, profit: 2018, margin: 20, fcf: 679 },
-  { year: '2021', revenue: 15639, growth: 49.6, profit: 5461, margin: 34.9, fcf: 4540 },
-  { year: '2022', revenue: 17200, growth: 17, profit: 5776, margin: 33.6, fcf: 3534 },
-  { year: '2023', revenue: 19700, growth: 16, profit: 6407, margin: 32.5, fcf: 3755 },
-  { year: '2024', revenue: 18699, growth: -4.3, profit: 4479, margin: 24, fcf: 1842 },
-  { year: '2025', revenue: 19269, growth: 3, profit: 4712, margin: 24.5, fcf: 2646 },
-];
-
-const hermesRows = [
-  ['2020', '6,389.4', '31.0%', '3,209.2', '-4.8%', '50.2%'],
-  ['2021', '8,982', '39.3%', '4,091', '+29.0%', '45.5%'],
-  ['2022', '11,602', '40.5%', '4,963', '+15.6%', '42.8%'],
-  ['2023', '13,427', '42.1%', '5,547', '+16.7%', '41.3%'],
-  ['2024', '15,170', '40.5%', '6,457', '+18.3%', '42.6%'],
-  ['2025', '16,002', '41.0%', '7,070', '+13.1%', '44.2%'],
-];
-
-const hermesDashboardRows = [
-  { year: '2020', group: 6389.4, leather: 3209.2, margin: 31, growth: -4.8, share: 50.2 },
-  { year: '2021', group: 8982, leather: 4091, margin: 39.3, growth: 29, share: 45.5 },
-  { year: '2022', group: 11602, leather: 4963, margin: 40.5, growth: 15.6, share: 42.8 },
-  { year: '2023', group: 13427, leather: 5547, margin: 42.1, growth: 16.7, share: 41.3 },
-  { year: '2024', group: 15170, leather: 6457, margin: 40.5, growth: 18.3, share: 42.6 },
-  { year: '2025', group: 16002, leather: 7070, margin: 41, growth: 13.1, share: 44.2 },
-];
-
-const financial2025 = financialDashboardRows[financialDashboardRows.length - 1];
-const hermes2025 = hermesDashboardRows[hermesDashboardRows.length - 1];
-const hermesMarginMin = 30;
-const hermesMarginMax = 45;
-
-const lvmhRows = [
-  ['2020', '21,207', '-5%', '-3%', '7,188', '33.9%'],
-  ['2021', '30,896', '+46%', '+47%', '12,842', '41.6%'],
-  ['2022', '38,648', '+25%', '+20%', '15,709', '40.6%'],
-  ['2023', '42,169', '+9%', '+14%', '16,836', '39.9%'],
-  ['2024', '41,060', '-3%', '-1%', '15,230', '37.1%'],
-  ['2025', '37,770', '-8%', '-5%', '13,209', '35.0%'],
-];
-
-const lvmhDashboardRows = [
-  { year: '2020', revenue: 21207, reported: -5, organic: -3, profit: 7188, margin: 33.9 },
-  { year: '2021', revenue: 30896, reported: 46, organic: 47, profit: 12842, margin: 41.6 },
-  { year: '2022', revenue: 38648, reported: 25, organic: 20, profit: 15709, margin: 40.6 },
-  { year: '2023', revenue: 42169, reported: 9, organic: 14, profit: 16836, margin: 39.9 },
-  { year: '2024', revenue: 41060, reported: -3, organic: -1, profit: 15230, margin: 37.1 },
-  { year: '2025', revenue: 37770, reported: -8, organic: -5, profit: 13209, margin: 35.0 },
-];
-
-const lvmh2025 = lvmhDashboardRows.at(-1)!;
-const lvmhMarginMin = 30;
-const lvmhMarginMax = 45;
-
-const judgments = [
-  {
-    title: 'Price Evidence Supports Premiumization',
-    lead: 'Yes, within the price evidence.',
-    body: 'The current architecture shows a high visible entry/core floor and a clear Classic/icon anchor. The aligned historical panel shows both access/core and icon lines moving higher, with a wider absolute gap and a broadly stable relative ratio. This conclusion comes from prices, not revenue.',
-  },
-  {
-    title: 'Premiumization and Business Performance Coexisted, Unevenly',
-    lead: 'They coexisted, but the pattern was not stable across years.',
-    body: 'Revenue, margin, and FCF were strong in 2021–2023, deteriorated in 2024, and recovered in 2025. The accurate statement is that premiumization coexisted with recovery and continued investment; the data does not establish a pricing-to-growth causal relationship.',
-  },
-  {
-    title: 'The Architecture Held, but Demand Resilience Remains Unproven',
-    lead: 'The structure persisted across the observed period; prices alone cannot show demand resilience.',
-    body: 'The public snapshot does not show the price structure falling during the 2024 operating setback. That supports persistence of the architecture, while the 2024 margin and FCF pressure shows continued exposure to the cycle and reinvestment demands. Demand, volume/mix, conversion, and customer migration require customer and transaction data.',
-  },
-  {
-    title: 'Chanel and Hermès Differ by Price Role',
-    lead: 'Chanel combines a high visible floor, a strong Classic anchor, and a wide middle gap.',
-    body: 'Hermès has a wider, more distributed upper ladder. Its Leather Goods & Saddlery business line and higher group-margin context make it useful for leather-goods momentum and margin comparison. Hermès is not simply the answer to “who is more expensive.”',
-  },
-  {
-    title: 'Chanel and LVMH F&LG Followed Different Paths',
-    lead: 'LVMH F&LG was strong in 2020–2023 and slowed in 2024–2025; Chanel reported a recovery in 2025.',
-    body: 'Chanel’s performance cannot be assigned entirely to the industry cycle, nor treated as independent of it. The supported conclusion is narrower: the trajectories differ, and the difference is shaped by reporting level, brand mix, foreign exchange, and geographic exposure.',
-  },
-  {
-    title: 'Premiumization Came with Continued Reinvestment',
-    lead: 'Public financial materials show sustained capex and high brand-support investment.',
-    body: 'The disclosed investment spans boutiques, client experience, craftsmanship, supplier capacity, and real estate. This supports an interpretation of premiumization as requiring reinvestment. It does not support treating brand-support investment as handbag marketing expense or proving that investment caused price or profit outcomes.',
-  },
-];
-
-const tensions = [
-  ['Exclusivity vs recruitment', 'A high visible entry threshold has limited overlap with lower-tier competitors.', 'Conversion and recruitment effects require customer-funnel and migration data.'],
-  ['Icon monetization vs ladder continuity', 'The Classic anchor is strong; the pre-icon → icon gap is €3,300 / $3,600.', 'Whether the gap creates migration risk requires assortment, conversion, and client-movement data.'],
-  ['Broad repricing vs competitive substitution', 'Multiple tiers moved higher, with different overlap against Dior, Louis Vuitton, and Hermès.', 'Actual substitution requires transaction, win/loss, or client data.'],
-  ['Premiumization vs growth quality', 'Price architecture persisted in 2024 while revenue, margin, and FCF came under pressure.', 'Public data cannot separate volume/mix, regional, investment, and demand-elasticity effects.'],
-  ['Price elevation vs reinvestment requirement', 'Brand support, capex, craftsmanship, boutique, and experience investment continued.', 'The causal return from investment to desirability, price realization, or profit is not identified.'],
-];
-
-const implications = [
-  'Manage the ladder, not only the Classic anchor. The Classic position is clear, but the visible middle gap is now an architecture issue to monitor. Without behavioral evidence, it should not trigger a product or price change on its own.',
-  'Monitor middle-ladder continuity. Track the entry → core → icon family steps, price visibility, and future assortment coverage. First establish whether a gap is a real portfolio issue or a limitation of the public sample.',
-  'Benchmark competitors by tier and reporting level. Use Louis Vuitton and Dior for the lower/core battleground, Hermès Leather Goods & Saddlery for leather-goods context, and LVMH F&LG for the broader multi-brand environment. A single global price ranking would obscure these differences.',
-  'Evaluate premiumization alongside growth quality and investment. Each pricing decision should be read with revenue growth, margin, FCF, capex, brand-support intensity, and regional commentary. Price is not a success metric by itself.',
-  'Use customer and transaction data before intervening. Validate migration, conversion, volume/mix, stock availability, realized price, SKU economics, and willingness to pay before deciding whether to repair the middle of the ladder or change the entry architecture.',
-];
-
-const canJudge = [
-  'The current public list-price architecture: tiers, family steps, SKU gaps, price visibility, and the Classic anchor.',
-  'Broad repricing and gap evolution across selected 2020–2026 historical price paths.',
-  'Trends in Chanel consolidated revenue, profit, margin, FCF, capex, and brand-support investment for FY2020–FY2025.',
-  'Reporting-level-valid benchmark context from Hermès Leather Goods & Saddlery and LVMH Fashion & Leather Goods.',
-  'Whether premiumization appeared alongside business performance and investment over time.',
-];
-
-const cannotJudge = [
-  'Chanel handbag revenue, handbag units, handbag gross margin, Classic revenue, or SKU profitability.',
-  'Customer conversion, demand elasticity, willingness to pay, realized price, volume/mix, migration, or substitution.',
-  'Louis Vuitton standalone revenue or Dior standalone couture-brand revenue.',
-  'Whether price changes caused revenue, profit, cash flow, or brand desirability outcomes.',
-];
 
 const architectureScale = (market: (typeof LUXURY_FLAGSHIP.architecture)[number]) =>
   Math.max(market.maximum * 1.05, market.maximum + 500);
 
 const architecturePosition = (value: number, market: (typeof LUXURY_FLAGSHIP.architecture)[number]) =>
-  `${(value / architectureScale(market)) * 100}%`;
+  (value / architectureScale(market)) * 100;
 
-const historicalChart = [
-  { year: '2022', classic: 8720, access: 4250, gap: 4470 },
-  { year: '2023', classic: 9500, access: 4600, gap: 4900 },
-  { year: '2024', classic: 10100, access: 4850, gap: 5250 },
-  { year: '2026', classic: 10300, access: 4950, gap: 5350 },
+const historicalRows = [
+  { year: '2022', classic: 8720, mini: 4250, ratio: '2.052×', gap: 4470 },
+  { year: '2023', classic: 9500, mini: 4600, ratio: '2.065×', gap: 4900 },
+  { year: '2024', classic: 10100, mini: 4850, ratio: '2.082×', gap: 5250 },
+  { year: '2026', classic: 10300, mini: 4950, ratio: '2.081×', gap: 5350 },
 ];
 
-const businessChart = [
-  { label: 'REVENUE', values: [10108, 15639, 17200, 19700, 18699, 19269], max: 20000, unit: '$m' },
-  { label: 'OPERATING MARGIN', values: [20, 34.9, 33.6, 32.5, 24, 24.5], max: 40, unit: '%' },
-  { label: 'FCF', values: [679, 4540, 3534, 3755, 1842, 2646], max: 5000, unit: '$m' },
+const baseline = LUXURY_SLOWDOWN_CHANEL[0];
+const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
+  ...row,
+  revenueIndex: (row.revenue / baseline.revenue) * 100,
+  operatingProfitIndex: (row.operatingProfit / baseline.operatingProfit) * 100,
+  freeCashFlowIndex: (row.freeCashFlow / baseline.freeCashFlow) * 100,
+}));
+
+const slowdownSeries = [
+  { key: 'revenue', label: 'REVENUE INDEX', value: 'revenueIndex' as const },
+  { key: 'profit', label: 'OPERATING PROFIT INDEX', value: 'operatingProfitIndex' as const },
+  { key: 'cash', label: 'FREE CASH FLOW INDEX', value: 'freeCashFlowIndex' as const },
 ];
 ---
 
 <BaseLayout
-  title="Chanel Premiumization Strategy — Gabriel Chen"
-  description="A complete analysis of Chanel handbag price architecture, historical repricing, business performance and competitive positioning."
+  title="How Chanel Navigated the Luxury Slowdown — Gabriel Chen"
+  description="A public-source case examining Chanel’s FY2023–FY2025 performance, where recovery occurred, and what products, pricing and client experience can explain."
   noindex={false}
   lang="en"
 >
@@ -204,25 +58,24 @@ const businessChart = [
         <ThemeToggle />
       </div>
     </header>
-    <div class="report-progress" aria-hidden="true">
-      <span data-report-progress></span>
-    </div>
+    <div class="report-progress" aria-hidden="true"><span data-report-progress></span></div>
 
     <section class="report-hero" aria-labelledby="report-title">
       <div class="report-hero__label">
-        <SectionLabel index="01" label="RESEARCH / PRICING" />
+        <SectionLabel index="01" label="RESEARCH / LUXURY STRATEGY" />
         <FolioNumber current="01" />
       </div>
       <div class="report-hero__main">
-        <p class="report-kicker editorial"><em>Chanel Handbag Pricing</em></p>
-        <h1 id="report-title" class="report-title">Price Architecture, Business Performance, and Competitive Position</h1>
-        <p class="report-lede">
-          How does Chanel build and move its handbag price ladder? This report traces visible list prices, aligned historical lines, consolidated financial results, and comparable luxury-leather-goods context.
+        <p class="report-kicker editorial"><em>Chanel Through the Slowdown</em></p>
+        <h1 id="report-title" class="report-title">How Chanel Navigated the Luxury Slowdown</h1>
+        <p class="report-lede">Where recovery occurred, and what the public evidence can explain.</p>
+        <p class="report-hero__summary">
+          Why did Chanel appear to fare differently as luxury slowed? This case starts with its FY2023–FY2025 results, locates the recovery, then examines business scope, product choice, pricing, marketing and client experience.
         </p>
         <p class="report-meta data-copy">
-          PRICE WINDOW: 2020–2026 <span aria-hidden="true">/</span>
-          CURRENT SNAPSHOT: {LUXURY_FLAGSHIP.snapshot.capturedAt} <span aria-hidden="true">/</span>
-          FINANCIAL CORE: FY2020–FY2025
+          OPERATING WINDOW: FY2023–FY2025 <span aria-hidden="true">/</span>
+          PRICE HISTORY: 2022–2026 <span aria-hidden="true">/</span>
+          PRICE SNAPSHOT: {LUXURY_FLAGSHIP.snapshot.capturedAt}
         </p>
       </div>
     </section>
@@ -231,59 +84,178 @@ const businessChart = [
       <aside class="report-index" aria-label="Report contents">
         <p class="data-copy">ON THIS PAGE</p>
         <ol>
-          <li><a href="#thesis">01 / Conclusion</a></li>
-          <li><a href="#architecture">02 / Price architecture</a></li>
-          <li><a href="#history">03 / Historical change</a></li>
-          <li><a href="#business">04 / Business performance</a></li>
-          <li><a href="#competition">05 / Competitive context</a></li>
-          <li><a href="#judgments">06 / Six insights</a></li>
-          <li><a href="#tensions">07 / Strategic tensions</a></li>
-          <li><a href="#implications">08 / Implications</a></li>
-          <li><a href="#boundaries">09 / Evidence boundaries</a></li>
-          <li><a href="#sources">10 / Sources</a></li>
+          <li><a href="#context">01 / The starting question</a></li>
+          <li><a href="#performance">02 / Operating results</a></li>
+          <li><a href="#recovery">03 / Recovery and business scope</a></li>
+          <li><a href="#products-pricing">04 / Products and pricing</a></li>
+          <li><a href="#experience">05 / Product appeal and experience</a></li>
+          <li><a href="#conclusion">06 / What the case establishes</a></li>
+          <li><a href="#appendix">07 / Evidence appendix</a></li>
+          <li><a href="#sources">08 / Sources</a></li>
         </ol>
       </aside>
 
       <article class="report-body">
-        <section id="thesis" class="report-section report-section--opening">
-          <p class="report-section__number data-copy">01 / CONCLUSION</p>
-          <h2>Conclusion</h2>
-          <p class="report-claim">
-            Chanel’s premiumization is a shift in the full price architecture, not only a higher Classic ticket.
-          </p>
-          <ul class="report-bullets">
-            <li>The current sample shows a high visible entry/core floor, a concentrated premium zone, and a clear Classic/icon anchor.</li>
-            <li>Aligned France lines from 2022–2026 show both Mini/access-core and Classic/icon prices moving higher. The Classic relationship held while the absolute gap widened.</li>
-            <li>Over the same period, Chanel’s consolidated revenue recovery, operating margin, cash generation, and brand/capital investment coexisted with the price move.</li>
-            <li>Revenue, operating profit, and FCF all came under pressure in 2024, then partly recovered in 2025. Price elevation is not a validated growth engine, and it does not remove cycle, regional-demand, or reinvestment risk.</li>
-          </ul>
-          <p>
-            The supported interpretation is that premiumization depends on the price ladder, the Classic anchor, desirability, distribution and client experience, craftsmanship and supply, and cash and profit performance holding together. Public evidence shows these factors coexisting and reveals tensions between them; it does not establish that price changes caused the operating results.
-          </p>
-        </section>
-
-        <section id="architecture" class="report-section">
-          <p class="report-section__number data-copy">02 / PRICE ARCHITECTURE</p>
-          <h2>How Chanel’s Handbag Price Architecture Works</h2>
-          <p>
-            The current snapshot contains 41 accepted observations, 35 with numeric prices: 17 of 20 in France and 18 of 21 in the United States. Folded into the existing market bands, the sample forms four analytical tiers:
-          </p>
+        <section id="context" class="report-section report-section--opening">
+          <p class="report-section__number data-copy">01 / THE STARTING QUESTION</p>
+          <h2>Luxury slowed. Did Chanel follow a different path?</h2>
+          <p class="report-claim">A slowing market produced very different brand results. Chanel’s return to growth in FY2025 raises a question: what recovered, and what could explain it?</p>
+          <p>Bain’s spring 2026 update estimates the FY2025 personal luxury goods market at €358bn, against €364bn in FY2024: down about 2% at current exchange rates, up about 1% at constant exchange rates. That revised estimate describes a market with little underlying growth. It replaces the year-end 2025 estimate of broadly flat constant-currency sales. <a href={LUXURY_FLAGSHIP_SOURCES.industryUpdate} target="_blank" rel="noreferrer">Bain update ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.industryPrevious} target="_blank" rel="noreferrer">Earlier estimate ↗</a></p>
+          <p>The company disclosures show the divergence. Chanel and Gucci both declined in FY2024; in FY2025 Chanel returned to growth while Gucci and LVMH Fashion &amp; Leather Goods continued to contract. Hermès grew in both years.</p>
           <div class="report-table-wrap">
-            <table>
-              <thead>
-                <tr><th>Analytical Tier</th><th>France / EUR</th><th>United States / USD</th><th>Chanel Observed Role</th></tr>
-              </thead>
+            <table class="report-table--wide">
+              <thead><tr><th>Reporting entity</th><th>FY2024 growth</th><th>FY2025 growth</th><th>Disclosure basis</th></tr></thead>
               <tbody>
-                {architectureTiers.map((row) => (
-                  <tr><th scope="row">{row.tier}</th><td>{row.france}</td><td>{row.unitedStates}</td><td>{row.role}</td></tr>
+                {LUXURY_SLOWDOWN_PEERS.map((peer) => (
+                  <tr><th scope="row">{peer.entity}</th><td>{peer.fy2024}</td><td>{peer.fy2025}</td><td>{peer.basis}</td></tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div class="report-visual report-visual--architecture" data-report-motion data-interactive-chart aria-label="Observed Chanel price endpoints in France and the United States">
+          <p class="report-note">These are each company’s disclosed growth measures, not a like-for-like ranking. Gucci is a brand; Chanel and Hermès are groups; LVMH Fashion &amp; Leather Goods is a multi-brand business segment.</p>
+          <p class="report-note"><a href={LUXURY_FLAGSHIP_SOURCES.slowdownPeerReview} target="_blank" rel="noreferrer">Growth definitions and disclosure sources ↗</a></p>
+          <p>Chanel’s relative performance depends on the year and the comparison. This case follows Chanel through FY2023–FY2025, first establishing its results, then examining the businesses, products and customer touchpoints that might help explain them.</p>
+        </section>
+
+        <section id="performance" class="report-section">
+          <p class="report-section__number data-copy">02 / THE OPERATING RESULTS</p>
+          <h2>Revenue recovered further than profit or cash flow</h2>
+          <p>Chanel declined in FY2024 and improved in FY2025 across all three measures. By FY2025, reported revenue stood at 97.6% of FY2023, operating profit at 73.5%, and free cash flow at 70.5%. The return to revenue growth left a substantial earnings and cash gap.</p>
+          <div class="report-visual report-index-chart" data-report-motion data-interactive-chart role="group" aria-label="Chanel consolidated revenue, operating profit and free cash flow indexed to FY2023 equals 100">
             <div class="report-visual__heading">
-              <span class="data-copy">FIG. 01 / OBSERVED PRICE ENDPOINTS</span>
-              <span class="data-copy">HOVER / CLICK TO INSPECT</span>
+              <span class="data-copy">FIG. 01 / CHANEL CONSOLIDATED RESULTS</span>
+              <span class="data-copy">FY2023 = 100 / USD</span>
+            </div>
+            {slowdownSeries.map((series) => (
+              <div class={'report-index-chart__row report-index-chart__row--' + series.key}>
+                <strong class="data-copy">{series.label}</strong>
+                <div class="report-index-chart__cells">
+                  {slowdownRows.map((row) => {
+                    const value = row[series.value];
+                    return (
+                      <div class="report-index-chart__cell">
+                        <span class="data-copy">{row.year}</span>
+                        <button type="button" class="report-index-chart__bar" data-chart-bar data-series={series.key} data-year={row.year} aria-label={series.label.toLowerCase() + ' ' + row.year + ' index: ' + value.toFixed(1)} aria-pressed="false">
+                          <span class="report-index-chart__track"><i style={'--index-width:' + value + '%;'}></i></span>
+                          <b>{value.toFixed(1)}</b>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+          <details class="report-details" open>
+            <summary><span class="data-copy">SHOW REPORTED FINANCIAL VALUES</span><span class="data-copy">FY2023–FY2025 / USD MILLIONS</span></summary>
+            <div class="report-table-wrap">
+              <table>
+                <thead><tr><th>Fiscal year</th><th>Net revenue</th><th>Revenue index</th><th>Operating profit</th><th>Operating-profit index</th><th>Free cash flow</th><th>FCF index</th></tr></thead>
+                <tbody>
+                  {slowdownRows.map((row) => (
+                    <tr><th scope="row">{row.year}</th><td>${row.revenue.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}m</td><td>{row.revenueIndex.toFixed(1)}</td><td>${row.operatingProfit.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}m</td><td>{row.operatingProfitIndex.toFixed(1)}</td><td>${row.freeCashFlow.toLocaleString('en-US')}m</td><td>{row.freeCashFlowIndex.toFixed(1)}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+          <p class="report-note">Revenue and operating profit use exact consolidated filed-account inputs in USD millions; free cash flow retains company disclosure precision. Indices use reported dollars, including FX effects. Cash flow also reflects investment and other cash movements. <a href={LUXURY_FLAGSHIP_SOURCES.slowdownFinancialInputs} target="_blank" rel="noreferrer">Financial inputs ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.financialPanel} target="_blank" rel="noreferrer">Cash-flow series and calculations ↗</a></p>
+          <h3>What kept operating profit below FY2023?</h3>
+          <p>
+            Filed-account inputs reconcile a $1,695.5 million operating-profit shortfall between FY2023 and FY2025. Lower gross profit and higher SG&amp;A explain the arithmetic; the savings shown below partly offset the decline.
+            <a href={LUXURY_FLAGSHIP_SOURCES.slowdownProfitReview} target="_blank" rel="noreferrer">Operating-profit bridge ↗</a>
+          </p>
+          <div class="report-table-wrap">
+            <table>
+              <thead><tr><th>Bridge item</th><th>Change</th><th>Interpretation</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Operating profit, FY2023</th><td>$6,407.0m</td><td>Consolidated-company starting point</td></tr>
+                <tr><th scope="row">Gross profit</th><td>−$773.0m</td><td>Lower gross profit</td></tr>
+                <tr><th scope="row">Selling, general and administrative expenses</th><td>+$984.8m expense</td><td>Higher SG&amp;A expense</td></tr>
+                <tr><th scope="row">Advertising, promotion and distribution</th><td>−$62.3m expense</td><td>Savings partly offset the changes above</td></tr>
+                <tr><th scope="row">Operating profit, FY2025</th><td>$4,711.5m</td><td>$1,695.5m below FY2023</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Capital expenditure has a different accounting treatment from current operating expenses, so the year’s investment spending cannot simply be added to this bridge.</p>
+
+          <p>The profit bridge locates the gap in the accounts. To understand the revenue recovery, the next step is to examine where sales returned and which businesses those sales cover.</p>
+        </section>
+
+        <section id="recovery" class="report-section">
+          <p class="report-section__number data-copy">03 / RECOVERY &amp; BUSINESS SCOPE</p>
+          <h2>Europe and the Americas led the reported revenue recovery</h2>
+          <p>
+            The regional bridge locates the reported-dollar decline and recovery. Asia Pacific accounted for 90.4% of Chanel’s net revenue decline in FY2024. In FY2025, Europe and the Americas added revenue while Asia Pacific continued to decline.
+            <a href={LUXURY_FLAGSHIP_SOURCES.slowdownRegionReview} target="_blank" rel="noreferrer">Regional analysis ↗</a>
+          </p>
+          <p>
+            The channel bridge shows that both retail and wholesale recovered in FY2025, but retail regained only 45.7% of its prior-year loss. Region and channel are parallel breakdowns of group revenue, not additive contributions.
+            <a href={LUXURY_FLAGSHIP_SOURCES.slowdownChannelReview} target="_blank" rel="noreferrer">Channel and product analysis ↗</a>
+          </p>
+          <details class="report-details" open>
+            <summary><span class="data-copy">REGIONAL REVENUE BRIDGE</span><span class="data-copy">REPORTED USD MILLIONS / ROUNDED</span></summary>
+            <div class="report-table-wrap"><table class="report-table--wide">
+              <thead><tr><th>Region</th><th>FY2023</th><th>FY2024</th><th>FY2025</th><th>FY2024 change</th><th>FY2025 change</th></tr></thead>
+              <tbody>{regionalRevenue.map((row) => <tr><th scope="row">{row.name}</th>{row.values.map((v) => <td>{v.toLocaleString('en-US')}</td>)}{[row.values[1]-row.values[0],row.values[2]-row.values[1]].map((v) => <td>{v > 0 ? '+' : '−'}{Math.abs(v).toLocaleString('en-US')}</td>)}</tr>)}</tbody>
+            </table></div>
+            <p class="report-note">Rounded regional totals are $19,744m, $18,699m and $19,269m. Their changes differ slightly from exact filed-account totals. These changes include FX effects. Regions describe sales location, not shopper nationality. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/chanel_regional_panel.csv" target="_blank" rel="noreferrer">Regional inputs ↗</a></p>
+          </details>
+          <details class="report-details" open>
+            <summary><span class="data-copy">CHANNEL REVENUE BRIDGE</span><span class="data-copy">REPORTED USD MILLIONS</span></summary>
+            <div class="report-table-wrap"><table class="report-table--wide">
+              <thead><tr><th>Channel</th><th>FY2023</th><th>FY2024</th><th>FY2025</th><th>FY2024 change</th><th>FY2025 change</th></tr></thead>
+              <tbody>{channelRevenue.map((row) => <tr><th scope="row">{row.name}</th>{row.values.map((v) => <td>{v.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>)}{[row.values[1]-row.values[0],row.values[2]-row.values[1]].map((v) => <td>{v > 0 ? '+' : '−'}{Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>)}</tr>)}</tbody>
+            </table></div>
+            <p class="report-note">Retail and wholesale cover multiple categories. They cannot be assigned to handbags and beauty respectively. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/chanel_channel_panel.csv" target="_blank" rel="noreferrer">Channel inputs and source pages ↗</a></p>
+          </details>
+          <p>Europe and the Americas offset continuing Asia Pacific weakness. Retail supplied most of the FY2025 increase, yet remained $517.3m below FY2023. The group increase covered several businesses; a regional or channel bridge alone cannot identify the products behind it.</p>
+          <h3>The group result covers more than handbags</h3>
+          <p>Chanel reports Fashion, Fragrance &amp; Beauty, and Watches &amp; Fine Jewellery. Its annual business commentary shows product renewal across these activities throughout the slowdown.</p>
+          <div class="report-table-wrap"><table>
+            <thead><tr><th>Year</th><th>Fashion</th><th>Fragrance &amp; Beauty</th><th>Watches &amp; Fine Jewellery</th></tr></thead>
+            <tbody>
+              <tr><th>FY2023</th><td>Ready-to-wear, leather goods and shoes highlighted</td><td>Makeup; local clients and travel retail</td><td>Part of the disclosed double-digit growth across all businesses</td></tr>
+              <tr><th>FY2024</th><td>Mainland China pressure; Japan and Europe partly offset it</td><td>Makeup and skincare highlighted</td><td>Growth disclosed</td></tr>
+              <tr><th>FY2025</th><td>Ready-to-wear and CHANEL 25 reception highlighted</td><td>Fragrance and skincare, including CHANCE EAU SPLENDIDE</td><td>Growth disclosed, with the U.S. highlighted</td></tr>
+            </tbody>
+          </table></div>
+          <p class="report-note">Company descriptions provide direction and product context, without a category revenue bridge. <a href={LUXURY_FLAGSHIP_SOURCES.chanel2023} target="_blank" rel="noreferrer">FY2023 ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.chanel2024} target="_blank" rel="noreferrer">FY2024 ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.chanel2025} target="_blank" rel="noreferrer">FY2025 ↗</a></p>
+          <p>L’Oréal’s annual report, citing WWD, estimates Chanel’s FY2024 beauty sales at $8.54bn, about 46% of Chanel’s $18.6993bn group revenue. That cross-source scale ratio makes beauty relevant to the group question. It is not a reconciled segment share, and subtracting it from group revenue would not reveal handbag sales. <a href="https://www.loreal-finance.com/eng/2025-universal-registration-document/en/article/23/" target="_blank" rel="noreferrer">L’Oréal / WWD estimate ↗</a></p>
+          <p>The recovery therefore calls for a reading of products across the business. Handbag prices are one part of that explanation to examine.</p>
+        </section>
+
+        <section id="products-pricing" class="report-section">
+          <p class="report-section__number data-copy">04 / PRODUCTS &amp; PRICING</p>
+          <h2>What did Chanel offer customers during the slowdown?</h2>
+          <p>The annual disclosures identify updates in handbags, makeup, fragrance and skincare. To assess their relevance to FY2025, the first requirement is timing: the product had to be available in the sales year.</p>
+          <h3>Which products could participate in FY2025 sales?</h3>
+          <div class="report-table-wrap"><table>
+            <thead><tr><th>Product or activity</th><th>Timing established by the sources</th><th>Analytical use</th></tr></thead>
+            <tbody>
+              <tr><th>31 LE ROUGE and N°5</th><td>Lipstick introduced in 2023 and extended in 2024; N°5 campaign in 2024</td><td>Beauty renewal was already underway before the recovery year</td></tr>
+              <tr><th>CHANEL 25</th><td>2025 promotion, with a full campaign phase in March; earlier ownership accounts also exist</td><td>A FY2025 handbag candidate; a universal first-sale date is unresolved</td></tr>
+              <tr><th>CHANCE EAU SPLENDIDE</th><td>2025 launch; London activation April 25–May 5</td><td>Fragrance product and experience updates occurred in the sales year</td></tr>
+              <tr><th>Blazy’s first collection</th><td>October 2025 show; boutique arrival March 2026</td><td>Merchandise sales belong to FY2026; any earlier halo effect is unmeasured</td></tr>
+            </tbody>
+          </table></div>
+          <p class="report-note">Selected events, with date precision retained from the sources. The earlier marketing study covers August 13, 2025–August 13, 2026, so its full calendar crosses the FY2025 boundary. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/product_timing_ledger.csv" target="_blank" rel="noreferrer">Timing ledger ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.slowdownChannelReview} target="_blank" rel="noreferrer">Product and channel review ↗</a></p>
+          <p class="report-note">A February 2, 2025 forum post already describes buying a “25 bag” from a Chanel store. This is an early ownership self-report, without SKU or transaction verification; March should therefore be treated as a promotion phase, rather than a universal first-sale date. <a href="https://forum.purseblog.com/threads/fabulous-january-2025-chanel-purchases.1073181/page-5" target="_blank" rel="noreferrer">Early account, post 65 ↗</a></p>
+          <h3>CHANEL 25: another use case within the brand</h3>
+          <p>Selected public accounts describe choosing CHANEL 25 for casual daily use. A self-described first-time buyer wanted a bag for everyday wear; another owner of both CHANEL 25 and a Classic Flap reported using the 25 more often. These accounts suggest that usefulness can shape a choice within Chanel’s offering. <a href="https://www.reddit.com/r/chanel/comments/1okv32a/im_buying_a_chanel_bag_for_my_40th_chanel_25_or/" target="_blank" rel="noreferrer">Original discussion ↗</a></p>
+          <p>One owner reported returning a larger version and later buying a small one; another commenter said they passed on the bag and bought a Margaux 10. A March 13, 2025 forum post describes considering the 31 and 25, then choosing the familiar 22. Size, appearance and prior experience could also work against the new product. <a href="https://www.reddit.com/r/chanel/comments/1mxeq4d/chanel_25/" target="_blank" rel="noreferrer">Return and alternative choice ↗</a> · <a href="https://forum.purseblog.com/threads/marvelous-march-2025-chanel-purchases.1074511/page-2" target="_blank" rel="noreferrer">Internal choice, post 18 ↗</a></p>
+          <p class="report-note">These anonymous, purposively selected self-reports identify possible choice mechanisms. Transactions and purchase dates are unverified; the selected Reddit comments lack precise dates. They provide neither a representative customer sample nor a count of FY2025 purchases. <a href={LUXURY_FLAGSHIP_SOURCES.slowdownCustomerReview} target="_blank" rel="noreferrer">Selection method, further accounts and counterexamples ↗</a></p>
+          <p>A first Chanel purchase, an additional bag and more frequent use have different implications for growth. The accounts do not reveal whether the 25 added spending or replaced another planned purchase.</p>
+          <h3>Where price fits into the product offer</h3>
+          <p>Prices describe another part of the offer: how much Chanel asks customers to pay, and how its lines sit relative to one another. The later snapshot and French histories establish positioning and repricing within their own observation windows.</p>
+          <p>
+            The observed ladder starts at €4,850 in France and $5,400 in the United States, with the Classic/icon tier beginning at €10,000 and $11,000. The snapshot dated {LUXURY_FLAGSHIP.snapshot.capturedAt} contains 41 accepted observations, including 35 numeric prices: 17 of 20 in France and 18 of 21 in the United States.
+          </p>
+
+          <div class="report-visual report-visual--architecture" data-report-motion data-interactive-chart role="group" aria-label="Observed Chanel price endpoints in France and the United States">
+            <div class="report-visual__heading">
+              <span class="data-copy">FIG. 02 / OBSERVED PRICE ENDPOINTS</span>
+              <span class="data-copy">HOVER OR SELECT A MARKER</span>
             </div>
             <div class="report-price-lanes">
               {LUXURY_FLAGSHIP.architecture.map((market) => (
@@ -294,77 +266,92 @@ const businessChart = [
                   </div>
                   <div class="report-price-lane__rail">
                     <span class="report-price-lane__line"></span>
-                    <button type="button" class="report-price-lane__node report-price-lane__node--entry" data-chart-bar data-series="entry" data-market={market.name} aria-label={`${market.name} entry price: ${market.currency} ${market.minimum.toLocaleString('en-US')}`} aria-pressed="false" style={`--node-position:${architecturePosition(market.minimum, market)};`}>
-                      <i></i><b>ENTRY</b><em>{market.currency === 'EUR' ? '€' : '$'}{market.minimum.toLocaleString('en-US')}</em>
-                    </button>
-                    <button type="button" class="report-price-lane__node report-price-lane__node--pre" data-chart-bar data-series="pre-icon" data-market={market.name} aria-label={`${market.name} pre-icon price: ${market.currency} ${market.preIcon.toLocaleString('en-US')}`} aria-pressed="false" style={`--node-position:${architecturePosition(market.preIcon, market)};`}>
-                      <i></i><b>PRE-ICON</b><em>{market.currency === 'EUR' ? '€' : '$'}{market.preIcon.toLocaleString('en-US')}</em>
-                    </button>
-                    <button type="button" class="report-price-lane__node report-price-lane__node--icon" data-chart-bar data-series="icon" data-market={market.name} aria-label={`${market.name} icon price: ${market.currency} ${market.icon.toLocaleString('en-US')}`} aria-pressed="false" style={`--node-position:${architecturePosition(market.icon, market)};`}>
-                      <i></i><b>ICON</b><em>{market.currency === 'EUR' ? '€' : '$'}{market.icon.toLocaleString('en-US')}</em>
-                    </button>
-                    <button type="button" class="report-price-lane__node report-price-lane__node--max" data-chart-bar data-series="max" data-market={market.name} aria-label={`${market.name} maximum price: ${market.currency} ${market.maximum.toLocaleString('en-US')}`} aria-pressed="false" style={`--node-position:${architecturePosition(market.maximum, market)};`}>
-                      <i></i><b>MAX</b><em>{market.currency === 'EUR' ? '€' : '$'}{market.maximum.toLocaleString('en-US')}</em>
-                    </button>
+                    {[
+                      { label: 'ENTRY', key: 'entry', classKey: 'entry', value: market.minimum },
+                      { label: 'PRE-ICON', key: 'pre-icon', classKey: 'pre', value: market.preIcon },
+                      { label: 'ICON', key: 'icon', classKey: 'icon', value: market.icon },
+                      { label: 'MAX', key: 'max', classKey: 'max', value: market.maximum },
+                    ].map((point) => (
+                      <button
+                        type="button"
+                        class={'report-price-lane__node report-price-lane__node--' + (point.classKey ?? point.key)}
+                        data-chart-bar
+                        data-series={point.key}
+                        data-market={market.name}
+                        aria-label={market.name + ' ' + point.label.toLowerCase() + ' price: ' + market.currency + ' ' + point.value.toLocaleString('en-US')}
+                        aria-pressed="false"
+                        style={'--node-position:' + architecturePosition(point.value, market) + '%;'}
+                      >
+                        <i></i><b>{point.label}</b><em>{market.currency === 'EUR' ? '€' : '$'}{point.value.toLocaleString('en-US')}</em>
+                      </button>
+                    ))}
                   </div>
                   <p class="report-price-lane__note data-copy">{market.observationNote}</p>
                 </div>
               ))}
             </div>
           </div>
-          <p>
-            In the current sample, Chanel’s observed numeric range is €4,850–€12,250 in France and $5,400–$13,500 in the United States. The largest visible pre-icon → icon gap is €6,700 → €10,000 in France, or €3,300; in the United States it is $7,400 → $11,000, or $3,600. The largest median family step is Bowling Bag → Small Classic: €4,100 in France and $4,600 in the United States.
-          </p>
-          <p>
-            Numeric versus non-numeric visibility is 35 / 6. The six non-numeric Chanel rows are contact_us entries with no listed price. They remain visibility states rather than being interpolated into higher prices.
-          </p>
-          <p class="report-note">
-            Figures 1–2 use observed numeric list prices across the four-brand range and Chanel’s ladder. A visible gap is not the same as a complete-assortment gap or a demand barrier.
-          </p>
-          <h3>Competition Is Tiered, Not One Global Ranking</h3>
-          <p>
-            The current four-brand panel contains 161 accepted observations, 147 with numeric prices. At the lower end, Chanel overlaps more with Louis Vuitton and Dior; its overlap with Hermès is concentrated higher up. A single “who is more expensive” ranking would hide this structure.
-          </p>
-          <p>
-            Directional French cells support the same tiered reading. In tote | large | leather, the median is €6,200 for Chanel, €6,475 for Hermès, and €3,350 for Dior. In tote | standard | leather, it is €5,700 for Chanel, €3,400 for Dior, and €2,900 for Louis Vuitton. Some brand cells have only one or two observations, so they indicate position rather than like-for-like substitution or consumer share.
-          </p>
-          <p class="report-note">Figures 3–4 are analytical summaries of public list-price samples, not official brand strategy statements.</p>
-        </section>
 
-        <section id="history" class="report-section">
-          <p class="report-section__number data-copy">03 / HISTORICAL CHANGE</p>
-          <h2>How the Architecture Has Changed</h2>
           <p>
-            The rerun historical panel tracks four selected continuous lines in Chanel France across the common years 2022, 2023, 2024, and 2026:
+            The Classic anchor stands above the rest of the observed ladder. The step from the highest pre-icon price to the lowest icon price is €3,300 in France and $3,600 in the United States. At the family-median level, Bowling Bag to Small Classic is the largest step: €4,100 and $4,600. These two measures describe different features of the price architecture.
+          </p>
+          <p class="report-note">The snapshot measures public list prices. A visible gap can reflect sample coverage as well as assortment; it does not measure a customer’s difficulty moving between tiers. Six contact_us rows have no numeric price and remain outside the price calculations.</p>
+          <details class="report-details">
+            <summary><span class="data-copy">HOW THE PRICE TIERS ARE DEFINED</span><span class="data-copy">FRANCE / UNITED STATES</span></summary>
+            <div class="report-table-wrap"><table>
+              <thead><tr><th>Analytical tier</th><th>France / EUR</th><th>United States / USD</th><th>Observed Chanel role</th></tr></thead>
+              <tbody>
+                <tr><th>Entry / lower</th><td>Below €3,000</td><td>Below $4,000</td><td>No numeric observation in this snapshot</td></tr>
+                <tr><th>Core</th><td>€3,000–€4,999</td><td>$4,000–$5,999</td><td>Lower Mini Classic and selected Shopping Bags</td></tr>
+                <tr><th>Premium</th><td>€5,000–€9,999</td><td>$6,000–$10,999</td><td>Shopping, Bowling and higher core offerings</td></tr>
+                <tr><th>Icon / exceptional</th><td>€10,000 and above</td><td>$11,000 and above</td><td>Classic 11.12, Small Classic and higher variants</td></tr>
+              </tbody>
+            </table></div>
+            <p class="report-note">These four broad tiers combine the more detailed price bands in the competitor evidence below. They are analytical groupings, not official Chanel categories.</p>
+          </details>
+          <h3>Competitors occupy different parts of the ladder</h3>
+          <p>The four-brand panel contains 161 accepted observations, including 147 numeric prices. Louis Vuitton’s sample is concentrated in lower bands; Dior is concentrated in the French core band. Chanel has more observations in premium core and icon bands, while Hermès spans several tiers. This gives the Classic anchor a competitive context.</p>
+          <details class="report-details">
+            <summary><span class="data-copy">VIEW COMPETITION BY PRICE BAND</span><span class="data-copy">NUMERIC OBSERVATION COUNTS</span></summary>
+            {priceBands.map((panel) => (
+              <div class="report-table-wrap"><h4>{panel.market}</h4><table class="report-band-table">
+                <thead><tr><th>Market-specific band</th><th>Chanel</th><th>Hermès</th><th>Louis Vuitton</th><th>Dior</th></tr></thead>
+                <tbody>{panel.rows.map((row) => <tr>{row.map((cell, i) => i === 0 ? <th scope="row">{cell}</th> : <td><span class="report-band-count" style={'--band-fill:' + (Number(cell) / 20 * 100) + '%'}>{cell}</span></td>)}</tr>)}</tbody>
+              </table></div>
+            ))}
+            <p class="report-note">Each cell counts observations in the local numeric sample. Zero means no observation captured. EUR and USD bands use different thresholds; these counts are not market shares. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/competitive_pricing_calculations/price_band_summary.csv" target="_blank" rel="noreferrer">Band definitions and calculations ↗</a></p>
+          </details>
+          <p class="report-note">Strict R1 matching produced no publishable headline cells. The tier comparison describes positioning; the exploratory tote cells are preserved with their threshold warning in the method appendix.</p>
+          <h3>Selected French price lines also moved</h3>
+          <p>
+            Across selected continuous France lines in the common observation years 2022, 2023, 2024, and 2026, the Classic median rose 18.1% and the Mini median rose 16.5%. Their relative ratio changed little; the absolute gap widened by €880. Both tiers repriced. Classic retained roughly twice the Mini median as the euro gap widened.
           </p>
           <details class="report-details">
-            <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">4 YEARS / 4 SIGNALS</span></summary>
+            <summary><span class="data-copy">SHOW ALIGNED PRICE OBSERVATIONS</span><span class="data-copy">4 YEARS / 4 SIGNALS</span></summary>
             <div class="report-table-wrap">
               <table>
-                <thead>
-                  <tr><th>FY / Observed Year</th><th>Classic / Icon Median</th><th>Mini / Access-Core Median</th><th>Relative Ratio</th><th>Absolute Gap</th></tr>
-                </thead>
+                <thead><tr><th>Observed year</th><th>Classic / icon median</th><th>Mini / access-core median</th><th>Relative ratio</th><th>Absolute gap</th></tr></thead>
                 <tbody>
                   {historicalRows.map((row) => (
-                    <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>
+                    <tr><th scope="row">{row.year}</th><td>€{row.classic.toLocaleString('en-US')}</td><td>€{row.mini.toLocaleString('en-US')}</td><td>{row.ratio}</td><td>€{row.gap.toLocaleString('en-US')}</td></tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </details>
-          <div class="report-visual report-visual--history" data-report-motion data-interactive-chart aria-label="Classic and Mini median prices from 2022 to 2026">
+          <div class="report-visual report-visual--history" data-report-motion data-interactive-chart role="group" aria-label="Selected Classic and Mini median prices in France from 2022 to 2026">
             <div class="report-visual__heading">
-              <span class="data-copy">FIG. 02 / ALIGNED FRANCE LINES</span>
-              <span class="data-copy">HOVER / CLICK TO INSPECT</span>
+              <span class="data-copy">FIG. 03 / ALIGNED FRANCE LINES</span>
+              <span class="data-copy">HOVER OR SELECT A BAR</span>
             </div>
             <div class="report-history-chart">
               <div class="report-history-chart__axis data-copy"><span>€10k</span><span>€5k</span><span>€0</span></div>
               <div class="report-history-chart__plot">
-                {historicalChart.map((row) => (
+                {historicalRows.map((row) => (
                   <div class="report-history-column">
                     <div class="report-history-column__bars">
-                      <button type="button" class="report-history-bar report-history-bar--classic" data-chart-bar data-series="classic" data-year={row.year} aria-label={`Classic / Icon ${row.year}: €${row.classic.toLocaleString('en-US')}`} aria-pressed="false" style={`--bar-height:${(row.classic / 11000) * 100}%;`}><b>€{row.classic.toLocaleString('en-US')}</b></button>
-                      <button type="button" class="report-history-bar report-history-bar--access" data-chart-bar data-series="access-core" data-year={row.year} aria-label={`Mini / Access-Core ${row.year}: €${row.access.toLocaleString('en-US')}`} aria-pressed="false" style={`--bar-height:${(row.access / 11000) * 100}%;`}><b>€{row.access.toLocaleString('en-US')}</b></button>
+                      <button type="button" class="report-history-bar report-history-bar--classic" data-chart-bar data-series="classic" data-year={row.year} aria-label={'Classic / icon ' + row.year + ': €' + row.classic.toLocaleString('en-US')} aria-pressed="false" style={'--bar-height:' + (row.classic / 11000) * 100 + '%;'}><b>€{row.classic.toLocaleString('en-US')}</b></button>
+                      <button type="button" class="report-history-bar report-history-bar--access" data-chart-bar data-series="mini" data-year={row.year} aria-label={'Mini / access-core ' + row.year + ': €' + row.mini.toLocaleString('en-US')} aria-pressed="false" style={'--bar-height:' + (row.mini / 11000) * 100 + '%;'}><b>€{row.mini.toLocaleString('en-US')}</b></button>
                     </div>
                     <span class="report-history-column__year data-copy">{row.year}</span>
                   </div>
@@ -376,442 +363,136 @@ const businessChart = [
               <span><i class="report-swatch report-swatch--access"></i>MINI / ACCESS-CORE</span>
             </div>
           </div>
-          <p>
-            From 2022 to 2026, the Classic median rose 18.1% and the Mini/access-core median rose 16.5%. The ratio changed little, while the absolute gap widened by €880. The evidence supports broad repricing across multiple tiers, with some ladder stretching as the price base rose—not a Classic-only increase.
-          </p>
-          <p class="report-note">Figure 5 uses common observation years only. It is not the full Chanel handbag assortment or a U.S. historical price series.</p>
-          <p>
-            The square Mini rose approximately 44.8% over the longer 2020–2026 window. The main Mini-versus-Classic comparison uses the aligned 2022–2026 window to avoid different starting points. The historical panel contains 77 accepted observations, 76 numeric prices, and 13 lineages: seven same-model continuous lines and six successors. Missing years are not treated as zero change.
-          </p>
+          <p class="report-note">This comparison uses selected continuous French lines and common observation years. Missing years are not treated as zero change; the longer historical panel is documented in the appendix.</p>
+          <p>The study establishes a high Classic anchor and price increases in selected lines. It does not supply a price–volume–mix bridge for FY2025. High prices also coexisted with the FY2024 decline, so repricing alone cannot explain the change in direction.</p>
+          <p class="report-note">The August 2026 snapshot is a later observation of positioning, not a record of FY2025 transaction prices. <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Full price study and source trail ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">Current panel ↗</a></p>
+          <p>Product choice and price positioning lead to the next question: how did Chanel present its products and support the purchase and ownership experience?</p>
         </section>
 
-        <section id="business" class="report-section">
-          <p class="report-section__number data-copy">04 / BUSINESS PERFORMANCE</p>
-          <h2>What Happened to the Business While This Occurred</h2>
-          <h3>Chanel Consolidated Company</h3>
-          <p>
-            The table uses Chanel Limited consolidated company figures in USD millions. For 2020, operating profit and capex use the restated comparative in the FY2021 release; the original FY2020 values remain in the financial panel as comparative_only.
-          </p>
-          <div class="report-data-dashboard report-data-dashboard--summary" data-report-motion>
-            <div class="report-dashboard__heading">
-              <span class="data-copy">CHANEL / FY2025 SNAPSHOT</span>
-              <span class="data-copy">SELECTED SIGNALS</span>
-            </div>
-            <div class="report-kpi-grid">
-              <article class="report-kpi-card">
-                <span class="data-copy">REVENUE</span>
-                <strong>${financial2025.revenue.toLocaleString('en-US')}m</strong>
-                <em class="data-copy">+3% REPORTED</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">OPERATING PROFIT</span>
-                <strong>${financial2025.profit.toLocaleString('en-US')}m</strong>
-                <em class="data-copy">+5.2% VS FY2024</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">OPERATING MARGIN</span>
-                <strong>{financial2025.margin.toFixed(1)}%</strong>
-                <em class="data-copy">DERIVED</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">FREE CASH FLOW</span>
-                <strong>${financial2025.fcf.toLocaleString('en-US')}m</strong>
-                <em class="data-copy">+43.6% VS FY2024</em>
-              </article>
-            </div>
-          </div>
-          <details class="report-details">
-            <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 7 METRICS</span></summary>
-            <div class="report-table-wrap">
-              <table class="report-table--wide">
-                <thead>
-                  <tr><th>FY</th><th>Revenue</th><th>Comparable Growth</th><th>Operating Profit</th><th>Operating Margin*</th><th>FCF</th><th>Capex / Revenue</th><th>Brand-Support / Revenue</th></tr>
-                </thead>
-                <tbody>
-                  {financialRows.map((row) => (
-                    <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </details>
-          <div class="report-visual report-visual--business" data-report-motion data-interactive-chart aria-label="Chanel revenue, operating margin and free cash flow from 2020 to 2025">
-            <div class="report-visual__heading">
-              <span class="data-copy">FIG. 03 / BUSINESS TRAJECTORY</span>
-              <span class="data-copy">HOVER / CLICK TO INSPECT</span>
-            </div>
-            <div class="report-business-chart">
-              <div class="report-business-chart__years data-copy"><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span></div>
-              {businessChart.map((metric) => (
-                <div class="report-business-row">
-                  <div class="report-business-row__label">
-                    <strong class="data-copy">{metric.label}</strong>
-                    <span class="data-copy">{metric.unit}</span>
-                  </div>
-                  <div class="report-business-row__bars">
-                    {metric.values.map((value, index) => (
-                      <button type="button" class="report-business-bar" data-chart-bar data-series={metric.label.toLowerCase()} data-year={String(2020 + index)} aria-label={`${metric.label} ${2020 + index}: ${metric.unit === '%' ? `${value}%` : value.toLocaleString('en-US')}`} aria-pressed="false" style={`--bar-height:${(value / metric.max) * 100}%;`}>
-                        <b>{metric.unit === '%' ? `${value}%` : value.toLocaleString('en-US')}</b>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <p class="report-note">
-            * Operating margin is derived as operating profit / revenue. Officially disclosed 2022 and 2023 revenue is rounded to $17.2bn and $19.7bn, so the corresponding ratios are approximate.
-          </p>
-          <p>
-            The business trajectory has four distinct phases:
-          </p>
-          <ol class="report-bullets report-bullets--numbered">
-            <li><strong>2020 — pandemic shock:</strong> Revenue, margin, and FCF contracted, while capex intensity remained high. The pattern is consistent with continued investment alongside a high-end position; it does not isolate a price effect.</li>
-            <li><strong>2021–2023 — rebound and expansion:</strong> Revenue rose from $15,639m to $19,700m, operating margin held between 32.5% and 34.9%, and FCF remained positive and substantial.</li>
-            <li><strong>2024 — deterioration during record investment:</strong> Comparable growth was -4.3%, operating profit fell 30.1%, and FCF fell 50.9%. Capex/revenue rose to 9.4% and brand-support/revenue reached 13.1%.</li>
-            <li><strong>2025 — reported recovery with investment still elevated:</strong> Reported revenue rose 3.0%, comparable growth was 1.8%, operating profit rose 5.2%, and FCF rose 43.6%. Capex and brand-support investment remained $1,449m and $2,395m, respectively.</li>
-          </ol>
-          <p>
-            Nominal revenue CAGR was 13.8% from 2020 to 2025. It should not be read as a causal return on pricing: the measure also reflects the pandemic base, product and regional mix, industry conditions, foreign exchange, the investment cycle, and the consolidated-company perimeter.
-          </p>
-          <h3>Reinvestment and Brand Economics</h3>
-          <p>
-            Chanel’s FY2024–FY2025 commentary continues to disclose investment in boutiques, client experience, real estate, craftsmanship, and supplier expertise/capacity. The FY2025 release also discloses more than $700m of supplier and craftsmanship investment. In the context of the price architecture, these inputs form a connected operating system:
-          </p>
-          <p class="report-chain">Pricing <span>↕</span> Desirability <span>↕</span> Distribution / client experience <span>↕</span> Craftsmanship / supply <span>↕</span> Brand investment <span>↕</span> Cash generation / profitability</p>
-          <p>
-            This is an explanatory framework, not a causal model tested by this analysis. Public data shows price elevation and continued reinvestment occurring together; it cannot identify which investment produced which demand or profit outcome.
-          </p>
+        <section id="experience" class="report-section">
+          <p class="report-section__number data-copy">05 / PRODUCT APPEAL &amp; CLIENT EXPERIENCE</p>
+          <h2>Marketing and service provide mechanisms to examine</h2>
+          <p>Chanel’s public records show how it presented products, expanded access and supported ownership. These activities could influence product understanding and purchase opportunities. Their presence alone does not measure an effect on sales.</p>
+          <div class="report-table-wrap"><table>
+            <thead><tr><th>Activity in the research window</th><th>Potential mechanism</th><th>What the evidence establishes</th></tr></thead>
+            <tbody>
+              <tr><th>FY2025 CHANEL 25 campaign</th><td>Product communication may help customers understand a new offer</td><td>Chanel highlights client reception; the company does not report incremental sales attributable to the campaign</td></tr>
+              <tr><th>FY2025 beauty launches and access</th><td>New products and touchpoints create purchase opportunities</td><td>Over 25 dedicated fragrance and beauty boutiques, a new app, and e-commerce in Mexico and Argentina; channel contribution unmeasured</td></tr>
+              <tr><th>FY2023–FY2024 care and personal service</th><td>Maintenance and tailored service may support ownership and future purchases</td><td>Care services in Tokyo, London and Seoul; personalized beauty experiences at Paris Passy; retention and conversion unmeasured</td></tr>
+            </tbody>
+          </table></div>
+          <p class="report-note">Actions and business commentary come from company releases. Mechanisms describe possible pathways; customer outcomes have not been measured. <a href={LUXURY_FLAGSHIP_SOURCES.chanel2023} target="_blank" rel="noreferrer">FY2023 ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.chanel2024} target="_blank" rel="noreferrer">FY2024 ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.chanel2025} target="_blank" rel="noreferrer">FY2025 ↗</a></p>
+          <p>Product renewal and service were already underway in FY2024, when revenue declined. This is a useful check on the explanation: activity can coexist with weakening demand. The question is whether a particular action changed customer behavior enough to affect the business.</p>
+          <h3>Continued investment, with returns still unresolved</h3>
+          <p>FY2025 capital expenditure was $1,449m and brand support was $2,395m. Chanel also describes more than $700m of supplier and craftsmanship investment and over 40 new boutiques overall. These figures cover different spending definitions and should not be added together. They document ongoing capacity and brand investment; the accounts do not isolate new-store sales, same-store recovery or individual investment returns.</p>
+          <p>The earlier marketing study runs from August 2025 to August 2026. Its later creative work and events belong to a different sales window. Here, marketing enters the explanation through relevant products and customer touchpoints; its contribution to the FY2025 recovery remains untested.</p>
         </section>
 
-        <section id="competition" class="report-section">
-          <p class="report-section__number data-copy">05 / COMPETITIVE CONTEXT</p>
-          <h2>Competitive Context</h2>
-          <h3>Hermès: A Leather-Goods Benchmark</h3>
-          <p>
-            Hermès Leather Goods & Saddlery is the most relevant public benchmark in this set for leather-goods economics, although the business line is not handbags-only. The dashboard pairs group scale with segment momentum, margin, and mix:
-          </p>
-          <div class="report-data-dashboard report-data-dashboard--summary" data-report-motion>
-            <div class="report-dashboard__heading">
-              <span class="data-copy">HERMÈS / FY2025 SNAPSHOT</span>
-              <span class="data-copy">LEATHER-GOODS CONTEXT</span>
-            </div>
-            <div class="report-kpi-grid">
-              <article class="report-kpi-card">
-                <span class="data-copy">GROUP REVENUE</span>
-                <strong>€{hermes2025.group.toLocaleString('en-US')}m</strong>
-                <em class="data-copy">FY2025</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">LEATHER GOODS</span>
-                <strong>€{hermes2025.leather.toLocaleString('en-US')}m</strong>
-                <em class="data-copy">+13.1% CC</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">GROUP OP MARGIN</span>
-                <strong>{hermes2025.margin.toFixed(1)}%</strong>
-                <em class="data-copy">RECURRING</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">LEATHER SHARE</span>
-                <strong>{hermes2025.share.toFixed(1)}%</strong>
-                <em class="data-copy">OF GROUP REVENUE</em>
-              </article>
-            </div>
-            <div class="report-dashboard-panel report-dashboard-panel--scale" data-interactive-chart>
-              <div class="report-dashboard-panel__heading">
-                <span class="data-copy">GROUP VS LEATHER GOODS</span>
-                <span class="data-copy">HOVER / CLICK TO INSPECT</span>
-              </div>
-              <div class="report-dashboard-metric">
-                <div class="report-dashboard-metric__label"><strong class="data-copy">GROUP</strong><span class="data-copy">€M</span></div>
-                <div class="report-dashboard-bars">
-                  {hermesDashboardRows.map((row) => (
-                    <button type="button" class="report-dashboard-bar report-dashboard-bar--revenue" data-chart-bar data-series="group-revenue" data-year={row.year} aria-label={`Hermès group revenue ${row.year}: €${row.group.toLocaleString('en-US')} million`} aria-pressed="false" style={`--bar-height:${(row.group / 18000) * 100}%;`}>
-                      <b>€{row.group.toLocaleString('en-US')}</b>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div class="report-dashboard-metric">
-                <div class="report-dashboard-metric__label"><strong class="data-copy">LEATHER GOODS</strong><span class="data-copy">€M</span></div>
-                <div class="report-dashboard-bars">
-                  {hermesDashboardRows.map((row) => (
-                    <button type="button" class="report-dashboard-bar report-dashboard-bar--profit" data-chart-bar data-series="leather-goods" data-year={row.year} aria-label={`Hermès Leather Goods and Saddlery revenue ${row.year}: €${row.leather.toLocaleString('en-US')} million`} aria-pressed="false" style={`--bar-height:${(row.leather / 8000) * 100}%;`}>
-                      <b>€{row.leather.toLocaleString('en-US')}</b>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div class="report-dashboard-years data-copy">{hermesDashboardRows.map((row) => <span>{row.year}</span>)}</div>
-            </div>
-            <div class="report-dashboard-panel report-dashboard-panel--margin" data-interactive-chart>
-              <div class="report-dashboard-panel__heading">
-                <span class="data-copy">MARGIN TRAJECTORY</span>
-                <span class="data-copy">DERIVED GROUP OPERATING MARGIN</span>
-              </div>
-              <div class="report-margin-chart">
-                <div class="report-margin-chart__axis data-copy"><span>45%</span><span>40%</span><span>35%</span><span>30%</span></div>
-                <div class="report-margin-chart__plot">
-                  <div class="report-margin-chart__grid"></div>
-                  <div class="report-margin-chart__points">
-                    {hermesDashboardRows.map((row) => (
-                      <button type="button" class="report-margin-point" data-chart-bar data-series="margin" data-year={row.year} aria-label={`Derived Hermès group operating margin ${row.year}: ${row.margin.toFixed(1)} percent`} aria-pressed="false" style={`--point-position:${((row.margin - hermesMarginMin) / (hermesMarginMax - hermesMarginMin)) * 100}%;`}>
-                        <i></i><b>{row.margin.toFixed(1)}%</b><span class="data-copy">{row.year}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="report-dashboard-panel report-dashboard-panel--heatmap" data-interactive-chart>
-              <div class="report-dashboard-panel__heading">
-                <span class="data-copy">MIX &amp; MOMENTUM</span>
-                <span class="data-copy">LEATHER GOODS SIGNALS</span>
-              </div>
-              <div class="report-growth-heatmap report-growth-heatmap--hermes">
-                <div class="report-growth-heatmap__years data-copy"><span></span>{hermesDashboardRows.map((row) => <span>{row.year}</span>)}</div>
-                <div class="report-growth-heatmap__row">
-                  <strong class="data-copy">CC GROWTH</strong>
-                  {hermesDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="leather-growth" data-year={row.year} data-direction={row.growth < 0 ? 'negative' : 'positive'} aria-label={`Hermès Leather Goods constant-currency growth ${row.year}: ${row.growth}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.growth) / 30, 1)};`}>{row.growth > 0 ? '+' : ''}{row.growth}%</button>)}
-                </div>
-                <div class="report-growth-heatmap__row">
-                  <strong class="data-copy">GROUP SHARE</strong>
-                  {hermesDashboardRows.map((row) => <button type="button" class="report-growth-cell report-growth-cell--share" data-chart-bar data-series="leather-share" data-year={row.year} aria-label={`Hermès Leather Goods share of group revenue ${row.year}: ${row.share}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(row.share / 60, 1)};`}>{row.share}%</button>)}
-                </div>
-              </div>
-            </div>
-          </div>
-          <details class="report-details">
-            <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 5 SIGNALS</span></summary>
-            <div class="report-table-wrap">
-              <table class="report-table--wide">
-                <thead>
-                  <tr><th>FY</th><th>Group Revenue (€m)</th><th>Group Recurring Op Margin</th><th>Leather Goods &amp; Saddlery Revenue (€m)</th><th>Leather Segment Constant-Currency Growth</th><th>Leather Share of Group</th></tr>
-                </thead>
-                <tbody>
-                  {hermesRows.map((row) => (
-                    <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </details>
-          <p>
-            Hermès Leather Goods & Saddlery reached a 2020–2025 revenue index of 220.3 (2020=100), versus 190.6 for Chanel consolidated revenue. These indices do not show that Hermès leather handbags grew faster than Chanel handbags: the entities, segment content, currencies, and category breadth differ. Hermès’ higher and more stable group-margin context supports a resilience comparison, but it is not a like-for-like proxy for Chanel handbag profitability.
-          </p>
-          <h3>LVMH Fashion & Leather Goods: Broad Market Context</h3>
-          <div class="report-data-dashboard" data-report-motion>
-            <div class="report-dashboard__heading">
-              <span class="data-copy">FIG. 04 / LVMH F&amp;LG SNAPSHOT</span>
-              <span class="data-copy">FY2025 / SELECTED SIGNALS</span>
-            </div>
-            <div class="report-kpi-grid">
-              <article class="report-kpi-card">
-                <span class="data-copy">REVENUE</span>
-                <strong>€{lvmh2025.revenue.toLocaleString('en-US')}m</strong>
-                <em class="data-copy">−8% REPORTED</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">ORGANIC GROWTH</span>
-                <strong>−5%</strong>
-                <em class="data-copy">FY2025</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">OPERATING PROFIT</span>
-                <strong>€{lvmh2025.profit.toLocaleString('en-US')}m</strong>
-                <em class="data-copy">RECURRING</em>
-              </article>
-              <article class="report-kpi-card">
-                <span class="data-copy">DERIVED MARGIN</span>
-                <strong>{lvmh2025.margin.toFixed(1)}%</strong>
-                <em class="data-copy">−2.1 PP VS FY2024</em>
-              </article>
-            </div>
-
-            <div class="report-dashboard-panel report-dashboard-panel--scale" data-interactive-chart>
-              <div class="report-dashboard-panel__heading">
-                <span class="data-copy">FIG. 05 / SCALE &amp; PROFIT</span>
-                <span class="data-copy">HOVER / CLICK TO INSPECT</span>
-              </div>
-              <div class="report-dashboard-metric">
-                <div class="report-dashboard-metric__label"><strong class="data-copy">REVENUE</strong><span class="data-copy">€M</span></div>
-                <div class="report-dashboard-bars">
-                  {lvmhDashboardRows.map((row) => (
-                    <button type="button" class="report-dashboard-bar report-dashboard-bar--revenue" data-chart-bar data-series="revenue" data-year={row.year} aria-label={`LVMH F&LG revenue ${row.year}: €${row.revenue.toLocaleString('en-US')} million`} aria-pressed="false" style={`--bar-height:${(row.revenue / 45000) * 100}%;`}>
-                      <b>€{row.revenue.toLocaleString('en-US')}</b>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div class="report-dashboard-metric">
-                <div class="report-dashboard-metric__label"><strong class="data-copy">OPERATING PROFIT</strong><span class="data-copy">€M</span></div>
-                <div class="report-dashboard-bars">
-                  {lvmhDashboardRows.map((row) => (
-                    <button type="button" class="report-dashboard-bar report-dashboard-bar--profit" data-chart-bar data-series="operating-profit" data-year={row.year} aria-label={`LVMH F&LG recurring operating profit ${row.year}: €${row.profit.toLocaleString('en-US')} million`} aria-pressed="false" style={`--bar-height:${(row.profit / 18000) * 100}%;`}>
-                      <b>€{row.profit.toLocaleString('en-US')}</b>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div class="report-dashboard-years data-copy">{lvmhDashboardRows.map((row) => <span>{row.year}</span>)}</div>
-            </div>
-
-            <div class="report-dashboard-panel report-dashboard-panel--margin" data-interactive-chart>
-              <div class="report-dashboard-panel__heading">
-                <span class="data-copy">FIG. 06 / MARGIN TRAJECTORY</span>
-                <span class="data-copy">DERIVED OPERATING MARGIN</span>
-              </div>
-              <div class="report-margin-chart">
-                <div class="report-margin-chart__axis data-copy"><span>45%</span><span>40%</span><span>35%</span><span>30%</span></div>
-                <div class="report-margin-chart__plot">
-                  <div class="report-margin-chart__grid"></div>
-                  <div class="report-margin-chart__points">
-                    {lvmhDashboardRows.map((row) => (
-                      <button type="button" class="report-margin-point" data-chart-bar data-series="margin" data-year={row.year} aria-label={`Derived operating margin ${row.year}: ${row.margin.toFixed(1)} percent`} aria-pressed="false" style={`--point-position:${((row.margin - lvmhMarginMin) / (lvmhMarginMax - lvmhMarginMin)) * 100}%;`}>
-                        <i></i><b>{row.margin.toFixed(1)}%</b><span class="data-copy">{row.year}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="report-dashboard-panel report-dashboard-panel--heatmap" data-interactive-chart>
-              <div class="report-dashboard-panel__heading">
-                <span class="data-copy">FIG. 07 / GROWTH HEATMAP</span>
-                <span class="data-copy">REPORTED VS ORGANIC</span>
-              </div>
-              <div class="report-growth-heatmap">
-                <div class="report-growth-heatmap__years data-copy"><span></span>{lvmhDashboardRows.map((row) => <span>{row.year}</span>)}</div>
-                <div class="report-growth-heatmap__row">
-                  <strong class="data-copy">REPORTED</strong>
-                  {lvmhDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="reported-growth" data-year={row.year} data-direction={row.reported < 0 ? 'negative' : 'positive'} aria-label={`Reported growth ${row.year}: ${row.reported}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.reported) / 50, 1)};`}>{row.reported > 0 ? '+' : ''}{row.reported}%</button>)}
-                </div>
-                <div class="report-growth-heatmap__row">
-                  <strong class="data-copy">ORGANIC</strong>
-                  {lvmhDashboardRows.map((row) => <button type="button" class="report-growth-cell" data-chart-bar data-series="organic-growth" data-year={row.year} data-direction={row.organic < 0 ? 'negative' : 'positive'} aria-label={`Organic growth ${row.year}: ${row.organic}%`} aria-pressed="false" style={`--heat-opacity:${Math.min(Math.abs(row.organic) / 50, 1)};`}>{row.organic > 0 ? '+' : ''}{row.organic}%</button>)}
-                </div>
-              </div>
-            </div>
-          </div>
-          <details class="report-details">
-            <summary><span class="data-copy">SHOW FULL DATA TABLE</span><span class="data-copy">6 YEARS / 5 METRICS</span></summary>
-            <div class="report-table-wrap">
-              <table>
-                <thead>
-                  <tr><th>FY</th><th>F&amp;LG Revenue (€m)</th><th>Reported Growth</th><th>Organic Growth</th><th>Recurring Operating Profit (€m)</th><th>Derived Margin</th></tr>
-                </thead>
-                <tbody>
-                  {lvmhRows.map((row) => (
-                    <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </details>
-          <p>
-            LVMH F&amp;LG slowed in 2024–2025 while Chanel reported a recovery over the same period. Chanel’s path therefore cannot be assigned to one uniform industry cycle. Different company perimeters, currencies, brand mixes, foreign-exchange effects, and accounting presentations also prevent the difference from proving that Chanel’s pricing strategy outperformed LVMH’s.
-          </p>
-          <p>
-            LVMH Fashion &amp; Leather Goods revenue and profit describe a multi-brand business group, not Louis Vuitton revenue, Dior revenue, or the combined revenue of both brands. Louis Vuitton and Dior are used here only for price and official qualitative context.
-          </p>
-          <p class="report-note">Figure 7 indexes each series to 2020=100 within its own currency and reporting level. Nominal size should not be compared across currencies.</p>
-        </section>
-
-        <section id="judgments" class="report-section">
-          <p class="report-section__number data-copy">06 / SIX INSIGHTS</p>
-          <h2>Six Insights</h2>
-          <div class="report-judgments">
-            {judgments.map((judgment, index) => (
-              <article class="report-judgment">
-                <p class="report-judgment__number data-copy">0{index + 1}</p>
-                <h3>{judgment.title}</h3>
-                <p class="report-judgment__lead">{judgment.lead}</p>
-                <p>{judgment.body}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="tensions" class="report-section">
-          <p class="report-section__number data-copy">07 / STRATEGIC TENSIONS</p>
-          <h2>Strategic Tensions</h2>
-          <div class="report-table-wrap">
-            <table class="report-table--wide">
-              <thead>
-                <tr><th>Tension</th><th>Evidence-Supported Observation</th><th>What Remains Unproven / Required Data</th></tr>
-              </thead>
-              <tbody>
-                {tensions.map((row) => (
-                  <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p class="report-note">Figure 8 frames the strategic questions; it is not an unverified resilience score.</p>
-        </section>
-
-        <section id="implications" class="report-section">
-          <p class="report-section__number data-copy">08 / IMPLICATIONS</p>
-          <h2>Implications</h2>
-          <ol class="report-implications">
-            {implications.map((implication) => <li>{implication}</li>)}
-          </ol>
-        </section>
-
-        <section id="boundaries" class="report-section">
-          <p class="report-section__number data-copy">09 / EVIDENCE BOUNDARIES</p>
-          <h2>Evidence Boundaries</h2>
+        <section id="conclusion" class="report-section">
+          <p class="report-section__number data-copy">06 / THE ANSWER &amp; ITS LIMITS</p>
+          <h2>What this case establishes</h2>
+          <p class="report-claim">Chanel experienced the slowdown, then made a partial and uneven recovery in FY2025. Europe and the Americas added reported revenue; both channels improved. Operating profit and free cash flow remained much further below FY2023 than revenue.</p>
+          <p>The evidence broadens the explanation beyond handbags. Beauty has substantial scale, and the company reports renewal and growth across its main businesses. CHANEL 25 accounts show how everyday use can enter an individual choice; product communication, stores and service provide possible routes to purchase and ownership. The price study adds a record of positioning and selected repricing.</p>
+          <p>Public evidence supports those operating changes and activities. It cannot yet rank their contribution to recovery. The remaining gaps are category growth, price–volume–mix, campaign incrementality and service outcomes.</p>
           <div class="report-boundaries">
             <div>
-              <h3>Supported by This Analysis</h3>
-              <ul class="report-bullets">{canJudge.map((item) => <li>{item}</li>)}</ul>
+              <h3>Supported by public evidence</h3>
+              <ul class="report-bullets">
+                <li>Observed list-price endpoints in France and the United States, plus selected aligned French price histories.</li>
+                <li>Chanel consolidated FY2023–FY2025 revenue and operating profit from filed accounts, with company-disclosed free cash flow.</li>
+                <li>Disclosed regional and channel bridges and an arithmetic reconciliation of the consolidated operating-profit gap.</li>
+                <li>Different FY2024–FY2025 disclosed growth paths across Chanel, LVMH Fashion &amp; Leather Goods, Gucci, and Hermès, with their distinct definitions and reporting scopes.</li>
+              </ul>
             </div>
             <div>
-              <h3>Not Supported by This Analysis</h3>
-              <ul class="report-bullets">{cannotJudge.map((item) => <li>{item}</li>)}</ul>
+              <h3>Not established by this case</h3>
+              <ul class="report-bullets">
+                <li>Handbag-only revenue, units, margin, SKU profitability, or contribution to Chanel’s recovery.</li>
+                <li>Customer conversion, willingness to pay, realized prices, volume and mix, migration, or brand substitution.</li>
+                <li>Shopper nationality from regional revenue, or category sales from retail and wholesale channels.</li>
+                <li>Whether price changes, marketing activity, or specific investments caused revenue, profit, cash flow, or desirability outcomes.</li>
+              </ul>
             </div>
           </div>
-          <p class="report-boundary">
-            These gaps are recorded as not publicly disclosed or not estimable from the available evidence. No proxy is presented as a measured outcome.
-          </p>
+
+        </section>
+
+        <section id="appendix" class="report-section">
+          <p class="report-section__number data-copy">07 / EVIDENCE APPENDIX</p>
+          <h2>The longer record and the method behind the comparisons</h2>
+          <p>The main argument uses the slowdown baseline. The background series below preserve the earlier financial work, cash generation, investment intensity and peer context.</p>
+          <details class="report-details">
+            <summary><span class="data-copy">PEER REPORTED REVENUE INDICES</span><span class="data-copy">FY2023 = 100</span></summary>
+          <h3>The same baseline puts the peer paths in view</h3>
+          <div class="report-table-wrap"><table>
+            <thead><tr><th>Entity / reporting scope / currency</th><th>FY2023</th><th>FY2024 index</th><th>FY2025 index</th></tr></thead>
+            <tbody>{peerRevenue.map((peer) => <tr><th scope="row">{peer.entity}</th><td>100.0</td>{peer.values.slice(1).map((value) => <td>{(value / peer.values[0] * 100).toFixed(1)}</td>)}</tr>)}</tbody>
+          </table></div>
+          <p class="report-note">Indices use reported revenue in each entity’s own currency, including FX effects. The growth rates above retain comparable, organic or constant-currency definitions. Group, business-group and brand scopes remain distinct. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/resilience_panel.csv" target="_blank" rel="noreferrer">Peer inputs ↗</a></p>
+          </details>
+          <LuxuryFinancialAppendix />
+          <details class="report-details">
+            <summary><span class="data-copy">PRICE HISTORY AND EXPLORATORY TOTE CELLS</span><span class="data-copy">METHOD NOTES</span></summary>
+            <p>The historical panel has 77 accepted observations, 76 numeric prices and 13 lineages: seven continuous same-model lines and six successors. The square Mini rose about 44.8% in the longer 2020–2026 window. The main Classic–Mini comparison uses the aligned 2022–2026 window to keep starting points consistent.</p>
+            <div class="report-table-wrap"><table>
+              <thead><tr><th>Exploratory France cell</th><th>Chanel median</th><th>Hermès median</th><th>Dior median</th><th>Louis Vuitton median</th></tr></thead>
+              <tbody><tr><th>Tote / large / leather</th><td>€6,200</td><td>€6,475</td><td>€3,350</td><td>—</td></tr><tr><th>Tote / standard / leather</th><td>€5,700</td><td>—</td><td>€3,400</td><td>€2,900</td></tr></tbody>
+            </table></div>
+            <p class="report-note">These earlier descriptive cells include brand cells with only one or two observations. They did not clear the strict R1 publication threshold and are retained solely as exploratory method history. They support no like-for-like price advantage or substitution claim. A dash marks no value reproduced here. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_r1/report/FINAL_STATUS_CN.md" target="_blank" rel="noreferrer">R1 threshold review ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Original price study ↗</a></p>
+          </details>
         </section>
 
         <section id="sources" class="report-section report-section--sources">
-          <p class="report-section__number data-copy">10 / SOURCES &amp; REPRODUCIBILITY</p>
-          <h2>Sources and Reproducibility</h2>
+          <p class="report-section__number data-copy">08 / SOURCES &amp; REPRODUCIBILITY</p>
+          <h2>Sources and reproducibility</h2>
           <p>
-            This page contains the full analysis. The links below provide the underlying project, method, validation, and source panels so readers can review definitions and calculation boundaries.
+            The links below lead to the underlying project, price evidence, slowdown diagnostics, calculation inputs, methodology, and company disclosures. Peer metrics retain the definitions used in the source reports.
           </p>
           <div class="report-sources">
             <div>
-              <h3>Project Materials</h3>
+              <h3>Project and price evidence</h3>
               <a href={LUXURY_FLAGSHIP_SOURCES.readme} target="_blank" rel="noreferrer">Project repository ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.websiteHandoff} target="_blank" rel="noreferrer">Website handoff ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Price-architecture study ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">Current France / U.S. price panel ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.methodology} target="_blank" rel="noreferrer">Methodology ↗</a>
+              <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/website_handoff/content.json" target="_blank" rel="noreferrer">Integrated claim and evidence map ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.financialPanel} target="_blank" rel="noreferrer">Longer financial panel and calculations ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.validation} target="_blank" rel="noreferrer">Validation ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">Current Price Panel ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.financialPanel} target="_blank" rel="noreferrer">Financial Panel ↗</a>
             </div>
             <div>
-              <h3>Official Financial Sources</h3>
-              <a href="https://www.chanel.com/es/financial-results/" target="_blank" rel="noreferrer">Chanel Financial Results ↗</a>
-              <a href="https://assets-finance.hermes.com/s3fs-public/node/pdf_file/2026-02/1770842737-hermes-2025-full-year-results-en.pdf" target="_blank" rel="noreferrer">Hermès 2025 full-year results ↗</a>
-              <a href="https://www.lvmh.com/en/publications/solid-performance-in-a-disrupted-global-economic-environment/" target="_blank" rel="noreferrer">LVMH 2025 annual results ↗</a>
+              <h3>Slowdown analyses and data</h3>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownPeerReview} target="_blank" rel="noreferrer">Peer comparison ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownRegionReview} target="_blank" rel="noreferrer">Regional revenue bridge ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownChannelReview} target="_blank" rel="noreferrer">Channel and product timing ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownProfitReview} target="_blank" rel="noreferrer">Operating-profit reconciliation ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownCustomerReview} target="_blank" rel="noreferrer">Customer and beauty evidence ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownFinancialInputs} target="_blank" rel="noreferrer">Filed-account inputs ↗</a>
+            </div>
+            <div>
+              <h3>Industry and company disclosures</h3>
+              <a href={LUXURY_FLAGSHIP_SOURCES.industryUpdate} target="_blank" rel="noreferrer">Bain FY2025 market estimate, spring 2026 revision ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.industryPrevious} target="_blank" rel="noreferrer">Bain year-end 2025 estimate ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.chanel2023} target="_blank" rel="noreferrer">Chanel FY2023 release ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.chanel2024} target="_blank" rel="noreferrer">Chanel FY2024 release ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.chanel2025} target="_blank" rel="noreferrer">Chanel FY2025 release ↗</a>
+              <a href="https://www.chanel.com/es/financial-results/" target="_blank" rel="noreferrer">Chanel financial results ↗</a>
+              <a href="https://assets-finance.hermes.com/s3fs-public/node/pdf_file/2026-02/1770842738/hermes_20260212_pr_2025fullyearresults_va.pdf" target="_blank" rel="noreferrer">Hermès 2025 full-year results ↗</a>
+              <a href="https://www.lvmh.com/en/publications/solid-performance-in-a-disrupted-global-economic-and-geopolitical-environment" target="_blank" rel="noreferrer">LVMH 2025 annual results ↗</a>
             </div>
           </div>
           <p class="report-final">
-            The evidence supports a clear view of the price ladder, historical repricing, business performance, and competitive reporting levels. The next evidence gate is customer and transaction data: without it, demand, migration, and price return remain unmeasured.
+            The case begins with a difference in brand performance and ends with a more precise question: which changes in products, customers and channels produced the recovery visible in the accounts?
           </p>
         </section>
       </article>
     </div>
 
     <footer class="report-footer">
-      <span class="data-copy">GABRIEL CHEN / CHANEL PREMIUMIZATION STRATEGY</span>
-      <span class="data-copy">UPDATED 2026-08-15</span>
+      <span class="data-copy">GABRIEL CHEN / CHANEL THROUGH THE LUXURY SLOWDOWN</span>
+      <span class="data-copy">UPDATED 2026-10-04 / PRICE SNAPSHOT 2026-08-15</span>
     </footer>
-</main>
+  </main>
 </BaseLayout>
 
 <script>
@@ -848,18 +529,15 @@ const businessChart = [
     if (!progress) return;
     const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
     const amount = scrollRange > 0 ? window.scrollY / scrollRange : 0;
-    progress.style.transform = `scaleX(${amount})`;
+    progress.style.transform = 'scaleX(' + amount + ')';
   };
 
   window.addEventListener('scroll', updateProgress, { passive: true });
   window.addEventListener('resize', updateProgress, { passive: true });
   updateProgress();
 
-  const interactiveCharts = document.querySelectorAll<HTMLElement>('[data-interactive-chart]');
-
-  interactiveCharts.forEach((chart) => {
+  document.querySelectorAll<HTMLElement>('[data-interactive-chart]').forEach((chart) => {
     const bars = [...chart.querySelectorAll<HTMLButtonElement>('[data-chart-bar]')];
-
     const clearSelection = () => {
       chart.removeAttribute('data-has-selection');
       bars.forEach((bar) => {
@@ -893,7 +571,7 @@ const businessChart = [
           if (!entry.isIntersecting) return;
           const activeId = entry.target.id;
           links.forEach((link) => {
-            const isActive = link.getAttribute('href') === `#${activeId}`;
+            const isActive = link.getAttribute('href') === '#' + activeId;
             link.dataset.active = String(isActive);
             if (isActive) link.setAttribute('aria-current', 'location');
             else link.removeAttribute('aria-current');

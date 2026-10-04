@@ -1,0 +1,52 @@
+# Chanel 主页对齐与官网发布
+
+用户认可 `0eded1c3` 案例 Preview，并要求保留该页，调整主页对应描述后发布。沿用已选 Native；本次是已认可论证的主页摘要对齐，不重新设计完整案例。
+
+## 执行范围
+
+- [x] 保留真实 Bocconi/Milan 开篇、passing conversation 项目缘起及标题。
+- [x] 将后续叙述改为经营恢复 → 地区/渠道与业务范围 → 产品/价格/体验的有限解释。
+- [x] 首页首个数据块使用 FY2023–FY2025 窗口；显示两年的可比收入增长及 FY2025 收入/利润/FCF 相对 FY2023 的恢复程度，采用案例已有数据。
+- [x] 首页移除先行价格/历史图，其完整证据仍在已认可案例页；组件文件保留。
+- [x] humanize-ai 与 writing-analyst-prose 审阅。
+- [x] 类型、构建、桌面/窄屏及详情入口核对；不添加或运行自动化测试。
+- [x] 可审阅提交、最终独立审阅及 PR 更新。
+- [x] 发布同一构建至官网，核对实际主页与案例页。
+
+## 决定与边界
+
+最新用户要求替代 2026-09-17 主页设计中价格先行的叙事顺序。保留其真实项目缘起、自然滚动、低干扰动效与首页/完整研究两层结构。2026-10-04 用户已认可案例，生产发布授权在本次主页对齐后生效。
+
+继续复用 `codex/chanel-slowdown-case-study` 和 PR #4；文件职责限于 home.ts、ChanelChapter、ChanelBusinessSignal 与对应样式。案例页不得改动。官网上线前提交与审阅；所有增长口径、集团范围、未识别策略贡献保持明确。
+
+## 语言审阅与核对
+
+writing-analyst-prose：以部分恢复为主张，使用相同财务窗口和三个恢复比例；地区、渠道定位恢复，业务范围引出候选解释。可比增长与报告美元基期比例分开标注。CHANEL 25 用途归于选定公开自述；策略贡献与营销因果没有升级为已测量结论。
+
+humanize-ai：按个人项目介绍处理，保护 Bocconi/Milan 与 passing conversation 真实缘起。删去旧的“visible explanations → pricing complete → something missing”转折，保留自然第一人称和具体发现，没有新增经历或情绪。商业规范措辞不因去 AI 味而被口语化或夸大。
+
+初次渲染发现原 .chanel-business-signal 桌面 grid-column 被嵌套继承，导致隐式列。已为 .chanel-chapter__visible 的直接子块显式限定同一列，按实际 computed styles 确认：标题、段落和数据块均为 1 / -1。
+
+- `npm run check`：59 files，0 errors / warnings / hints。
+- `npm run build`：7 routes 成功；已有 phases 空目录警告。
+- 桌面：三个新标题顺序正确；当前价格与价格历史图不再出现在首页；FY2023–FY2025 数据块明确标注可比增长及报告美元基期。
+- 390×844：页面宽与 viewport 均 390；恢复比例显示单列，文字与数字可读。
+- Results and sources 入口实际跳到已认可案例 #performance，标题和经营图保持一致。
+- 案例 Astro、案例元数据、价格与财务证据输入均无本轮改动。
+
+## 最终审阅
+
+独立审阅覆盖 c443cab..aa3d1a0：无 Critical / Important；数据口径、比例、移动布局、入口与案例保护符合范围。发现一处 Minor：新增 basis 样式意外切断原开篇/转折/结尾的 max-width 选择器组。该问题影响需保留的开篇呈现，发布前已修正并重新构建；实际桌面 computed styles 确认四个正文区恢复 768px max-width 和正常正文色，页面无横向溢出。
+
+aa3d1a0 已提交并推送。首次候选 d774fb86 因上述样式修正弃用，不提升至生产。接下来上传修正版并发布该同一版本。
+
+
+## 发布结果
+
+- 修正提交：`1ac1a00`；此前主页实现提交：`aa3d1a0`，均在 PR #4 可审阅。
+- 最终版本：`7e1bfb3d-eaef-46c4-89bc-59456899fe71`，由 `1ac1a00` 构建；候选主页实际核对开篇宽度、三段标题与三个财务比例正确。
+- `wrangler versions deploy ...@100% --yes` 返回 SUCCESS；官网已使用该版本 100% 流量。
+- 实际 `https://gabrielchen.me/#work` 展示新叙述与正确比例；Results and sources 实际导航到官网案例 `#performance`。
+- 官网详情标题为 How Chanel Navigated the Luxury Slowdown；八节顺序、FY2023–FY2025 三指标图和来源/附录存在，与认可版本一致。
+- 截图：`/private/tmp/chanel-home-production.png`。
+- PR 说明已记录最新认可和发布授权。远端 main 的额外三个提交仅为其他研究的 docs，合并时保留。
