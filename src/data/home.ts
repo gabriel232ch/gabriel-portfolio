@@ -37,9 +37,9 @@ export const HOME_STATE = {
       missingBody:
         'By then, the pricing work was largely complete. I could see how Chanel was positioning itself. I still couldn’t tell whether that positioning was actually supported by the business.',
       current:
-        'The slowdown figures changed my view. Chanel also declined in 2024. Revenue began to recover in 2025, while operating profit stayed well below its 2023 level. I now read its higher price ladder alongside product renewal, beauty, stores and continued investment. The business question became broader than pricing.',
+        'The figures changed the question. Chanel also declined in 2024. In 2025, revenue partly recovered through Europe and the Americas, while profit and cash flow remained further behind. I needed to understand the businesses and products behind those sales before treating pricing or marketing as an explanation.',
       unresolved:
-        'I can trace where group revenue returned and where the profit gap remains. I still cannot tell how much handbag demand or any individual investment contributed.',
+        'I can trace where group revenue returned and identify possible links to products and the purchase experience. The public evidence still cannot tell me how much each contributed.',
       status: 'A partial recovery, with more of the business in view.',
       cta: 'Explore the research →',
       href: '/work/luxury-handbag-pricing-architecture/',

@@ -88,6 +88,11 @@ export const LUXURY_FLAGSHIP = {
 } as const;
 
 export const LUXURY_FLAGSHIP_SOURCES = {
+  industryUpdate: 'https://www.bain.cn/news_info.php?id=2150',
+  industryPrevious: 'https://www.bain.com.cn/news_info.php?id=2073',
+  chanel2023: 'https://www.chanel.com/puls-img/1716301904618-pressrelease2023resultsengfinalpdf.pdf',
+  chanel2024: 'https://www.chanel.com/puls-img/1747810519727-20250520fy24resultspressreleasefinalwwpdf.pdf',
+  chanel2025: 'https://www.chanel.com/puls-img/1779118002743-fy25-results-press-release-en-final.pdf',
   readme: 'https://github.com/gabriel232ch/luxury-handbag-price-architecture',
   websiteHandoff:
     'https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/website_handoff/README.md',
@@ -117,9 +122,9 @@ export const LUXURY_FLAGSHIP_SOURCES = {
 
 /** Exact consolidated Chanel values used for the FY2023–FY2025 slowdown test. */
 export const LUXURY_SLOWDOWN_CHANEL = [
-  { year: 'FY2023', revenue: 19743.9, operatingProfit: 6407.0 },
-  { year: 'FY2024', revenue: 18699.3, operatingProfit: 4478.6 },
-  { year: 'FY2025', revenue: 19269.1, operatingProfit: 4711.5 },
+  { year: 'FY2023', revenue: 19743.9, operatingProfit: 6407.0, freeCashFlow: 3755 },
+  { year: 'FY2024', revenue: 18699.3, operatingProfit: 4478.6, freeCashFlow: 1842 },
+  { year: 'FY2025', revenue: 19269.1, operatingProfit: 4711.5, freeCashFlow: 2646 },
 ] as const;
 
 /** Disclosed comparison rates; the basis differs by company and is shown in the page. */

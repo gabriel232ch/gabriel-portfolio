@@ -38,7 +38,7 @@ L’Oréal 年报引用 WWD，将 Chanel FY2024 美妆销售估为 $8.54bn，约
 
 产品分析先核对销售时点。CHANEL 25 的 2025 产品与传播窗口相容于 FY2025；March 的完整广告阶段不能等同于所有市场的首次销售。Blazy 首秀在 October 2025，首批系列到店在 March 2026，其商品销售应归入 FY2026；可能的提前品牌效应没有量化。[时点登记](https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/product_timing_ledger.csv)。
 
-已有 CHANEL 25 公开自述涉及日常容量、尺寸选择、首次购买及既有客户添购，说明产品用途可以影响个人选择。退换、未选购和品牌内部替代案例应与正向自述一起呈现。首次买 Chanel、购买另一只 Chanel，以及增加全年品牌预算，是不同结果。材料来自有目的选择的匿名公开账号，没有交易核验或代表性抽样，只适合识别可能的选择机制。[客户自述、反例与原始链接](https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/reports/CUSTOMER_BEAUTY_REVIEW_CN.md)。英文正文采用前，仍需把每个选用案例的日期、原始链接和陈述范围登记到同一张表。
+已有 CHANEL 25 公开自述涉及日常容量、尺寸选择、首次购买及既有客户添购，说明产品用途可以影响个人选择。退换、未选购和品牌内部替代案例应与正向自述一起呈现。首次买 Chanel、购买另一只 Chanel，以及增加全年品牌预算，是不同结果。材料来自有目的选择的匿名公开账号，没有交易核验或代表性抽样，只适合识别可能的选择机制。[客户自述、反例与原始链接](https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/reports/CUSTOMER_BEAUTY_REVIEW_CN.md)。选用案例的日期、原始链接和陈述范围已登记在[机制证据表](2026-10-04-selected-mechanism-evidence.md)；精确评论日期和购买日未知的记录不计作当年交易。
 
 在这一层，价格研究才进入。现有法国、美国观察显示选定手袋的价格层级，法国历史面板显示选定线的价格上移。这支持产品组合和价格定位的描述。当前快照与历史面板有各自时间窗口，后期报价不能倒推 FY2025 交易价格。观察数不能解释为市场份额，早期探索性小样本不能升级为严格同款替代证据。[价格研究](https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/FINAL_LUXURY_HANDBAG_PRICING_STRATEGY_CN.md)；[价格带输入](https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/competitive_pricing_calculations/price_band_summary.csv)；[R1 门槛复核](https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_r1/report/FINAL_STATUS_CN.md)。
 

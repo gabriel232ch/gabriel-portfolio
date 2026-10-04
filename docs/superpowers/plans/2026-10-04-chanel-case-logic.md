@@ -50,31 +50,31 @@
 **Interfaces:** 消费 approved spec、现有公共证据审计及 GitHub 原稿；产出六节中文论证和选用机制表。机制表列为：`案例 / 财年或日期 / 来源类型 / 原始链接 / 可确认事实 / 解释用途 / 反例或测量缺口`。
 
 - [x] 写出 `2026-10-04-integrated-case-cn.md` 六节初稿；结论区分经营发现和未测量贡献。
-- [ ] 从 `CUSTOMER_BEAUTY_REVIEW_CN.md` 追溯正文选用的用途、购买与退换反例，将原始链接和日期记入机制表；无法追溯的具体陈述不进入正文。
-- [ ] 将三年官方业务/服务表与同窗口产品记录关联到机制表；后期材料明确排除 FY2025 销售归因。
-- [ ] 按 Review Focus 前四项逐条核对中文稿，修正缺失来源和措辞；不存在公开贡献数字的地方保留未测量。
-- [ ] 提交研究文档，提交信息 `docs: consolidate Chanel slowdown evidence and explanation`。
+- [x] 从 `CUSTOMER_BEAUTY_REVIEW_CN.md` 追溯正文选用的用途、购买与退换反例，将原始链接和日期记入机制表；无法追溯的具体陈述不进入正文。
+- [x] 将三年官方业务/服务表与同窗口产品记录关联到机制表；后期材料明确排除 FY2025 销售归因。
+- [x] 按 Review Focus 前四项逐条核对中文稿，修正缺失来源和措辞；不存在公开贡献数字的地方保留未测量。
+- [x] 提交研究文档，提交信息 `docs: consolidate Chanel slowdown evidence and explanation`。
 
 ### Task 2: 按六个节点重写英文页面
 
 **Interfaces:** 消费 Task 1 两份研究稿以及现有 `LUXURY_SLOWDOWN_CHANEL`、地区/渠道和价格数组。产出同一路由的正文；目录锚点固定为 `context`、`performance`、`recovery`、`products-pricing`、`experience`、`conclusion`，随后 `appendix`、`sources`。
 
-- [ ] 将 Hero 与第一节改为行业疑问；同行增长简表放在背景，报告收入同行指数移入可展开背景资料。
-- [ ] 在 `luxury.ts` 的三条 Chanel 年度记录补充 `freeCashFlow: number`：3755、1842、2646（USDm）；经营表现主表显示收入、经营利润、FCF，保留精度与基期说明。
-- [ ] 将地区/渠道桥与利润桥组织在诊断段，补充三大业务的连续评论；说明每个拆分的用途，后接产品问题。
-- [ ] 将现有价格端点、法国历史、价格带研究移至 `products-pricing`，与 CHANEL 25 时点和经登记的用途/反例连接；每图保留原窗口、样本与来源。
-- [ ] 从 Task 1 机制表写 `experience`；使用行动、管理层评价、公开自述的各自证据级别，明确 FY2024 活动与下滑并存。
-- [ ] 写 `conclusion`，先回答恢复程度和位置，再概括有限机制及贡献缺口；附录复用原组件，新增来源常量直接链接 Bain 与三年公司发布稿。
-- [ ] 同步目录/脚本所用锚点；逐个定位既有图表、表格与来源，记录新位置，防止再次丢失证据。
+- [x] 将 Hero 与第一节改为行业疑问；同行增长简表放在背景，报告收入同行指数移入可展开背景资料。
+- [x] 在 `luxury.ts` 的三条 Chanel 年度记录补充 `freeCashFlow: number`：3755、1842、2646（USDm）；经营表现主表显示收入、经营利润、FCF，保留精度与基期说明。
+- [x] 将地区/渠道桥与利润桥组织在诊断段，补充三大业务的连续评论；说明每个拆分的用途，后接产品问题。
+- [x] 将现有价格端点、法国历史、价格带研究移至 `products-pricing`，与 CHANEL 25 时点和经登记的用途/反例连接；每图保留原窗口、样本与来源。
+- [x] 从 Task 1 机制表写 `experience`；使用行动、管理层评价、公开自述的各自证据级别，明确 FY2024 活动与下滑并存。
+- [x] 写 `conclusion`，先回答恢复程度和位置，再概括有限机制及贡献缺口；附录复用原组件，新增来源常量直接链接 Bain 与三年公司发布稿。
+- [x] 同步目录/脚本所用锚点；逐个定位既有图表、表格与来源，记录新位置，防止再次丢失证据。
 
 ### Task 3: 对齐摘要与完成语言审阅
 
 **Interfaces:** 消费 Task 2 正文；产出同一研究问题的 Hero、SEO、work 元数据及首页摘要，不新增个人经历。
 
-- [ ] 统一详情页/项目元数据题为 `How Chanel Navigated the Luxury Slowdown`；首页保留既有真实个人开篇，摘要转向部分恢复及解释范围。
-- [ ] 使用 writing-analyst-prose 审阅各段的主张、证据和含义，检查归因词与来源等级；具体修改写入 progress 文档。
-- [ ] 使用 humanize-ai 审阅重复转折、机械边界标签和空泛结语；保留必要的局部限定，用具体事实接续下一问。
-- [ ] 对照中文论证核对英文六节、主表数值、日期和所有选用案例；记录 Review Focus 前四项的人工核对结果。
+- [x] 统一详情页/项目元数据题为 `How Chanel Navigated the Luxury Slowdown`；首页保留既有真实个人开篇，摘要转向部分恢复及解释范围。
+- [x] 使用 writing-analyst-prose 审阅各段的主张、证据和含义，检查归因词与来源等级；具体修改写入 progress 文档。
+- [x] 使用 humanize-ai 审阅重复转折、机械边界标签和空泛结语；保留必要的局部限定，用具体事实接续下一问。
+- [x] 对照中文论证核对英文六节、主表数值、日期和所有选用案例；记录 Review Focus 前四项的人工核对结果。
 
 ### Task 4: 提交可审阅变更并发布 Preview
 
@@ -92,4 +92,4 @@
 
 ## Execution Handoff
 
-推荐 Native：四项任务沿同一论证连续推进，复用现有页面和数据，适合在本会话由主代理实施。用户需按 Superpowers 审阅此计划并选择 Native 或 Subagent-driven，随后调用对应执行 skill。当前已完成中文初稿，产品代码与 Preview 未变更。
+推荐 Native：四项任务沿同一论证连续推进，复用现有页面和数据，适合在本会话由主代理实施。用户已审阅并明确选择 Native，授权直接完成与发布 Preview。当前按 executing-plans 连续实施，部署结果见 progress 记录。
