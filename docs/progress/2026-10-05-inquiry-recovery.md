@@ -1,6 +1,6 @@
 # Recover the approved Smaller Companies inquiry
 
-Date: 2026-10-05 (Asia/Shanghai). Status: combined recovery validated; preview publication pending; production awaiting visual approval.
+Date: 2026-10-05 (Asia/Shanghai). Status: combined recovery validated and preview published; production awaiting visual approval.
 
 ## Root cause
 
@@ -37,3 +37,11 @@ Final `npm run verify` against the built local preview passed: Astro 0 errors/wa
 ## Publication
 
 Only a new Cloudflare preview is authorized by the current recovery request. Review the combined preview before merging into main and promoting that reviewed version to production. Future production releases must include both approved projects in main so branch-only deployments cannot lose previously approved work.
+
+## Combined review preview
+
+- Preview: https://37b1b34e-gabriel-portfolio.gabrielchen.workers.dev
+- Inquiry: https://37b1b34e-gabriel-portfolio.gabrielchen.workers.dev/work/why-some-people-choose-smaller-companies/
+- Cloudflare version: `37b1b34e-4b8e-4510-ad38-499f6feed42e`.
+- Uploaded source commit: `550792e6d5c1d433b23858a3e95821828c878f5d`. Subsequent commits only record publication details; product source is identical.
+- Command: `npm run deploy:preview -- --message 'Recover approved inquiry at 550792e alongside current Chanel main'`; successful. No production deployment or main merge was run.
