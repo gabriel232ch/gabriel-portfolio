@@ -1,0 +1,12 @@
+---
+import { SMALLER_COMPANIES_INQUIRY as inquiry } from '../../data/smaller-companies-inquiry';
+const nodes=[{id:'geo',label:'Visibility',question:'Can people find accurate information?'},{id:'reality',label:'Reality',question:'What makes the company worth choosing?'},{id:'decision-support',label:'Decision support',question:'What helps someone judge fit?'}].map(n=>({...n,chapter:inquiry.chapters.find(c=>c.id===n.id)!}));
+---
+<figure class="question-map question-map--progressive">
+  <figcaption class="data-copy">THREE TURNS IN THE INQUIRY</figcaption>
+  <ol>{nodes.map((node,i)=><li data-home-motion style={`--turn-index:${i}`}>
+    <details name="home-inquiry-turn"><summary><span class="question-map__index">{String(i+1).padStart(2,'0')}</span><span class="question-map__label">{node.label}</span><span class="question-map__question">{node.question}</span><span class="question-map__arrow" aria-hidden="true">+</span></summary>
+    <div class="question-map__evidence"><p>{node.chapter.evidenceOrProblem}</p><a href={`/work/why-some-people-choose-smaller-companies/#${node.id}`}>Follow this question ↗</a></div></details>
+  </li>)}</ol>
+  <p class="visual-note">Selected turns in an evolving inquiry. <a href="/work/why-some-people-choose-smaller-companies/">Explore every stage ↗</a></p>
+</figure>

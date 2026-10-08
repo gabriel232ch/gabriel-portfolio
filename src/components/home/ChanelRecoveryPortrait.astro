@@ -1,0 +1,114 @@
+---
+import { LUXURY_SLOWDOWN_CHANEL as rows } from '../../data/luxury';
+const measures=[{key:'revenue',label:'Revenue',color:'primary'},{key:'operatingProfit',label:'Operating profit',color:'secondary'},{key:'freeCashFlow',label:'Free cash flow',color:'tertiary'}] as const;
+const x=(i:number)=>48+i*208;
+const y=(value:number)=>246-value*1.8;
+const series=measures.map(m=>({...m,values:rows.map(r=>r[m.key]/rows[0][m.key]*100),actual:rows.map(r=>r[m.key])}));
+const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:'2024',label:'Decline',title:'All three measures fell.'},{year:'2025',label:'Return',title:'A partial recovery.'}];
+---
+<figure class="recovery-portrait chanel-experience" data-recovery-portrait data-home-motion data-year="2" data-active-measure="all">
+  <figcaption class="data-copy">CHANEL / THE RECOVERY GAP <span>FY2023 = 100</span></figcaption>
+  <div class="chanel-experience__moment">
+    <div><p class="chanel-experience__phase" data-portrait-phase>2025 / RETURN</p><h3 data-portrait-title>A partial recovery.</h3></div>
+    <div class="chanel-experience__reading"><span class="chanel-experience__number"><b data-portrait-index>97.6</b><i>%</i></span><span data-portrait-measure>Revenue / FY2023 baseline</span><small data-portrait-actual>$19,269.1m · FY2025</small></div>
+  </div>
+  <p class="chanel-experience__insight" data-portrait-explanation aria-live="polite">Revenue nearly returned to its earlier level. Profit and cash flow remained further behind.</p>
+  <div class="chanel-experience__plot">
+    <svg viewBox="0 0 540 285" role="img" aria-labelledby="recovery-portrait-title recovery-portrait-desc" data-portrait-canvas>
+      <title id="recovery-portrait-title">Revenue recovered further than profit or cash flow</title>
+      <desc id="recovery-portrait-desc">Reported USD indices, FY2023 = 100. Three annual observations for revenue, operating profit and free cash flow. In FY2025 the indices were 97.6, 73.5 and 70.5. Select a year or measure to inspect its exact value. Connecting lines do not represent observations between years.</desc>
+      <defs><clipPath id="portrait-time-clip"><rect x="0" y="0" width="540" height="285" class="chanel-experience__mask" data-portrait-mask /></clipPath></defs>
+      {[0,50,100].map(v=><g class="recovery-portrait__grid"><line x1="48" x2="464" y1={y(v)} y2={y(v)} /><text x="34" y={y(v)+4} text-anchor="end">{v}</text></g>)}
+      <line class="chanel-experience__cursor" x1={x(2)} x2={x(2)} y1="42" y2="246" data-portrait-guide />
+      {series.map((s,i)=><g class="recovery-portrait__series" data-portrait-series={i} style={`--series-color:var(--chart-${s.color})`}>
+        <g clip-path="url(#portrait-time-clip)">
+          <path class="chanel-experience__line" d={s.values.map((v,j)=>`${j?'L':'M'}${x(j)},${y(v)}`).join(' ')} />
+          {s.values.map((v,j)=><circle class="chanel-experience__dot" cx={x(j)} cy={y(v)} r="3" />)}
+        </g>
+        <circle class="chanel-experience__focus" cx={x(2)} cy={y(s.values[2])} r="6" data-portrait-focus={i} />
+        <text class="recovery-portrait__value" x="480" y={y(s.values[2])+(i===1?-8:i===2?13:5)} data-portrait-end={i}>{s.values[2].toFixed(1)}</text>
+        <path class="chanel-experience__line-hit" d={s.values.map((v,j)=>`${j?'L':'M'}${x(j)},${y(v)}`).join(' ')} data-portrait-line-hit={i} clip-path="url(#portrait-time-clip)" aria-hidden="true" />
+      </g>)}
+    </svg>
+  </div>
+  <div class="chanel-experience__timeline" aria-label="Explore a year">
+    {stages.map((stage,i)=><button type="button" data-portrait-year={i} aria-label={`${stage.year} ${stage.label}`} aria-pressed={i===2}><span>{stage.year}</span><small>{stage.label}</small></button>)}
+    <input class="chanel-experience__scrubber" type="range" min="0" max="2" value="2" step="1" aria-label="Chanel observation year" aria-valuetext="FY2025 · Return" data-portrait-range />
+  </div>
+  <div class="recovery-portrait__legend" aria-label="Select a measure">
+    {series.map((s,i)=><button type="button" data-portrait-select={i} aria-pressed="false" style={`--series-color:var(--chart-${s.color})`}><i aria-hidden="true"></i>{s.label}</button>)}
+  </div>
+  <div class="chanel-experience__footer"><button class="visual-replay" type="button" data-portrait-replay>Play the recovery ↺</button><a href="/work/luxury-handbag-pricing-architecture/#performance">Values & sources ↗</a></div>
+  <p class="visual-note">Reported USD · Chanel group · Three annual observations.</p>
+  <script is:inline type="application/json" data-portrait-values set:html={JSON.stringify(series)} />
+</figure>
+<script>
+  const stageTitles=['Before the slowdown.','All three measures fell.','A partial recovery.'];
+  const stageLabels=['Baseline','Decline','Return'];
+  const insights=[
+    ['The starting point for the comparison. Each measure is indexed to its own FY2023 value.','Revenue and profit were reported in consolidated accounts. Cash flow retains company-disclosure precision.','The FY2023 cash-flow value is the baseline for the later comparison.'],
+    ['Revenue declined. Comparable revenue growth was −4.3%; the plotted index uses reported USD.','Operating profit fell further than revenue, to 69.9% of its FY2023 level.','Cash generation fell to 49.1% of its FY2023 level.'],
+    ['Revenue nearly returned to its earlier level. Profit and cash flow remained further behind.','Operating profit recovered to 73.5% of FY2023, leaving a larger gap than revenue.','Free cash flow recovered to 70.5% of FY2023, still well below its earlier level.'],
+  ];
+  document.querySelectorAll<HTMLElement>('[data-recovery-portrait]').forEach(root=>{
+    const values=JSON.parse(root.querySelector('[data-portrait-values]')!.textContent!) as {label:string;color:string;values:number[];actual:number[]}[];
+    const buttons=root.querySelectorAll<HTMLButtonElement>('[data-portrait-select]');
+    const yearButtons=root.querySelectorAll<HTMLButtonElement>('[data-portrait-year]');
+    const range=root.querySelector<HTMLInputElement>('[data-portrait-range]')!;
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+    let year=2,measure=0,locked:string|null=null;
+    let interacted=false;
+    let timers:ReturnType<typeof setTimeout>[]=[];
+    const stop=()=>{timers.forEach(clearTimeout);timers=[];root.dataset.playing='false';};
+    const move=(index:number,automatic=false,force=false)=>{
+      if(!automatic){interacted=true;stop();}
+      const changed=index!==year;year=index;root.dataset.year=String(index);
+      yearButtons.forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.portraitYear)===index)));
+      range.value=String(index);range.setAttribute('aria-valuetext',`FY${2023+index} · ${stageLabels[index]}`);
+      root.querySelector('[data-portrait-phase]')!.textContent=`${2023+index} / ${stageLabels[index].toUpperCase()}`;
+      root.querySelector('[data-portrait-title]')!.textContent=stageTitles[index];
+      root.querySelector('[data-portrait-index]')!.textContent=values[measure].values[index].toFixed(1);
+      root.querySelector('[data-portrait-measure]')!.textContent=values[measure].label+' / FY2023 baseline';
+      root.querySelector('[data-portrait-actual]')!.textContent='$'+values[measure].actual[index].toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})+'m · FY'+(2023+index);
+      root.querySelector('[data-portrait-explanation]')!.textContent=insights[index][measure];
+      const x=48+index*208;
+      const mask=root.querySelector<SVGRectElement>('[data-portrait-mask]')!;mask.style.width=(index===2?540:x+8)+'px';
+      const guide=root.querySelector<SVGLineElement>('[data-portrait-guide]')!;guide.style.setProperty('--cursor-x',String(x));guide.setAttribute('x1',String(x));guide.setAttribute('x2',String(x));
+      values.forEach((s,i)=>{const focus=root.querySelector<SVGCircleElement>(`[data-portrait-focus="${i}"]`)!;focus.setAttribute('cx',String(x));focus.setAttribute('cy',String(246-s.values[index]*1.8));root.querySelector(`[data-portrait-end="${i}"]`)!.textContent=s.values[index].toFixed(1);});
+      if((changed||force)&&!reduced.matches){
+        for(const selector of ['[data-portrait-index]','[data-portrait-title]','[data-portrait-explanation]']){
+          const el=root.querySelector<HTMLElement>(selector)!;el.getAnimations().forEach(a=>a.cancel());
+          el.animate([{opacity:0,transform:'translateY(16px)',filter:'blur(3px)'},{opacity:1,transform:'translateY(0)',filter:'blur(0)'}],{duration:650,easing:'cubic-bezier(.16,1,.3,1)'});
+        }
+      }
+    };
+    const select=(active:string|null)=>{
+      interacted=true;stop();locked=active;measure=Number(active??0);root.dataset.activeMeasure=active??'all';
+      root.style.setProperty('--active-color',`var(--chart-${values[measure].color})`);
+      buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.portraitSelect===active)));
+      root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted=String(active!==null&&s.dataset.portraitSeries!==active));
+      move(year,false,true);
+    };
+    buttons.forEach(b=>b.addEventListener('click',()=>select(locked===b.dataset.portraitSelect?null:b.dataset.portraitSelect!)));
+    root.querySelectorAll<SVGPathElement>('[data-portrait-line-hit]').forEach(line=>{
+      line.addEventListener('pointerenter',()=>{
+        if(locked!==null)return;
+        root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted=String(s.dataset.portraitSeries!==line.dataset.portraitLineHit));
+      });
+      line.addEventListener('pointerleave',()=>{if(locked===null)root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted='false');});
+      line.addEventListener('click',()=>select(locked===line.dataset.portraitLineHit?null:line.dataset.portraitLineHit!));
+    });
+    yearButtons.forEach(b=>b.addEventListener('click',()=>move(Number(b.dataset.portraitYear))));
+    range.addEventListener('input',()=>move(Number(range.value)));
+    const play=()=>{
+      stop();if(reduced.matches){move(2);return;}
+      interacted=false;locked=null;measure=0;root.dataset.activeMeasure='all';buttons.forEach(b=>b.setAttribute('aria-pressed','false'));root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted='false');
+      root.style.setProperty('--active-color','var(--chart-primary)');root.dataset.playing='true';move(0,true);
+      timers.push(setTimeout(()=>move(1,true),850),setTimeout(()=>move(2,true),2200),setTimeout(()=>root.dataset.playing='false',3400));
+    };
+    root.querySelector('[data-portrait-replay]')!.addEventListener('click',play);
+    new MutationObserver(()=>{if(root.dataset.motionState==='entered'&&!interacted)play();}).observe(root,{attributes:true,attributeFilter:['data-motion-state']});
+    if(root.dataset.motionState==='entered'&&!interacted)play();
+    reduced.addEventListener('change',()=>{if(reduced.matches){stop();move(2);}});
+  });
+</script>

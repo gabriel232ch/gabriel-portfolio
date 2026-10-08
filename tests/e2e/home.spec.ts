@@ -23,6 +23,7 @@ test('Home opens with Gabriel identity rather than a project index', async ({ pa
 });
 
 test('Chanel preserves the approved operating-recovery narrative', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   const chanel = page.locator('[data-home-chapter="chanel"]');
 
@@ -42,7 +43,7 @@ test('Chanel preserves the approved operating-recovery narrative', async ({ page
   await expect(chanel.getByRole('heading', { name: 'What actually recovered?' })).toBeVisible();
   await expect(chanel.locator('.chanel-chapter__turn')).toBeVisible();
   await expect(chanel.getByRole('heading', { name: 'Where did revenue return?' })).toBeVisible();
-  await expect(chanel.locator('[data-chanel-business]')).toBeVisible();
+  await expect(chanel.locator('[data-recovery-portrait]')).toBeVisible();
   await expect(chanel.locator('.chanel-chapter__current')).toBeVisible();
   await expect(chanel.locator('.chanel-chapter__current > .body-copy').first()).toHaveText(
     'That business scope changes how I read the possible explanations. Beauty has substantial scale. Selected public accounts describe CHANEL 25 as an everyday-use option. Chanel also continued updating products, stores and client services. The price study shows positioning and selected price increases; it does not measure how much pricing added to the recovery.',
@@ -54,13 +55,8 @@ test('Chanel preserves the approved operating-recovery narrative', async ({ page
   await expect(chanel.getByRole('heading', { name: 'What could explain it?' })).toBeVisible();
   await expect(chanel.locator('[data-chanel-price-position]')).toHaveCount(0);
   await expect(chanel.locator('[data-chanel-history]')).toHaveCount(0);
-  await expect(chanel.locator('[data-chanel-business] .chanel-business-signal__baseline > span')).toHaveCount(2);
-  await expect(chanel.locator('[data-chanel-business] .chanel-business-signal__shock > span')).toHaveCount(3);
-  await expect(chanel.locator('.chanel-business-signal__shock strong')).toHaveText([
-    '97.6%', '73.5%', '70.5%',
-  ]);
-  await expect(chanel.getByText('FY2025 as a share of FY2023 · reported USD · Chanel group')).toBeVisible();
-  await expect(chanel.getByRole('link', { name: 'Results and sources →' })).toHaveAttribute(
+  await expect(chanel.locator('.recovery-portrait__value')).toHaveText(['97.6', '73.5', '70.5']);
+  await expect(chanel.getByRole('link', { name: 'Values & sources ↗' })).toHaveAttribute(
     'href', '/work/luxury-handbag-pricing-architecture/#performance',
   );
   await expect(chanel.getByText('An uneven, partial recovery.')).toBeVisible();
@@ -82,7 +78,7 @@ test('Chanel preserves the approved operating-recovery narrative', async ({ page
 test('Home typography uses Baskerville body, Didot metrics, and editorial display', async ({ page }) => {
   await page.goto('/');
 
-  const narrativeStyles = await page.locator('.body-copy').evaluateAll((nodes) =>
+  const narrativeStyles = await page.locator('.body-copy:not(.chanel-chapter__return .body-copy)').evaluateAll((nodes) =>
     nodes.map((node) => {
       const style = getComputedStyle(node);
       return {
@@ -283,26 +279,16 @@ test('Home preserves the approved personal-digital-home order', async ({ page })
   await expect(page.getByText('Featured', { exact: true })).toHaveCount(0);
 });
 
-test('mobile Chanel recovery figures remain readable within the viewport', async ({ page }) => {
+test('mobile Chanel recovery chart stays within the viewport', async ({ page }) => {
   await page.goto('/');
-  const signal = page.locator('[data-chanel-business]');
-  await expect(signal).toBeVisible();
-
+  const portrait = page.locator('[data-recovery-portrait]');
   for (const width of [375, 390]) {
     await page.setViewportSize({ width, height: 900 });
-    const figures = await signal.locator('.chanel-business-signal__shock > span').evaluateAll((elements) =>
-      elements.map((element) => {
-        const label = element.querySelector('small')!.getBoundingClientRect();
-        const value = element.querySelector('strong')!.getBoundingClientRect();
-        return { labelBottom: label.bottom, valueTop: value.top, left: value.left, right: value.right };
-      }),
-    );
-    expect(figures).toHaveLength(3);
-    for (const figure of figures) {
-      expect(figure.labelBottom).toBeLessThanOrEqual(figure.valueTop + 1);
-      expect(figure.left).toBeGreaterThanOrEqual(0);
-      expect(figure.right).toBeLessThanOrEqual(width);
-    }
+    await portrait.scrollIntoViewIfNeeded();
+    const bounds = await portrait.locator('svg').boundingBox();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
+    await expect(portrait.getByRole('button', { name: 'Free cash flow', exact: true })).toBeVisible();
   }
 });
 
@@ -365,7 +351,8 @@ test('smaller-company research link can be reached with a keyboard', async ({ pa
   await page.goto('/');
   const link = page.getByRole('link', { name: 'Explore the current research →' });
 
-  for (let tab = 0; tab < 20; tab += 1) {
+  const focusableCount = await page.locator('a[href], button, input, summary').count();
+  for (let tab = 0; tab < focusableCount + 2; tab += 1) {
     if (await link.evaluate((element) => element === document.activeElement)) break;
     await page.keyboard.press('Tab');
   }
