@@ -1,4 +1,5 @@
 ---
+import InquiryQuestionMap from './InquiryQuestionMap.astro';
 interface Props { copy: typeof import('../../data/home').HOME_STATE.projects.smallerCompanies }
 const { copy } = Astro.props;
 ---
@@ -14,6 +15,8 @@ const { copy } = Astro.props;
     <h2 id="smaller-companies-title" class="display">{copy.title}</h2>
     <p class="body-copy">{copy.opening}</p>
   </div>
+
+  <InquiryQuestionMap />
 
   <div class="smaller-companies-chapter__shift motion-reveal" data-home-motion>
     <p class="body-copy">{copy.shift}</p>

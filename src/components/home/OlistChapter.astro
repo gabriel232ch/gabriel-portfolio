@@ -1,5 +1,6 @@
 ---
 import { OLIST_DATA_METRICS } from '../../data/olist';
+import OlistMarketMatrix from './OlistMarketMatrix.astro';
 import OlistDataMap from './OlistDataMap.astro';
 
 interface Props { copy: typeof import('../../data/home').HOME_STATE.projects.olist }
@@ -32,22 +33,26 @@ if (!gmv || gmv.id !== 'gmv' || !onTime || onTime.id !== 'on-time') {
     <OlistDataMap />
   </div>
 
-  <div class="olist-chapter__tension" data-olist-tension data-home-motion>
-    <div>
-      <span class="data-copy">{gmv.label}</span>
-      <strong>{gmv.fromLabel} → {gmv.toLabel}</strong>
-      <small>{gmv.context}</small>
-      <small>{gmv.note}</small>
+  <div class="olist-decision editorial-grid">
+    <blockquote class="olist-chapter__question">{copy.businessQuestion}</blockquote>
+    <OlistMarketMatrix />
+    <div class="olist-chapter__tension" data-olist-tension data-home-motion>
+      <div>
+        <span class="data-copy">{gmv.label}</span>
+        <strong>{gmv.fromLabel} → {gmv.toLabel}</strong>
+        <small>{gmv.context}</small>
+        <small>{gmv.note}</small>
+      </div>
+      <div>
+        <span class="data-copy">{onTime.label}</span>
+        <strong>{onTime.fromLabel} → {onTime.toLabel}</strong>
+        <small>{onTime.context}</small>
+        <small>{onTime.note}</small>
+      </div>
     </div>
-    <div>
-      <span class="data-copy">{onTime.label}</span>
-      <strong>{onTime.fromLabel} → {onTime.toLabel}</strong>
-      <small>{onTime.context}</small>
-      <small>{onTime.note}</small>
-    </div>
+
   </div>
 
-  <blockquote class="olist-chapter__question">{copy.businessQuestion}</blockquote>
 
   <div class="olist-chapter__end">
     <p class="display">{copy.shift}</p>
