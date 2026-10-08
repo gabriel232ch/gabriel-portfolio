@@ -40,3 +40,12 @@ Applied make-interfaces-feel-better for typography, interaction states, explicit
 ## Release gate
 
 Upload a version preview and create the PR. Await the user's preview confirmation before merging. After approval, refresh main, merge through PR, build the resulting main commit, compare its asset manifest with the approved preview, upload and deploy that main build, then verify production Olist, Chanel and Smaller Companies. Do not promote a historical branch or old preview over main.
+
+## Candidate preview
+
+- Implementation commit: `17baa99`.
+- Cloudflare version: `24a5ae6b-b316-4d86-b99f-9daba04dcee3`.
+- Preview: https://24a5ae6b-gabriel-portfolio.gabrielchen.workers.dev/work/olist-marketplace-analysis/
+- No production traffic change or main merge performed.
+- Repository-level workflow is now recorded in `AGENTS.md`; main remains a moving approved baseline.
+- Final browser rerun after month-guide and mobile-axis sizing changes passed the same smoke checks.
