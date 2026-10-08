@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('market matrix follows the selected month with exact rates and denominators', async ({ page }) => {
   await page.goto('/');
+  await page.getByText('Explore all six markets', { exact: false }).click();
   const matrix = page.locator('[data-market-matrix]');
   const watches = matrix.locator('[data-matrix-row]').first();
   await expect(watches.locator('[data-matrix-rate]')).toHaveText('94.87%');
@@ -32,10 +33,43 @@ test('Chanel measure emphasis can be selected and cleared with the keyboard', as
   await expect(portrait.locator('[data-muted="true"]')).toHaveCount(0);
 });
 
-test('selected inquiry turns link to real evidence chapters', async ({ page }) => {
+test('selected inquiry turns reveal evidence and link to the source chapter', async ({ page }) => {
   await page.goto('/');
-  const design = page.locator('.question-map').getByRole('link').last();
-  await design.click();
-  await expect(page).toHaveURL(/\/work\/why-some-people-choose-smaller-companies\/#crossroads$/);
-  await expect(page.locator('#crossroads')).toContainText('has not shipped publicly');
+  const map = page.locator('.question-map');
+  await map.locator('summary').last().click();
+  await map.getByRole('link', { name: 'Follow this question ↗' }).click();
+  await expect(page).toHaveURL(/\/work\/why-some-people-choose-smaller-companies\/#decision-support$/);
+  await expect(page.locator('#decision-support')).toContainText('cannot decide for a candidate');
+});
+
+test('main Olist trajectory moves the guide and rates with keyboard months', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  const story = page.locator('[data-trajectory-story]');
+  await expect(page.locator('[data-market-matrix]')).not.toBeVisible();
+  const slider = story.getByRole('slider');
+  await slider.focus();
+  await page.keyboard.press('Home');
+  await expect(story.locator('[data-story-rate="0"]')).toHaveText('90.70%');
+  await expect(story.locator('[data-story-count="0"]')).toHaveText('n=43');
+  await expect(story.locator('[data-story-guide]')).toHaveAttribute('x1', '44');
+  await page.keyboard.press('End');
+  await expect(story.locator('[data-story-rate="0"]')).toHaveText('94.87%');
+});
+
+test('chart entry animation advances observations and yields to user input', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  const story = page.locator('[data-trajectory-story]');
+  await story.scrollIntoViewIfNeeded();
+  await expect(story).toHaveAttribute('data-motion-state', 'entered');
+  await story.getByRole('button', { name: 'Replay months' }).click();
+  await expect(story.locator('[data-story-range]')).toHaveValue('0');
+  await expect(story.locator('[data-story-range]')).toHaveValue('7');
+  const slider = story.getByRole('slider');
+  await slider.focus();
+  await page.keyboard.press('Home');
+  await expect(story).toHaveAttribute('data-interacting', 'true');
+  await expect(slider).toHaveValue('0');
+  await expect(story.locator('[data-story-rate="0"]')).toHaveText('90.70%');
 });

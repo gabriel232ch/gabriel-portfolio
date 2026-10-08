@@ -1,7 +1,6 @@
 ---
 import { HOME_STATE } from '../../data/home';
 import ChanelRecoveryPortrait from './ChanelRecoveryPortrait.astro';
-import ChanelBusinessSignal from './ChanelBusinessSignal.astro';
 
 interface Props {
   copy: (typeof HOME_STATE.projects)['chanel'];
@@ -32,7 +31,6 @@ const { copy } = Astro.props;
   <div class="chanel-chapter__visible">
     <h3 class="editorial">{copy.resultsTitle}</h3>
     <p class="body-copy">{copy.results}</p>
-    <ChanelBusinessSignal />
   </div>
 
   <div class="chanel-chapter__turn motion-reveal" data-home-motion>

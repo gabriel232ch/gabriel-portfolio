@@ -116,3 +116,89 @@
 @media (prefers-reduced-motion:reduce) {
   .recovery-portrait__series,.market-matrix__cell,.question-map__arrow { transition:none; }
 }
+
+/* Revision: one focal chart at a time, with evidence available on demand. */
+.chanel-chapter__visible { display:block; max-width:46rem; border:0; padding-block:1rem; }
+.chanel-chapter__visible > h3 { margin-bottom:1.5rem; }
+.recovery-portrait__explanation { min-height:4.5em; max-width:40rem; margin:1rem 0 .5rem; font-size:var(--font-size-secondary-reading); line-height:1.5; }
+.visual-replay { min-height:44px; border:0; border-bottom:1px solid var(--hairline); background:none; color:var(--ink-muted); padding:0; font-family:var(--font-metadata); font-size:var(--font-size-micro); cursor:pointer; }
+.recovery-portrait[data-motion-state='pending'] .recovery-portrait__series path { clip-path:inset(0 100% 0 0); }
+.recovery-portrait[data-motion-state='entered'] .recovery-portrait__decline { animation:portrait-decline 950ms var(--ease-cinematic) both; }
+.recovery-portrait[data-motion-state='entered'] .recovery-portrait__return { animation:portrait-return 1050ms var(--ease-cinematic) 1050ms both; }
+.recovery-portrait[data-motion-state='entered'] .recovery-portrait__value { animation:visual-arrive 500ms ease 1900ms both; }
+.recovery-portrait[data-motion-state='entered'] .recovery-portrait__series circle { animation:visual-arrive 450ms ease 1700ms both; }
+.recovery-portrait[data-interacting='true'] .recovery-portrait__series :is(path,circle,text) { animation:none; clip-path:none; }
+@keyframes portrait-decline { from { clip-path:inset(0 100% 0 0); } to { clip-path:inset(0); } }
+@keyframes portrait-return { from { clip-path:inset(0 100% 0 0); } to { clip-path:inset(0); } }
+@keyframes visual-arrive { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.olist-decision { row-gap:clamp(2rem,4vw,4rem); }
+.olist-decision__opening { align-self:center; }
+.olist-decision__opening > p { margin:0 0 2rem; color:var(--ink-muted); }
+.olist-decision__title { max-width:14ch; margin:0; font-family:var(--font-display); font-size:clamp(3rem,6vw,6.5rem); font-weight:300; line-height:.98; letter-spacing:-.035em; }
+.olist-decision__all { min-width:0; border-block:1px solid var(--hairline); }
+.olist-decision__all > summary { display:flex; justify-content:space-between; align-items:center; min-height:64px; padding-block:1rem; cursor:pointer; font-family:var(--font-metadata); font-size:var(--font-size-micro); list-style:none; }
+.olist-decision__all > summary::-webkit-details-marker { display:none; }
+.olist-decision__all[open] > summary > span { transform:rotate(45deg); }
+.olist-decision__all .market-matrix { padding-block:1.5rem 2rem; }
+.trajectory-story { min-width:0; margin:0; }
+.trajectory-story figcaption > p { margin:0 0 1rem; color:var(--ink-muted); }
+.trajectory-story h3 { font-family:var(--font-display); font-size:clamp(1.8rem,3vw,3rem); font-weight:300; line-height:1; margin:0 0 1.5rem; }
+.trajectory-story svg { display:block; width:100%; height:auto; overflow:visible; }
+.trajectory-story__grid line { stroke:var(--hairline); }
+.trajectory-story__grid text,.trajectory-story__month { fill:var(--ink-muted); font-family:var(--font-metadata); font-size:12px; }
+.trajectory-story__line { fill:none; stroke:var(--series-color); stroke-width:2.5; vector-effect:non-scaling-stroke; }
+.trajectory-story__point { fill:var(--series-color); }
+.trajectory-story__focus { fill:var(--series-color); stroke:var(--paper); stroke-width:3; transition:cx 180ms ease,cy 180ms ease; }
+.trajectory-story__end-label { fill:var(--series-color); font-family:var(--font-reading); font-size:15px; }
+.trajectory-story__guide { stroke:var(--ink-muted); stroke-dasharray:3 6; transition:x1 180ms ease,x2 180ms ease; }
+.trajectory-story__hit { cursor:crosshair; touch-action:pan-y; }
+.trajectory-story__explore { display:grid; grid-template-columns:1fr auto; gap:.5rem; margin-top:.75rem; font-family:var(--font-metadata); font-size:var(--font-size-micro); }
+.trajectory-story__explore input { grid-column:1 / -1; margin:0; width:100%; height:44px; accent-color:var(--chart-secondary); }
+.trajectory-story__readout { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:.75rem; }
+.trajectory-story__readout > div { border-left:2px solid var(--series-color); padding-left:1rem; }
+.trajectory-story__readout span,.trajectory-story__readout small { display:block; color:var(--ink-muted); font-family:var(--font-metadata); font-size:.75rem; }
+.trajectory-story__readout strong { display:block; margin:.5rem 0; font-family:var(--font-numeric); font-size:clamp(1.7rem,3vw,2.6rem); font-weight:400; }
+.trajectory-story[data-motion-state='pending'] .trajectory-story__line { clip-path:inset(0 100% 0 0); }
+.trajectory-story[data-motion-state='entered'] .trajectory-story__line { animation:portrait-decline 1800ms var(--ease-cinematic) 300ms both; }
+.trajectory-story[data-motion-state='entered'] .trajectory-story__series:nth-of-type(even) .trajectory-story__line { animation-delay:450ms; }
+.trajectory-story[data-motion-state='entered'] :is(.trajectory-story__point,.trajectory-story__focus,.trajectory-story__end-label) { animation:visual-arrive 500ms ease 1700ms both; }
+.trajectory-story[data-interacting='true'] :is(path,circle,text) { animation:none; clip-path:none; }
+.question-map--progressive li { position:relative; border:0; padding-left:1rem; }
+.question-map--progressive li:last-child { border:0; }
+.question-map--progressive li::before { content:''; position:absolute; left:0; top:1rem; width:1px; height:100%; background:var(--accent); transform-origin:top; transition:transform 750ms var(--ease-cinematic); }
+.question-map--progressive li:last-child::before { height:50%; }
+.question-map--progressive li[data-motion-state='pending']::before { transform:scaleY(0); }
+.question-map--progressive summary { display:grid; grid-template-columns:2rem 1fr 1rem; gap:.6rem 1rem; padding:1.5rem 0; cursor:pointer; list-style:none; }
+.question-map--progressive summary::-webkit-details-marker { display:none; }
+.question-map--progressive .question-map__index { grid-row:1 / span 2; }
+.question-map--progressive .question-map__question { font-size:1.1rem; }
+.question-map--progressive details[open] .question-map__arrow { transform:rotate(45deg); }
+.question-map__evidence { padding:0 0 1.5rem 3rem; font-size:1.1rem; line-height:1.5; }
+.question-map__evidence p { margin:0 0 1rem; color:var(--ink-muted); }
+.question-map__evidence a { font-family:var(--font-metadata); font-size:var(--font-size-micro); }
+@media(min-width:72rem) {
+  .chanel-chapter__visible { grid-column:2 / span 5; }
+  .chanel-chapter__turn { grid-column:8 / span 5; grid-row:3; }
+  .chanel-chapter__current { grid-column:4 / span 7; }
+  .olist-decision__opening { grid-column:1 / span 5; }
+  .olist-decision .trajectory-story { grid-column:7 / span 6; }
+  .olist-decision .olist-decision__all { grid-column:7 / span 6; }
+}
+@media(max-width:47.99rem) {
+  .trajectory-story__grid text,.trajectory-story__month { font-size:17px; }
+  .trajectory-story__end-label { font-size:19px; }
+  .recovery-portrait__explanation { min-height:6em; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .recovery-portrait .recovery-portrait__series :is(path,circle,text),.trajectory-story :is(path,circle,text) { animation:none!important; clip-path:none!important; }
+  .trajectory-story__guide,.trajectory-story__focus,.question-map--progressive li::before { transition:none; }
+  .question-map--progressive li::before { transform:none!important; }
+}
+.trajectory-story[data-motion-state='entered'] .trajectory-story__readout { animation:visual-arrive 700ms ease 400ms both; }
+.trajectory-story[data-interacting='true'] .trajectory-story__readout { animation:none; }
+.question-map--progressive li summary { transition:opacity 600ms ease,transform 650ms var(--ease-cinematic); transition-delay:calc(var(--turn-index) * 140ms); }
+.question-map--progressive li[data-motion-state='pending'] summary { opacity:0; transform:translateY(18px); }
+@media(prefers-reduced-motion:reduce) {
+ .trajectory-story .trajectory-story__readout { animation:none!important; }
+ .question-map--progressive li summary { opacity:1!important; transform:none!important; transition:none; }
+}

@@ -13,3 +13,17 @@ User approved the direction: project visuals, denser/sparser typography and an a
 - Preview version: 370b5197-0ed5-43cf-9722-b71e0f0364d4.
 - Immutable preview: https://370b5197-gabriel-portfolio.gabrielchen.workers.dev/
 - Await user preview confirmation. Reconcile newer main before merge; build resulting approved main, compare against approved preview, publish main and verify live site.
+
+## Density and motion revision
+
+User rejected the first preview as too dense and visually static, liked the aubergine chapter, and authorized the proposed reduction and stronger data-driven animation.
+
+- Olist defaults to two selected historical market trajectories. The six-market matrix is now closed by default in a native details disclosure. The long approved business question is retained outside the dark chapter, whose opening is now shorter.
+- Month-by-month entry animation advances the actual monthly observations, reference line, points, percentages and eligible counts. Pointer/touch exploration and keyboard slider input stop the animation and take over immediately. Replay is explicit; no continuous looping. Full 0–100% axis and historical/limited-sample scope remain visible.
+- Chanel's duplicated homepage meter block was removed; the main portrait now draws the FY2024 decline, then FY2025 return, with later endpoint emphasis and replay. Measure hover/selection shows a bounded interpretation, including comparable growth on the revenue selection. Detailed data remains on the unmodified case page.
+- Inquiry defaults to three abbreviated question turns; native disclosures expose existing evidence and chapter links. Connector/summary entries follow viewport progression. All stages remain on the unchanged research page.
+- Reduced-motion and no-JavaScript modes retain usable static charts and native disclosures. Existing homepage tests updated for the explicitly authorized consolidation; new tests cover autoplay and immediate user takeover.
+- Astro check, lint, 35 unit tests, build and 64 selected desktop/mobile browser tests passed. Desktop/mobile light/dark screenshots inspected with no horizontal overflow. New remote preview verified after upload.
+- Revised version: 0e20c5f9-f9f6-436b-b289-568e25df2197.
+- Current preview: https://0e20c5f9-gabriel-portfolio.gabrielchen.workers.dev/
+- Previous version 370b5197 remains a historical reference. Continue PR #9, awaiting current-preview confirmation before merge or production publication.

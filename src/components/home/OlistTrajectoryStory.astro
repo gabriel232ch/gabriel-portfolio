@@ -1,0 +1,78 @@
+---
+import { olistResearch } from '../../data/olist-research';
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
+const series=[{category:'watches_gifts',state:'RJ',label:'Watches & gifts · RJ',color:'secondary'},{category:'office_furniture',state:'SP',label:'Office furniture · SP',color:'primary'}].map(s=>({...s,rows:olistResearch['candidate_monthly.csv'].filter(r=>r.category_name===s.category&&r.customer_state===s.state).sort((a,b)=>a.cohort.localeCompare(b.cohort))}));
+const x=(i:number)=>44+i*64;
+const y=(rate:number)=>246-rate*200;
+---
+<figure class="trajectory-story" data-trajectory-story data-home-motion>
+  <figcaption><p class="data-copy">OLIST / TWO HISTORICAL RISK MARKETS</p><h3>Same shortlist.<br />Different trajectories.</h3></figcaption>
+  <svg viewBox="0 0 640 290" role="img" aria-labelledby="story-title story-desc" data-story-canvas>
+    <title id="story-title">Two markets followed different monthly delivery paths</title>
+    <desc id="story-desc">On-time delivery in eligible delivered orders, Jan–Aug 2018. Watches and gifts in RJ and office furniture in SP are selected illustrations from six historical candidates. The full shortlist can be expanded below. The axis runs from 0 to 100 percent.</desc>
+    {[0,50,100].map(v=><g class="trajectory-story__grid"><line x1="44" x2="492" y1={y(v/100)} y2={y(v/100)} /><text x="32" y={y(v/100)+4} text-anchor="end">{v}%</text></g>)}
+    <line x1={x(7)} x2={x(7)} y1="36" y2="246" class="trajectory-story__guide" data-story-guide />
+    {series.map((s,i)=><g style={`--series-color:var(--chart-${s.color})`} class="trajectory-story__series">
+      <path class="trajectory-story__line" d={s.rows.map((r,j)=>`${j?'L':'M'}${x(j)},${y(r.on_time_rate)}`).join(' ')} />
+      {s.rows.map((r,j)=><circle class="trajectory-story__point" cx={x(j)} cy={y(r.on_time_rate)} r="3" />)}
+      <circle class="trajectory-story__focus" cx={x(7)} cy={y(s.rows[7].on_time_rate)} r="6" data-story-focus={i} />
+      <text x="510" y={y(s.rows[7].on_time_rate)+(i===0?-16:16)} class="trajectory-story__end-label">{i===0?'Watches · RJ':'Furniture · SP'}</text>
+    </g>)}
+    {months.map((m,i)=><text class="trajectory-story__month" x={x(i)} y="275" text-anchor="middle">{m}</text>)}
+    <rect class="trajectory-story__hit" x="36" y="30" width="464" height="222" fill="transparent" data-story-hit />
+  </svg>
+  <div class="trajectory-story__explore"><label for="story-month">Explore month</label><output for="story-month" data-story-month>August 2018</output><input id="story-month" type="range" min="0" max="7" value="7" aria-valuetext="August 2018" data-story-range /></div>
+  <div class="trajectory-story__readout" aria-live="polite">
+    {series.map((s,i)=><div style={`--series-color:var(--chart-${s.color})`}><span>{s.label}</span><strong data-story-rate={i}>{(s.rows[7].on_time_rate*100).toFixed(2)}%</strong><small data-story-count={i}>n={s.rows[7].eligible}</small></div>)}
+  </div>
+  <button type="button" class="visual-replay" data-story-replay>Replay months ↺</button>
+  <p class="visual-note">Eligible delivered orders · Jan–Aug 2018. Small samples can fluctuate. Historical candidates; no intervention effect established. <a href="/work/olist-marketplace-analysis/#markets">Evidence ↗</a></p>
+  <script is:inline type="application/json" data-story-values set:html={JSON.stringify(series.map(s=>s.rows.map(r=>({rate:r.on_time_rate,n:r.eligible}))))} />
+</figure>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-trajectory-story]').forEach(root=>{
+    const months=['January','February','March','April','May','June','July','August'];
+    const values=JSON.parse(root.querySelector('[data-story-values]')!.textContent!) as {rate:number;n:number}[][];
+    const slider=root.querySelector<HTMLInputElement>('[data-story-range]')!;
+    const canvas=root.querySelector<SVGSVGElement>('[data-story-canvas]')!;
+    let selected=7;
+    let timers:ReturnType<typeof setTimeout>[]=[];
+    const stop=()=>{timers.forEach(clearTimeout);timers=[];};
+    const update=(index:number,interactive=true)=>{
+      if(interactive){stop();root.dataset.interacting='true';}
+      if(index===selected)return; selected=index;
+      const label=months[index]+' 2018',x=44+index*64;
+      slider.value=String(index);slider.setAttribute('aria-valuetext',label);
+      root.querySelector<HTMLOutputElement>('[data-story-month]')!.value=label;
+      const guide=root.querySelector('[data-story-guide]')!;guide.setAttribute('x1',String(x));guide.setAttribute('x2',String(x));
+      values.forEach((rows,i)=>{
+        const focus=root.querySelector(`[data-story-focus="${i}"]`)!;focus.setAttribute('cx',String(x));focus.setAttribute('cy',String(246-rows[index].rate*200));
+        root.querySelector(`[data-story-rate="${i}"]`)!.textContent=(rows[index].rate*100).toFixed(2)+'%';
+        root.querySelector(`[data-story-count="${i}"]`)!.textContent='n='+rows[index].n;
+      });
+    };
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+    const play=()=>{
+      stop();
+      if(reduced.matches){update(7,false);return;}
+      update(0,false);
+      for(let i=1;i<8;i++)timers.push(setTimeout(()=>update(i,false),300+i*240));
+    };
+    const observer=new MutationObserver(()=>{if(root.dataset.motionState==='entered')play();else stop();});
+    observer.observe(root,{attributes:true,attributeFilter:['data-motion-state']});
+    if(root.dataset.motionState==='entered')play();
+    reduced.addEventListener('change',()=>{stop();if(reduced.matches)update(7,false);});
+    root.querySelector('[data-story-replay]')!.addEventListener('click',()=>{
+      stop();root.dataset.interacting='false';root.dataset.motionState='pending';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>root.dataset.motionState='entered'));
+    });
+    slider.addEventListener('input',()=>update(Number(slider.value)));
+    const hit=root.querySelector<SVGRectElement>('[data-story-hit]')!;
+    const pointer=(event:PointerEvent)=>{
+      const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(canvas.getScreenCTM()!.inverse());
+      update(Math.max(0,Math.min(7,Math.round((point.x-44)/64))));
+    };
+    hit.addEventListener('pointermove',event=>{if(event.pointerType==='mouse'||event.buttons)pointer(event)});
+    hit.addEventListener('pointerdown',pointer);
+  });
+</script>

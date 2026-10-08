@@ -1,5 +1,6 @@
 ---
 import { OLIST_DATA_METRICS } from '../../data/olist';
+import OlistTrajectoryStory from './OlistTrajectoryStory.astro';
 import OlistMarketMatrix from './OlistMarketMatrix.astro';
 import OlistDataMap from './OlistDataMap.astro';
 
@@ -34,8 +35,9 @@ if (!gmv || gmv.id !== 'gmv' || !onTime || onTime.id !== 'on-time') {
   </div>
 
   <div class="olist-decision editorial-grid">
-    <blockquote class="olist-chapter__question">{copy.businessQuestion}</blockquote>
-    <OlistMarketMatrix />
+    <div class="olist-decision__opening motion-reveal" data-home-motion><p class="data-copy">FROM GROWTH TO A QUESTION</p><h3 class="olist-decision__title">Where should<br />Olist look next?</h3></div>
+    <OlistTrajectoryStory />
+    <details class="olist-decision__all"><summary>Explore all six markets <span aria-hidden="true">+</span></summary><OlistMarketMatrix /></details>
     <div class="olist-chapter__tension" data-olist-tension data-home-motion>
       <div>
         <span class="data-copy">{gmv.label}</span>
@@ -53,6 +55,8 @@ if (!gmv || gmv.id !== 'gmv' || !onTime || onTime.id !== 'on-time') {
 
   </div>
 
+
+  <blockquote class="olist-chapter__question">{copy.businessQuestion}</blockquote>
 
   <div class="olist-chapter__end">
     <p class="display">{copy.shift}</p>

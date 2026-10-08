@@ -9,14 +9,15 @@ const x = (i:number) => 46 + i * 198;
 const y = (value:number) => 310 - value * 2.3;
 const series = measures.map(m=>({...m,values:rows.map(r=>r[m.key]/rows[0][m.key]*100)}));
 ---
-<figure class="recovery-portrait" data-recovery-portrait>
+<figure class="recovery-portrait" data-recovery-portrait data-home-motion>
   <figcaption class="data-copy">CHANEL / THE RECOVERY GAP <span>FY2023 = 100</span></figcaption>
   <svg viewBox="0 0 540 360" role="img" aria-labelledby="recovery-portrait-title recovery-portrait-desc">
     <title id="recovery-portrait-title">Revenue recovered further than profit or cash flow</title>
     <desc id="recovery-portrait-desc">Reported USD indices for FY2023, FY2024 and FY2025. In FY2025 revenue was 97.6%, operating profit 73.5%, and free cash flow 70.5% of FY2023. Lines connect annual observations.</desc>
     {[0,50,75,100].map(value=><g class="recovery-portrait__grid"><line x1="46" x2="442" y1={y(value)} y2={y(value)} /><text x="30" y={y(value)+4} text-anchor="end">{value}</text></g>)}
     {series.map((s,i)=><g class="recovery-portrait__series" data-portrait-series={i} style={`--series-color:var(--chart-${s.color})`}>
-      <path d={s.values.map((v,j)=>`${j?'L':'M'}${x(j)},${y(v)}`).join(' ')} />
+      <path class="recovery-portrait__decline" d={`M${x(0)},${y(s.values[0])}L${x(1)},${y(s.values[1])}`} />
+      <path class="recovery-portrait__return" d={`M${x(1)},${y(s.values[1])}L${x(2)},${y(s.values[2])}`} />
       {s.values.map((v,j)=><circle cx={x(j)} cy={y(v)} r={j===2?5:3} />)}
       <text class="recovery-portrait__value" x="462" y={y(s.values[2])+(i===1?-7:i===2?15:5)}>{s.values[2].toFixed(1)}</text>
     </g>)}
@@ -25,15 +26,36 @@ const series = measures.map(m=>({...m,values:rows.map(r=>r[m.key]/rows[0][m.key]
   <div class="recovery-portrait__legend" aria-label="Highlight a measure">
     {series.map((s,i)=><button type="button" data-portrait-select={i} aria-pressed="false" style={`--series-color:var(--chart-${s.color})`}><i aria-hidden="true"></i>{s.label}</button>)}
   </div>
+  <p class="recovery-portrait__explanation" data-portrait-explanation aria-live="polite">Revenue returned closer to its earlier level. Profit and cash flow retained larger gaps.</p>
+  <button class="visual-replay" type="button" data-portrait-replay>Replay trajectory ↺</button>
   <p class="visual-note">Reported USD · Chanel group · Annual observations. <a href="/work/luxury-handbag-pricing-architecture/#performance">Values & sources ↗</a></p>
 </figure>
 <script>
+  const explanations=[
+    'Revenue stood at 97.6% of FY2023. Comparable revenue growth moved from −4.3% in FY2024 to +1.8% in FY2025.',
+    'Operating profit stood at 73.5% of FY2023, leaving a larger gap than revenue.',
+    'Free cash flow stood at 70.5% of FY2023, despite its recovery from FY2024.',
+  ];
+  const overview='Revenue returned closer to its earlier level. Profit and cash flow retained larger gaps.';
   document.querySelectorAll<HTMLElement>('[data-recovery-portrait]').forEach(root=>{
     const buttons=root.querySelectorAll<HTMLButtonElement>('[data-portrait-select]');
-    buttons.forEach(button=>button.addEventListener('click',()=>{
-      const active=button.getAttribute('aria-pressed')==='true'?null:button.dataset.portraitSelect;
-      buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.portraitSelect===active)));
+    const emphasize=(active:string|null)=>{
       root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted=String(active!==null&&s.dataset.portraitSeries!==active));
-    }));
+      root.querySelector('[data-portrait-explanation]')!.textContent=active===null?overview:explanations[Number(active)];
+    };
+    buttons.forEach(button=>{
+      button.addEventListener('pointerenter',()=>emphasize(button.dataset.portraitSelect!));
+      button.addEventListener('pointerleave',()=>emphasize(Array.from(buttons).find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.portraitSelect??null));
+      button.addEventListener('click',()=>{
+        root.dataset.interacting='true';
+        const active=button.getAttribute('aria-pressed')==='true'?null:button.dataset.portraitSelect!;
+        buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.portraitSelect===active)));
+        emphasize(active);
+      });
+    });
+    root.querySelector('[data-portrait-replay]')!.addEventListener('click',()=>{
+      root.dataset.interacting='false';root.dataset.motionState='pending';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{root.dataset.motionState='entered'}));
+    });
   });
 </script>
