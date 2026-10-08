@@ -43,3 +43,5 @@ New chart copy reviewed with humanize-ai and writing-analyst-prose: labels descr
 ## Release gate
 
 Preview upload and remote verification pending. Do not merge or deploy production until the user confirms this concrete preview. After confirmation: reconcile with then-current origin/main, merge through PR, build approved main, compare with reviewed preview, publish main build and verify live.
+
+Initial remote candidate `9cc3914e` was superseded after inspecting mobile price endpoints: the legacy parent retained a 36rem minimum width. The Chanel-only small-screen override now clears that minimum so endpoint cards fit the available width.

@@ -121,3 +121,4 @@
   .chanel-report .report-price-lane__node { position:static; width:100%; left:auto; top:auto; padding:.8rem; border:1px solid var(--hairline); transform:none!important; }
   .chanel-report .report-price-lane__node i { margin:0 0 .65rem; }
 }
+@media(max-width:600px) { .chanel-report .report-price-lanes { min-width:0; } }
