@@ -1,0 +1,29 @@
+---
+interface Series { label: string; values: number[]; counts: number[] }
+interface Props { id: string; title: string; series: Series[]; minimum?: number; maximum?: number; note: string }
+const { id, title, series, minimum = 0, maximum = 100, note } = Astro.props;
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
+const x = (index: number) => 52 + index * 88;
+const y = (value: number) => 214 - ((value - minimum) / (maximum - minimum)) * 180;
+const ticks = minimum === 75 ? [75, 80, 85, 90, 95, 100] : maximum === 25 ? [0, 5, 10, 15, 20, 25] : [0, 25, 50, 75, 100];
+const valueLabel = (value: number) => `${value.toFixed(2)}%`;
+const readout = (index: number) => `${months[index]} · ${series.map(s => `${s.label}: ${valueLabel(s.values[index])} (n=${s.counts[index].toLocaleString('en-US')})`).join(' · ')}`;
+---
+<figure class="olist-chart" data-olist-reveal data-line-chart data-chart-rows={JSON.stringify(months.map((_, i) => readout(i)))}>
+  <figcaption><span class="olist-eyebrow">PURCHASE COHORTS / JAN–AUG</span><h3>{title}</h3></figcaption>
+  <div class="olist-chart__legend">{series.map((s, i) => <span class:list={['olist-series', { 'olist-series--second': i === 1 }]}>{s.label}</span>)}</div>
+  <svg viewBox="0 0 720 252" role="img" aria-labelledby={`${id}-title ${id}-desc`}>
+    <title id={`${id}-title`}>{title}</title><desc id={`${id}-desc`}>{note} Exact values are available in the data table below.</desc>
+    {ticks.map(tick => <g><line x1="52" x2="686" y1={y(tick)} y2={y(tick)} class="olist-chart__grid" /><text x="40" y={y(tick) + 4} text-anchor="end">{tick}%</text></g>)}
+    {months.map((month, i) => <text x={x(i)} y="242" text-anchor="middle">{month}</text>)}
+    <line class="olist-chart__guide" x1={x(0)} x2={x(0)} y1="28" y2="220" data-chart-guide />
+    {series.map((s, si) => <g class:list={['olist-chart__series', { 'olist-chart__series--second': si === 1 }]}>
+      <path class="olist-chart__line" d={s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')} />
+      {s.values.map((v, i) => <g><circle class="olist-chart__halo" cx={x(i)} cy={y(v)} r="14" data-chart-month={i} /><circle class="olist-chart__point" cx={x(i)} cy={y(v)} r="4" /></g>)}
+    </g>)}
+  </svg>
+  <div class="olist-chart__explore"><label for={`${id}-month`}>Explore month</label><input id={`${id}-month`} type="range" min="0" max="7" value="0" step="1" aria-valuetext={months[0]} data-chart-range /></div>
+  <p class="olist-chart__readout" aria-live="polite" data-chart-readout>{readout(0)}</p>
+  <p class="olist-chart__note">{note}</p>
+  <details class="olist-data-details"><summary>Exact values and sample sizes</summary><div class="olist-table-wrap"><table><caption>{title}: monthly values</caption><thead><tr><th>Month</th>{series.map(s => <><th>{s.label}</th><th>Eligible n</th></>)}</tr></thead><tbody>{months.map((m, i) => <tr><th scope="row">{m}</th>{series.map(s => <><td>{valueLabel(s.values[i])}</td><td>{s.counts[i].toLocaleString('en-US')}</td></>)}</tr>)}</tbody></table></div></details>
+</figure>

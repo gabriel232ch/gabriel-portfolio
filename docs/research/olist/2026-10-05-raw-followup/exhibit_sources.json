@@ -1,0 +1,11 @@
+{
+  "monthly_source": "/Users/jquser/Downloads/olist-business-analysis/dashboard/data/monthly_trend.csv",
+  "monthly_source_sha256": "cacbfc502bebed29d062cb92fa621211dc7e9977f90d9542c9b1470a0a5874cc",
+  "monthly_plot_rows": 16,
+  "timing_sources": [
+    "review_timing.csv",
+    "review_before_delivery.csv",
+    "review_after_delivery.csv"
+  ],
+  "plot_script": "plot_review_exhibits.py"
+}

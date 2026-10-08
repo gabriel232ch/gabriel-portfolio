@@ -1,217 +1,99 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { HOME_STATE } from '../../data/home';
-import { OLIST_DATA_METRICS, OLIST_DATA_SOURCES } from '../../data/olist';
+import ThemeToggle from '../../components/system/ThemeToggle.astro';
+import OlistLineChart from '../../components/editorial/OlistLineChart.astro';
+import { olistResearch as data } from '../../data/olist-research';
 import '../../styles/report.css';
-
-const project = HOME_STATE.projects.olist;
+import '../../styles/olist-report.css';
+const original = 'https://github.com/gabriel232ch/olist-marketplace-analytics/blob/84819c37b79ab7fcf7982e2f7063124432fee0cc/';
+const evidence = '/research/olist/';
+const monthly = data['monthly_trend_matched.csv'];
+const trend = (field: 'on_time_rate' | 'low_review_rate', count: 'on_time_eligible_orders' | 'reviewed_orders') => [2017, 2018].map(year => ({label: String(year), values: monthly.filter(r => r.year === year).map(r => r[field] * 100), counts: monthly.filter(r => r.year === year).map(r => r[count])}));
+const keys = [ ['watches_gifts', 'RJ'], ['bed_bath_table', 'RJ'], ['bed_bath_table', 'MG'], ['office_furniture', 'SP'], ['sports_leisure', 'RJ'], ['computers_accessories', 'RJ'] ];
+const candidates = keys.map(([category, state]) => ({category, state, label: `${category} × ${state}`, rows: data['candidate_monthly.csv'].filter(r => r.category_name === category && r.customer_state === state), windows: data['candidate_windows.csv'].filter(r => r.category_name === category && r.customer_state === state).sort((a,b) => a.window === 'Jan–Mar' ? -1 : b.window === 'Jan–Mar' ? 1 : 0)}));
+const timing = data['review_timing.csv'].filter(r => r.band.startsWith('late'));
+const bandLabel: Record<string,string> = {late1_2:'1–2 days late', late3_7:'3–7 days late', late8plus:'8+ days late'};
+const format = (value: number) => `${(value * 100).toFixed(2)}%`;
+const sections = [['performance','Scale and service'],['markets','Markets over time'],['diagnosis','Routes and reviews'],['actions','Priorities to validate'],['answer','What this establishes'],['appendix','Evidence and methods']];
 ---
-
-<BaseLayout
-  title={`${project.title} — Gabriel Chen`}
-  description="An evidence-led Olist marketplace analysis about growth, fulfillment reliability, and the questions that connect them."
-  noindex={false}
->
-  <main class="research-page">
-    <header class="research-page__header">
-      <a class="research-page__identity" href="/">GABRIEL CHEN</a>
-      <a class="research-page__back" href="/#work">← BACK TO WORK</a>
-    </header>
-
-    <article class="research-page__article">
-      <p class="research-page__kicker">SAMSUNG · 2025 → OLIST · 2026</p>
-      <h1>{project.title}</h1>
-      <p class="research-page__lede">{project.noQuestion}</p>
-
-      <section aria-labelledby="analysis-trail-title">
-        <h2 id="analysis-trail-title">Analysis trail</h2>
-        <ol class="research-page__trail">
-          <li>Understand the available tables and their grain.</li>
-          <li>Test how marketplace growth changed over time.</li>
-          <li>Separate order-volume growth from value growth.</li>
-          <li>Compare scale with delivery reliability and review outcomes.</li>
-          <li>Translate the observed tension into market and route priorities.</li>
-        </ol>
+<BaseLayout title="Olist: Growth, Delivery and Marketplace Priorities — Gabriel Chen" description="An Olist study tracing marketplace growth, changing delivery risk and the timing of customer reviews into conditional market priorities." noindex={false}>
+<main class="report-page olist-report">
+  <header class="report-topline"><a class="report-topline__identity" href="/"><span>GABRIEL CHEN</span><span>WORK / RESEARCH</span></a><div class="report-topline__tools"><a href="/#olist">← BACK TO WORK</a><ThemeToggle /></div></header>
+  <div class="report-progress" aria-hidden="true"><span data-olist-progress></span></div>
+  <section class="report-hero" aria-labelledby="olist-title">
+    <div class="report-hero__label"><p class="olist-eyebrow">02 / MARKETPLACE ANALYTICS</p><p class="editorial">Olist<br />Brazil</p></div>
+    <div class="report-hero__main"><p class="report-kicker editorial"><em>From unfamiliar data to a business question</em></p><h1 id="olist-title" class="report-title">Growth, delivery &amp; marketplace priorities</h1><p class="report-lede">Which markets deserve attention, and what should be checked before further growth?</p><p class="report-hero__summary">I started with Olist to learn how to find a question in unfamiliar data. The analysis led from rising transaction volume to uneven delivery performance—and then to the importance of when a problem, or a customer review, occurred.</p><p class="report-meta data-copy">PROJECT / 2026 · OBSERVATION / JAN–AUG 2017 &amp; 2018</p></div>
+  </section>
+  <div class="report-layout">
+    <aside class="report-index" aria-label="Report contents"><p class="data-copy">THE INVESTIGATION</p><ol>{sections.map(([id,label],i) => <li><a href={`#${id}`}>{String(i+1).padStart(2,'0')} / {label}</a></li>)}</ol></aside>
+    <article class="report-body">
+      <section id="performance" class="report-section">
+        <p class="report-section__number data-copy">01 / CONFIRM THE CHANGE</p><h2>More orders. Uneven service.</h2>
+        <p class="report-claim">Delivered merchandise value more than doubled, while the matched-period on-time rate fell and low-review incidence rose.</p>
+        <p>At Samsung, I had worked with large sales datasets in Excel. SQL exercises usually supplied the question. With Olist, I began by understanding the available records: orders, items, sellers, customers, delivery dates and reviews. Comparing commercial scale with service outcomes gave the research its direction.</p>
+        <dl class="olist-kpis" data-olist-reveal><div><dt>DELIVERED GMV PROXY</dt><dd>R$2.99M → R$7.22M</dd><small>+141.13% · item prices, excluding freight</small></div><div><dt>ON-TIME DELIVERY</dt><dd>96.50% → 92.27%</dd><small>Relative to the estimated delivery date</small></div><div><dt>LOW-REVIEW INCIDENCE</dt><dd>10.59% → 13.37%</dd><small>Scores 1–2 among selected reviewed orders</small></div></dl>
+        <p>Delivered orders rose from 21,998 to 52,783; average merchandise value per order changed by just 0.49%. A symmetric decomposition allocates 99.40% of the GMV increase to the order-volume term. This describes the arithmetic of growth, rather than identifying its acquisition or demand mechanism.</p>
+        <p class="olist-source">Matched Jan–Aug purchase cohorts, delivered orders. GMV is a merchandise-value proxy, not platform revenue or profit. <a href={original+'dashboard/data/executive_kpis.csv'}>Baseline data ↗</a> · <a href={original+'sql/10_marketplace_baseline.sql'}>Definitions and decomposition ↗</a></p>
+        <OlistLineChart id="delivery-trend" title="The delivery decline was concentrated in particular months" series={trend('on_time_rate','on_time_eligible_orders')} minimum={75} note="Eligible delivered orders, grouped by purchase month. The axis starts at 75%. February and March 2018 were low points; April and June improved year on year." />
+        <OlistLineChart id="review-trend" title="Low reviews also peaked early in 2018" series={trend('low_review_rate','reviewed_orders')} maximum={25} note="Selected reviewed orders; low means score 1 or 2. This chart uses a different vertical scale and denominator from the delivery chart. Co-movement does not establish causation." />
+        <p class="olist-source"><a href={evidence+'monthly_trend_matched.csv'}>Monthly values / CSV</a> · <a href={original+'dashboard/data/monthly_trend.csv'}>Original monthly export ↗</a></p>
+        <p>The aggregate decline was not a continuous deterioration. Nor was it explained by a shift toward weaker customer states: a state-level decomposition assigns −4.45 percentage points to within-state rate changes, while changing state weights offset 0.21 points. Category, seller, route and month composition within states still need to be distinguished from process changes.</p>
+        <p class="olist-source"><a href={evidence+'state_decomposition.csv'}>State decomposition / CSV</a> · Detailed method below.</p>
       </section>
-
-      <section aria-labelledby="evidence-title">
-        <h2 id="evidence-title">What the current analysis found</h2>
-        <div class="research-page__evidence">
-          {OLIST_DATA_METRICS.map((metric) => (
-            <article class="research-page__evidence-card">
-              <p class="research-page__eyebrow">{metric.label}</p>
-              {metric.id === 'fix' ? (
-                <>
-                  <p class="research-page__metric">{metric.segments} material markets</p>
-                  <p>{metric.orders} · {metric.gmvExposure} · {metric.lateOrders}</p>
-                </>
-              ) : (
-                <>
-                  <p class="research-page__metric">{metric.fromLabel} → {metric.toLabel}</p>
-                  <p>{metric.context}</p>
-                </>
-              )}
-              <p class="research-page__note">{metric.note}</p>
-            </article>
-          ))}
-        </div>
+      <section id="markets" class="report-section">
+        <p class="report-section__number data-copy">02 / LOCATE THE EXPOSURE</p><h2>A historical shortlist needs a recent-performance check.</h2>
+        <p class="report-claim">Six commercially material category × customer-state markets qualified for the original Fix rules. Their monthly paths suggest different next questions.</p>
+        <p>The rules screen scale, delivery and reviews together. Under the original thresholds, the six markets contain R$409,170 in merchandise value and 405 late-order exposures. These quantities describe historical exposure; they do not estimate lost or recoverable revenue.</p>
+        <p>Choose a market to compare its monthly trajectory with the early and later windows. January–March and April–August are descriptive windows selected after inspecting the aggregate trend, not intervention periods.</p>
+        <div class="olist-candidate-controls" role="group" aria-label="Choose a historical Fix market">{candidates.map((c,i) => <button type="button" data-candidate-button={i} aria-pressed={i===0?'true':'false'} aria-controls={`candidate-${i}`}>{c.label}</button>)}</div>
+        {candidates.map((c,i) => <div id={`candidate-${i}`} class="olist-candidate-panel" data-candidate-panel={i}>
+          <div class="olist-window">{c.windows.map(w => <div><span>{w.window} / ON-TIME</span><strong>{format(w.on_time_rate)}</strong><small>{w.eligible} eligible orders · low reviews {format(w.low_review_rate)} / {w.reviewed} reviews</small></div>)}</div>
+          <OlistLineChart id={`market-${i}`} title={c.label} series={[{label:'2018',values:c.rows.map(r=>r.on_time_rate*100),counts:c.rows.map(r=>r.eligible)}]} note="Monthly on-time rate. Small monthly samples can fluctuate; these values do not establish a new classification or intervention effect." />
+        </div>)}
+        <p class="olist-source"><a href={evidence+'candidate_monthly.csv'}>Monthly market data / CSV</a> · <a href={evidence+'candidate_windows.csv'}>Window comparison / CSV</a> · <a href={original+'sql/14_create_priority_portfolios.sql'}>Original screening rules ↗</a></p>
+        <p>Watches and gifts in RJ improved from 65.54% on time in the early window to 95.88% later; computers and accessories in RJ rose from 73.57% to 99.05%. Office furniture in SP moved in the other direction, from 94.78% to 91.45%, even as its low-review rate declined. These observations call for checking recovery, recurrence and mechanisms individually.</p>
+        <p>The same check applies to growth and protection candidates. In August, the original Grow candidate stationery × SP recorded 87.21% on time across 86 orders; the Defend example health_beauty × SP recorded 87.84% across 370. A cumulative label is not a permanent assessment of operating health.</p>
+        <details class="olist-data-details"><summary>Compare all six early and later windows</summary><div class="olist-table-wrap"><table><thead><tr><th>Market</th><th>Jan–Mar on time / n</th><th>Apr–Aug on time / n</th></tr></thead><tbody>{candidates.map(c=><tr><th scope="row">{c.label}</th>{c.windows.map(w=><td>{format(w.on_time_rate)} / {w.eligible}</td>)}</tr>)}</tbody></table></div></details>
       </section>
-
-      <section aria-labelledby="limits-title">
-        <h2 id="limits-title">What the data cannot tell me</h2>
-        <p>
-          The dataset does not provide commission revenue, complete costs or margins, marketing exposure, seller acquisition cost,
-          inventory availability, carrier identity, complete refunds, or experiment assignment. The analysis is observational and does
-          not establish causal impact.
-        </p>
+      <section id="diagnosis" class="report-section">
+        <p class="report-section__number data-copy">03 / EVALUATE EXPLANATIONS</p><h2>Routes narrow the search. Review timing changes the interpretation.</h2>
+        <p class="report-claim">SP→RJ intersects several priority markets, but neither the route evidence nor the review association identifies a single cause.</p>
+        <p>SP→RJ had 653 late orders among 4,155 delivered orders, a 15.72% late rate. Its median handling and carrier-time proxies did not exceed their route-peer P75 thresholds. Promise setting, transaction mix and tail durations therefore deserve investigation alongside execution.</p>
+        <div class="olist-table-wrap"><table><caption>RJ market late orders containing at least one SP seller</caption><thead><tr><th>Market</th><th>All late orders</th><th>With an SP seller</th></tr></thead><tbody>{data['candidate_SP_origin.csv'].filter(r=>r.customer_state==='RJ').map(r=><tr><th scope="row">{r.category_name}</th><td>{r.late}</td><td>{r.late_with_SP_seller}</td></tr>)}</tbody></table></div>
+        <p>The intersection is large for bed_bath_table and watches_gifts, but only 33 of 76 late computers_accessories orders contained an SP seller. A shared customer state does not imply one route mechanism. Orders may involve several sellers; these records do not identify the carrier or which item caused the delay.</p>
+        <p class="olist-source"><a href={evidence+'candidate_SP_origin.csv'}>Order-intersection counts / CSV</a> · <a href={original+'dashboard/data/route.csv'}>Route evidence ↗</a> · <a href={original+'sql/12_opportunity_diagnostics.sql'}>Diagnostic definitions ↗</a></p>
+        <h3 class="editorial">When was the customer answering?</h3>
+        <p>Low-review incidence rises from 9.90% for deliveries between six days early and the estimated day, to 64.79% for final delays of 3–7 days and 80.21% for final delays of 8+ days. The association persists in limited comparisons stratified separately by category, single-seller route, seller or purchase month.</p>
+        <figure class="olist-chart" data-olist-reveal><figcaption><span class="olist-eyebrow">SELECTED REVIEW / EVENT ORDER</span><h3>Most reviews of severely late orders were answered before receipt</h3></figcaption><div class="olist-chart__legend"><span class="olist-series">Answered before receipt</span><span>Remaining share: after receipt</span></div>{timing.map(r=><div class="olist-timing-row"><span>{bandLabel[r.band]}</span><div><div class="olist-timing-track" aria-hidden="true"><span class="olist-timing-fill" style={`--timing-width: ${100*r.answered_before_delivery/r.reviewed}%`}></span></div><small>{format(r.answered_before_delivery/r.reviewed)} before receipt · {r.answered_before_delivery.toLocaleString('en-US')} of {r.reviewed.toLocaleString('en-US')} reviewed orders</small></div></div>)}<p class="olist-chart__note">2018 Jan–Aug purchase cohorts. Review answer timestamp compared with the recorded customer delivery timestamp.</p></figure>
+        <p>For final delays of 8+ days, 97.39% of selected reviews were answered before receipt. The 80.21% rate therefore mostly describes feedback while customers were still waiting, rather than satisfaction after delivery. Waiting, communication and expectations are plausible investigation paths; the data does not establish what caused each rating.</p>
+        <p>Among the 45 reviews answered after receipt in that delay group, 10 were low scores (22.22%). These are different orders, not the same customers measured before and after delivery. Their difference cannot estimate the effect of receiving a parcel.</p>
+        <p class="olist-source"><a href={evidence+'review_timing.csv'}>Review timing / CSV</a> · <a href={evidence+'review_before_delivery.csv'}>Before-receipt subgroup / CSV</a> · <a href={evidence+'review_after_delivery.csv'}>After-receipt subgroup / CSV</a> · <a href={original+'dashboard/data/delay_band.csv'}>All five delay bands ↗</a></p>
       </section>
-
-      <footer class="research-page__footer">
-        <a href={OLIST_DATA_SOURCES.readme} target="_blank" rel="noreferrer">Source analysis on GitHub</a>
-      </footer>
+      <section id="actions" class="report-section">
+        <p class="report-section__number data-copy">04 / PRIORITIES TO VALIDATE</p><h2>Use the shortlist to choose the next check.</h2>
+        <p class="report-claim">Scale and service identify candidates. Recent performance and mechanism evidence determine what should be tested next.</p>
+        <div class="olist-actions" data-olist-reveal><div><span class="olist-eyebrow">01 / RECOVERY</span><h3>Check whether recovery holds.</h3><p>For historically weak markets with later improvement, inspect recurring risk, seller and route mix, and promise-date changes before deciding whether expansion needs restrictions.</p></div><div><span class="olist-eyebrow">02 / RECENT RISK</span><h3>Diagnose the specific exposure.</h3><p>For renewed delivery or review signals, establish adequate sample size and investigate the relevant month, seller and route. Keep delivery and review mechanisms distinct.</p></div><div><span class="olist-eyebrow">03 / PROTECTION</span><h3>Monitor the larger engines.</h3><p>Track recent service, supply capacity and concentration alongside scale. A strong historical execution label still needs an operating check.</p></div><div><span class="olist-eyebrow">04 / LIMITED GROWTH</span><h3>Test under explicit conditions.</h3><p>For qualified growth candidates, verify recent execution and supply, then define a limited treatment, comparison group, observation window and stopping conditions.</p></div></div>
+        <p>The exact shortlist depends on the screening rule. Moving the commercial-scale threshold from P75 to P70 expands Fix from six to eight and moves both Grow candidates into Defend; moving it to P80 leaves three Fix candidates. Small, separate changes to delivery and review percentiles preserved the original Fix and Grow members in the checks performed. Changing a scale label does not remove an underlying service problem.</p>
+        <p>These are proposed diagnostic and test priorities. Cost, capacity, inventory and treatment records are needed to evaluate net returns and choose a real resource allocation.</p>
+      </section>
+      <section id="answer" class="report-section">
+        <p class="report-section__number data-copy">05 / THE RESEARCH ANSWER</p><h2>Priorities change when the timeline is visible.</h2>
+        <p class="report-claim">The data supports a market-level screening process followed by recent-performance and mechanism checks.</p>
+        <p>Some historical risk markets recovered; some growth and protection candidates showed later warning signals. Linking markets to routes helped locate exposure, while checking review timestamps changed what the severe-delay figures meant. That is the basis for differentiated monitoring, diagnosis and controlled tests.</p>
+        <p>The analysis identifies what deserves investigation and what should be verified before growth. Carrier identity, promise logic, supply capacity, costs and post-action cohorts are the next evidence needed to assess causes and outcomes.</p>
+      </section>
+      <section id="appendix" class="report-section">
+        <p class="report-section__number data-copy">06 / EVIDENCE AND METHODS</p><h2>Trace the observations.</h2>
+        <details class="olist-data-details"><summary>Populations, grain and metric definitions</summary><p>Commercial measures use delivered, item-bearing orders in matched Jan–Aug purchase cohorts. Item GMV excludes freight. On-time eligibility requires delivery and estimate timestamps and a delivery timestamp no earlier than purchase; on-time compares their calendar dates. Low reviews are scores 1–2, using one selected review per order: latest answer timestamp, then creation date and review ID.</p><p>Category-state counts use a distinct category-order bridge; one multi-category order can appear in several markets. Seller, route and market order exposures can overlap and must not be added. A route is seller state → customer state, not a carrier or actual transport path.</p><p><a href={original+'sql/08_create_measurement_foundations.sql'}>Measurement foundations ↗</a> · <a href={original+'sql/16_headline_validation.sql'}>Original headline validation ↗</a></p></details>
+        <details class="olist-data-details"><summary>Screening rules and their sensitivity</summary><p>Original ranked category-state markets require at least 100 current orders and 95% review coverage. Peer GMV P75 defines high scale. Weak execution means on-time below P25 or low-review above P75; strong execution uses the on-time and low-review medians. The ordered rules also include Investigate supply, Monitor, Deprioritize and Not ranked. Sample-volume confidence labels are not causal confidence.</p><p>The CSV export contained 104 qualified markets. Rebuilding all labels matched the original output. Increasing the order floor to 125 reduced Fix to four, because the changed peer population raised the scale threshold; the original six markets themselves still had enough orders. Reducing qualification floors requires the excluded population and was not part of that exported-table sensitivity check. New monthly peer thresholds were not estimated.</p><p><a href={original+'dashboard/data/category_state.csv'}>Original qualified markets ↗</a> · <a href={original+'sql/14_create_priority_portfolios.sql'}>Ordered classification rules ↗</a></p></details>
+        <details class="olist-data-details"><summary>Composition and conditional comparisons</summary><p>State decomposition uses mutually exclusive customer-state order groups. With w denoting each state's share of eligible orders and r its on-time rate, the within-state term is Σ[(w₀+w₁)/2 × (r₁−r₀)]; the mix term is Σ[(r₀+r₁)/2 × (w₁−w₀)]. They exactly reconcile to the overall change. A separate month decomposition cannot be added to this one.</p><p>Review comparisons contrast on-time orders with final delays of at least three days, excluding 1–2 day delays. Each retained stratum needs five reviewed orders in both groups; rates are standardized to the pooled stratum distribution. Category comparisons use unique-category orders; seller and route comparisons use single-seller orders. These are descriptive checks. Joint category-route-month conditioning limited to after-receipt reviews retained only two strata and 11 severely late orders, too narrow for a stable conclusion.</p><p><a href={evidence+'state_decomposition.csv'}>State decomposition / CSV</a> · <a href={evidence+'conditional_review_comparison.csv'}>Conditional comparisons and retained samples / CSV</a></p></details>
+        <details class="olist-data-details"><summary>Source, reproduction and evidence status</summary><p>The source is the Brazilian E-Commerce Public Dataset by Olist. Nine supplied raw-file hashes matched the original project manifest. An independent Python validation followed the existing SQL measurement rules and exactly reproduced the matched-period headline counts and merchandise value, five delay-band counts, and selected candidate aggregates. This was a targeted validation, not an audit of every SQL script.</p><p>Supplemental aggregate evidence and its reproducible validation are preserved with this website's source. No raw orders, identifiers or review text are redistributed here. The dataset lacks complete costs, inventory, capacity, carrier identity and experiment assignment. Recommendations have no implemented outcome evidence.</p><p><a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce">Original dataset ↗</a> · <a href="https://github.com/gabriel232ch/olist-marketplace-analytics/tree/84819c37b79ab7fcf7982e2f7063124432fee0cc">Original research snapshot ↗</a> · <a href="https://github.com/gabriel232ch/gabriel-portfolio/tree/main/docs/research/olist">Supplemental research and validation ↗</a></p></details>
+      </section>
+      <footer class="report-footer"><span>GABRIEL CHEN / OLIST RESEARCH</span><a href="/#olist">BACK TO WORK ↑</a></footer>
     </article>
-  </main>
+  </div>
+</main>
 </BaseLayout>
-
-<style>
-  .research-page {
-    min-height: 100vh;
-    padding: 1.5rem clamp(1.25rem, 4vw, 5rem) 6rem;
-    color: var(--ink);
-    background: var(--paper);
-    font-family: var(--font-reading);
-  }
-
-  .research-page__header,
-  .research-page__footer {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    align-items: baseline;
-    max-width: 74rem;
-    margin: 0 auto;
-  }
-
-  .research-page__identity,
-  .research-page__back,
-  .research-page__footer a {
-    color: inherit;
-    font-family: var(--font-metadata);
-    font-size: var(--font-size-micro);
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-  }
-
-  .research-page__article {
-    max-width: 54rem;
-    margin: 10rem auto 0;
-  }
-
-  .research-page .research-page__kicker,
-  .research-page .research-page__eyebrow,
-  .research-page .research-page__note {
-    color: var(--ink-muted);
-    font-family: var(--font-metadata);
-    font-size: var(--font-size-micro);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .research-page h1,
-  .research-page h2 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.035em;
-  }
-
-  .research-page h1 {
-    max-width: 15ch;
-    margin: 1.5rem 0;
-    font-size: var(--font-size-project-title);
-    line-height: 0.95;
-  }
-
-  .research-page h2 {
-    margin: 0.5rem 0 1.5rem;
-    font-size: var(--font-size-section-title);
-    line-height: 1;
-  }
-
-  .research-page :where(p, li) {
-    max-width: 42rem;
-    font-family: var(--font-reading);
-    font-size: var(--font-size-body);
-    line-height: var(--line-height-reading);
-  }
-
-  .research-page .research-page__lede {
-    max-width: 38rem;
-    margin: 0 0 8rem;
-    font-family: var(--font-display);
-    font-size: var(--font-size-lead);
-    line-height: 1.25;
-  }
-
-  .research-page section {
-    margin: 0 0 8rem;
-    padding-top: 2rem;
-    border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
-  }
-
-  .research-page__trail {
-    display: grid;
-    gap: 0.85rem;
-    padding-left: 1.5rem;
-  }
-
-  .research-page__evidence {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .research-page__evidence-card {
-    padding: 1.25rem 0;
-    border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
-  }
-
-  .research-page__evidence-card p {
-    margin: 0.25rem 0;
-  }
-
-  .research-page .research-page__metric {
-    font-family: var(--font-numeric);
-    font-size: var(--font-size-statement);
-    font-feature-settings: 'lnum' 1, 'pnum' 1;
-    font-variant-numeric: lining-nums proportional-nums;
-    font-weight: 400;
-    letter-spacing: -0.035em;
-    line-height: 1.05;
-  }
-
-  .research-page .research-page__note {
-    font-family: var(--font-metadata);
-    font-size: var(--font-size-micro);
-    line-height: 1.4;
-  }
-
-  .research-page__footer {
-    justify-content: flex-start;
-    padding-top: 2rem;
-    border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
-  }
-
-  @media (max-width: 640px) {
-    .research-page__header {
-      align-items: flex-start;
-    }
-
-    .research-page__article {
-      margin-top: 6rem;
-    }
-
-    .research-page__lede,
-    .research-page section {
-      margin-bottom: 5rem;
-    }
-  }
-</style>
+<script>
+  import '../../scripts/olist-report';
+</script>

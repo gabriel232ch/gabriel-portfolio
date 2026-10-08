@@ -1,6 +1,6 @@
 ---
 title: Olist Marketplace Analysis
-summary: A portfolio approach to marketplace growth, delivery reliability, and customer experience.
+summary: A marketplace study tracing growth, changing delivery risk, and review timing into conditional market priorities.
 publication: review
 visibility: public
 curation: featured
@@ -13,9 +13,9 @@ source:
   github: https://github.com/gabriel232ch/olist-marketplace-analytics
 home:
   headline: "Growth and delivery, in tension"
-  takeaway: "GMV growth was volume-led, while on-time delivery declined—supporting different priorities for growth and repair."
-  question: "Where should Olist allocate commercial and operational resources to grow marketplace value while protecting delivery reliability and customer experience?"
-  outcome: "Growth was volume-led while operating quality weakened as scale grew, supporting distinct Grow / Defend / Fix / Investigate portfolios rather than one opaque score."
+  takeaway: "Transaction growth coincided with uneven delivery performance; recent trajectories and review timing changed the priorities to investigate."
+  question: "Which category × customer-state markets deserve attention, and what should Olist verify before further growth?"
+  outcome: "Historical screening identifies candidates; recent performance and review timing determine what to check before monitoring, repair or controlled growth tests."
   evidence:
     - label: GMV proxy
       value: Jan–Aug GMV proxy R$2.99M → R$7.22M (+141.13%)
@@ -23,7 +23,7 @@ home:
     - label: On-time delivery
       value: 96.50% → 92.27%
     - label: Fix-market exposure
-      value: Six material Fix markets cover 2,920 orders and R$409K GMV exposure.
+      value: Six historical Fix candidates cover R$409K GMV exposure under the original rules.
   signals:
     - GROW
     - DEFEND

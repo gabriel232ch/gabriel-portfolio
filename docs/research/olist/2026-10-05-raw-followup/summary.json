@@ -1,0 +1,194 @@
+{
+  "source": "/Users/jquser/Downloads/olist-business-analysis",
+  "hashes": {
+    "olist_customers_dataset.csv": "983a422239e1712ded753b3bf9ecf47dc73f144d306029dcfa99e70a226883d2",
+    "olist_geolocation_dataset.csv": "b514f6fc991b9566aeba02aa5d67e2c3630f034b60a0e05aa0d082a3b66d88d6",
+    "olist_order_items_dataset.csv": "0bc4d068c4fe38cbb01bd90e8746e3c613fe7b4baef75fab7b0e329701c3e279",
+    "olist_order_payments_dataset.csv": "4f713964f2815dbbaa40b9488268c55aac3627bfce5aa96cf58d1f3616de3cc0",
+    "olist_order_reviews_dataset.csv": "012b61c7593e34f51fa614efdf802b9c7056ce6aae5307ddb93236e7cfc797d7",
+    "olist_orders_dataset.csv": "8df58ef3d2d7e9944010f7beecd9b75367f5588ec6e3c91cec19ae3345ef9ecf",
+    "olist_products_dataset.csv": "3e6569628a17fbc75fd206ee357b59e20364b9afa90f5b6cd5b4d624c58aa9cc",
+    "olist_sellers_dataset.csv": "1f643d2b950373b85735e7794b20986f528d7a000432e7c6f9bcbb44d0846a0e",
+    "product_category_name_translation.csv": "a81f0d1f27b27e7293f761bc79e3ce8f348ee39c4b3ed3e49bde38f478586278"
+  },
+  "baseline": [
+    {
+      "year": 2017,
+      "orders": 21998,
+      "gmv_cents": 299345613,
+      "eligible": 21997,
+      "on_time": 21228,
+      "reviewed": 21837,
+      "low": 2312
+    },
+    {
+      "year": 2018,
+      "orders": 52783,
+      "gmv_cents": 721812512,
+      "eligible": 52777,
+      "on_time": 48699,
+      "reviewed": 52468,
+      "low": 7015
+    }
+  ],
+  "state_decomposition": {
+    "overall_delta_pp": -4.230919448130077,
+    "within_state_pp": -4.44559554019359,
+    "state_mix_pp": 0.21467609206351498,
+    "current_at_prior_state_weights": 0.9191991008400312
+  },
+  "review_comparisons": [
+    {
+      "comparison": "category",
+      "strata": 44,
+      "nonlate_orders": 46802,
+      "severe_orders": 3112,
+      "eligible_nonlate_before_overlap": 48033,
+      "eligible_severe_before_overlap": 3156,
+      "standardized_nonlate_low": 0.08981064794020267,
+      "standardized_severe_low": 0.7311505393050992,
+      "gap_pp": 64.13398913648966
+    },
+    {
+      "comparison": "category_answered_after_delivery",
+      "strata": 22,
+      "nonlate_orders": 41946,
+      "severe_orders": 409,
+      "eligible_nonlate_before_overlap": 47965,
+      "eligible_severe_before_overlap": 454,
+      "standardized_nonlate_low": 0.09105241644341375,
+      "standardized_severe_low": 0.19272666085734202,
+      "gap_pp": 10.167424441392829
+    },
+    {
+      "comparison": "single_seller_route",
+      "strata": 55,
+      "nonlate_orders": 43541,
+      "severe_orders": 2961,
+      "eligible_nonlate_before_overlap": 47689,
+      "eligible_severe_before_overlap": 3157,
+      "standardized_nonlate_low": 0.08710237998909594,
+      "standardized_severe_low": 0.7017844876321311,
+      "gap_pp": 61.46821076430351
+    },
+    {
+      "comparison": "single_seller_route_answered_after_delivery",
+      "strata": 18,
+      "nonlate_orders": 35673,
+      "severe_orders": 350,
+      "eligible_nonlate_before_overlap": 47622,
+      "eligible_severe_before_overlap": 452,
+      "standardized_nonlate_low": 0.08678512707802144,
+      "standardized_severe_low": 0.19117311097698256,
+      "gap_pp": 10.438798389896112
+    },
+    {
+      "comparison": "single_seller",
+      "strata": 161,
+      "nonlate_orders": 23752,
+      "severe_orders": 2010,
+      "eligible_nonlate_before_overlap": 47689,
+      "eligible_severe_before_overlap": 3157,
+      "standardized_nonlate_low": 0.09546040024165213,
+      "standardized_severe_low": 0.7337062552635759,
+      "gap_pp": 63.82458550219238
+    },
+    {
+      "comparison": "single_seller_answered_after_delivery",
+      "strata": 16,
+      "nonlate_orders": 8703,
+      "severe_orders": 121,
+      "eligible_nonlate_before_overlap": 47622,
+      "eligible_severe_before_overlap": 452,
+      "standardized_nonlate_low": 0.09756756166082674,
+      "standardized_severe_low": 0.24195260956933667,
+      "gap_pp": 14.438504790850992
+    },
+    {
+      "comparison": "month",
+      "strata": 8,
+      "nonlate_orders": 48468,
+      "severe_orders": 3160,
+      "eligible_nonlate_before_overlap": 48468,
+      "eligible_severe_before_overlap": 3160,
+      "standardized_nonlate_low": 0.09320169129170255,
+      "standardized_severe_low": 0.6918655604370856,
+      "gap_pp": 59.8663869145383
+    },
+    {
+      "comparison": "month_answered_after_delivery",
+      "strata": 8,
+      "nonlate_orders": 48399,
+      "severe_orders": 454,
+      "eligible_nonlate_before_overlap": 48399,
+      "eligible_severe_before_overlap": 454,
+      "standardized_nonlate_low": 0.09268049431498232,
+      "standardized_severe_low": 0.18878186612397208,
+      "gap_pp": 9.610137180898976
+    },
+    {
+      "comparison": "category_route_month",
+      "strata": 121,
+      "nonlate_orders": 7316,
+      "severe_orders": 1053,
+      "eligible_nonlate_before_overlap": 47615,
+      "eligible_severe_before_overlap": 3154,
+      "standardized_nonlate_low": 0.09340367676669345,
+      "standardized_severe_low": 0.6945187667569779,
+      "gap_pp": 60.11150899902844
+    },
+    {
+      "comparison": "category_route_month_answered_after_delivery",
+      "strata": 2,
+      "nonlate_orders": 311,
+      "severe_orders": 11,
+      "eligible_nonlate_before_overlap": 47548,
+      "eligible_severe_before_overlap": 452,
+      "standardized_nonlate_low": 0.06473396897172351,
+      "standardized_severe_low": 0.09813664596273292,
+      "gap_pp": 3.3402676991009406
+    }
+  ],
+  "timing": [
+    {
+      "band": "early6_to_due",
+      "reviewed": 9129,
+      "low": 904,
+      "created_before_delivery_day": 26,
+      "answered_before_delivery": 22,
+      "answered_before_due_day": 5404
+    },
+    {
+      "band": "early7",
+      "reviewed": 39339,
+      "low": 3596,
+      "created_before_delivery_day": 54,
+      "answered_before_delivery": 47,
+      "answered_before_due_day": 38319
+    },
+    {
+      "band": "late1_2",
+      "reviewed": 834,
+      "low": 201,
+      "created_before_delivery_day": 4,
+      "answered_before_delivery": 91,
+      "answered_before_due_day": 4
+    },
+    {
+      "band": "late3_7",
+      "reviewed": 1437,
+      "low": 931,
+      "created_before_delivery_day": 1246,
+      "answered_before_delivery": 1028,
+      "answered_before_due_day": 4
+    },
+    {
+      "band": "late8plus",
+      "reviewed": 1723,
+      "low": 1382,
+      "created_before_delivery_day": 1722,
+      "answered_before_delivery": 1678,
+      "answered_before_due_day": 4
+    }
+  ]
+}

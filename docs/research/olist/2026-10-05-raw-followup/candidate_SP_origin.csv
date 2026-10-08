@@ -1,0 +1,10 @@
+category_name,customer_state,orders,orders_with_SP_seller,late,late_with_SP_seller
+bed_bath_table,MG,554,478,53,51
+bed_bath_table,RJ,646,555,106,103
+computers_accessories,RJ,490,167,76,33
+health_beauty,SP,2442,1766,162,107
+housewares,MG,397,232,21,17
+office_furniture,SP,286,278,20,20
+sports_leisure,RJ,456,279,85,61
+stationery,SP,622,497,29,24
+watches_gifts,RJ,488,392,65,60
