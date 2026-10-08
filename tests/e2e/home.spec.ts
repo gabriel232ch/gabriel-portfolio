@@ -192,25 +192,26 @@ test('smaller-company chapter stays open-ended and protects current-employer det
 
 test('Olist and smaller-company CTAs resolve locally in light and dark themes', async ({ page }) => {
   const themes = {
-    light: { background: 'rgb(242, 239, 231)', ink: 'rgb(21, 21, 21)' },
-    dark: { background: 'rgb(17, 18, 20)', ink: 'rgb(239, 237, 231)' },
+    light: { background: 'rgb(244, 243, 246)', ink: 'rgb(36, 27, 41)' },
+    dark: { background: 'rgb(20, 16, 22)', ink: 'rgb(242, 238, 245)' },
   } as const;
 
   for (const [theme, colors] of Object.entries(themes)) {
     await page.goto('/work/olist-marketplace-analysis/');
     await page.evaluate((selectedTheme) => localStorage.setItem('theme', selectedTheme), theme);
     await page.reload();
-    const olistPage = page.locator('.research-page');
+    const olistPage = page.locator('body');
+    await expect(page.locator('.olist-report')).toBeVisible();
     await expect(olistPage).toHaveCSS('background-color', colors.background);
     await expect(olistPage).toHaveCSS('color', colors.ink);
     await expect(page.getByRole('heading', {
       level: 1,
-      name: 'SQL Wasn’t the Hard Part. Knowing What to Ask Was.',
+      name: 'Growth, delivery & marketplace priorities',
     })).toBeVisible();
-    await expect(page.getByText('Analysis trail')).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Source analysis on GitHub' })).toHaveAttribute(
+    await expect(page.locator('#appendix')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Original research snapshot ↗', includeHidden: true })).toHaveAttribute(
       'href',
-      'https://github.com/gabriel232ch/olist-marketplace-analytics/blob/main/README.md',
+      'https://github.com/gabriel232ch/olist-marketplace-analytics/tree/84819c37b79ab7fcf7982e2f7063124432fee0cc',
     );
     for (const retiredLabel of ['01 / METHOD', '02 / OBSERVATIONS', '03 / BOUNDARIES']) {
       await expect(page.getByText(retiredLabel, { exact: true })).toHaveCount(0);
