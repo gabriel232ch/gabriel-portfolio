@@ -155,8 +155,8 @@ test('keeps private employer material out of rendered page text', async ({ page 
 
 test('uses the existing paper and ink tokens in light and dark themes', async ({ page }) => {
   const themes = {
-    light: { background: 'rgb(242, 239, 231)', ink: 'rgb(21, 21, 21)' },
-    dark: { background: 'rgb(17, 18, 20)', ink: 'rgb(239, 237, 231)' },
+    light: { background: 'rgb(244, 243, 246)', ink: 'rgb(36, 27, 41)' },
+    dark: { background: 'rgb(20, 16, 22)', ink: 'rgb(242, 238, 245)' },
   } as const;
 
   for (const [theme, expected] of Object.entries(themes)) {

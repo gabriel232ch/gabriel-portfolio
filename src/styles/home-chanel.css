@@ -306,3 +306,7 @@
 .chanel-business-signal__shock > span:nth-child(3) .chanel-business-signal__meter b { background:var(--ink-muted); transition-delay:200ms; }
 .chanel-business-signal[data-motion-state='pending'] .chanel-business-signal__meter b { transform:scaleX(0); }
 @media(prefers-reduced-motion:reduce) { .chanel-business-signal__meter b { transform:none!important; transition:none!important; } }
+
+/* Match the report's revenue / operating profit / cash flow series. */
+.chanel-business-signal__shock > span:nth-child(2) .chanel-business-signal__meter b { background: var(--chart-secondary); }
+.chanel-business-signal__shock > span:nth-child(3) .chanel-business-signal__meter b { background: var(--chart-tertiary); }

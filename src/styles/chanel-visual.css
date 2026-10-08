@@ -1,16 +1,10 @@
 /* Chanel-only visual layer: shared report styles and other published projects stay intact. */
 .chanel-report {
-  --chanel-series-0: #8a6754;
-  --chanel-series-1: #587b78;
-  --chanel-series-2: #a67682;
-  --chanel-loss: #98605c;
+  --chanel-series-0: var(--chart-primary);
+  --chanel-series-1: var(--chart-secondary);
+  --chanel-series-2: var(--chart-tertiary);
+  --chanel-loss: var(--chart-negative);
   --chanel-ease: cubic-bezier(.22,1,.36,1);
-}
-:root[data-theme='dark'] .chanel-report {
-  --chanel-series-0: #d4b08b;
-  --chanel-series-1: #87b4af;
-  --chanel-series-2: #d0a4b3;
-  --chanel-loss: #cf9390;
 }
 .chanel-report .report-hero { position: relative; }
 .chanel-report .report-hero::after { content:''; position:absolute; bottom:-1px; left:0; width:18%; height:2px; background:var(--accent); }
