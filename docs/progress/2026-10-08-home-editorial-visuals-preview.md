@@ -51,3 +51,14 @@ User approved the animation but found the overall information density cramped.
 - Check, lint, build and 40 homepage desktop/mobile tests passed; screenshots inspected, no overflow.
 - Preview: https://6c82db60-gabriel-portfolio.gabrielchen.workers.dev/
 - Version: 6c82db60-4d66-41bd-a14f-c8741a39bd66. Await current preview confirmation before merge and production publication.
+
+## Homepage whitespace and later chapters
+
+User requested a moderate Chanel chart scale with surrounding whitespace, and authorized easing cramped sections later on the homepage.
+
+- Chanel evidence composition is inset to ten columns, with the plot and its controls capped at 38rem instead of filling the page. Existing animation and interaction are retained.
+- Olist introduction pairs the smaller, more comfortably spaced title with the Samsung context; learning and the key question follow in a separate spread, then arrival/data scope and a smaller constellation. Original text is preserved. The dark data chapter, metrics and closing have wider gaps and inset content.
+- Smaller Companies separates the opening from its progressive inquiry paths; question summaries have more vertical spacing. Current-life items have more separation.
+- Homepage CSS only: no case-page, dataset, research-file or financial-data changes. Latest origin/main remains d5a507a. Check, lint, build and 46 desktop/mobile homepage/motion tests passed. Three chapters captured in desktop/mobile light/dark with no viewport overflow.
+- Preview: https://7e1572d0-gabriel-portfolio.gabrielchen.workers.dev/
+- Version: 7e1572d0-a6d0-41cb-96d2-d29c27c3e884. Await current preview confirmation before merge and production publication.
