@@ -32,7 +32,7 @@ const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:
     </svg>
   </div>
   <div class="chanel-experience__timeline" aria-label="Explore a year">
-    {stages.map((stage,i)=><button type="button" data-portrait-year={i} aria-pressed={i===2}><span>{stage.year}</span><small>{stage.label}</small></button>)}
+    {stages.map((stage,i)=><button type="button" data-portrait-year={i} aria-label={`${stage.year} ${stage.label}`} aria-pressed={i===2}><span>{stage.year}</span><small>{stage.label}</small></button>)}
     <input class="chanel-experience__scrubber" type="range" min="0" max="2" value="2" step="1" aria-label="Chanel observation year" aria-valuetext="FY2025 · Return" data-portrait-range />
   </div>
   <div class="recovery-portrait__legend" aria-label="Select a measure">
@@ -57,10 +57,11 @@ const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:
     const range=root.querySelector<HTMLInputElement>('[data-portrait-range]')!;
     const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
     let year=2,measure=0,locked:string|null=null;
+    let interacted=false;
     let timers:ReturnType<typeof setTimeout>[]=[];
     const stop=()=>{timers.forEach(clearTimeout);timers=[];root.dataset.playing='false';};
     const move=(index:number,automatic=false,force=false)=>{
-      if(!automatic)stop();
+      if(!automatic){interacted=true;stop();}
       const changed=index!==year;year=index;root.dataset.year=String(index);
       yearButtons.forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.portraitYear)===index)));
       range.value=String(index);range.setAttribute('aria-valuetext',`FY${2023+index} · ${stageLabels[index]}`);
@@ -82,7 +83,7 @@ const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:
       }
     };
     const select=(active:string|null)=>{
-      stop();locked=active;measure=Number(active??0);root.dataset.activeMeasure=active??'all';
+      interacted=true;stop();locked=active;measure=Number(active??0);root.dataset.activeMeasure=active??'all';
       root.style.setProperty('--active-color',`var(--chart-${values[measure].color})`);
       buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.portraitSelect===active)));
       root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted=String(active!==null&&s.dataset.portraitSeries!==active));
@@ -101,13 +102,13 @@ const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:
     range.addEventListener('input',()=>move(Number(range.value)));
     const play=()=>{
       stop();if(reduced.matches){move(2);return;}
-      locked=null;measure=0;root.dataset.activeMeasure='all';buttons.forEach(b=>b.setAttribute('aria-pressed','false'));root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted='false');
+      interacted=false;locked=null;measure=0;root.dataset.activeMeasure='all';buttons.forEach(b=>b.setAttribute('aria-pressed','false'));root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted='false');
       root.style.setProperty('--active-color','var(--chart-primary)');root.dataset.playing='true';move(0,true);
       timers.push(setTimeout(()=>move(1,true),850),setTimeout(()=>move(2,true),2200),setTimeout(()=>root.dataset.playing='false',3400));
     };
     root.querySelector('[data-portrait-replay]')!.addEventListener('click',play);
-    new MutationObserver(()=>{if(root.dataset.motionState==='entered')play();}).observe(root,{attributes:true,attributeFilter:['data-motion-state']});
-    if(root.dataset.motionState==='entered')play();
+    new MutationObserver(()=>{if(root.dataset.motionState==='entered'&&!interacted)play();}).observe(root,{attributes:true,attributeFilter:['data-motion-state']});
+    if(root.dataset.motionState==='entered'&&!interacted)play();
     reduced.addEventListener('change',()=>{if(reduced.matches){stop();move(2);}});
   });
 </script>

@@ -40,3 +40,14 @@ User requested a focused Chanel revision: the returning-question paragraph below
 - Version: 28f9a02f-86e5-456b-b63a-01f793050ce5.
 - Current preview: https://28f9a02f-gabriel-portfolio.gabrielchen.workers.dev/
 - Continue PR #9; awaiting user preview confirmation before merge or production publication.
+
+## Chanel spacing revision
+
+User approved the animation but found the overall information density cramped.
+
+- Separated the introductory narrative and full-width chart into distinct reading moments. Desktop pairs the title with its original narrative, then reserves an entire row for financial evidence, with stage/readout beside a wider plot. Mobile retains a stacked rhythm with more spacing.
+- Reduced competing labels: repeated timeline stage labels and endpoint numbers are quiet by default; selected-measure endpoints remain available. Removed the repeated scope footer visually, while chart accessibility description and source link retain its context.
+- Original narrative and data are preserved. Entry playback cannot overwrite a selection made before viewport entry. Year controls retain explicit accessible labels.
+- Check, lint, build and 40 homepage desktop/mobile tests passed; screenshots inspected, no overflow.
+- Preview: https://6c82db60-gabriel-portfolio.gabrielchen.workers.dev/
+- Version: 6c82db60-4d66-41bd-a14f-c8741a39bd66. Await current preview confirmation before merge and production publication.
