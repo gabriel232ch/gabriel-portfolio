@@ -42,6 +42,17 @@ New chart copy reviewed with humanize-ai and writing-analyst-prose: labels descr
 
 ## Release gate
 
-Preview upload and remote verification pending. Do not merge or deploy production until the user confirms this concrete preview. After confirmation: reconcile with then-current origin/main, merge through PR, build approved main, compare with reviewed preview, publish main build and verify live.
+Preview upload and remote verification completed. Do not merge or deploy production until the user confirms this concrete preview. After confirmation: reconcile with then-current origin/main, merge through PR, build approved main, compare with reviewed preview, publish main build and verify live.
 
 Initial remote candidate `9cc3914e` was superseded after inspecting mobile price endpoints: the legacy parent retained a 36rem minimum width. The Chanel-only small-screen override now clears that minimum so endpoint cards fit the available width.
+
+
+## Final preview
+
+- Build commit: `5b18abf` (implementation `537544e`, then mobile container correction).
+- Cloudflare version: `3c7f764c-f6a8-41ce-9596-da2f05df59b0`.
+- Case: https://3c7f764c-gabriel-portfolio.gabrielchen.workers.dev/work/luxury-handbag-pricing-architecture/
+- Home: https://3c7f764c-gabriel-portfolio.gabrielchen.workers.dev/#work
+- Actual remote checks: financial year readouts, profit selection/full reset, mobile endpoint selection, homepage's three ratio meters and current Olist/Smaller Companies summaries. Final mobile page width and viewport both 390; endpoint cards fit their local rail.
+- Final screenshot: `/private/tmp/chanel-visual-preview.png`; preview case retained as a deliverable tab.
+- Only `wrangler versions upload` used. No main merge, production deployment or route change.
