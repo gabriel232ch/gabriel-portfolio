@@ -18,7 +18,7 @@ const readout = (index: number) => `${months[index]} · ${series.map(s => `${s.l
     {months.map((month, i) => <text x={x(i)} y="242" text-anchor="middle">{month}</text>)}
     <line class="olist-chart__guide" x1={x(0)} x2={x(0)} y1="28" y2="220" data-chart-guide />
     {series.map((s, si) => <g class:list={['olist-chart__series', { 'olist-chart__series--second': si === 1 }]}>
-      <path class="olist-chart__line" pathLength="1" d={s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')} />
+      <path class="olist-chart__line" d={s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')} />
       {s.values.map((v, i) => <g><circle class="olist-chart__halo" cx={x(i)} cy={y(v)} r="14" data-chart-month={i} /><circle class="olist-chart__point" cx={x(i)} cy={y(v)} r="4" /></g>)}
     </g>)}
   </svg>

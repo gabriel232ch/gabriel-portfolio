@@ -62,8 +62,9 @@
 .olist-actions p { font-size: var(--font-size-secondary-reading); line-height: 1.6; }
 .olist-report [data-olist-reveal] { transition: opacity var(--motion-cinematic) var(--ease-cinematic), transform var(--motion-cinematic) var(--ease-cinematic); }
 .olist-report [data-reveal-state='pending'] { opacity: 0; transform: translateY(22px); }
-.olist-report [data-reveal-state='pending'] .olist-chart__line { stroke-dasharray: 1; stroke-dashoffset: 1; }
-.olist-report [data-reveal-state='entered'] .olist-chart__line { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset var(--motion-signature) var(--ease-cinematic); }
+/* Reveal the complete stroke without dash lengths that change under SVG scaling. */
+.olist-report [data-reveal-state='pending'] .olist-chart__line { clip-path: inset(0 100% 0 0); }
+.olist-report [data-reveal-state='entered'] .olist-chart__line { clip-path: inset(0 0 0 0); transition: clip-path var(--motion-signature) var(--ease-cinematic); }
 .olist-report [data-reveal-state='pending'] .olist-timing-fill { transform: scaleX(0); }
 .olist-report [data-reveal-state='entered'] .olist-timing-fill { transform: scaleX(1); transition: transform var(--motion-signature) var(--ease-cinematic); }
 .olist-report :focus-visible { outline: 2px solid var(--olist-blue); outline-offset: 4px; }
@@ -81,6 +82,6 @@
 @media (prefers-reduced-motion: reduce) {
  .olist-report [data-olist-reveal], .olist-report .olist-chart__line, .olist-report .olist-timing-fill, .olist-candidate-controls button { transition: none !important; }
  .olist-report [data-reveal-state='pending'] { opacity: 1; transform: none; }
- .olist-report [data-reveal-state='pending'] .olist-chart__line { stroke-dashoffset: 0; }
+ .olist-report .olist-chart__line { clip-path: none !important; }
  .olist-report [data-reveal-state='pending'] .olist-timing-fill { transform: none; }
 }

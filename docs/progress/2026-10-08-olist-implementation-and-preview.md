@@ -49,3 +49,13 @@ Upload a version preview and create the PR. Await the user's preview confirmatio
 - No production traffic change or main merge performed.
 - Repository-level workflow is now recorded in `AGENTS.md`; main remains a moving approved baseline.
 - Final browser rerun after month-guide and mobile-axis sizing changes passed the same smoke checks.
+
+## Chart rendering correction
+
+- User screenshots exposed truncated July–August connections despite complete data points.
+- Reproduced the defect at enlarged desktop size: normalized SVG dash lengths with non-scaling strokes cut off the final segments. Replaced dash drawing with a clipping reveal and removed `pathLength`; data and scales are unchanged.
+- Browser screenshot pixel checks at the final segments reproduced absent strokes in the old implementation and visible strokes in both corrected charts. Desktop/mobile interactions, dark mode, reduced motion and protected case routes passed again.
+- Astro, lint, 35 unit tests and the static build passed.
+- Corrected Cloudflare preview version: `82b4bc86-70ef-418a-9196-4f0f17d0fb85`.
+- Updated preview: https://82b4bc86-gabriel-portfolio.gabrielchen.workers.dev/work/olist-marketplace-analysis/
+- Continues PR #6 on its existing branch. Main and production remain unchanged, awaiting preview confirmation.
