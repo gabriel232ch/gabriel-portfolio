@@ -9,6 +9,10 @@ import {
   LUXURY_SLOWDOWN_CHANEL,
   LUXURY_SLOWDOWN_PEERS,
 } from '../../data/luxury';
+import ChanelTrajectory from '../../components/editorial/ChanelTrajectory.astro';
+import ChanelRecovery from '../../components/editorial/ChanelRecovery.astro';
+import ChanelProfitBridge from '../../components/editorial/ChanelProfitBridge.astro';
+import '../../styles/chanel-visual.css';
 import LuxuryFinancialAppendix from '../../components/editorial/LuxuryFinancialAppendix.astro';
 import { peerRevenue, regionalRevenue, channelRevenue, priceBands } from '../../data/luxury-evidence';
 import '../../styles/report.css';
@@ -34,11 +38,7 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
   freeCashFlowIndex: (row.freeCashFlow / baseline.freeCashFlow) * 100,
 }));
 
-const slowdownSeries = [
-  { key: 'revenue', label: 'REVENUE INDEX', value: 'revenueIndex' as const },
-  { key: 'profit', label: 'OPERATING PROFIT INDEX', value: 'operatingProfitIndex' as const },
-  { key: 'cash', label: 'FREE CASH FLOW INDEX', value: 'freeCashFlowIndex' as const },
-];
+
 ---
 
 <BaseLayout
@@ -47,7 +47,7 @@ const slowdownSeries = [
   noindex={false}
   lang="en"
 >
-  <main class="report-page">
+  <main class="report-page chanel-report">
     <header class="report-topline">
       <a class="report-topline__identity" href="/">
         <span>GABRIEL CHEN</span>
@@ -121,31 +121,11 @@ const slowdownSeries = [
           <p class="report-section__number data-copy">02 / THE OPERATING RESULTS</p>
           <h2>Revenue recovered further than profit or cash flow</h2>
           <p>Chanel declined in FY2024 and improved in FY2025 across all three measures. By FY2025, reported revenue stood at 97.6% of FY2023, operating profit at 73.5%, and free cash flow at 70.5%. The return to revenue growth left a substantial earnings and cash gap.</p>
-          <div class="report-visual report-index-chart" data-report-motion data-interactive-chart role="group" aria-label="Chanel consolidated revenue, operating profit and free cash flow indexed to FY2023 equals 100">
-            <div class="report-visual__heading">
-              <span class="data-copy">FIG. 01 / CHANEL CONSOLIDATED RESULTS</span>
-              <span class="data-copy">FY2023 = 100 / USD</span>
-            </div>
-            {slowdownSeries.map((series) => (
-              <div class={'report-index-chart__row report-index-chart__row--' + series.key}>
-                <strong class="data-copy">{series.label}</strong>
-                <div class="report-index-chart__cells">
-                  {slowdownRows.map((row) => {
-                    const value = row[series.value];
-                    return (
-                      <div class="report-index-chart__cell">
-                        <span class="data-copy">{row.year}</span>
-                        <button type="button" class="report-index-chart__bar" data-chart-bar data-series={series.key} data-year={row.year} aria-label={series.label.toLowerCase() + ' ' + row.year + ' index: ' + value.toFixed(1)} aria-pressed="false">
-                          <span class="report-index-chart__track"><i style={'--index-width:' + value + '%;'}></i></span>
-                          <b>{value.toFixed(1)}</b>
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
+          <ChanelTrajectory id="chanel-performance" eyebrow="FIG. 01 / CHANEL CONSOLIDATED RESULTS" title="A recovery with an earnings gap" years={[2023,2024,2025]} maximum={110} ticks={[0,25,50,75,100]} kind="finance" series={[
+            {label:'Revenue',values:slowdownRows.map(r=>r.revenueIndex),actual:slowdownRows.map(r=>r.revenue),unit:'$',precision:1},
+            {label:'Operating profit',values:slowdownRows.map(r=>r.operatingProfitIndex),actual:slowdownRows.map(r=>r.operatingProfit),unit:'$',precision:1},
+            {label:'Free cash flow',values:slowdownRows.map(r=>r.freeCashFlowIndex),actual:slowdownRows.map(r=>r.freeCashFlow),unit:'$',precision:0},
+          ]} note="Reported-dollar indices, including FX effects. Revenue and operating profit use filed accounts; free cash flow retains company-disclosure precision." />
           <details class="report-details" open>
             <summary><span class="data-copy">SHOW REPORTED FINANCIAL VALUES</span><span class="data-copy">FY2023–FY2025 / USD MILLIONS</span></summary>
             <div class="report-table-wrap">
@@ -165,6 +145,7 @@ const slowdownSeries = [
             Filed-account inputs reconcile a $1,695.5 million operating-profit shortfall between FY2023 and FY2025. Lower gross profit and higher SG&amp;A explain the arithmetic; the savings shown below partly offset the decline.
             <a href={LUXURY_FLAGSHIP_SOURCES.slowdownProfitReview} target="_blank" rel="noreferrer">Operating-profit bridge ↗</a>
           </p>
+          <ChanelProfitBridge />
           <div class="report-table-wrap">
             <table>
               <thead><tr><th>Bridge item</th><th>Change</th><th>Interpretation</th></tr></thead>
@@ -193,6 +174,7 @@ const slowdownSeries = [
             The channel bridge shows that both retail and wholesale recovered in FY2025, but retail regained only 45.7% of its prior-year loss. Region and channel are parallel breakdowns of group revenue, not additive contributions.
             <a href={LUXURY_FLAGSHIP_SOURCES.slowdownChannelReview} target="_blank" rel="noreferrer">Channel and product analysis ↗</a>
           </p>
+          <ChanelRecovery />
           <details class="report-details" open>
             <summary><span class="data-copy">REGIONAL REVENUE BRIDGE</span><span class="data-copy">REPORTED USD MILLIONS / ROUNDED</span></summary>
             <div class="report-table-wrap"><table class="report-table--wide">
@@ -339,30 +321,10 @@ const slowdownSeries = [
               </table>
             </div>
           </details>
-          <div class="report-visual report-visual--history" data-report-motion data-interactive-chart role="group" aria-label="Selected Classic and Mini median prices in France from 2022 to 2026">
-            <div class="report-visual__heading">
-              <span class="data-copy">FIG. 03 / ALIGNED FRANCE LINES</span>
-              <span class="data-copy">HOVER OR SELECT A BAR</span>
-            </div>
-            <div class="report-history-chart">
-              <div class="report-history-chart__axis data-copy"><span>€10k</span><span>€5k</span><span>€0</span></div>
-              <div class="report-history-chart__plot">
-                {historicalRows.map((row) => (
-                  <div class="report-history-column">
-                    <div class="report-history-column__bars">
-                      <button type="button" class="report-history-bar report-history-bar--classic" data-chart-bar data-series="classic" data-year={row.year} aria-label={'Classic / icon ' + row.year + ': €' + row.classic.toLocaleString('en-US')} aria-pressed="false" style={'--bar-height:' + (row.classic / 11000) * 100 + '%;'}><b>€{row.classic.toLocaleString('en-US')}</b></button>
-                      <button type="button" class="report-history-bar report-history-bar--access" data-chart-bar data-series="mini" data-year={row.year} aria-label={'Mini / access-core ' + row.year + ': €' + row.mini.toLocaleString('en-US')} aria-pressed="false" style={'--bar-height:' + (row.mini / 11000) * 100 + '%;'}><b>€{row.mini.toLocaleString('en-US')}</b></button>
-                    </div>
-                    <span class="report-history-column__year data-copy">{row.year}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div class="report-history-chart__legend data-copy">
-              <span><i class="report-swatch report-swatch--classic"></i>CLASSIC / ICON</span>
-              <span><i class="report-swatch report-swatch--access"></i>MINI / ACCESS-CORE</span>
-            </div>
-          </div>
+          <ChanelTrajectory id="chanel-price-history" eyebrow="FIG. 03 / ALIGNED FRANCE LINES" title="A wider euro gap, a similar ratio" years={historicalRows.map(r=>Number(r.year))} maximum={11000} ticks={[0,2500,5000,7500,10000]} kind="price" series={[
+            {label:'Classic / icon',values:historicalRows.map(r=>r.classic),actual:historicalRows.map(r=>r.classic),unit:'€',precision:0},
+            {label:'Mini / access-core',values:historicalRows.map(r=>r.mini),actual:historicalRows.map(r=>r.mini),unit:'€',precision:0},
+          ]} note="Selected continuous French lines, at common observed years only. The time axis retains the gap from 2024 to 2026; no 2025 price observation is added." />
           <p class="report-note">This comparison uses selected continuous French lines and common observation years. Missing years are not treated as zero change; the longer historical panel is documented in the appendix.</p>
           <p>The study establishes a high Classic anchor and price increases in selected lines. It does not supply a price–volume–mix bridge for FY2025. High prices also coexisted with the FY2024 decline, so repricing alone cannot explain the change in direction.</p>
           <p class="report-note">The August 2026 snapshot is a later observation of positioning, not a record of FY2025 transaction prices. <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Full price study and source trail ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">Current panel ↗</a></p>
@@ -496,95 +458,5 @@ const slowdownSeries = [
 </BaseLayout>
 
 <script>
-  const motionNodes = document.querySelectorAll<HTMLElement>('[data-report-motion]');
-  const progress = document.querySelector<HTMLElement>('[data-report-progress]');
-  const links = [...document.querySelectorAll<HTMLAnchorElement>('.report-index a')];
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (reduceMotion || typeof IntersectionObserver !== 'function') {
-    motionNodes.forEach((node) => {
-      node.dataset.motionState = 'entered';
-    });
-  } else {
-    motionNodes.forEach((node) => {
-      node.dataset.motionState = 'pending';
-    });
-
-    const motionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const node = entry.target as HTMLElement;
-          node.dataset.motionState = 'entered';
-          motionObserver.unobserve(node);
-        });
-      },
-      { threshold: 0.12 },
-    );
-
-    motionNodes.forEach((node) => motionObserver.observe(node));
-  }
-
-  const updateProgress = () => {
-    if (!progress) return;
-    const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
-    const amount = scrollRange > 0 ? window.scrollY / scrollRange : 0;
-    progress.style.transform = 'scaleX(' + amount + ')';
-  };
-
-  window.addEventListener('scroll', updateProgress, { passive: true });
-  window.addEventListener('resize', updateProgress, { passive: true });
-  updateProgress();
-
-  document.querySelectorAll<HTMLElement>('[data-interactive-chart]').forEach((chart) => {
-    const bars = [...chart.querySelectorAll<HTMLButtonElement>('[data-chart-bar]')];
-    const clearSelection = () => {
-      chart.removeAttribute('data-has-selection');
-      bars.forEach((bar) => {
-        bar.dataset.selected = 'false';
-        bar.setAttribute('aria-pressed', 'false');
-      });
-    };
-
-    bars.forEach((bar) => {
-      bar.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const wasSelected = bar.dataset.selected === 'true';
-        bars.forEach((item) => {
-          const isSelected = item === bar && !wasSelected;
-          item.dataset.selected = String(isSelected);
-          item.setAttribute('aria-pressed', String(isSelected));
-        });
-
-        if (wasSelected) chart.removeAttribute('data-has-selection');
-        else chart.dataset.hasSelection = 'true';
-      });
-    });
-
-    chart.addEventListener('click', clearSelection);
-  });
-
-  if (typeof IntersectionObserver === 'function') {
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const activeId = entry.target.id;
-          links.forEach((link) => {
-            const isActive = link.getAttribute('href') === '#' + activeId;
-            link.dataset.active = String(isActive);
-            if (isActive) link.setAttribute('aria-current', 'location');
-            else link.removeAttribute('aria-current');
-          });
-        });
-      },
-      { rootMargin: '-18% 0px -65% 0px', threshold: 0 },
-    );
-
-    links.forEach((link) => {
-      const id = link.getAttribute('href')?.slice(1);
-      const section = id ? document.getElementById(id) : null;
-      if (section) sectionObserver.observe(section);
-    });
-  }
+  import '../../scripts/chanel-report';
 </script>

@@ -1,0 +1,21 @@
+---
+const steps=[{label:'FY2023',start:0,end:6407,change:6407,note:'Starting operating profit: $6,407.0m.'},{label:'Gross profit',start:6407,end:5634,change:-773,note:'Gross profit decreased by $773.0m.'},{label:'SG&A',start:5634,end:4649.2,change:-984.8,note:'SG&A expense increased by $984.8m, reducing operating profit.'},{label:'A&P / distribution',start:4649.2,end:4711.5,change:62.3,note:'A $62.3m decrease in advertising, promotion and distribution expense partly offset the decline.'},{label:'FY2025',start:0,end:4711.5,change:4711.5,note:'Ending operating profit: $4,711.5m; $1,695.5m below FY2023.'}];
+const y=(v:number)=>236-v/7000*190;
+const value=(v:number)=>(v<0?'−':'+')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})+'m';
+---
+<figure class="chanel-viz chanel-bridge" data-chanel-reveal>
+  <figcaption class="chanel-viz__caption"><span class="data-copy">OPERATING PROFIT / ARITHMETIC BRIDGE</span><span class="data-copy">USD MILLIONS · FY2023 → FY2025</span></figcaption>
+  <div class="chanel-viz__title"><h3>The earnings gap, step by step</h3><span class="chanel-viz__edition" aria-hidden="true">−</span></div>
+  <div class="chanel-bridge__plot" tabindex="0" role="region" aria-label="Operating profit bridge, scroll horizontally on small screens"><svg viewBox="0 0 680 285" role="img" aria-label="Operating profit falls from 6407 million dollars to 4711.5 million dollars: gross profit minus 773, SG&A minus 984.8, advertising promotion and distribution savings plus 62.3.">
+    {[0,2000,4000,6000].map(t=><g class="chanel-viz__grid"><line x1="48" x2="650" y1={y(t)} y2={y(t)} /><text x="40" y={y(t)+4} text-anchor="end">{t/1000}k</text></g>)}
+    {steps.map((s,i)=><g class:list={['chanel-bridge__step',{'chanel-bridge__step--loss':s.change<0,'chanel-bridge__step--gain':i===3}]} style={'--step-delay:'+i*90+'ms'}>
+      <rect x={66+i*116} y={y(Math.max(s.start,s.end))} width="68" height={Math.abs(y(s.start)-y(s.end))} />
+      <text x={100+i*116} y={y(Math.max(s.start,s.end))-12} text-anchor="middle">{i===0||i===4 ? '$'+s.end.toLocaleString('en-US',{minimumFractionDigits:1})+'m' : value(s.change)}</text>
+      <text class="chanel-bridge__label" x={100+i*116} y="261" text-anchor="middle">{s.label}</text>
+      {i<4&&<line class="chanel-bridge__connector" x1={134+i*116} x2={182+i*116} y1={y(s.end)} y2={y(s.end)} />}
+    </g>)}
+  </svg></div>
+  <div class="chanel-bridge__steps" aria-label="Explore profit bridge"><button type="button" data-bridge-all aria-pressed="true">All steps</button>{steps.map((s)=><button type="button" data-bridge-step data-readout={s.note} aria-pressed="false">{s.label}</button>)}</div>
+  <p class="chanel-recovery__readout" data-bridge-readout aria-live="polite">{steps[4].note}</p>
+  <p class="chanel-viz__note">An accounting reconciliation, not a causal explanation of purchases. Capital expenditure is not an operating-expense step.</p>
+</figure>

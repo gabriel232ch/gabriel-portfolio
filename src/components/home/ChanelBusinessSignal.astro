@@ -20,7 +20,7 @@ const measures = [
   <p class="data-copy chanel-business-signal__basis">FY2025 as a share of FY2023 · reported USD · Chanel group</p>
   <div class="chanel-business-signal__shock">
     {measures.map((measure) => (
-      <span><small>{measure.label}</small><strong>{measure.value.toFixed(1)}%</strong></span>
+      <span><small>{measure.label}</small><strong>{measure.value.toFixed(1)}%</strong><i class="chanel-business-signal__meter" aria-hidden="true"><b style={'--recovery-share:'+measure.value+'%'}></b></i></span>
     ))}
   </div>
   <p class="body-copy chanel-business-signal__note">Revenue was closest to its earlier level. Profit and cash generation still had larger gaps. <a href="/work/luxury-handbag-pricing-architecture/#performance">Results and sources →</a></p>

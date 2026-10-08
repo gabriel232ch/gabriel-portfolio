@@ -298,3 +298,11 @@
     transition: none !important;
   }
 }
+
+/* Recovery meters retain the exact FY2023 denominator used in the text. */
+.chanel-business-signal__meter { display:block; width:100%; height:3px; margin-top:1rem; background:var(--hairline); overflow:hidden; }
+.chanel-business-signal__meter b { display:block; width:var(--recovery-share); height:100%; background:var(--accent); transform-origin:left; transition:transform 1100ms var(--ease-cinematic); }
+.chanel-business-signal__shock > span:nth-child(2) .chanel-business-signal__meter b { background:var(--metal); transition-delay:100ms; }
+.chanel-business-signal__shock > span:nth-child(3) .chanel-business-signal__meter b { background:var(--ink-muted); transition-delay:200ms; }
+.chanel-business-signal[data-motion-state='pending'] .chanel-business-signal__meter b { transform:scaleX(0); }
+@media(prefers-reduced-motion:reduce) { .chanel-business-signal__meter b { transform:none!important; transition:none!important; } }

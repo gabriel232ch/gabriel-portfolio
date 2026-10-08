@@ -1,0 +1,36 @@
+---
+interface Series { label: string; values: number[]; actual: number[]; unit: string; precision: number }
+interface Props { id: string; eyebrow: string; title: string; years: number[]; series: Series[]; maximum: number; ticks: number[]; kind: 'finance' | 'price'; note: string }
+const { id, eyebrow, title, years, series, maximum, ticks, kind, note } = Astro.props;
+const selected = years.length - 1;
+const x = (i: number) => 48 + (years[i] - years[0]) / (years[selected] - years[0]) * 584;
+const y = (v: number) => 238 - v / maximum * 198;
+const formatted = (s: Series, i: number) => s.unit + s.actual[i].toLocaleString('en-US', {minimumFractionDigits:s.precision,maximumFractionDigits:s.precision}) + (kind === 'finance' ? 'm' : '');
+const record = (i: number) => ({year:years[i],x:x(i),metrics:series.map(s=>({label:s.label,value:formatted(s,i),index:s.values[i].toFixed(1),position:y(s.values[i])}))});
+---
+<figure class:list={['chanel-viz', 'chanel-trajectory', {'chanel-viz--price':kind === 'price'}]} data-chanel-reveal data-chanel-trajectory data-records={JSON.stringify(years.map((_,i)=>record(i)))}>
+  <figcaption class="chanel-viz__caption"><span class="data-copy">{eyebrow}</span><span class="data-copy">{kind === 'finance' ? 'FY2023 = 100 · REPORTED USD' : 'FRANCE · EUR · OBSERVED YEARS'}</span></figcaption>
+  <div class="chanel-viz__title"><h3>{title}</h3><span class="chanel-viz__edition" aria-hidden="true">{kind === 'finance' ? '01' : '03'}</span></div>
+  <div class="chanel-viz__legend" aria-label="Highlight a series">
+    <button type="button" data-trajectory-series="all" aria-pressed="true">All series</button>
+    {series.map((s,i)=><button type="button" style={'--series-color:var(--chanel-series-'+i+')'} data-trajectory-series={i} aria-pressed="false"><i aria-hidden="true"></i>{s.label}</button>)}
+  </div>
+  <svg class="chanel-trajectory__plot" viewBox="0 0 680 278" role="img" aria-labelledby={id+'-title '+id+'-description'}>
+    <title id={id+'-title'}>{title}</title><desc id={id+'-description'}>{note} Select an observed year below for exact values. Connecting lines join observations; they do not add measurements between years.</desc>
+    {ticks.map(t=><g class="chanel-viz__grid"><line x1="48" x2="632" y1={y(t)} y2={y(t)} /><text x="36" y={y(t)+4} text-anchor="end">{kind === 'price' ? (t === 0 ? '€0' : '€'+t/1000+'k') : t}</text></g>)}
+    {kind === 'finance' && <line class="chanel-trajectory__baseline" x1="48" x2="632" y1={y(100)} y2={y(100)} />}
+    <line class="chanel-trajectory__guide" data-trajectory-guide x1={x(selected)} x2={x(selected)} y1="30" y2="240" />
+    {series.map((s,si)=><g class="chanel-trajectory__series" data-trajectory-line={si} style={'--series-color:var(--chanel-series-'+si+')'}>
+      <path class="chanel-trajectory__line" pathLength="1" d={s.values.map((v,i)=>(i ? 'L' : 'M')+x(i)+','+y(v)).join(' ')} />
+      {s.values.map((v,i)=><g><circle class="chanel-trajectory__point" cx={x(i)} cy={y(v)} r="4" /><circle class="chanel-trajectory__hit" data-trajectory-observation={i} cx={x(i)} cy={y(v)} r="16" aria-hidden="true" /></g>)}
+      <circle class="chanel-trajectory__focus" data-trajectory-focus={si} cx={x(selected)} cy={y(s.values[selected])} r="8" />
+    </g>)}
+    {years.map((year,i)=><text class="chanel-trajectory__year" x={x(i)} y="267" text-anchor="middle">{kind==='finance' ? 'FY' : ''}{year}</text>)}
+  </svg>
+  <div class="chanel-viz__toolbar"><span class="data-copy">OBSERVATION</span><div class="chanel-viz__segments" aria-label="Select observed year">{years.map((year,i)=><button type="button" data-trajectory-year={i} aria-pressed={i===selected ? 'true':'false'}>{kind==='finance' ? 'FY' : ''}{year}</button>)}</div></div>
+  <div class="chanel-trajectory__readout" aria-live="polite" aria-atomic="true">
+    <p class="data-copy" data-trajectory-label>{kind==='finance'?'FY':''}{years[selected]}</p>
+    <div class="chanel-trajectory__metrics">{series.map((s,i)=><div style={'--series-color:var(--chanel-series-'+i+')'}><span>{s.label}</span><strong data-trajectory-value={i}>{formatted(s,selected)}</strong>{kind==='finance'&&<small><b data-trajectory-index={i}>{s.values[selected].toFixed(1)}</b> / FY2023 = 100</small>}</div>)}</div>
+  </div>
+  <p class="chanel-viz__note">{note}</p>
+</figure>
