@@ -57,10 +57,10 @@ export const HOME_STATE = {
       noQuestion:
         'There was no research question at the beginning. I started by understanding what was in the data — and what wasn’t.',
       businessQuestion:
-        'How should Olist grow marketplace value without letting fulfillment reliability and customer experience deteriorate?',
+        'Which markets deserve attention, and what should Olist verify before further growth?',
       shift: 'SQL stopped being the task. It became the language I used to investigate a business.',
       reflection:
-        'What changed wasn’t just what I could query. It was how I approached an unfamiliar problem.',
+        'Historical risk markets followed different paths over time. Checking recent performance and when customers answered reviews changed the priorities I could propose. Their effects still need to be tested.',
       cta: 'Explore the analysis →',
       href: '/work/olist-marketplace-analysis/',
     },

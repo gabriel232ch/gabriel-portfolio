@@ -47,17 +47,17 @@ export const OLIST_DATA_METRICS: readonly (OlistComparisonMetric | OlistFixMetri
     toValue: 92.27,
     scaleMax: 100,
     context: 'JAN–AUG / 2017 → 2018',
-    note: 'Operating quality weakened as scale grew',
+    note: 'The aggregate declined; monthly trajectories differed',
   },
   {
     id: 'fix',
-    label: 'Fix before growth',
+    label: 'Historical Fix candidates',
     segments: 6,
     orders: '2,920 orders',
     gmvExposure: 'R$409K GMV exposure',
     lateOrders: '405 late orders',
     context: 'MATERIAL MARKETS / PRIORITY PORTFOLIO',
-    note: 'Six material markets qualify for Fix before growth',
+    note: 'Original screening rules; recent performance needs a separate check',
   },
 ] as const;
 

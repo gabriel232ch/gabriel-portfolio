@@ -15,11 +15,18 @@
 }
 
 .olist-data-map {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
+  display: block;
   margin-top: var(--space-6);
 }
+
+.olist-data-map__constellation { display: block; width: min(100%, 42rem); height: auto; overflow: visible; }
+.olist-data-map__connections path { fill: none; stroke: var(--hairline); stroke-width: 1; }
+.olist-data-map__satellites { fill: var(--accent); }
+.olist-data-map__orbit { fill: none; stroke: var(--accent); stroke-width: .75; stroke-dasharray: 2 5; transform-origin: 240px 90px; transition: transform var(--motion-signature) var(--ease-cinematic); }
+.olist-data-map:hover .olist-data-map__orbit { transform: rotate(60deg); }
+.olist-data-map__core { fill: var(--ink); }
+.olist-data-map__labels { fill: var(--ink-muted); font-family: var(--font-metadata); font-size: var(--font-size-micro); }
+@media (prefers-reduced-motion: reduce) { .olist-data-map__orbit { transition: none; transform: none !important; } }
 
 .olist-data-map__node {
   border-top: 1px solid var(--hairline);
