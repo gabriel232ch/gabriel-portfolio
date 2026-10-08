@@ -1,0 +1,18 @@
+---
+import {regionalRevenue,channelRevenue} from '../../data/luxury-evidence';
+const panels = ['region','channel'].flatMap(group=>[1,2].map(period=>({group,period,rows:(group==='region'?regionalRevenue:channelRevenue.filter(r=>r.name!=='Group total')).map(r=>({name:r.name,values:r.values,delta:r.values[period]-r.values[period-1]}))})));
+const format=(v:number,group:string)=>v.toLocaleString('en-US',{minimumFractionDigits:group==='region'?0:1,maximumFractionDigits:group==='region'?0:1});
+---
+<figure class="chanel-viz chanel-recovery" data-chanel-reveal data-chanel-recovery>
+  <figcaption class="chanel-viz__caption"><span class="data-copy">REVENUE / LOCATING THE CHANGE</span><span class="data-copy">REPORTED USD MILLIONS</span></figcaption>
+  <div class="chanel-viz__title"><h3>Where the recovery took place</h3><span class="chanel-viz__edition" aria-hidden="true">↗</span></div>
+  <div class="chanel-recovery__controls"><div class="chanel-viz__segments" aria-label="Revenue breakdown"><button type="button" data-recovery-group="region" aria-pressed="true">Regions</button><button type="button" data-recovery-group="channel" aria-pressed="false">Channels</button></div><div class="chanel-viz__segments" aria-label="Revenue change period"><button type="button" data-recovery-period="1" aria-pressed="false">FY2024 change</button><button type="button" data-recovery-period="2" aria-pressed="true">FY2025 change</button></div></div>
+  {panels.map(panel=><div data-recovery-panel={panel.group+'-'+panel.period} hidden={!(panel.group==='region'&&panel.period===2)}>
+    <div class="chanel-recovery__scale data-copy" aria-label="Shared scale from minus 1000 to plus 1000 USD millions"><span></span><span class="chanel-recovery__ticks"><span>−1,000</span><span>0</span><span>+1,000</span></span><span>USDm</span></div>
+    <div class="chanel-recovery__rows">{panel.rows.map(row=><button type="button" class="chanel-recovery__row" data-recovery-row data-readout={row.name+' · FY'+(2022+panel.period)+': $'+format(row.values[panel.period-1],panel.group)+'m → FY'+(2023+panel.period)+': $'+format(row.values[panel.period],panel.group)+'m · Change: '+(row.delta>=0?'+':'−')+'$'+format(Math.abs(row.delta),panel.group)+'m'} aria-label={row.name+' change: '+(row.delta>=0?'+':'−')+'$'+format(Math.abs(row.delta),panel.group)+' million'} aria-pressed="false">
+      <span class="chanel-recovery__name">{row.name}</span><span class="chanel-recovery__rail"><i class:list={['chanel-recovery__bar',{'chanel-recovery__bar--negative':row.delta<0}]} style={'--change-width:'+Math.abs(row.delta)/1000*50+'%;--change-start:'+(row.delta<0?50-Math.abs(row.delta)/1000*50:50)+'%;'}></i></span><strong>{row.delta>=0?'+':'−'}{format(Math.abs(row.delta),panel.group)}</strong>
+    </button>)}</div>
+  </div>)}
+  <p class="chanel-recovery__readout" data-recovery-readout aria-live="polite">Europe · FY2024: $5,676m → FY2025: $6,054m · Change: +$378m</p>
+  <p class="chanel-viz__note">Regions and channels are separate views of the same revenue, not additive contributions. Regional inputs are rounded; channel inputs retain filed-account precision. Changes include FX effects.</p>
+</figure>
