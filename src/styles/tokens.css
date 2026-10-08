@@ -14,6 +14,13 @@
   --accent-soft: rgb(73 48 79 / 12%);
   --focus-ring: #49304f;
 
+  /* Chart roles: category colors are distinct; direction colors encode signed changes. */
+  --chart-primary: var(--accent);
+  --chart-secondary: #466b68;
+  --chart-tertiary: #617087;
+  --chart-positive: var(--chart-secondary);
+  --chart-negative: #92566d;
+
   --font-display: 'Cormorant Garamond Variable', Georgia, serif;
   --font-reading: Baskerville, 'Libre Baskerville', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --font-numeric: Didot, 'Bodoni 72', 'Bodoni Moda', 'Cormorant Garamond Variable', Georgia, serif;
@@ -66,4 +73,8 @@
   --accent-strong: #d6bce0;
   --accent-soft: rgb(186 160 197 / 16%);
   --focus-ring: #d6bce0;
+
+  --chart-secondary: #91b8b0;
+  --chart-tertiary: #a3b2cc;
+  --chart-negative: #d49aad;
 }
