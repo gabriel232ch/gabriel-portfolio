@@ -19,7 +19,7 @@ const detailRoleSelectors = {
     title: '.inquiry-page h1',
     lead: '.inquiry-page__opening',
     sectionTitle: '.inquiry-page h2',
-    body: '.inquiry-page__article > p:not(.inquiry-page__kicker):not(.inquiry-page__opening):not(.inquiry-page__status)',
+    body: '.inquiry-page__body > p',
     metadata: '.inquiry-page__kicker',
   },
 } as const;
@@ -53,7 +53,7 @@ test('Home and Chanel report resolve the approved visible typography roles', asy
 
   const homeRoles = await page.evaluate(() => ({
     body: getComputedStyle(document.querySelector('.chanel-chapter__opening > .body-copy')!).fontFamily,
-    metric: getComputedStyle(document.querySelector('.chanel-history-signal__rows strong')!).fontFamily,
+    metric: getComputedStyle(document.querySelector('.chanel-business-signal__shock strong')!).fontFamily,
     display: getComputedStyle(document.querySelector('.chanel-chapter__opening h2')!).fontFamily,
     data: getComputedStyle(document.querySelector('.chanel-chapter__opening > .data-copy')!).fontFamily,
   }));
@@ -102,7 +102,7 @@ test('Home resolves semantic body, metadata, and KPI scales at mobile', async ({
       tokenBody: bodyToken,
       resolvedBodyToken,
       tokenTitle: titleToken,
-      metric: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-history-signal__rows strong')!).fontSize),
+      metric: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-business-signal__shock strong')!).fontSize),
       statementToken: Number.parseFloat(root.getPropertyValue('--font-size-statement')),
       resolvedStatementToken,
       metadata: Number.parseFloat(getComputedStyle(document.querySelector('.chanel-chapter__opening > .data-copy')!).fontSize),
@@ -225,7 +225,7 @@ for (const viewport of [
         probe.remove();
         return value;
       };
-      const kpi = document.querySelector('.chanel-history-signal__rows strong')!;
+      const kpi = document.querySelector('.chanel-business-signal__shock strong')!;
       const kpiStyle = getComputedStyle(kpi);
 
       return {

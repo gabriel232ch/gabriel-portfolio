@@ -1,14 +1,50 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { HOME_STATE } from '../../data/home';
-import { COMPETITIVE_MECHANISMS } from '../../data/competitive';
+import {
+  PUBLIC_RESEARCH_ARCHIVE_URL,
+  SMALLER_COMPANIES_INQUIRY,
+} from '../../data/smaller-companies-inquiry';
+import '../../styles/work-inquiry.css';
 
-const project = HOME_STATE.projects.smallerCompanies;
+type Chapter = (typeof SMALLER_COMPANIES_INQUIRY.chapters)[number];
+type Transition = (typeof SMALLER_COMPANIES_INQUIRY.transitions)[number];
+type SystemizationNode = (typeof SMALLER_COMPANIES_INQUIRY.systemizationNodes)[number];
+type InquiryStage =
+  | { type: 'chapter'; id: string; chapter: Chapter }
+  | { type: 'transition'; id: string; transition: Transition }
+  | { type: 'systemization'; id: string; node: SystemizationNode };
+
+const inquiry = SMALLER_COMPANIES_INQUIRY;
+const stages: InquiryStage[] = inquiry.chapters.flatMap((chapter) => {
+  const afterChapter: InquiryStage[] = [{ type: 'chapter', id: chapter.id, chapter }];
+
+  inquiry.transitions
+    .filter((transition) => transition.afterChapterId === chapter.id)
+    .forEach((transition) => {
+      afterChapter.push({
+        type: 'transition',
+        id: transition.id,
+        transition,
+      });
+    });
+
+  inquiry.systemizationNodes
+    .filter((node) => node.afterChapterId === chapter.id)
+    .forEach((node) => {
+      afterChapter.push({
+        type: 'systemization',
+        id: node.id,
+        node,
+      });
+    });
+
+  return afterChapter;
+});
 ---
 
 <BaseLayout
-  title={`${project.title} — Gabriel Chen`}
-  description="A current research note about why people may choose smaller companies and which patterns are worth examining."
+  title={`${inquiry.title} — Gabriel Chen`}
+  description={inquiry.dek}
   noindex={false}
 >
   <main class="inquiry-page">
@@ -18,176 +54,155 @@ const project = HOME_STATE.projects.smallerCompanies;
     </header>
 
     <article class="inquiry-page__article">
-      <p class="inquiry-page__kicker">CURRENT RESEARCH · OPEN QUESTION</p>
-      <h1>{project.title}</h1>
-      <p class="inquiry-page__opening">{project.opening}</p>
-      <p>{project.shift}</p>
+      <header class="inquiry-page__hero">
+        <p class="inquiry-page__kicker">AN OPEN INQUIRY · FIELD NOTES</p>
+        <h1>{inquiry.title}</h1>
+        <p class="inquiry-page__dek">{inquiry.dek}</p>
+        <p class="inquiry-page__opening">{inquiry.opening}</p>
 
-      <section aria-labelledby="current-research-title">
-        <h2 id="current-research-title">Current research</h2>
-        <p>
-          One current research pass screened 28 organizations, structured 12 cases, completed six longitudinal deep dives,
-          and used two counterexamples to test whether recurring mechanisms survived a wider comparison.
-        </p>
-        <p>
-          The deep-dive cases were Linear, 37signals, XTX Markets, Pentagram, Midjourney, and DeepSeek.
-          Allbirds and IDEO were used as counterexamples.
-        </p>
-      </section>
+        <nav class="inquiry-page__contents" aria-label="On this page">
+          <details>
+            <summary class="data-copy">On this page</summary>
+            <ol>
+              {inquiry.chapters.map((chapter) => (
+                <li>
+                  <a href={'#' + chapter.id}>{chapter.heading}</a>
+                </li>
+              ))}
+            </ol>
+          </details>
+        </nav>
+      </header>
 
-      <section aria-labelledby="patterns-title">
-        <h2 id="patterns-title">Patterns I’m looking at</h2>
-        <p class="inquiry-page__intro">
-          These are current analytical patterns, not recipes. The question is whether they remain visible across different
-          organizations and contexts, and what each pattern leaves out.
-        </p>
-        <div class="inquiry-page__patterns">
-          {COMPETITIVE_MECHANISMS.map((mechanism) => (
-            <article class="inquiry-page__pattern" data-competitive-mechanism>
-              <h3>{mechanism.label}</h3>
-              <p>{mechanism.summary}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      <div class="inquiry-page__story">
+        {stages.map((stage) => (
+          <div class="inquiry-page__stage" data-inquiry-stage={stage.id}>
+            {stage.type === 'chapter' ? (
+              <section
+                id={stage.chapter.id}
+                class="inquiry-page__chapter"
+                aria-labelledby={'chapter-' + stage.chapter.id + '-title'}
+              >
+                <header class="inquiry-page__section-header">
+                  <p class="inquiry-page__stage-label data-copy">Question {String(inquiry.chapters.indexOf(stage.chapter) + 1).padStart(2, '0')}</p>
+                  <h2 id={'chapter-' + stage.chapter.id + '-title'}>{stage.chapter.heading}</h2>
+                </header>
 
-      <p class="inquiry-page__status">{project.status}</p>
+                <p class="inquiry-page__question-label data-copy">The question I was asking</p>
+                <blockquote class="inquiry-page__question">
+                  <p>{stage.chapter.questionBefore}</p>
+                </blockquote>
+
+                <p class="inquiry-page__evidence-label data-copy">What I found</p>
+                <p class="inquiry-page__evidence body-copy">{stage.chapter.evidenceOrProblem}</p>
+
+                <div class="inquiry-page__body">
+                  {stage.chapter.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
+                </div>
+
+                <div class="inquiry-page__reframe">
+                  <span class="data-copy">How the question changed</span>
+                  <p class="body-copy">{stage.chapter.reframe}</p>
+                </div>
+
+                {stage.chapter.id === 'evaluation' && (
+                  <aside
+                    class="inquiry-page__findings"
+                    aria-labelledby="evaluation-findings-title"
+                  >
+                    <h3 id="evaluation-findings-title">What the later matrix recorded</h3>
+                    <ol>
+                      {inquiry.evaluation.findings.map((finding, index) => (
+                        <li>
+                          <p class="inquiry-page__finding-observation">{finding.observation}</p>
+                          <p class="inquiry-page__finding-scope data-copy">Scope: {finding.scope}</p>
+                          <a
+                            class="inquiry-page__finding-method data-copy"
+                            href={finding.archiveHref}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`Method details for finding ${index + 1}`}
+                          >
+                            Method details <span aria-hidden="true">↗</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  </aside>
+                )}
+
+                {stage.chapter.id === 'decision-support' && (
+                  <aside class="inquiry-page__synthesis" aria-labelledby="inquiry-synthesis-title">
+                    <h3 id="inquiry-synthesis-title">A working interpretation</h3>
+                    <p class="body-copy">{inquiry.currentSynthesis}</p>
+                  </aside>
+                )}
+
+                {stage.chapter.id === 'crossroads' && (
+                  <aside class="inquiry-page__design-status" aria-labelledby="inquiry-design-title">
+                    <h3 id="inquiry-design-title">Prototype status</h3>
+                    <p class="body-copy">{inquiry.currentDesign}</p>
+                  </aside>
+                )}
+
+                {stage.chapter.archiveHref && (
+                  <a
+                    class="inquiry-page__archive-link data-copy"
+                    href={stage.chapter.archiveHref}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Explore the research <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </section>
+            ) : stage.type === 'transition' ? (
+              <aside
+                id={stage.transition.id}
+                class="inquiry-page__transition"
+                aria-labelledby={stage.transition.id + '-title'}
+              >
+                <p class="inquiry-page__stage-label data-copy">An intermediate step</p>
+                <h3 id={stage.transition.id + '-title'}>{stage.transition.heading}</h3>
+                {stage.transition.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
+              </aside>
+            ) : (
+              <aside
+                id={stage.node.id}
+                class="inquiry-page__systemization"
+                data-systemization-node
+                aria-labelledby={stage.node.id + '-title'}
+              >
+                <p class="inquiry-page__stage-label data-copy">When the process began to repeat</p>
+                <h3 id={stage.node.id + '-title'}>{stage.node.heading}</h3>
+                <div class="inquiry-page__body">
+                  {stage.node.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
+                </div>
+                <a
+                  class="inquiry-page__archive-link data-copy"
+                  href={stage.node.archiveHref}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Explore the method <span aria-hidden="true">↗</span>
+                </a>
+              </aside>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <footer class="inquiry-page__footer">
+        <p class="inquiry-page__status">{inquiry.closing}</p>
+        <a
+          class="inquiry-page__archive-link data-copy"
+          href={PUBLIC_RESEARCH_ARCHIVE_URL}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Open the public research archive <span aria-hidden="true">↗</span>
+        </a>
+      </footer>
     </article>
   </main>
 </BaseLayout>
-
-<style>
-  .inquiry-page {
-    min-height: 100vh;
-    padding: 1.5rem clamp(1.25rem, 4vw, 5rem) 6rem;
-    color: var(--ink);
-    background: var(--paper);
-    font-family: var(--font-reading);
-  }
-
-  .inquiry-page__header {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    align-items: baseline;
-    max-width: 74rem;
-    margin: 0 auto;
-  }
-
-  .inquiry-page__identity,
-  .inquiry-page__back {
-    color: inherit;
-    font-family: var(--font-metadata);
-    font-size: var(--font-size-micro);
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-  }
-
-  .inquiry-page__article {
-    max-width: 54rem;
-    margin: 10rem auto 0;
-  }
-
-  .inquiry-page .inquiry-page__kicker {
-    color: var(--ink-muted);
-    font-family: var(--font-metadata);
-    font-size: var(--font-size-micro);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .inquiry-page h1,
-  .inquiry-page h2,
-  .inquiry-page h3 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.035em;
-  }
-
-  .inquiry-page h1 {
-    max-width: 13ch;
-    margin: 1.5rem 0;
-    font-size: var(--font-size-project-title);
-    line-height: 0.95;
-  }
-
-  .inquiry-page h2 {
-    margin: 0.5rem 0 1.5rem;
-    font-size: var(--font-size-section-title);
-    line-height: 1;
-  }
-
-  .inquiry-page h3 {
-    margin: 0;
-    font-size: var(--font-size-statement);
-    line-height: 1.1;
-  }
-
-  .inquiry-page :where(p) {
-    max-width: 42rem;
-    font-family: var(--font-reading);
-    font-size: var(--font-size-body);
-    line-height: var(--line-height-reading);
-  }
-
-  .inquiry-page .inquiry-page__opening {
-    max-width: 38rem;
-    margin-bottom: 1.5rem;
-    font-family: var(--font-display);
-    font-size: var(--font-size-lead);
-    line-height: 1.25;
-  }
-
-  .inquiry-page section {
-    margin: 8rem 0;
-    padding-top: 2rem;
-    border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
-  }
-
-  .inquiry-page__intro {
-    margin-bottom: 2.5rem;
-  }
-
-  .inquiry-page__patterns {
-    display: grid;
-    gap: 0;
-  }
-
-  .inquiry-page__pattern {
-    display: grid;
-    grid-template-columns: minmax(12rem, 0.8fr) 1fr;
-    gap: 2rem;
-    padding: 1.5rem 0;
-    border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
-  }
-
-  .inquiry-page__pattern p {
-    margin: 0;
-  }
-
-  .inquiry-page .inquiry-page__status {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: var(--font-size-statement);
-    line-height: 1.1;
-  }
-
-  @media (max-width: 640px) {
-    .inquiry-page__header {
-      align-items: flex-start;
-    }
-
-    .inquiry-page__article {
-      margin-top: 6rem;
-    }
-
-    .inquiry-page section {
-      margin: 5rem 0;
-    }
-
-    .inquiry-page__pattern {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
-    }
-  }
-</style>

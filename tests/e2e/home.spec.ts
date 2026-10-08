@@ -22,7 +22,7 @@ test('Home opens with Gabriel identity rather than a project index', async ({ pa
   await expect(page.locator('.folio-number')).toHaveCount(0);
 });
 
-test('Chanel follows the approved question-first narrative', async ({ page }) => {
+test('Chanel preserves the approved operating-recovery narrative', async ({ page }) => {
   await page.goto('/');
   const chanel = page.locator('[data-home-chapter="chanel"]');
 
@@ -39,34 +39,31 @@ test('Chanel follows the approved question-first narrative', async ({ page }) =>
     'Later, a passing conversation brought Chanel to mind. It seemed to be holding up differently. I wanted to understand whether that impression was real — and, if it was, why.',
   );
   await expect(chanel.locator('.chanel-chapter__visible')).toBeVisible();
-  await expect(chanel.getByText('I started with what I could see.')).toBeVisible();
+  await expect(chanel.getByRole('heading', { name: 'What actually recovered?' })).toBeVisible();
   await expect(chanel.locator('.chanel-chapter__turn')).toBeVisible();
-  await expect(chanel.getByText('But something still felt missing.')).toBeVisible();
+  await expect(chanel.getByRole('heading', { name: 'Where did revenue return?' })).toBeVisible();
   await expect(chanel.locator('[data-chanel-business]')).toBeVisible();
   await expect(chanel.locator('.chanel-chapter__current')).toBeVisible();
   await expect(chanel.locator('.chanel-chapter__current > .body-copy').first()).toHaveText(
-    'I no longer think Chanel’s relative resilience can be explained by a single price move or campaign. What I see now is a system: pricing, product, desirability, investment, client experience and brand identity all have to keep reinforcing one another.',
+    'That business scope changes how I read the possible explanations. Beauty has substantial scale. Selected public accounts describe CHANEL 25 as an everyday-use option. Chanel also continued updating products, stores and client services. The price study shows positioning and selected price increases; it does not measure how much pricing added to the recovery.',
   );
   await expect(chanel.locator(
     '.chanel-chapter__opening, .chanel-chapter__return, .chanel-chapter__visible, .chanel-chapter__turn, .chanel-chapter__current',
   )).toHaveCount(5);
 
-  const pricePosition = chanel.locator('[data-chanel-price-position]');
-  await expect(pricePosition).toBeVisible();
-  await expect(pricePosition.locator('.chanel-price-position__market')).toHaveCount(2);
-  await expect(pricePosition.locator('.chanel-price-position__row')).toHaveCount(8);
-  const rails = pricePosition.locator('.chanel-price-position__rail');
-  await expect(rails).toHaveCount(8);
-  for (const rail of await rails.all()) {
-    await expect(rail).toHaveAttribute('role', 'img');
-    await expect(rail).toHaveAttribute('aria-label', /to .+, median/);
-  }
-
-  await expect(chanel.locator('[data-chanel-history]')).toBeVisible();
-  await expect(chanel.locator('[data-chanel-history] .chanel-history-signal__rows > div')).toHaveCount(2);
+  await expect(chanel.getByRole('heading', { name: 'What could explain it?' })).toBeVisible();
+  await expect(chanel.locator('[data-chanel-price-position]')).toHaveCount(0);
+  await expect(chanel.locator('[data-chanel-history]')).toHaveCount(0);
   await expect(chanel.locator('[data-chanel-business] .chanel-business-signal__baseline > span')).toHaveCount(2);
-  await expect(chanel.locator('[data-chanel-business] .chanel-business-signal__shock > span')).toHaveCount(4);
-  await expect(chanel.getByText('The question is still open.')).toBeVisible();
+  await expect(chanel.locator('[data-chanel-business] .chanel-business-signal__shock > span')).toHaveCount(3);
+  await expect(chanel.locator('.chanel-business-signal__shock strong')).toHaveText([
+    '97.6%', '73.5%', '70.5%',
+  ]);
+  await expect(chanel.getByText('FY2025 as a share of FY2023 · reported USD · Chanel group')).toBeVisible();
+  await expect(chanel.getByRole('link', { name: 'Results and sources →' })).toHaveAttribute(
+    'href', '/work/luxury-handbag-pricing-architecture/#performance',
+  );
+  await expect(chanel.getByText('An uneven, partial recovery.')).toBeVisible();
   await expect(chanel.getByRole('link', { name: 'Explore the research →' })).toHaveAttribute(
     'href',
     '/work/luxury-handbag-pricing-architecture/',
@@ -180,6 +177,9 @@ test('smaller-company chapter stays open-ended and protects current-employer det
   })).toBeVisible();
   await expect(inquiry).toContainText('a quantitative investment firm');
   await expect(inquiry).toContainText('So I started looking elsewhere.');
+  await expect(inquiry).toContainText(
+    'what information helps someone decide whether a smaller company is right for them',
+  );
   await expect(inquiry).toContainText('I’m still trying to understand this.');
   await expect(inquiry.getByRole('link', { name: 'Explore the current research →' })).toHaveAttribute(
     'href',
@@ -226,8 +226,9 @@ test('Olist and smaller-company CTAs resolve locally in light and dark themes', 
       level: 1,
       name: 'Why Do Some People Choose Smaller Companies?',
     })).toBeVisible();
-    await expect(page.getByRole('heading', { level: 2, name: 'Current research' })).toBeVisible();
-    await expect(page.getByText('I’m still trying to understand this.')).toBeVisible();
+    await expect(page.locator('#evaluation')).toBeVisible();
+    await expect(page.locator('#evaluation')).toContainText('12 prompts across five platforms');
+    await expect(page.locator('.inquiry-page__status')).toContainText('so far');
     await expect(page.locator('body')).not.toContainText('JoinQuant');
     await expect(page.locator('body')).not.toContainText('聚宽');
     for (const retiredLabel of ['01 / CURRENT RESEARCH', '02 / OBSERVATIONS']) {
@@ -281,29 +282,25 @@ test('Home preserves the approved personal-digital-home order', async ({ page })
   await expect(page.getByText('Featured', { exact: true })).toHaveCount(0);
 });
 
-test('mobile Chanel price position keeps market rails within the viewport', async ({ page }) => {
+test('mobile Chanel recovery figures remain readable within the viewport', async ({ page }) => {
   await page.goto('/');
-  const position = page.locator('[data-chanel-price-position]');
-  await expect(position).toBeVisible();
+  const signal = page.locator('[data-chanel-business]');
+  await expect(signal).toBeVisible();
 
   for (const width of [375, 390]) {
     await page.setViewportSize({ width, height: 900 });
-    const rows = await position.locator('.chanel-price-position__row').evaluateAll((elements) =>
+    const figures = await signal.locator('.chanel-business-signal__shock > span').evaluateAll((elements) =>
       elements.map((element) => {
-        const label = element.querySelector('.data-copy')?.getBoundingClientRect();
-        const rail = element.querySelector('.chanel-price-position__rail')?.getBoundingClientRect();
-        return {
-          labelRight: label?.right ?? 0,
-          railLeft: rail?.left ?? 0,
-          railRight: rail?.right ?? 0,
-        };
+        const label = element.querySelector('small')!.getBoundingClientRect();
+        const value = element.querySelector('strong')!.getBoundingClientRect();
+        return { labelBottom: label.bottom, valueTop: value.top, left: value.left, right: value.right };
       }),
     );
-
-    for (const row of rows) {
-      expect(row.labelRight).toBeLessThanOrEqual(row.railLeft + 1);
-      expect(row.railLeft).toBeGreaterThanOrEqual(0);
-      expect(row.railRight).toBeLessThanOrEqual(width);
+    expect(figures).toHaveLength(3);
+    for (const figure of figures) {
+      expect(figure.labelBottom).toBeLessThanOrEqual(figure.valueTop + 1);
+      expect(figure.left).toBeGreaterThanOrEqual(0);
+      expect(figure.right).toBeLessThanOrEqual(width);
     }
   }
 });
