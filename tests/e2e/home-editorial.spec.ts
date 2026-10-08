@@ -73,3 +73,35 @@ test('chart entry animation advances observations and yields to user input', asy
   await expect(slider).toHaveValue('0');
   await expect(story.locator('[data-story-rate="0"]')).toHaveText('90.70%');
 });
+
+
+test('Chanel years and measures reveal the corresponding filed values', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  const portrait = page.locator('[data-recovery-portrait]');
+  await portrait.getByRole('button', { name: '2024 Decline' }).click();
+  await expect(portrait.locator('[data-portrait-title]')).toHaveText('All three measures fell.');
+  await expect(portrait.locator('[data-portrait-actual]')).toHaveText('$18,699.3m · FY2024');
+  await portrait.getByRole('button', { name: 'Operating profit', exact: true }).click();
+  await expect(portrait.locator('[data-portrait-index]')).toHaveText('69.9');
+  await expect(portrait.locator('[data-portrait-actual]')).toHaveText('$4,478.6m · FY2024');
+  const slider = portrait.getByRole('slider', { name: 'Chanel observation year' });
+  await slider.focus();
+  await page.keyboard.press('End');
+  await expect(portrait.locator('[data-portrait-index]')).toHaveText('73.5');
+  await expect(portrait.locator('[data-portrait-actual]')).toHaveText('$4,711.5m · FY2025');
+});
+
+test('Chanel playback advances through decline and return and stops on selection', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  const portrait = page.locator('[data-recovery-portrait]');
+  await portrait.scrollIntoViewIfNeeded();
+  await portrait.getByRole('button', { name: 'Play the recovery' }).click();
+  await expect(portrait).toHaveAttribute('data-year', '0');
+  await expect(portrait).toHaveAttribute('data-year', '1');
+  await expect(portrait).toHaveAttribute('data-year', '2');
+  await portrait.getByRole('button', { name: '2024 Decline' }).click();
+  await expect(portrait).toHaveAttribute('data-playing', 'false');
+  await expect(portrait).toHaveAttribute('data-year', '1');
+});

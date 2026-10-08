@@ -27,3 +27,16 @@ User rejected the first preview as too dense and visually static, liked the aube
 - Revised version: 0e20c5f9-f9f6-436b-b289-568e25df2197.
 - Current preview: https://0e20c5f9-gabriel-portfolio.gabrielchen.workers.dev/
 - Previous version 370b5197 remains a historical reference. Continue PR #9, awaiting current-preview confirmation before merge or production publication.
+
+## Chanel narrative and interaction revision
+
+User requested a focused Chanel revision: the returning-question paragraph below the graph was overlooked, and the animation and interaction felt weak.
+
+- Moved the original returning-question paragraph directly into the left opening, with a distinct editorial lead and increased text emphasis.
+- Added the selected year’s large index, exact reported USD amount, stage heading and interpretation above the graph. Three year controls and a keyboard-operable timeline link curve reveal, guide, focus points and numeric readout.
+- Viewport entry and explicit replay progress from baseline through decline to return. Direct year/range/measure input stops playback immediately. Measure selection and curve hit areas reveal the corresponding existing financial series; reduced motion retains immediate transitions.
+- Changes in this revision are scoped to Chanel. Olist, Inquiry, case pages, data and research files are unchanged. Latest origin/main remains d5a507a.
+- Astro check, lint, build, 35 unit tests and 68 selected desktop/mobile browser tests passed. Desktop/mobile light/dark screenshots inspected with no overflow. Six Chanel desktop/mobile tests passed against the uploaded preview. Three protected case pages match production byte-for-byte.
+- Version: 28f9a02f-86e5-456b-b63a-01f793050ce5.
+- Current preview: https://28f9a02f-gabriel-portfolio.gabrielchen.workers.dev/
+- Continue PR #9; awaiting user preview confirmation before merge or production publication.

@@ -23,6 +23,7 @@ test('Home opens with Gabriel identity rather than a project index', async ({ pa
 });
 
 test('Chanel preserves the approved operating-recovery narrative', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   const chanel = page.locator('[data-home-chapter="chanel"]');
 
@@ -77,7 +78,7 @@ test('Chanel preserves the approved operating-recovery narrative', async ({ page
 test('Home typography uses Baskerville body, Didot metrics, and editorial display', async ({ page }) => {
   await page.goto('/');
 
-  const narrativeStyles = await page.locator('.body-copy').evaluateAll((nodes) =>
+  const narrativeStyles = await page.locator('.body-copy:not(.chanel-chapter__return .body-copy)').evaluateAll((nodes) =>
     nodes.map((node) => {
       const style = getComputedStyle(node);
       return {
@@ -350,7 +351,8 @@ test('smaller-company research link can be reached with a keyboard', async ({ pa
   await page.goto('/');
   const link = page.getByRole('link', { name: 'Explore the current research →' });
 
-  for (let tab = 0; tab < 20; tab += 1) {
+  const focusableCount = await page.locator('a[href], button, input, summary').count();
+  for (let tab = 0; tab < focusableCount + 2; tab += 1) {
     if (await link.evaluate((element) => element === document.activeElement)) break;
     await page.keyboard.press('Tab');
   }

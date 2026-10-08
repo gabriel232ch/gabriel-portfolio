@@ -1,0 +1,65 @@
+/* Chanel's homepage story and interactive annual observations. */
+.chanel-chapter__opening > .body-copy { margin-bottom:0; }
+.chanel-chapter__opening .chanel-chapter__return { margin-top:clamp(2rem,4vw,3.5rem); padding-left:1.5rem; border-left:1px solid var(--accent); max-width:36rem; }
+.chanel-chapter__turn-label { display:block; margin-bottom:1rem; color:var(--accent); font-size:.75rem; letter-spacing:.08em; }
+.chanel-chapter__opening .chanel-chapter__return .body-copy { margin:0; font-size:var(--font-size-lead); line-height:1.4; }
+.chanel-experience { --active-color:var(--chart-primary); position:relative; align-self:start; padding-top:0; }
+.chanel-experience figcaption { padding-bottom:1.25rem; }
+.chanel-experience__moment { display:grid; grid-template-columns:1fr 1.15fr; align-items:end; column-gap:1.5rem; margin-top:2rem; }
+.chanel-experience__phase { margin:0 0 1rem; color:var(--ink-muted); font-family:var(--font-metadata); font-size:.8rem; letter-spacing:.08em; }
+.chanel-experience__moment h3 { max-width:12ch; margin:0; font-family:var(--font-display); font-size:clamp(2rem,3.5vw,3.5rem); font-weight:300; line-height:.98; letter-spacing:-.035em; }
+.chanel-experience__reading { min-width:0; }
+.chanel-experience__number { display:flex; align-items:baseline; color:var(--active-color); font-family:var(--font-numeric); font-variant-numeric:lining-nums; }
+.chanel-experience__number b { display:block; font-weight:400; font-size:clamp(3.5rem,6.4vw,6.5rem); line-height:.85; letter-spacing:-.05em; }
+.chanel-experience__number i { font-size:clamp(1.5rem,2vw,2rem); font-style:normal; margin-left:.2rem; }
+.chanel-experience__reading > span:not(.chanel-experience__number),.chanel-experience__reading small { display:block; color:var(--ink-muted); font-family:var(--font-metadata); font-size:.75rem; line-height:1.6; }
+.chanel-experience__reading > span:not(.chanel-experience__number) { margin-top:1.25rem; }
+.chanel-experience__insight { min-height:3.1em; max-width:42rem; margin:1.5rem 0 0; font-size:var(--font-size-secondary-reading); line-height:1.45; }
+.chanel-experience__plot { margin-top:1.5rem; }
+.chanel-experience .chanel-experience__plot svg { margin:0; }
+.chanel-experience .recovery-portrait__series :is(path,circle,text) { animation:none!important; clip-path:none!important; }
+.chanel-experience .recovery-portrait__series { transition:opacity 450ms ease; }
+.chanel-experience .recovery-portrait__series[data-muted='true'] { opacity:.3; }
+.chanel-experience__mask { transition:width 1100ms cubic-bezier(.16,1,.3,1); }
+.chanel-experience .chanel-experience__line { stroke-width:2.8; }
+.chanel-experience .chanel-experience__dot { fill:var(--paper); stroke-width:1.7; }
+.chanel-experience .chanel-experience__focus { fill:var(--series-color); stroke:var(--paper); stroke-width:3; transition:cx 1100ms cubic-bezier(.16,1,.3,1),cy 1100ms cubic-bezier(.16,1,.3,1); }
+.chanel-experience__cursor { stroke:var(--ink-muted); stroke-dasharray:2 6; opacity:.55; transition:x1 1100ms cubic-bezier(.16,1,.3,1),x2 1100ms cubic-bezier(.16,1,.3,1); }
+.chanel-experience .chanel-experience__line-hit { stroke:transparent; stroke-width:24; fill:none; cursor:pointer; pointer-events:stroke; }
+.chanel-experience__timeline { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:.5rem; }
+.chanel-experience__timeline button { min-height:58px; display:grid; gap:.35rem; padding:.5rem 0; border:0; background:none; color:var(--ink-muted); font-family:var(--font-metadata); cursor:pointer; text-align:center; transition:color 300ms ease; }
+.chanel-experience__timeline button span { font-size:1rem; }
+.chanel-experience__timeline button small { font-size:.75rem; }
+.chanel-experience__timeline button[aria-pressed='true'] { color:var(--ink); }
+.chanel-experience__timeline button:first-child { text-align:left; }
+.chanel-experience__timeline button:last-of-type { text-align:right; }
+.chanel-experience__scrubber { grid-column:1 / -1; width:100%; height:44px; margin:0; accent-color:var(--active-color); cursor:ew-resize; }
+.chanel-experience__scrubber::-webkit-slider-runnable-track { height:2px; background:var(--hairline); }
+.chanel-experience__scrubber::-webkit-slider-thumb { margin-top:-7px; }
+.chanel-experience .recovery-portrait__legend { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5rem; border-bottom:1px solid var(--hairline); margin-top:.25rem; }
+.chanel-experience .recovery-portrait__legend button { position:relative; align-items:center; min-height:56px; border:0; font-size:.8rem; line-height:1.3; }
+.chanel-experience .recovery-portrait__legend button::after { content:''; position:absolute; left:0; bottom:-1px; width:100%; height:2px; background:var(--series-color); transform:scaleX(0); transform-origin:left; transition:transform 450ms cubic-bezier(.16,1,.3,1); }
+.chanel-experience .recovery-portrait__legend button[aria-pressed='true']::after { transform:scaleX(1); }
+.chanel-experience .recovery-portrait__legend i { flex:none; width:.5rem; height:.5rem; border-radius:50%; }
+.chanel-experience__footer { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:1rem; font-family:var(--font-metadata); font-size:.8rem; }
+.chanel-experience__footer a { text-underline-offset:.25rem; }
+.chanel-experience > .visual-note { margin-top:.6rem; font-size:.75rem; }
+@media(min-width:72rem) {
+  .chanel-chapter__opening { grid-column:1 / span 6; }
+  .chanel-chapter > .chanel-experience { grid-column:8 / span 5; }
+  .chanel-chapter__visible { grid-column:1 / span 5; }
+  .chanel-chapter__turn { grid-column:8 / span 5; grid-row:2; }
+}
+@media(max-width:47.99rem) {
+  .chanel-chapter__opening .chanel-chapter__return { padding-left:1rem; }
+  .chanel-experience__moment { gap:1rem; }
+  .chanel-experience__moment h3 { font-size:2rem; }
+  .chanel-experience__number b { font-size:3.5rem; }
+  .chanel-experience__insight { min-height:4.5em; }
+  .chanel-experience .recovery-portrait__legend button { font-size:.75rem; }
+  .chanel-experience .recovery-portrait__value { font-size:26px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .chanel-experience :is(.chanel-experience__mask,.chanel-experience__focus,.chanel-experience__cursor,.recovery-portrait__series,.recovery-portrait__legend button::after) { transition:none; }
+}
+.chanel-experience .chanel-experience__line-hit { clip-path:url(#portrait-time-clip)!important; }
