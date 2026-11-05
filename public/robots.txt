@@ -1,2 +1,13 @@
 User-agent: *
+Allow: /
+
+# Keep model-training crawlers closed while permitting user-requested reading
+# and search indexing for ChatGPT.
+User-agent: GPTBot
 Disallow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /

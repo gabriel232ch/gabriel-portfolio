@@ -1,11 +1,13 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "gabriel-portfolio",
+  "main": "./src/worker.ts",
   "compatibility_date": "2026-08-31",
   "workers_dev": true,
   "preview_urls": true,
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page"
   },
   "routes": [
