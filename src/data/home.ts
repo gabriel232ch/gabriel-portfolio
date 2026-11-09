@@ -16,9 +16,9 @@ export const HOME_STATE = {
     statement:
       'I like following questions until they become clearer — and building things that help me think better.',
     portrait: {
-      src: '/life/italy/florence-portrait.jpeg',
-      width: 1126,
-      height: 837,
+      src: '/life/italy/florence-portrait-edited@2x.webp',
+      width: 2896,
+      height: 2172,
       alt: 'Gabriel at Piazzale Michelangelo in Florence at night, with the cathedral and city lights behind him.',
       caption: 'Florence',
     },

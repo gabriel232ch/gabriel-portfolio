@@ -90,7 +90,7 @@ html [data-theme-toggle][type='button'] {
   .home-hero--photographic .home-hero__portrait {
     right: 0;
     left: auto;
-    width: min(78.2%, 70.375rem);
+    width: min(100%, 90.5rem);
   }
 
 }
