@@ -48,14 +48,13 @@ describe('Home content contract', () => {
     expect(JSON.stringify(inquiry)).not.toMatch(/7 of 30|13 of 60|40 of 60|Golden Samples|crossroads prototype/i);
   });
 
-  it('exposes four human Now items and no required photo', () => {
+  it('exposes four human Now items', () => {
     expect(HOME_STATE.now.items.map((item) => item.id)).toEqual([
       'learning',
       'working',
       'playing',
       'thinking',
     ]);
-    expect(HOME_STATE.now.personalSnapshot).toBeNull();
   });
 
   it('locks the warm unfinished ending', () => {

@@ -4,12 +4,6 @@ export const HOME_WORK_SLUGS = [
   'competitive-positioning-against-giants',
 ] as const;
 
-export interface PersonalSnapshot {
-  src: string;
-  alt: string;
-  caption?: string;
-}
-
 export interface HomeArchiveItem {
   type: string;
   date: string;
@@ -89,7 +83,29 @@ export const HOME_STATE = {
         value: 'Why do some people choose smaller companies?',
       },
     ],
-    personalSnapshot: null as PersonalSnapshot | null,
+    personalTrip: {
+      place: 'Hong Kong',
+      startDate: '2026-10-24',
+      endDate: '2026-10-26',
+      photos: [
+        {
+          src: '/life/hong-kong-2026/concert-960.webp',
+          srcSet: '/life/hong-kong-2026/concert-480.webp 480w, /life/hong-kong-2026/concert-960.webp 960w',
+          width: 960,
+          height: 1280,
+          alt: 'A selfie in the audience at a concert in Hong Kong, with the stage in the background.',
+          caption: 'At a concert',
+        },
+        {
+          src: '/life/hong-kong-2026/harbour-960.webp',
+          srcSet: '/life/hong-kong-2026/harbour-480.webp 480w, /life/hong-kong-2026/harbour-960.webp 960w',
+          width: 960,
+          height: 1700,
+          alt: 'Looking out over Hong Kong’s illuminated skyline and harbour at night, seen from behind.',
+          caption: 'Above the harbour',
+        },
+      ],
+    },
   },
   closing: {
     message: 'I’ll keep adding things here as I go.',
