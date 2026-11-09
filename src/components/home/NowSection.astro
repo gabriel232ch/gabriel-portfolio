@@ -43,6 +43,25 @@ const tripDates = dateFormat.formatRange(new Date(trip.startDate), new Date(trip
     </div>
   </div>
 
+  <div class="home-now__moments" aria-labelledby="moments-title">
+    <h3 id="moments-title">{now.personalMoments.title}</h3>
+    <div class="home-now__moments-grid">
+      {now.personalMoments.photos.map((photo) => (
+        <figure class="home-now__moment" data-personal-moment>
+          <img
+            src={photo.src}
+            width={photo.width}
+            height={photo.height}
+            alt={photo.alt}
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>{photo.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+
   <div class="home-now__items">
     {now.items.map((item) => (
       <article class="home-now__item motion-reveal" data-home-motion data-now-item={item.id}>

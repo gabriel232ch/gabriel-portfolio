@@ -39,4 +39,17 @@ const { state } = Astro.props;
   <div class="home-hero__context">
     <p class="home-hero__intro editorial">{state.intro.statement}</p>
   </div>
+
+  <figure class="home-hero__portrait">
+    <img
+      src={state.intro.portrait.src}
+      width={state.intro.portrait.width}
+      height={state.intro.portrait.height}
+      alt={state.intro.portrait.alt}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <figcaption>{state.intro.portrait.caption}</figcaption>
+  </figure>
 </section>

@@ -2,12 +2,15 @@ import { expect, test, type Page } from '@playwright/test';
 
 async function preparePhotographs(page: Page) {
   await page.locator('#about').scrollIntoViewIfNeeded();
-  await page.locator('#about img').evaluateAll((images) => {
+  await page.locator('main img').evaluateAll((images) => {
     images.forEach((image) => { (image as HTMLImageElement).loading = 'eager'; });
   });
-  await expect.poll(() => page.locator('#about img').evaluateAll((images) =>
+  await expect.poll(() => page.locator('main img').evaluateAll((images) =>
     images.every((image) => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0),
   )).toBe(true);
+  await page.locator('main img').evaluateAll((images) =>
+    Promise.all(images.map((image) => (image as HTMLImageElement).decode())),
+  );
   await page.evaluate(() => window.scrollTo(0, 0));
 }
 

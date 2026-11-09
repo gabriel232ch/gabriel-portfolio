@@ -15,6 +15,13 @@ export const HOME_STATE = {
   intro: {
     statement:
       'I like following questions until they become clearer — and building things that help me think better.',
+    portrait: {
+      src: '/life/italy/milan-portrait.webp',
+      width: 2316,
+      height: 3088,
+      alt: 'Gabriel in front of Milan Cathedral, wearing clear-framed glasses and a backpack.',
+      caption: 'Milan',
+    },
   },
   projects: {
     chanel: {
@@ -83,6 +90,39 @@ export const HOME_STATE = {
         value: 'Why do some people choose smaller companies?',
       },
     ],
+    personalMoments: {
+      title: 'Milan and elsewhere',
+      photos: [
+        {
+          src: '/life/italy/bocconi.webp',
+          width: 3024,
+          height: 4032,
+          alt: 'Looking up at the concrete entrance to Università Bocconi, with its name across the canopy.',
+          caption: 'Bocconi',
+        },
+        {
+          src: '/life/italy/quiet-street.webp',
+          width: 3024,
+          height: 4032,
+          alt: 'A narrow sunlit street between pink and yellow buildings, with plants growing along the walls.',
+          caption: 'A quiet street',
+        },
+        {
+          src: '/life/italy/fellow-passenger.jpeg',
+          width: 1080,
+          height: 1920,
+          alt: 'A dog resting on the floor of a train carriage beside seated passengers.',
+          caption: 'A fellow passenger',
+        },
+        {
+          src: '/life/italy/gelato.jpeg',
+          width: 1125,
+          height: 1494,
+          alt: 'A hand holding a gelato cone topped with a La Romana biscuit.',
+          caption: 'Gelato',
+        },
+      ],
+    },
     personalTrip: {
       place: 'Hong Kong',
       startDate: '2026-10-24',
