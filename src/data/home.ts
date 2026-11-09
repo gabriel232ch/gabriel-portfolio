@@ -25,10 +25,10 @@ export const HOME_STATE = {
   },
   photography: {
     milan: {
-      src: '/life/italy/milan-portrait.webp',
-      width: 2316,
-      height: 3088,
-      alt: 'Gabriel in front of Milan Cathedral, wearing clear-framed glasses and a backpack.',
+      src: '/life/italy/milan-portrait-edited.png',
+      width: 1087,
+      height: 1447,
+      alt: 'Gabriel taking a selfie in front of Milan Cathedral, wearing clear-framed glasses.',
       caption: 'Milan',
     },
     campus: {
