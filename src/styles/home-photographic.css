@@ -82,6 +82,19 @@ html [data-theme-toggle][type='button'] {
   color: var(--scene-ink);
 }
 
+@media (min-width: 72rem) {
+  .home-hero--photographic {
+    background: #071622;
+  }
+
+  .home-hero--photographic .home-hero__portrait {
+    right: 0;
+    left: auto;
+    width: min(78.2%, 70.375rem);
+  }
+
+}
+
 .chanel-chapter__place {
   position: relative;
   grid-column: 1 / -1;
@@ -207,6 +220,10 @@ html [data-theme-toggle][type='button'] {
 .home-now__moments-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+@media (min-width: 72rem) {
+  .home-now__moments-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 .home-closing {
