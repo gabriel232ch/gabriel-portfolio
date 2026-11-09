@@ -247,7 +247,7 @@ test('Now shows a life in progress and the page ends warmly', async ({ page }) =
   await expect(now).toContainText('Baldur’s Gate 3');
   await expect(now).toContainText('Thinking about');
   await expect(now).toContainText('Why do some people choose smaller companies?');
-  await expect(now.locator('[data-personal-snapshot]')).toHaveCount(0);
+  await expect(now.locator('[data-personal-snapshot]')).toHaveCount(2);
   await expect(now).not.toContainText('PRIMARY THREAD / CURRENT ATTENTION');
   await expect(now).not.toContainText('Employer Brand / GEO at JoinQuant');
 

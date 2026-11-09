@@ -6,11 +6,44 @@ interface Props {
 }
 
 const { now } = Astro.props;
+const trip = now.personalTrip;
+const dateFormat = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+const tripDates = dateFormat.formatRange(new Date(trip.startDate), new Date(trip.endDate));
 ---
 
 <section id="about" class="home-now editorial-grid" aria-labelledby="now-title">
   <div class="home-now__heading">
     <h2 id="now-title" class="display">Now</h2>
+  </div>
+
+  <div class="home-now__trip" aria-labelledby="hong-kong-title">
+    <div class="home-now__trip-heading">
+      <h3 id="hong-kong-title">{trip.place}</h3>
+      <p>{tripDates}</p>
+    </div>
+    <div class="home-now__photos">
+      {trip.photos.map((photo) => (
+        <figure class="home-now__photo" data-personal-snapshot>
+          <img
+            src={photo.src}
+            width={photo.width}
+            height={photo.height}
+            alt={photo.alt}
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>
+            <span>{photo.caption}</span>
+            <a href={photo.originalSrc} download aria-label={`Download original photo: ${photo.caption}`}>Download original</a>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
   </div>
 
   <div class="home-now__items">
@@ -22,10 +55,4 @@ const { now } = Astro.props;
     ))}
   </div>
 
-  {now.personalSnapshot && (
-    <figure class="home-now__snapshot" data-personal-snapshot>
-      <img src={now.personalSnapshot.src} alt={now.personalSnapshot.alt} />
-      {now.personalSnapshot.caption && <figcaption>{now.personalSnapshot.caption}</figcaption>}
-    </figure>
-  )}
 </section>

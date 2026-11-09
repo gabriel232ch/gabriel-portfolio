@@ -4,12 +4,6 @@ export const HOME_WORK_SLUGS = [
   'competitive-positioning-against-giants',
 ] as const;
 
-export interface PersonalSnapshot {
-  src: string;
-  alt: string;
-  caption?: string;
-}
-
 export interface HomeArchiveItem {
   type: string;
   date: string;
@@ -89,7 +83,29 @@ export const HOME_STATE = {
         value: 'Why do some people choose smaller companies?',
       },
     ],
-    personalSnapshot: null as PersonalSnapshot | null,
+    personalTrip: {
+      place: 'Hong Kong',
+      startDate: '2026-10-24',
+      endDate: '2026-10-26',
+      photos: [
+        {
+          src: '/life/hong-kong-2026/concert-full.webp',
+          originalSrc: '/life/hong-kong-2026/concert-original.heic',
+          width: 3024,
+          height: 4032,
+          alt: 'A selfie in the audience at The Weeknd’s Hong Kong concert on the evening of 24 October 2026, with the stage in the background.',
+          caption: 'The Weeknd live, 24 October 2026',
+        },
+        {
+          src: '/life/hong-kong-2026/harbour-original.jpeg',
+          originalSrc: '/life/hong-kong-2026/harbour-original.jpeg',
+          width: 1536,
+          height: 2720,
+          alt: 'Looking out over Hong Kong’s illuminated skyline and harbour at night, seen from behind.',
+          caption: 'Above the harbour',
+        },
+      ],
+    },
   },
   closing: {
     message: 'I’ll keep adding things here as I go.',
