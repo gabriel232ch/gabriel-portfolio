@@ -143,6 +143,13 @@ export const HOME_STATE = {
           alt: 'A hand holding a gelato cone topped with a La Romana biscuit.',
           caption: 'Gelato',
         },
+        {
+          src: '/life/italy/old-town-walk.png',
+          width: 1086,
+          height: 1448,
+          alt: 'Gabriel standing on a stone step in an old-town street, with a stone wall and cobbled lane around him.',
+          caption: 'An afternoon in the old town',
+        },
       ],
     },
     personalTrip: {
