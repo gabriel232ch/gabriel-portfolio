@@ -37,10 +37,7 @@ const tripDates = dateFormat.formatRange(new Date(trip.startDate), new Date(trip
             loading="lazy"
             decoding="async"
           />
-          <figcaption>
-            <span>{photo.caption}</span>
-            <a href={photo.originalSrc} download aria-label={`Download original photo: ${photo.caption}`}>Download original</a>
-          </figcaption>
+          <figcaption>{photo.caption}</figcaption>
         </figure>
       ))}
     </div>

@@ -57,3 +57,11 @@ Design review: the distinction comes from these personal photographs and their d
 - Refreshed four homepage visual baselines and made the existing visual checks wait for lazy-loaded photographs. All four baseline checks pass.
 - Full `npm run verify`: type check/lint/build and 35 unit tests pass; browser suite has 110 passed, 6 skipped and 24 failed. Reproduced the exact same 24 failures against an untouched archive of origin/main (cafefb3f): obsolete `noindex` metadata expectation, two design-system snapshots and existing typography contracts. These are pre-existing, outside the photograph change; no unrelated production styles or test contracts were changed.
 - PR: https://github.com/gabriel232ch/gabriel-portfolio/pull/11
+
+## Follow-up: remove download links
+
+User requested removing “Download original” from the published photographs, continuing the authorized publication workflow. Baseline: latest origin/main cae92fe6dfffdd1db61c78670ace420d3eca04a6. Branch: codex/remove-photo-download-links.
+
+Removed both download links, their unused data fields and link-specific caption styles. Full-resolution image sources, factual captions and all project/research content remain unchanged. Local desktop/mobile preview and the four light/dark homepage screenshot baselines were checked; Astro check, lint and build pass. A production main build must match this checked preview before deployment.
+
+UI review used the bundled Vercel guidelines snapshot (fetched 2026-10-21, source commit 434b7f91364665f2f733b310ec54809bf8f37937); refreshing the upstream rules timed out. No remaining issue was found in this small removal.

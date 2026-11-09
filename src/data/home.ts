@@ -90,7 +90,6 @@ export const HOME_STATE = {
       photos: [
         {
           src: '/life/hong-kong-2026/concert-full.webp',
-          originalSrc: '/life/hong-kong-2026/concert-original.heic',
           width: 3024,
           height: 4032,
           alt: 'A selfie in the audience at The Weeknd’s Hong Kong concert on the evening of 24 October 2026, with the stage in the background.',
@@ -98,7 +97,6 @@ export const HOME_STATE = {
         },
         {
           src: '/life/hong-kong-2026/harbour-original.jpeg',
-          originalSrc: '/life/hong-kong-2026/harbour-original.jpeg',
           width: 1536,
           height: 2720,
           alt: 'Looking out over Hong Kong’s illuminated skyline and harbour at night, seen from behind.',
