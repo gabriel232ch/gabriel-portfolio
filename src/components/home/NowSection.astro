@@ -27,7 +27,7 @@ const tripDates = dateFormat.formatRange(new Date(trip.startDate), new Date(trip
       <p>{tripDates}</p>
     </div>
     <div class="home-now__photos">
-      {trip.photos.map((photo) => (
+      {trip.photos.map((photo, index) => (
         <figure class="home-now__photo" data-personal-snapshot>
           <img
             src={photo.src}
@@ -37,7 +37,7 @@ const tripDates = dateFormat.formatRange(new Date(trip.startDate), new Date(trip
             loading="lazy"
             decoding="async"
           />
-          <figcaption>{photo.caption}</figcaption>
+          {index === 0 && <figcaption>{photo.caption}</figcaption>}
         </figure>
       ))}
     </div>

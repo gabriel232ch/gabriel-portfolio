@@ -16,6 +16,7 @@ import '../styles/home-inquiry.css';
 import '../styles/home-editorial.css';
 import '../styles/home-chanel-experience.css';
 import '../styles/home-spacing.css';
+import '../styles/home-photographic.css';
 ---
 
 <BaseLayout
@@ -28,6 +29,17 @@ import '../styles/home-spacing.css';
     <HomeHero state={HOME_STATE} />
     <ChanelChapter copy={HOME_STATE.projects.chanel} />
     <OlistChapter copy={HOME_STATE.projects.olist} />
+    <figure class="photo-interlude" data-photo-placement="venice">
+      <img
+        src={HOME_STATE.photography.venice.src}
+        width={HOME_STATE.photography.venice.width}
+        height={HOME_STATE.photography.venice.height}
+        alt={HOME_STATE.photography.venice.alt}
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>{HOME_STATE.photography.venice.caption}</figcaption>
+    </figure>
     <SmallerCompaniesChapter copy={HOME_STATE.projects.smallerCompanies} />
     <NowSection now={HOME_STATE.now} />
     <HomeClosing closing={HOME_STATE.closing} />

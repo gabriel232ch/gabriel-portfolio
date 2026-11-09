@@ -1,5 +1,5 @@
 ---
-import type { HOME_STATE } from '../../data/home';
+import { HOME_STATE } from '../../data/home';
 
 interface Props {
   closing: typeof HOME_STATE.closing;
@@ -9,11 +9,22 @@ const { closing } = Astro.props;
 ---
 
 <footer class="home-closing editorial-grid" data-home-closing>
-  <p class="home-closing__message editorial">{closing.message}</p>
-  <nav class="home-closing__links" aria-label="Gabriel links">
-    {closing.links.map((link) => (
-      <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
-    ))}
-  </nav>
-  <p class="home-closing__name data-copy">Gabriel Chen</p>
+  <img
+    class="home-closing__backdrop"
+    src={HOME_STATE.photography.coast.src}
+    width={HOME_STATE.photography.coast.width}
+    height={HOME_STATE.photography.coast.height}
+    alt={HOME_STATE.photography.coast.alt}
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="home-closing__note">
+    <p class="home-closing__message editorial">{closing.message}</p>
+    <nav class="home-closing__links" aria-label="Gabriel links">
+      {closing.links.map((link) => (
+        <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
+      ))}
+    </nav>
+    <p class="home-closing__name data-copy">Gabriel Chen</p>
+  </div>
 </footer>
