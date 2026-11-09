@@ -53,3 +53,7 @@ Design review: the distinction comes from these personal photographs and their d
 - Cloudflare candidate version: c2e0a8ba-ad08-4224-9d67-8c7b351c9131.
 - Candidate preview: https://c2e0a8ba-gabriel-portfolio.gabrielchen.workers.dev/#about
 - User has already authorized publication after these requested revisions; no further design approval is pending. Build the merged main and compare its full asset manifest with this candidate before deploying.
+- Cloudflare serves the original HEIC, original JPEG and full-resolution WebP byte-for-byte identical to the candidate build. All three protected case pages are byte-for-byte identical to current production.
+- Refreshed four homepage visual baselines and made the existing visual checks wait for lazy-loaded photographs. All four baseline checks pass.
+- Full `npm run verify`: type check/lint/build and 35 unit tests pass; browser suite has 110 passed, 6 skipped and 24 failed. Reproduced the exact same 24 failures against an untouched archive of origin/main (cafefb3f): obsolete `noindex` metadata expectation, two design-system snapshots and existing typography contracts. These are pre-existing, outside the photograph change; no unrelated production styles or test contracts were changed.
+- PR: https://github.com/gabriel232ch/gabriel-portfolio/pull/11
