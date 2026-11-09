@@ -248,10 +248,22 @@ main .body-copy {
 }
 
 .home-now__photo figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
   margin-top: var(--space-3);
   color: var(--ink-muted);
   font-size: var(--font-size-supporting);
   line-height: 1.5;
+}
+
+.home-now__photo figcaption a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  text-underline-offset: 0.2em;
 }
 
 @media (max-width: 47.99rem) {

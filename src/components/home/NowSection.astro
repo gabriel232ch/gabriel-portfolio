@@ -31,15 +31,16 @@ const tripDates = dateFormat.formatRange(new Date(trip.startDate), new Date(trip
         <figure class="home-now__photo" data-personal-snapshot>
           <img
             src={photo.src}
-            srcset={photo.srcSet}
-            sizes="(min-width: 96rem) 520px, (min-width: 72rem) 36vw, (min-width: 48rem) 44vw, 84vw"
             width={photo.width}
             height={photo.height}
             alt={photo.alt}
             loading="lazy"
             decoding="async"
           />
-          <figcaption>{photo.caption}</figcaption>
+          <figcaption>
+            <span>{photo.caption}</span>
+            <a href={photo.originalSrc} download aria-label={`Download original photo: ${photo.caption}`}>Download original</a>
+          </figcaption>
         </figure>
       ))}
     </div>
