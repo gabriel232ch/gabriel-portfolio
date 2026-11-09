@@ -23,6 +23,31 @@ const { copy } = Astro.props;
     <div class="chanel-chapter__return"><span class="data-copy chanel-chapter__turn-label">THE QUESTION RETURNED</span><p class="body-copy">{copy.return}</p></div>
   </div>
 
+  <div class="chanel-chapter__place" data-photo-placement="milan">
+    <figure class="chanel-chapter__campus">
+      <img
+        src={HOME_STATE.photography.campus.src}
+        width={HOME_STATE.photography.campus.width}
+        height={HOME_STATE.photography.campus.height}
+        alt={HOME_STATE.photography.campus.alt}
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>{HOME_STATE.photography.campus.caption}</figcaption>
+    </figure>
+    <figure class="chanel-chapter__milan">
+      <img
+        src={HOME_STATE.photography.milan.src}
+        width={HOME_STATE.photography.milan.width}
+        height={HOME_STATE.photography.milan.height}
+        alt={HOME_STATE.photography.milan.alt}
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>{HOME_STATE.photography.milan.caption}</figcaption>
+    </figure>
+  </div>
+
   <ChanelRecoveryPortrait />
 
   <div class="chanel-chapter__visible">

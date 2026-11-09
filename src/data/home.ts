@@ -16,11 +16,40 @@ export const HOME_STATE = {
     statement:
       'I like following questions until they become clearer — and building things that help me think better.',
     portrait: {
+      src: '/life/italy/florence-portrait.jpeg',
+      width: 1126,
+      height: 837,
+      alt: 'Gabriel at Piazzale Michelangelo in Florence at night, with the cathedral and city lights behind him.',
+      caption: 'Florence',
+    },
+  },
+  photography: {
+    milan: {
       src: '/life/italy/milan-portrait.webp',
       width: 2316,
       height: 3088,
       alt: 'Gabriel in front of Milan Cathedral, wearing clear-framed glasses and a backpack.',
       caption: 'Milan',
+    },
+    campus: {
+      src: '/life/italy/bocconi-campus.webp',
+      width: 3024,
+      height: 4032,
+      alt: 'Curved metal facades and a green lawn on the Bocconi campus in Milan.',
+      caption: 'Bocconi, Milan',
+    },
+    venice: {
+      src: '/life/italy/venice-waterfront.webp',
+      width: 4032,
+      height: 3024,
+      alt: 'A view across the water in Venice, with a church, a bell tower and mooring posts in the foreground.',
+      caption: 'Venice',
+    },
+    coast: {
+      src: '/life/italy/coast-afternoon.webp',
+      width: 3024,
+      height: 4032,
+      alt: 'Colourful houses above a rocky Italian beach, with swimmers and blue umbrellas beside the sea.',
     },
   },
   projects: {
@@ -93,13 +122,6 @@ export const HOME_STATE = {
     personalMoments: {
       title: 'Milan and elsewhere',
       photos: [
-        {
-          src: '/life/italy/bocconi.webp',
-          width: 3024,
-          height: 4032,
-          alt: 'Looking up at the concrete entrance to Università Bocconi, with its name across the canopy.',
-          caption: 'Bocconi',
-        },
         {
           src: '/life/italy/quiet-street.webp',
           width: 3024,
