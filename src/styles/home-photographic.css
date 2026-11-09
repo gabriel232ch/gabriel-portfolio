@@ -1,4 +1,11 @@
 /* Photographs supply place and rhythm; research remains on clear paper. */
+html [data-theme-toggle][type='button'] {
+  min-height: 2.75rem;
+  padding-inline: var(--space-3);
+  border: 1px solid var(--hairline);
+  background: var(--paper);
+}
+
 .home-hero--photographic,
 .photo-interlude,
 .home-now__trip {
@@ -235,6 +242,17 @@
 .home-closing__note .home-closing__name {
   grid-column: 1 / -1;
   margin: 0;
+}
+
+.home-closing__note .home-closing__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  text-underline-offset: .2em;
+}
+
+.home-closing__note .home-closing__links a:hover {
+  color: var(--accent);
 }
 
 @media (min-width: 48rem) and (max-width: 71.99rem) {

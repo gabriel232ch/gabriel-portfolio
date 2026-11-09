@@ -51,4 +51,6 @@ The Florence backdrop explicitly resets the earlier grid placement so it spans t
 
 Desktop and phone screenshots were inspected in light and dark themes for the opening, campus pair, interlude, Hong Kong composition and closing. No horizontal overflow at 320, 390, 768, 1024, 1440 or 1920px. Descriptive image alternatives, source dimensions, text contrast, reading order, keyboard destinations and reduced motion were reviewed against current Vercel guidelines fetched on 2026-11-09.
 
+The homepage theme control has a paper background to remain legible over photographs; it and the closing link retain comfortable touch targets. These rules are scoped to the homepage stylesheet and do not change protected case pages.
+
 Astro check, lint, 35 unit tests, build and 46 desktop/mobile homepage, research-interaction and motion checks passed. Four existing screenshot baselines were refreshed for the approved direction. Protected case-page sources, research inputs, public aggregates and analytical data files are unchanged. The previously reproduced unrelated full-suite baseline failures in PR #11 remain outside this task.
