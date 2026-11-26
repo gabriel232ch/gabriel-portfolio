@@ -11,7 +11,7 @@ const markets=keys.map(([category,state,label])=>({label,state,rows:olistResearc
 <figure class="market-matrix" data-market-matrix>
   <figcaption><p class="data-copy">SIX HISTORICAL RISK MARKETS / 2018</p><h3>Same shortlist.<br />Different trajectories.</h3></figcaption>
   <div class="market-matrix__scale visual-note"><span>On-time delivery</span><i aria-hidden="true"></i><span>50% → 100%</span></div>
-  <div class="market-matrix__head" aria-hidden="true"><span>Category / state</span><div>{months.map((month,i)=><span data-matrix-heading={i} data-selected={i===7}><span class="market-matrix__month-full">{month}</span><span class="market-matrix__month-short">{month[0]}</span></span>)}</div><span data-matrix-month-label>Aug</span></div>
+  <div class="market-matrix__head" aria-hidden="true"><span>Category / state</span><div>{months.map((month,i)=><button type="button" class="market-matrix__month-btn" data-matrix-heading={i} data-selected={i===7} tabindex="-1"><span class="market-matrix__month-full">{month}</span><span class="market-matrix__month-short">{month[0]}</span></button>)}</div><span data-matrix-month-label>Aug</span></div>
   <div class="market-matrix__rows">
     {markets.map(m=><div class="market-matrix__row" data-matrix-row data-month-values={JSON.stringify(m.rows.map(r=>({rate:(r.on_time_rate*100).toFixed(2),n:r.eligible})))}>
       <span class="market-matrix__label">{m.label}<small>{m.state}</small></span>
@@ -19,7 +19,7 @@ const markets=keys.map(([category,state,label])=>({label,state,rows:olistResearc
       <span class="market-matrix__value"><b data-matrix-rate>{(m.rows[7].on_time_rate*100).toFixed(2)}%</b><small data-matrix-count>n={m.rows[7].eligible}</small></span>
     </div>)}
   </div>
-  <div class="market-matrix__control"><label for="home-market-month">Explore month</label><input id="home-market-month" type="range" min="0" max="7" value="7" step="1" aria-valuetext="August 2018" data-matrix-range /><output for="home-market-month" aria-live="polite" data-matrix-output>August 2018</output></div>
+  <div class="market-matrix__control"><label for="home-market-month">Explore month</label><input id="home-market-month" class="editorial-slider" type="range" min="0" max="7" value="7" step="1" aria-valuetext="August 2018" data-matrix-range /><output for="home-market-month" aria-live="polite" data-matrix-output>August 2018</output></div>
   <p class="visual-note">Eligible delivered orders · Purchase-month cohorts. Small samples can fluctuate. These are historical candidates, not a new ranking or measured intervention results. <a href="/work/olist-marketplace-analysis/#markets">Read the evidence ↗</a></p>
 </figure>
 <script>
@@ -27,8 +27,9 @@ const markets=keys.map(([category,state,label])=>({label,state,rows:olistResearc
   document.querySelectorAll<HTMLElement>('[data-market-matrix]').forEach(root=>{
     const range=root.querySelector<HTMLInputElement>('[data-matrix-range]');
     if(!range)return;
-    range.addEventListener('input',()=>{
-      const index=Number(range.value),label=fullMonths[index]+' 2018';
+    const selectMonth=(index:number)=>{
+      const label=fullMonths[index]+' 2018';
+      range.value=String(index);
       range.setAttribute('aria-valuetext',label);
       root.querySelector<HTMLOutputElement>('[data-matrix-output]')!.value=label;
       root.querySelector('[data-matrix-month-label]')!.textContent=fullMonths[index].slice(0,3);
@@ -38,6 +39,13 @@ const markets=keys.map(([category,state,label])=>({label,state,rows:olistResearc
         row.querySelector('[data-matrix-rate]')!.textContent=values[index].rate+'%';
         row.querySelector('[data-matrix-count]')!.textContent='n='+values[index].n;
       });
+    };
+    range.addEventListener('input',()=>selectMonth(Number(range.value)));
+    root.querySelectorAll<HTMLElement>('[data-matrix-cell]').forEach(cell=>{
+      cell.addEventListener('click',()=>selectMonth(Number(cell.dataset.matrixCell)));
+    });
+    root.querySelectorAll<HTMLElement>('[data-matrix-heading]').forEach(heading=>{
+      heading.addEventListener('click',()=>selectMonth(Number(heading.dataset.matrixHeading)));
     });
   });
 </script>

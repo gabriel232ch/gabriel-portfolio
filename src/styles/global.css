@@ -2,6 +2,7 @@
 @import './typography.css';
 @import './grid.css';
 @import './motion.css';
+@import './modern-web.css';
 
 * {
   box-sizing: border-box;
@@ -10,6 +11,13 @@
 html {
   background: var(--paper);
   color: var(--ink);
+  scroll-padding-top: 4.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -34,30 +42,26 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid var(--focus-ring);
   outline-offset: 0.25rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+  html {
+    scroll-behavior: auto;
   }
 }
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 900ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-duration: 520ms;
+  animation-timing-function: var(--ease-cinematic);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

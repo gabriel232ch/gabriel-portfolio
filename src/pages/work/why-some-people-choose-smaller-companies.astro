@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ThemeToggle from '../../components/system/ThemeToggle.astro';
+import EvidencePopover from '../../components/system/EvidencePopover.astro';
 import {
   PUBLIC_RESEARCH_ARCHIVE_URL,
   SMALLER_COMPANIES_INQUIRY,
@@ -40,6 +42,14 @@ const stages: InquiryStage[] = inquiry.chapters.flatMap((chapter) => {
 
   return afterChapter;
 });
+
+const arcSummaries = inquiry.chapters.map((chapter, index) => ({
+  id: chapter.id,
+  index: String(index + 1).padStart(2, '0'),
+  heading: chapter.heading,
+  questionBefore: chapter.questionBefore,
+  reframe: chapter.reframe,
+}));
 ---
 
 <BaseLayout
@@ -48,161 +58,277 @@ const stages: InquiryStage[] = inquiry.chapters.flatMap((chapter) => {
   noindex={false}
 >
   <main class="inquiry-page">
-    <header class="inquiry-page__header">
-      <a class="inquiry-page__identity" href="/">GABRIEL CHEN</a>
-      <a class="inquiry-page__back" href="/#work">← BACK TO WORK</a>
-    </header>
-
-    <article class="inquiry-page__article">
-      <header class="inquiry-page__hero">
-        <p class="inquiry-page__kicker">AN OPEN INQUIRY · FIELD NOTES</p>
-        <h1>{inquiry.title}</h1>
-        <p class="inquiry-page__dek">{inquiry.dek}</p>
-        <p class="inquiry-page__opening">{inquiry.opening}</p>
-
-        <nav class="inquiry-page__contents" aria-label="On this page">
-          <details>
-            <summary class="data-copy">On this page</summary>
-            <ol>
-              {inquiry.chapters.map((chapter) => (
-                <li>
-                  <a href={'#' + chapter.id}>{chapter.heading}</a>
-                </li>
-              ))}
-            </ol>
-          </details>
-        </nav>
+    <div class="site-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+    <div class="inquiry-header-wrap">
+      <header class="inquiry-page__header">
+        <a class="inquiry-page__identity" href="/">GABRIEL CHEN</a>
+        <div class="inquiry-page__header-tools">
+          <a class="inquiry-page__back" href="/#work">← BACK TO WORK</a>
+          <ThemeToggle />
+        </div>
       </header>
+    </div>
 
-      <div class="inquiry-page__story">
-        {stages.map((stage) => (
-          <div class="inquiry-page__stage" data-inquiry-stage={stage.id}>
-            {stage.type === 'chapter' ? (
-              <section
-                id={stage.chapter.id}
-                class="inquiry-page__chapter"
-                aria-labelledby={'chapter-' + stage.chapter.id + '-title'}
-              >
-                <header class="inquiry-page__section-header">
-                  <p class="inquiry-page__stage-label data-copy">Question {String(inquiry.chapters.indexOf(stage.chapter) + 1).padStart(2, '0')}</p>
-                  <h2 id={'chapter-' + stage.chapter.id + '-title'}>{stage.chapter.heading}</h2>
-                </header>
+    <div class="inquiry-page__shell">
+      <aside class="inquiry-toc" aria-label="On this page">
+        <p class="data-copy">THE EVOLUTION</p>
+        <ol>
+          {inquiry.chapters.map((chapter, idx) => (
+            <li>
+              <a href={'#' + chapter.id}>
+                <span class="inquiry-toc__num">{String(idx + 1).padStart(2, '0')}</span>
+                <span>{chapter.heading}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </aside>
 
-                <p class="inquiry-page__question-label data-copy">The question I was asking</p>
-                <blockquote class="inquiry-page__question">
-                  <p>{stage.chapter.questionBefore}</p>
-                </blockquote>
+      <article class="inquiry-page__article">
+        <header class="inquiry-page__hero">
+          <p class="inquiry-page__kicker">AN OPEN INQUIRY · FIELD NOTES</p>
+          <h1 data-vt-name="work-inquiry-title">{inquiry.title}</h1>
+          <p class="inquiry-page__dek">{inquiry.dek}</p>
+          <p class="inquiry-page__opening">{inquiry.opening}</p>
 
-                <p class="inquiry-page__evidence-label data-copy">What I found</p>
-                <p class="inquiry-page__evidence body-copy">{stage.chapter.evidenceOrProblem}</p>
-
-                <div class="inquiry-page__body">
-                  {stage.chapter.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
+          <figure
+            class="inquiry-arc"
+            data-inquiry-arc
+            aria-label="Interactive evolution of the inquiry across chapters"
+          >
+            <figcaption class="inquiry-arc__caption">
+              <span class="data-copy">INQUIRY ARC / {arcSummaries.length} STAGES</span>
+              <span class="data-copy">SELECT A STAGE TO PREVIEW THE REFRAME</span>
+            </figcaption>
+            <div class="inquiry-arc__rail anchor-tabs" role="group" aria-label="Select inquiry stage">
+              {arcSummaries.map((item, idx) => (
+                <button
+                  type="button"
+                  class="inquiry-arc__node"
+                  data-arc-node={idx}
+                  aria-pressed={idx === 0 ? 'true' : 'false'}
+                >
+                  <span class="inquiry-arc__index">{item.index}</span>
+                  <span class="inquiry-arc__dot" aria-hidden="true"></span>
+                </button>
+              ))}
+            </div>
+            <div class="inquiry-arc__preview" aria-live="polite" data-arc-preview>
+              <p class="inquiry-arc__preview-title" data-arc-heading>{arcSummaries[0].heading}</p>
+              <div class="inquiry-arc__preview-grid">
+                <div>
+                  <span class="data-copy">QUESTION BEFORE</span>
+                  <p data-arc-before>{arcSummaries[0].questionBefore}</p>
                 </div>
-
-                <div class="inquiry-page__reframe">
-                  <span class="data-copy">How the question changed</span>
-                  <p class="body-copy">{stage.chapter.reframe}</p>
+                <div>
+                  <span class="data-copy">HOW IT REFRAMED</span>
+                  <p data-arc-reframe>{arcSummaries[0].reframe}</p>
                 </div>
+              </div>
+              <a class="inquiry-arc__jump data-copy" data-arc-jump href={'#' + arcSummaries[0].id}>
+                Jump to Stage {arcSummaries[0].index} ↓
+              </a>
+            </div>
+            <script is:inline type="application/json" data-arc-data set:html={JSON.stringify(arcSummaries)} />
+          </figure>
 
-                {stage.chapter.id === 'evaluation' && (
-                  <aside
-                    class="inquiry-page__findings"
-                    aria-labelledby="evaluation-findings-title"
-                  >
-                    <h3 id="evaluation-findings-title">What the later matrix recorded</h3>
-                    <ol>
-                      {inquiry.evaluation.findings.map((finding, index) => (
-                        <li>
-                          <p class="inquiry-page__finding-observation">{finding.observation}</p>
-                          <p class="inquiry-page__finding-scope data-copy">Scope: {finding.scope}</p>
-                          <a
-                            class="inquiry-page__finding-method data-copy"
-                            href={finding.archiveHref}
-                            target="_blank"
-                            rel="noreferrer"
-                            aria-label={`Method details for finding ${index + 1}`}
-                          >
-                            Method details <span aria-hidden="true">↗</span>
-                          </a>
-                        </li>
-                      ))}
-                    </ol>
-                  </aside>
-                )}
+          <nav class="inquiry-page__contents" aria-label="On this page">
+            <details>
+              <summary class="data-copy">On this page</summary>
+              <ol>
+                {inquiry.chapters.map((chapter) => (
+                  <li>
+                    <a href={'#' + chapter.id}>{chapter.heading}</a>
+                  </li>
+                ))}
+              </ol>
+            </details>
+          </nav>
+        </header>
 
-                {stage.chapter.id === 'decision-support' && (
-                  <aside class="inquiry-page__synthesis" aria-labelledby="inquiry-synthesis-title">
-                    <h3 id="inquiry-synthesis-title">A working interpretation</h3>
-                    <p class="body-copy">{inquiry.currentSynthesis}</p>
-                  </aside>
-                )}
+        <div class="inquiry-page__story">
+          {stages.map((stage) => (
+            <div class="inquiry-page__stage" data-inquiry-stage={stage.id}>
+              {stage.type === 'chapter' ? (
+                <section
+                  id={stage.chapter.id}
+                  tabindex="-1"
+                  class="inquiry-page__chapter"
+                  aria-labelledby={'chapter-' + stage.chapter.id + '-title'}
+                >
+                  <header class="inquiry-page__section-header">
+                    <p class="inquiry-page__stage-label data-copy">Question {String(inquiry.chapters.indexOf(stage.chapter) + 1).padStart(2, '0')}</p>
+                    <h2 id={'chapter-' + stage.chapter.id + '-title'}>{stage.chapter.heading}</h2>
+                  </header>
 
-                {stage.chapter.id === 'crossroads' && (
-                  <aside class="inquiry-page__design-status" aria-labelledby="inquiry-design-title">
-                    <h3 id="inquiry-design-title">Prototype status</h3>
-                    <p class="body-copy">{inquiry.currentDesign}</p>
-                  </aside>
-                )}
+                  <p class="inquiry-page__question-label data-copy">The question I was asking</p>
+                  <blockquote class="inquiry-page__question">
+                    <p>{stage.chapter.questionBefore}</p>
+                  </blockquote>
 
-                {stage.chapter.archiveHref && (
+                  <p class="inquiry-page__evidence-label data-copy">What I found</p>
+                  <p class="inquiry-page__evidence body-copy">{stage.chapter.evidenceOrProblem}</p>
+
+                  <div class="inquiry-page__body">
+                    {stage.chapter.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
+                  </div>
+
+                  <div class="inquiry-page__reframe">
+                    <span class="data-copy">How the question changed</span>
+                    <p class="body-copy">{stage.chapter.reframe}</p>
+                  </div>
+
+                  {stage.chapter.id === 'evaluation' && (
+                    <aside
+                      class="inquiry-page__findings"
+                      aria-labelledby="evaluation-findings-title"
+                    >
+                      <div class="inquiry-page__findings-head">
+                        <h3 id="evaluation-findings-title">What the later matrix recorded</h3>
+                        <EvidencePopover
+                          id="popover-inquiry-matrix"
+                          label="Method boundary"
+                          eyebrow="EVALUATION SCOPE"
+                          body="These counts summarize one exploratory matrix across 12 prompts and five platforms. Each cell reflects a single captured check rather than repeated independent trials."
+                          caveat="Descriptive observation only — not statistical significance or causal attribution."
+                        />
+                      </div>
+                      <ol>
+                        {inquiry.evaluation.findings.map((finding, index) => (
+                          <li>
+                            <p class="inquiry-page__finding-observation">{finding.observation}</p>
+                            <p class="inquiry-page__finding-scope data-copy">Scope: {finding.scope}</p>
+                            <a
+                              class="inquiry-page__finding-method data-copy"
+                              href={finding.archiveHref}
+                              target="_blank"
+                              rel="noreferrer"
+                              aria-label={`Method details for finding ${index + 1}`}
+                            >
+                              Method details <span aria-hidden="true">↗</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ol>
+                    </aside>
+                  )}
+
+                  {stage.chapter.id === 'decision-support' && (
+                    <aside class="inquiry-page__synthesis" aria-labelledby="inquiry-synthesis-title">
+                      <h3 id="inquiry-synthesis-title">A working interpretation</h3>
+                      <p class="body-copy">{inquiry.currentSynthesis}</p>
+                    </aside>
+                  )}
+
+                  {stage.chapter.id === 'crossroads' && (
+                    <aside class="inquiry-page__design-status" aria-labelledby="inquiry-design-title">
+                      <h3 id="inquiry-design-title">Prototype status</h3>
+                      <p class="body-copy">{inquiry.currentDesign}</p>
+                    </aside>
+                  )}
+
+                  {stage.chapter.archiveHref && (
+                    <a
+                      class="inquiry-page__archive-link data-copy"
+                      href={stage.chapter.archiveHref}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Explore the research <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                </section>
+              ) : stage.type === 'transition' ? (
+                <aside
+                  id={stage.transition.id}
+                  class="inquiry-page__transition"
+                  aria-labelledby={stage.transition.id + '-title'}
+                >
+                  <p class="inquiry-page__stage-label data-copy">An intermediate step</p>
+                  <h3 id={stage.transition.id + '-title'}>{stage.transition.heading}</h3>
+                  {stage.transition.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
+                </aside>
+              ) : (
+                <aside
+                  id={stage.node.id}
+                  class="inquiry-page__systemization"
+                  data-systemization-node
+                  aria-labelledby={stage.node.id + '-title'}
+                >
+                  <p class="inquiry-page__stage-label data-copy">When the process began to repeat</p>
+                  <h3 id={stage.node.id + '-title'}>{stage.node.heading}</h3>
+                  <div class="inquiry-page__body">
+                    {stage.node.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
+                  </div>
                   <a
                     class="inquiry-page__archive-link data-copy"
-                    href={stage.chapter.archiveHref}
+                    href={stage.node.archiveHref}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Explore the research <span aria-hidden="true">↗</span>
+                    Explore the method <span aria-hidden="true">↗</span>
                   </a>
-                )}
-              </section>
-            ) : stage.type === 'transition' ? (
-              <aside
-                id={stage.transition.id}
-                class="inquiry-page__transition"
-                aria-labelledby={stage.transition.id + '-title'}
-              >
-                <p class="inquiry-page__stage-label data-copy">An intermediate step</p>
-                <h3 id={stage.transition.id + '-title'}>{stage.transition.heading}</h3>
-                {stage.transition.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
-              </aside>
-            ) : (
-              <aside
-                id={stage.node.id}
-                class="inquiry-page__systemization"
-                data-systemization-node
-                aria-labelledby={stage.node.id + '-title'}
-              >
-                <p class="inquiry-page__stage-label data-copy">When the process began to repeat</p>
-                <h3 id={stage.node.id + '-title'}>{stage.node.heading}</h3>
-                <div class="inquiry-page__body">
-                  {stage.node.body.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
-                </div>
-                <a
-                  class="inquiry-page__archive-link data-copy"
-                  href={stage.node.archiveHref}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Explore the method <span aria-hidden="true">↗</span>
-                </a>
-              </aside>
-            )}
-          </div>
-        ))}
-      </div>
+                </aside>
+              )}
+            </div>
+          ))}
+        </div>
 
-      <footer class="inquiry-page__footer">
-        <p class="inquiry-page__status">{inquiry.closing}</p>
-        <a
-          class="inquiry-page__archive-link data-copy"
-          href={PUBLIC_RESEARCH_ARCHIVE_URL}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Open the public research archive <span aria-hidden="true">↗</span>
-        </a>
-      </footer>
-    </article>
+        <footer class="inquiry-page__footer">
+          <p class="inquiry-page__status">{inquiry.closing}</p>
+          <a
+            class="inquiry-page__archive-link data-copy"
+            href={PUBLIC_RESEARCH_ARCHIVE_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open the public research archive <span aria-hidden="true">↗</span>
+          </a>
+        </footer>
+      </article>
+    </div>
   </main>
 </BaseLayout>
+
+<script>
+  import { runViewTransition } from '../../scripts/modern-web';
+
+  interface ArcItem {
+    id: string;
+    index: string;
+    heading: string;
+    questionBefore: string;
+    reframe: string;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-inquiry-arc]').forEach((arc) => {
+    const raw = arc.querySelector('[data-arc-data]')?.textContent;
+    if (!raw) return;
+    const items = JSON.parse(raw) as ArcItem[];
+    const buttons = [...arc.querySelectorAll<HTMLButtonElement>('[data-arc-node]')];
+    const heading = arc.querySelector<HTMLElement>('[data-arc-heading]');
+    const before = arc.querySelector<HTMLElement>('[data-arc-before]');
+    const reframe = arc.querySelector<HTMLElement>('[data-arc-reframe]');
+    const jump = arc.querySelector<HTMLAnchorElement>('[data-arc-jump]');
+
+    const select = (index: number) => {
+      const item = items[index];
+      if (!item) return;
+      const update = () => {
+        buttons.forEach((btn, i) => btn.setAttribute('aria-pressed', String(i === index)));
+        if (heading) heading.textContent = item.heading;
+        if (before) before.textContent = item.questionBefore;
+        if (reframe) reframe.textContent = item.reframe;
+        if (jump) {
+          jump.setAttribute('href', `#${item.id}`);
+          jump.textContent = `Jump to Stage ${item.index} ↓`;
+        }
+      };
+      runViewTransition(update);
+    };
+
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => select(index));
+    });
+  });
+</script>

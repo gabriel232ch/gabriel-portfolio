@@ -56,6 +56,36 @@
   --motion-signature: 1400ms;
   --ease-editorial: cubic-bezier(0.22, 0.8, 0.2, 1);
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --in-oklab: ;
+}
+
+@supports (animation-timing-function: linear(0, 1)) {
+  :root {
+    /* Expressive ~7% editorial spring settle for tactile controls (never applied to opacity). */
+    --ease-spring-editorial: linear(
+      0,
+      0.009 1.1%,
+      0.038 2.3%,
+      0.156 5%,
+      0.51 11.2%,
+      0.81 17.5%,
+      0.99 24.2%,
+      1.064 31.8%,
+      1.072 39.5%,
+      1.044 48.5%,
+      1.012 58.5%,
+      0.994 70%,
+      0.998 83%,
+      1
+    );
+  }
+}
+
+@supports (background: linear-gradient(in oklab, white, black)) {
+  :root {
+    --in-oklab: in oklab;
+  }
 }
 
 :root[data-theme='dark'] {

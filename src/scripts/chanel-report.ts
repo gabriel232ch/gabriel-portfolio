@@ -1,97 +1,66 @@
-export {};
+import { runViewTransition } from './modern-web';
+
 const motionNodes = document.querySelectorAll<HTMLElement>('[data-report-motion]');
-  const progress = document.querySelector<HTMLElement>('[data-report-progress]');
-  const links = [...document.querySelectorAll<HTMLAnchorElement>('.report-index a')];
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (reduceMotion || typeof IntersectionObserver !== 'function') {
-    motionNodes.forEach((node) => {
-      node.dataset.motionState = 'entered';
-    });
-  } else {
-    motionNodes.forEach((node) => {
-      node.dataset.motionState = 'pending';
-    });
-
-    const motionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const node = entry.target as HTMLElement;
-          node.dataset.motionState = 'entered';
-          motionObserver.unobserve(node);
-        });
-      },
-      { threshold: 0.12 },
-    );
-
-    motionNodes.forEach((node) => motionObserver.observe(node));
-  }
-
-  const updateProgress = () => {
-    if (!progress) return;
-    const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
-    const amount = scrollRange > 0 ? window.scrollY / scrollRange : 0;
-    progress.style.transform = 'scaleX(' + amount + ')';
-  };
-
-  window.addEventListener('scroll', updateProgress, { passive: true });
-  window.addEventListener('resize', updateProgress, { passive: true });
-  updateProgress();
-
-  document.querySelectorAll<HTMLElement>('[data-interactive-chart]').forEach((chart) => {
-    const bars = [...chart.querySelectorAll<HTMLButtonElement>('[data-chart-bar]')];
-    const clearSelection = () => {
-      chart.removeAttribute('data-has-selection');
-      bars.forEach((bar) => {
-        bar.dataset.selected = 'false';
-        bar.setAttribute('aria-pressed', 'false');
-      });
-    };
-
-    bars.forEach((bar) => {
-      bar.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const wasSelected = bar.dataset.selected === 'true';
-        bars.forEach((item) => {
-          const isSelected = item === bar && !wasSelected;
-          item.dataset.selected = String(isSelected);
-          item.setAttribute('aria-pressed', String(isSelected));
-        });
-
-        if (wasSelected) chart.removeAttribute('data-has-selection');
-        else chart.dataset.hasSelection = 'true';
-      });
-    });
-
-    chart.addEventListener('click', clearSelection);
+if (reduceMotion || typeof IntersectionObserver !== 'function') {
+  motionNodes.forEach((node) => {
+    node.dataset.motionState = 'entered';
+  });
+} else {
+  motionNodes.forEach((node) => {
+    node.dataset.motionState = 'pending';
   });
 
-  if (typeof IntersectionObserver === 'function') {
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const activeId = entry.target.id;
-          links.forEach((link) => {
-            const isActive = link.getAttribute('href') === '#' + activeId;
-            link.dataset.active = String(isActive);
-            if (isActive) link.setAttribute('aria-current', 'location');
-            else link.removeAttribute('aria-current');
-          });
-        });
-      },
-      { rootMargin: '-18% 0px -65% 0px', threshold: 0 },
-    );
+  const motionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const node = entry.target as HTMLElement;
+        node.dataset.motionState = 'entered';
+        motionObserver.unobserve(node);
+      });
+    },
+    { threshold: 0.12 },
+  );
 
-    links.forEach((link) => {
-      const id = link.getAttribute('href')?.slice(1);
-      const section = id ? document.getElementById(id) : null;
-      if (section) sectionObserver.observe(section);
+  motionNodes.forEach((node) => motionObserver.observe(node));
+}
+
+document.querySelectorAll<HTMLElement>('[data-interactive-chart]').forEach((chart) => {
+  const bars = [...chart.querySelectorAll<HTMLButtonElement>('[data-chart-bar]')];
+  const clearSelection = () => {
+    chart.removeAttribute('data-has-selection');
+    bars.forEach((bar) => {
+      bar.dataset.selected = 'false';
+      bar.setAttribute('aria-pressed', 'false');
     });
-  }
+  };
 
-interface TrajectoryRecord { year: number; x: number; metrics: { label: string; value: string; index: string; position: number }[] }
+  bars.forEach((bar) => {
+    bar.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const wasSelected = bar.dataset.selected === 'true';
+      bars.forEach((item) => {
+        const isSelected = item === bar && !wasSelected;
+        item.dataset.selected = String(isSelected);
+        item.setAttribute('aria-pressed', String(isSelected));
+      });
+
+      if (wasSelected) chart.removeAttribute('data-has-selection');
+      else chart.dataset.hasSelection = 'true';
+    });
+  });
+
+  chart.addEventListener('click', clearSelection);
+});
+
+interface TrajectoryRecord {
+  year: number;
+  x: number;
+  metrics: { label: string; value: string; index: string; position: number }[];
+}
+
 document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((chart) => {
   const records = JSON.parse(chart.dataset.records || '[]') as TrajectoryRecord[];
   const years = [...chart.querySelectorAll<HTMLButtonElement>('[data-trajectory-year]')];
@@ -103,7 +72,9 @@ document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((char
     guide?.setAttribute('x1', String(row.x));
     guide?.setAttribute('x2', String(row.x));
     const label = chart.querySelector('[data-trajectory-label]');
-    if (label) label.textContent = (chart.classList.contains('chanel-viz--price') ? '' : 'FY') + row.year;
+    if (label) {
+      label.textContent = (chart.classList.contains('chanel-viz--price') ? '' : 'FY') + row.year;
+    }
     row.metrics.forEach((metric, i) => {
       const value = chart.querySelector(`[data-trajectory-value="${i}"]`);
       const indexValue = chart.querySelector(`[data-trajectory-index="${i}"]`);
@@ -115,95 +86,237 @@ document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((char
     });
   };
   let selectedYear = records.length - 1;
-  years.forEach((button, i) => button.addEventListener('click', () => { selectedYear = i; activate(i); }));
-  chart.querySelectorAll<SVGCircleElement>('[data-trajectory-observation]').forEach(point => {
+  years.forEach((button, i) =>
+    button.addEventListener('click', () => {
+      selectedYear = i;
+      activate(i);
+    }),
+  );
+  chart.querySelectorAll<SVGCircleElement>('[data-trajectory-observation]').forEach((point) => {
     const inspect = () => activate(Number(point.dataset.trajectoryObservation));
     point.addEventListener('pointermove', inspect);
     point.addEventListener('pointerleave', () => activate(selectedYear));
-    point.addEventListener('click', () => { selectedYear = Number(point.dataset.trajectoryObservation); activate(selectedYear); });
-  });
-  chart.querySelectorAll<HTMLButtonElement>('[data-trajectory-series]').forEach((button) => button.addEventListener('click', () => {
-    const selected = button.dataset.trajectorySeries;
-    chart.querySelectorAll<HTMLButtonElement>('[data-trajectory-series]').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-    chart.querySelectorAll<SVGGElement>('[data-trajectory-line]').forEach(line => {
-      line.dataset.muted = String(selected !== 'all' && line.dataset.trajectoryLine !== selected);
+    point.addEventListener('click', () => {
+      selectedYear = Number(point.dataset.trajectoryObservation);
+      activate(selectedYear);
     });
-  }));
+  });
+  chart.querySelectorAll<HTMLButtonElement>('[data-trajectory-series]').forEach((button) =>
+    button.addEventListener('click', () => {
+      const selected = button.dataset.trajectorySeries;
+      chart
+        .querySelectorAll<HTMLButtonElement>('[data-trajectory-series]')
+        .forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      chart.querySelectorAll<SVGGElement>('[data-trajectory-line]').forEach((line) => {
+        line.dataset.muted = String(selected !== 'all' && line.dataset.trajectoryLine !== selected);
+      });
+    }),
+  );
 });
+
+const supportsUntilFound = 'onbeforematch' in HTMLElement.prototype;
 
 document.querySelectorAll<HTMLElement>('[data-chanel-recovery]').forEach((chart) => {
   let group = 'region';
   let period = '2';
   const readout = chart.querySelector('[data-recovery-readout]');
-  const update = () => {
-    chart.querySelectorAll<HTMLElement>('[data-recovery-panel]').forEach(panel => {
-      panel.hidden = panel.dataset.recoveryPanel !== `${group}-${period}`;
-      if (!panel.hidden) {
+
+  const applyPanelState = () => {
+    const activeKey = `${group}-${period}`;
+    chart.querySelectorAll<HTMLElement>('[data-recovery-panel]').forEach((panel) => {
+      const isVisible = panel.dataset.recoveryPanel === activeKey;
+      if (isVisible) {
+        panel.removeAttribute('hidden');
         const first = panel.querySelector<HTMLButtonElement>('[data-recovery-row]');
         if (readout) readout.textContent = first?.dataset.readout || '';
+      } else if (supportsUntilFound) {
+        panel.setAttribute('hidden', 'until-found');
+      } else {
+        panel.hidden = true;
       }
     });
-    chart.querySelectorAll<HTMLButtonElement>('[data-recovery-group]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.recoveryGroup === group)));
-    chart.querySelectorAll<HTMLButtonElement>('[data-recovery-period]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.recoveryPeriod === period)));
-    chart.querySelectorAll<HTMLButtonElement>('[data-recovery-row]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    chart
+      .querySelectorAll<HTMLButtonElement>('[data-recovery-group]')
+      .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.recoveryGroup === group)));
+    chart
+      .querySelectorAll<HTMLButtonElement>('[data-recovery-period]')
+      .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.recoveryPeriod === period)));
+    chart
+      .querySelectorAll<HTMLButtonElement>('[data-recovery-row]')
+      .forEach((b) => b.setAttribute('aria-pressed', 'false'));
   };
-  chart.querySelectorAll<HTMLButtonElement>('[data-recovery-group]').forEach(b => b.addEventListener('click', () => {group = b.dataset.recoveryGroup || 'region';update();}));
-  chart.querySelectorAll<HTMLButtonElement>('[data-recovery-period]').forEach(b => b.addEventListener('click', () => {period = b.dataset.recoveryPeriod || '2';update();}));
-  chart.querySelectorAll<HTMLButtonElement>('[data-recovery-row]').forEach(b => b.addEventListener('click', () => {
-    chart.querySelectorAll<HTMLButtonElement>('[data-recovery-row]').forEach(row => row.setAttribute('aria-pressed', String(row === b)));
-    if (readout) readout.textContent = b.dataset.readout || '';
-  }));
+
+  const update = (animate = true) => {
+    if (animate) runViewTransition(applyPanelState);
+    else applyPanelState();
+  };
+
+  applyPanelState();
+
+  chart.querySelectorAll<HTMLButtonElement>('[data-recovery-group]').forEach((b) =>
+    b.addEventListener('click', () => {
+      group = b.dataset.recoveryGroup || 'region';
+      update(true);
+    }),
+  );
+  chart.querySelectorAll<HTMLButtonElement>('[data-recovery-period]').forEach((b) =>
+    b.addEventListener('click', () => {
+      period = b.dataset.recoveryPeriod || '2';
+      update(true);
+    }),
+  );
+  chart.querySelectorAll<HTMLButtonElement>('[data-recovery-row]').forEach((b) =>
+    b.addEventListener('click', () => {
+      chart
+        .querySelectorAll<HTMLButtonElement>('[data-recovery-row]')
+        .forEach((row) => row.setAttribute('aria-pressed', String(row === b)));
+      if (readout) readout.textContent = b.dataset.readout || '';
+    }),
+  );
+
+  // Sync panel state if Find-in-Page matches hidden="until-found" content
+  chart.addEventListener('beforematch', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const panel = target.closest<HTMLElement>('[data-recovery-panel]');
+    const key = panel?.dataset.recoveryPanel;
+    if (!key) return;
+    const [nextGroup, nextPeriod] = key.split('-');
+    if (nextGroup && nextPeriod) {
+      group = nextGroup;
+      period = nextPeriod;
+      applyPanelState();
+    }
+  });
 });
 
-document.querySelectorAll<HTMLElement>('.chanel-bridge').forEach(chart => {
+document.querySelectorAll<HTMLElement>('.chanel-bridge').forEach((chart) => {
   const all = chart.querySelector<HTMLButtonElement>('[data-bridge-all]');
-  const initialReadout = chart.querySelector('[data-bridge-readout]')?.textContent || '';
-  all?.addEventListener('click', () => {
-    all.setAttribute('aria-pressed', 'true');
-    chart.querySelectorAll<HTMLButtonElement>('[data-bridge-step]').forEach(b => b.setAttribute('aria-pressed', 'false'));
-    chart.querySelectorAll<SVGGElement>('.chanel-bridge__step').forEach(step => step.dataset.muted = 'false');
-    const readout = chart.querySelector('[data-bridge-readout]');
+  const buttons = [...chart.querySelectorAll<HTMLButtonElement>('[data-bridge-step]')];
+  const steps = [...chart.querySelectorAll<SVGGElement>('.chanel-bridge__step')];
+  const readout = chart.querySelector('[data-bridge-readout]');
+  const initialReadout = readout?.textContent || '';
+
+  const showAll = () => {
+    all?.setAttribute('aria-pressed', 'true');
+    buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    steps.forEach((step) => {
+      step.dataset.muted = 'false';
+      step.dataset.active = 'false';
+    });
     if (readout) readout.textContent = initialReadout;
-  });
-  chart.querySelectorAll<HTMLButtonElement>('[data-bridge-step]').forEach((button,i) => button.addEventListener('click', () => {
+  };
+
+  const selectStep = (index: number) => {
     all?.setAttribute('aria-pressed', 'false');
-    chart.querySelectorAll<HTMLButtonElement>('[data-bridge-step]').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-    chart.querySelectorAll<SVGGElement>('.chanel-bridge__step').forEach((step,si) => step.dataset.muted = String(i !== si));
-    const readout = chart.querySelector('[data-bridge-readout]');
-    if (readout) readout.textContent = button.dataset.readout || '';
-  }));
+    buttons.forEach((b, i) => b.setAttribute('aria-pressed', String(i === index)));
+    steps.forEach((step, si) => {
+      step.dataset.muted = String(index !== si);
+      step.dataset.active = String(index === si);
+    });
+    if (readout) readout.textContent = buttons[index]?.dataset.readout || initialReadout;
+  };
+
+  all?.addEventListener('click', showAll);
+  buttons.forEach((button, i) => button.addEventListener('click', () => selectStep(i)));
+
+  // Direct SVG bar click & hover interaction synced with step buttons
+  let lockedIndex: number | null = null;
+  steps.forEach((step, i) => {
+    step.addEventListener('pointerenter', () => {
+      if (lockedIndex === null) selectStep(i);
+    });
+    step.addEventListener('pointerleave', () => {
+      if (lockedIndex === null) showAll();
+    });
+    step.addEventListener('click', () => {
+      if (lockedIndex === i) {
+        lockedIndex = null;
+        showAll();
+      } else {
+        lockedIndex = i;
+        selectStep(i);
+      }
+    });
+  });
+
+  all?.addEventListener('click', () => {
+    lockedIndex = null;
+  });
+  buttons.forEach((button, i) => {
+    button.addEventListener('click', () => {
+      lockedIndex = i;
+    });
+  });
+});
+
+// Competition by Price Band: brand column highlight filter
+document.querySelectorAll<HTMLElement>('[data-band-browser]').forEach((browser) => {
+  const filterButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-band-filter]')];
+  const tables = [...browser.querySelectorAll<HTMLTableElement>('[data-band-table]')];
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const selected = button.dataset.bandFilter ?? 'all';
+      filterButtons.forEach((btn) =>
+        btn.setAttribute('aria-pressed', String(btn === button)),
+      );
+      tables.forEach((table) => {
+        if (selected === 'all') {
+          table.removeAttribute('data-brand-focus');
+        } else {
+          table.dataset.brandFocus = selected;
+        }
+      });
+    });
+  });
 });
 
 // Enter once; content and exact data remain available without animation or JavaScript.
-const revealNodes = document.querySelectorAll<HTMLElement>('[data-chanel-reveal], .chanel-report .report-section > h2, .chanel-report .report-hero__main');
+const revealNodes = document.querySelectorAll<HTMLElement>(
+  '[data-chanel-reveal], .chanel-report .report-section > h2, .chanel-report .report-hero__main',
+);
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 if (!motionPreference.matches && typeof IntersectionObserver === 'function') {
-  const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      (entry.target as HTMLElement).dataset.chanelVisible = 'true';
-      revealObserver.unobserve(entry.target);
-    });
-  }, {threshold: 0.08});
-  revealNodes.forEach(node => {node.dataset.chanelVisible = 'false';revealObserver.observe(node);});
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        (entry.target as HTMLElement).dataset.chanelVisible = 'true';
+        revealObserver.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.08 },
+  );
+  revealNodes.forEach((node) => {
+    node.dataset.chanelVisible = 'false';
+    revealObserver.observe(node);
+  });
   motionPreference.addEventListener('change', () => {
     if (!motionPreference.matches) return;
     revealObserver.disconnect();
-    revealNodes.forEach(node => node.dataset.chanelVisible = 'true');
+    revealNodes.forEach((node) => (node.dataset.chanelVisible = 'true'));
   });
 }
 
 // Selection adds an exact readout instead of only dimming the other marks.
-document.querySelectorAll<HTMLElement>('.chanel-report [data-interactive-chart]').forEach(chart => {
+document.querySelectorAll<HTMLElement>('.chanel-report [data-interactive-chart]').forEach((chart) => {
   const output = document.createElement('p');
   output.className = 'chanel-selection-readout';
   output.setAttribute('aria-live', 'polite');
   output.textContent = 'Select a mark to inspect the observation.';
   chart.append(output);
-  chart.querySelectorAll<HTMLButtonElement>('[data-chart-bar]').forEach(button => button.addEventListener('click', () => {
-    output.textContent = button.dataset.selected === 'true' ? button.getAttribute('aria-label') || '' : 'Select a mark to inspect the observation.';
-  }));
-  chart.addEventListener('click', event => {
-    if (!(event.target instanceof Element) || !event.target.closest('[data-chart-bar]')) output.textContent = 'Select a mark to inspect the observation.';
+  chart.querySelectorAll<HTMLButtonElement>('[data-chart-bar]').forEach((button) =>
+    button.addEventListener('click', () => {
+      output.textContent =
+        button.dataset.selected === 'true'
+          ? button.getAttribute('aria-label') || ''
+          : 'Select a mark to inspect the observation.';
+    }),
+  );
+  chart.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element) || !event.target.closest('[data-chart-bar]')) {
+      output.textContent = 'Select a mark to inspect the observation.';
+    }
   });
 });

@@ -11,6 +11,12 @@ const y=(rate:number)=>246-rate*200;
     <title id="story-title">Two markets followed different monthly delivery paths</title>
     <desc id="story-desc">On-time delivery in eligible delivered orders, Jan–Aug 2018. Watches and gifts in RJ and office furniture in SP are selected illustrations from six historical candidates. The full shortlist can be expanded below. The axis runs from 0 to 100 percent.</desc>
     {[0,50,100].map(v=><g class="trajectory-story__grid"><line x1="44" x2="492" y1={y(v/100)} y2={y(v/100)} /><text x="32" y={y(v/100)+4} text-anchor="end">{v}%</text></g>)}
+    <g class="trajectory-story__windows" aria-hidden="true">
+      <rect x="44" y="46" width="160" height="200" class="trajectory-story__window-early" />
+      <line x1="204" x2="204" y1="38" y2="246" class="trajectory-story__window-split" />
+      <text x="124" y="34" text-anchor="middle">JAN–MAR</text>
+      <text x="348" y="34" text-anchor="middle">APR–AUG</text>
+    </g>
     <line x1={x(7)} x2={x(7)} y1="36" y2="246" class="trajectory-story__guide" data-story-guide />
     {series.map((s,i)=><g style={`--series-color:var(--chart-${s.color})`} class="trajectory-story__series">
       <path class="trajectory-story__line" d={s.rows.map((r,j)=>`${j?'L':'M'}${x(j)},${y(r.on_time_rate)}`).join(' ')} />
@@ -21,7 +27,7 @@ const y=(rate:number)=>246-rate*200;
     {months.map((m,i)=><text class="trajectory-story__month" x={x(i)} y="275" text-anchor="middle">{m}</text>)}
     <rect class="trajectory-story__hit" x="36" y="30" width="464" height="222" fill="transparent" data-story-hit />
   </svg>
-  <div class="trajectory-story__explore"><label for="story-month">Explore month</label><output for="story-month" data-story-month>August 2018</output><input id="story-month" type="range" min="0" max="7" value="7" aria-valuetext="August 2018" data-story-range /></div>
+  <div class="trajectory-story__explore"><label for="story-month">Explore month</label><output for="story-month" data-story-month>August 2018</output><input id="story-month" class="editorial-slider" type="range" min="0" max="7" value="7" aria-valuetext="August 2018" data-story-range /></div>
   <div class="trajectory-story__readout" aria-live="polite">
     {series.map((s,i)=><div style={`--series-color:var(--chart-${s.color})`}><span>{s.label}</span><strong data-story-rate={i}>{(s.rows[7].on_time_rate*100).toFixed(2)}%</strong><small data-story-count={i}>n={s.rows[7].eligible}</small></div>)}
   </div>

@@ -11,7 +11,7 @@ const record = (i: number) => ({year:years[i],x:x(i),metrics:series.map(s=>({lab
 <figure class:list={['chanel-viz', 'chanel-trajectory', {'chanel-viz--price':kind === 'price'}]} data-chanel-reveal data-chanel-trajectory data-records={JSON.stringify(years.map((_,i)=>record(i)))}>
   <figcaption class="chanel-viz__caption"><span class="data-copy">{eyebrow}</span><span class="data-copy">{kind === 'finance' ? 'FY2023 = 100 · REPORTED USD' : 'FRANCE · EUR · OBSERVED YEARS'}</span></figcaption>
   <div class="chanel-viz__title"><h3>{title}</h3><span class="chanel-viz__edition" aria-hidden="true">{kind === 'finance' ? '01' : '03'}</span></div>
-  <div class="chanel-viz__legend" aria-label="Highlight a series">
+  <div class="chanel-viz__legend anchor-tabs" aria-label="Highlight a series">
     <button type="button" data-trajectory-series="all" aria-pressed="true">All series</button>
     {series.map((s,i)=><button type="button" style={'--series-color:var(--chanel-series-'+i+')'} data-trajectory-series={i} aria-pressed="false"><i aria-hidden="true"></i>{s.label}</button>)}
   </div>
@@ -27,7 +27,7 @@ const record = (i: number) => ({year:years[i],x:x(i),metrics:series.map(s=>({lab
     </g>)}
     {years.map((year,i)=><text class="chanel-trajectory__year" x={x(i)} y="267" text-anchor="middle">{kind==='finance' ? 'FY' : ''}{year}</text>)}
   </svg>
-  <div class="chanel-viz__toolbar"><span class="data-copy">OBSERVATION</span><div class="chanel-viz__segments" aria-label="Select observed year">{years.map((year,i)=><button type="button" data-trajectory-year={i} aria-pressed={i===selected ? 'true':'false'}>{kind==='finance' ? 'FY' : ''}{year}</button>)}</div></div>
+  <div class="chanel-viz__toolbar"><span class="data-copy">OBSERVATION</span><div class="chanel-viz__segments anchor-tabs" aria-label="Select observed year">{years.map((year,i)=><button type="button" data-trajectory-year={i} aria-pressed={i===selected ? 'true':'false'}>{kind==='finance' ? 'FY' : ''}{year}</button>)}</div></div>
   <div class="chanel-trajectory__readout" aria-live="polite" aria-atomic="true">
     <p class="data-copy" data-trajectory-label>{kind==='finance'?'FY':''}{years[selected]}</p>
     <div class="chanel-trajectory__metrics">{series.map((s,i)=><div style={'--series-color:var(--chanel-series-'+i+')'}><span>{s.label}</span><strong data-trajectory-value={i}>{formatted(s,selected)}</strong>{kind==='finance'&&<small><b data-trajectory-index={i}>{s.values[selected].toFixed(1)}</b> / FY2023 = 100</small>}</div>)}</div>

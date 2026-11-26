@@ -1,13 +1,151 @@
-<div
+---
+const tables = [
+  {
+    id: 'orders',
+    label: 'orders',
+    x: 240,
+    y: 90,
+    role: 'Central purchase grain — links purchase, approval, estimated delivery, and actual delivery timestamps.',
+    core: true,
+  },
+  {
+    id: 'customers',
+    label: 'customers',
+    x: 70,
+    y: 35,
+    role: 'Customer state & geography — anchors the state-level on-time decomposition and RJ/SP/MG market cohorts.',
+    core: false,
+  },
+  {
+    id: 'order_items',
+    label: 'order_items',
+    x: 70,
+    y: 90,
+    role: 'Item prices (excluding freight) & seller links — defines delivered GMV proxy and multi-seller order bridges.',
+    core: false,
+  },
+  {
+    id: 'products',
+    label: 'products',
+    x: 70,
+    y: 145,
+    role: 'Product categories — maps items into category × customer-state screening markets.',
+    core: false,
+  },
+  {
+    id: 'sellers',
+    label: 'sellers',
+    x: 410,
+    y: 35,
+    role: 'Seller origin states — defines seller-state → customer-state route intersections such as SP → RJ.',
+    core: false,
+  },
+  {
+    id: 'payments',
+    label: 'payments',
+    x: 410,
+    y: 90,
+    role: 'Payment records — cross-checked for order completeness alongside item-level merchandise value.',
+    core: false,
+  },
+  {
+    id: 'reviews',
+    label: 'reviews',
+    x: 410,
+    y: 145,
+    role: 'One selected review per order — comparing answer vs. delivery timestamps revealed 97.39% before-receipt feedback in 8+ day delays.',
+    core: false,
+  },
+];
+---
+
+<figure
   class="olist-data-map"
   data-olist-data-map
-  role="img"
   aria-label="Olist data connects orders with customers, order items, products, sellers, payments, and reviews"
 >
-  <svg class="olist-data-map__constellation" viewBox="0 0 480 180" aria-hidden="true">
-    <g class="olist-data-map__connections"><path d="M240 90L70 35M240 90L70 90M240 90L70 145M240 90L410 35M240 90L410 90M240 90L410 145" /></g>
-    <g class="olist-data-map__satellites"><circle cx="70" cy="35" r="5"/><circle cx="70" cy="90" r="5"/><circle cx="70" cy="145" r="5"/><circle cx="410" cy="35" r="5"/><circle cx="410" cy="90" r="5"/><circle cx="410" cy="145" r="5"/></g>
-    <circle class="olist-data-map__orbit" cx="240" cy="90" r="36"/><circle class="olist-data-map__core" cx="240" cy="90" r="7"/>
-    <g class="olist-data-map__labels"><text x="240" y="151" text-anchor="middle">orders</text><text x="85" y="39">customers</text><text x="85" y="94">order_items</text><text x="85" y="149">products</text><text x="395" y="39" text-anchor="end">sellers</text><text x="395" y="94" text-anchor="end">payments</text><text x="395" y="149" text-anchor="end">reviews</text></g>
+  <svg class="olist-data-map__constellation" viewBox="0 0 480 185" role="img" aria-label="Constellation of seven Olist tables centered on orders">
+    <g class="olist-data-map__connections">
+      {tables.filter((t) => !t.core).map((t) => (
+        <line
+          class="olist-data-map__edge"
+          data-map-edge={t.id}
+          x1="240"
+          y1="90"
+          x2={t.x}
+          y2={t.y}
+        />
+      ))}
+    </g>
+    <circle class="olist-data-map__orbit" cx="240" cy="90" r="36" />
+    {tables.map((t) => (
+      <g class:list={['olist-data-map__point', { 'is-core': t.core }]} data-map-node={t.id} data-active={t.core ? 'true' : 'false'}>
+        <circle class="olist-data-map__halo" cx={t.x} cy={t.y} r={t.core ? 16 : 13} />
+        <circle class={t.core ? 'olist-data-map__core' : 'olist-data-map__satellite'} cx={t.x} cy={t.y} r={t.core ? 7 : 5} />
+      </g>
+    ))}
+    <g class="olist-data-map__labels">
+      <text x="240" y="151" text-anchor="middle" data-map-label="orders">orders</text>
+      <text x="85" y="39" data-map-label="customers">customers</text>
+      <text x="85" y="94" data-map-label="order_items">order_items</text>
+      <text x="85" y="149" data-map-label="products">products</text>
+      <text x="395" y="39" text-anchor="end" data-map-label="sellers">sellers</text>
+      <text x="395" y="94" text-anchor="end" data-map-label="payments">payments</text>
+      <text x="395" y="149" text-anchor="end" data-map-label="reviews">reviews</text>
+    </g>
   </svg>
-</div>
+  <div class="olist-data-map__controls anchor-tabs" role="group" aria-label="Inspect an Olist table">
+    {tables.map((t) => (
+      <button
+        type="button"
+        class="olist-data-map__chip"
+        data-map-select={t.id}
+        data-map-role={t.role}
+        aria-pressed={t.core ? 'true' : 'false'}
+      >
+        {t.label}
+      </button>
+    ))}
+  </div>
+  <figcaption class="olist-data-map__readout" aria-live="polite" data-map-readout>
+    <strong>orders</strong> — {tables[0].role}
+  </figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-olist-data-map]').forEach((root) => {
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-map-select]')];
+    const nodes = [...root.querySelectorAll<SVGGElement>('[data-map-node]')];
+    const edges = [...root.querySelectorAll<SVGLineElement>('[data-map-edge]')];
+    const readout = root.querySelector<HTMLElement>('[data-map-readout]');
+
+    const activate = (id: string) => {
+      const btn = buttons.find((b) => b.dataset.mapSelect === id);
+      if (!btn) return;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      nodes.forEach((n) => {
+        n.dataset.active = String(n.dataset.mapNode === id || (id === 'orders' && n.dataset.mapNode === 'orders'));
+      });
+      edges.forEach((e) => {
+        e.dataset.active = String(id === 'orders' || e.dataset.mapEdge === id);
+      });
+      if (readout) {
+        readout.innerHTML = '';
+        const strong = document.createElement('strong');
+        strong.textContent = id;
+        readout.append(strong, ` — ${btn.dataset.mapRole ?? ''}`);
+      }
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => activate(btn.dataset.mapSelect ?? 'orders'));
+      btn.addEventListener('pointerenter', () => activate(btn.dataset.mapSelect ?? 'orders'));
+    });
+
+    nodes.forEach((node) => {
+      const id = node.dataset.mapNode ?? 'orders';
+      node.addEventListener('click', () => activate(id));
+      node.addEventListener('pointerenter', () => activate(id));
+    });
+  });
+</script>
