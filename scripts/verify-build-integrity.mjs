@@ -85,7 +85,7 @@ if (existsSync(indexPath)) {
     '/work/olist-marketplace-analysis/',
     '/work/why-some-people-choose-smaller-companies/',
     '/life/italy/florence-portrait-edited@2x.webp',
-    '/life/italy/milan-portrait-edited.png',
+    '/life/italy/bocconi-departments.webp',
     '/life/italy/old-town-walk.png',
     '/life/hong-kong-2026/concert-full.webp',
     '/life/hong-kong-2026/harbour-original.jpeg',
