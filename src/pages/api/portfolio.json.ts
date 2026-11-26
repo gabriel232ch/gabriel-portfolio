@@ -1,3 +1,4 @@
+import { getBuildInfo } from '../../lib/build-info';
 import { PORTFOLIO_PAGES, getPortfolioPageUrl } from '../../lib/portfolio-pages';
 
 export const prerender = true;
@@ -7,6 +8,7 @@ export function GET(): Response {
     name: 'Gabriel Chen — Portfolio',
     origin: 'https://gabrielchen.me',
     mcpEndpoint: 'https://gabrielchen.me/mcp',
+    build: getBuildInfo(),
     pages: PORTFOLIO_PAGES.map((page) => ({
       slug: page.slug,
       title: page.title,

@@ -15,9 +15,11 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",
-    "verify": "npm run check && npm run lint && npm run test && npm run build && npm run test:e2e",
-    "deploy": "npm run build && wrangler deploy",
-    "deploy:preview": "npm run build && wrangler versions upload"
+    "verify:build": "node scripts/verify-build-integrity.mjs",
+    "verify:ci": "npm run check && npm run lint && npm run test && npm run build && npm run verify:build",
+    "verify": "npm run verify:ci && npm run test:e2e",
+    "deploy": "node scripts/guard-production-deploy.mjs && npm run build && npm run verify:build && wrangler deploy",
+    "deploy:preview": "npm run build && npm run verify:build && wrangler versions upload"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.8",
