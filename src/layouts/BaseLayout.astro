@@ -36,8 +36,50 @@ const buildInfo = getBuildInfo();
           stored === 'light' || stored === 'dark' ? stored : dark ? 'dark' : 'light';
       })();
     </script>
+    <style is:inline>
+      @container page-header scroll-state(stuck: top) {
+        .report-topline-wrap > .report-topline,
+        .inquiry-header-wrap > .inquiry-page__header {
+          background: color-mix(in oklab, var(--paper) 88%, transparent);
+          backdrop-filter: blur(12px);
+          box-shadow: 0 12px 28px -22px rgb(0 0 0 / 35%);
+        }
+      }
+      @supports (container-type: anchored) {
+        @container anchored(fallback: flip-block) {
+          .evidence-popover__card {
+            margin-block-end: 0;
+            margin-block-start: 0.65rem;
+          }
+          .evidence-popover__card::before {
+            content: '▲' / '';
+            inset-block-start: -0.72rem;
+            inset-block-end: auto;
+          }
+        }
+      }
+      .report-index a:is(:target-current, [data-active='true'], [aria-current='location']),
+      .inquiry-toc a:is(:target-current, [data-active='true'], [aria-current='location']) {
+        color: var(--accent-strong);
+        padding-left: 0.7rem;
+        border-left: 2px solid var(--accent);
+      }
+    </style>
   </head>
   <body>
+    <div class="scroll-sentinel" data-scroll-sentinel aria-hidden="true"></div>
     <slot />
+    <button
+      type="button"
+      class="back-to-top"
+      data-back-to-top
+      aria-label="Back to top"
+    >
+      <span aria-hidden="true">↑</span>
+      <span>TOP</span>
+    </button>
+    <script>
+      import '../scripts/modern-web';
+    </script>
   </body>
 </html>

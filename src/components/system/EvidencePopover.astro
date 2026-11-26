@@ -1,0 +1,46 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  eyebrow: string;
+  body: string;
+  caveat?: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+const { id, label, eyebrow, body, caveat, href, linkLabel } = Astro.props;
+---
+
+<span class="evidence-popover-wrap">
+  <button
+    type="button"
+    class="evidence-popover-trigger"
+    popovertarget={id}
+    aria-describedby={id}
+  >
+    <span>{label}</span><span class="evidence-popover-trigger__glyph" aria-hidden="true">?</span>
+  </button>
+  <div id={id} class="evidence-popover" popover="auto" role="dialog" aria-label={eyebrow}>
+    <div class="evidence-popover__card">
+      <div class="evidence-popover__header">
+        <p class="evidence-popover__eyebrow">{eyebrow}</p>
+        <button
+          type="button"
+          class="evidence-popover__close"
+          data-popover-close
+          aria-label={`Close ${eyebrow}`}
+        >
+          ×
+        </button>
+      </div>
+      <p class="evidence-popover__body">{body}</p>
+      {caveat && <p class="evidence-popover__caveat">{caveat}</p>}
+      {href && (
+        <a class="evidence-popover__link" href={href} target="_blank" rel="noreferrer">
+          {linkLabel ?? 'Source & method ↗'}
+        </a>
+      )}
+    </div>
+  </div>
+</span>

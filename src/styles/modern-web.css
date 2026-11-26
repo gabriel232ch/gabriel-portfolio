@@ -1,0 +1,945 @@
+/* ==========================================================================
+   Modern Web Guidance Platform Layer
+   - Cross-document & same-document View Transitions
+   - Scroll-Driven Reading Progress & Photographic Depth
+   - Intrinsic-size <details> animation via ::details-content
+   - Anchor-positioned tab indicators & flippable evidence popovers
+   - Scrollability affordance hints, responsive sticky & sortable tables
+   - Brand-consistent custom range sliders & scroll-state chrome
+   ========================================================================== */
+
+/* 1. Cross-Document View Transitions (MPA) */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  @keyframes mwg-page-out-forward {
+    to {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.985);
+    }
+  }
+
+  @keyframes mwg-page-in-forward {
+    from {
+      opacity: 0;
+      transform: translateY(32px) scale(0.985);
+    }
+  }
+
+  @keyframes mwg-page-out-back {
+    to {
+      opacity: 0;
+      transform: translateY(20px) scale(0.985);
+    }
+  }
+
+  @keyframes mwg-page-in-back {
+    from {
+      opacity: 0;
+      transform: translateY(-28px) scale(0.985);
+    }
+  }
+
+  :active-view-transition-type(forward)::view-transition-old(root) {
+    animation: mwg-page-out-forward 380ms var(--ease-editorial) both;
+  }
+
+  :active-view-transition-type(forward)::view-transition-new(root) {
+    animation: mwg-page-in-forward 560ms var(--ease-cinematic) both;
+  }
+
+  :active-view-transition-type(back)::view-transition-old(root) {
+    animation: mwg-page-out-back 360ms var(--ease-editorial) both;
+  }
+
+  :active-view-transition-type(back)::view-transition-new(root) {
+    animation: mwg-page-in-back 520ms var(--ease-cinematic) both;
+  }
+}
+
+/* Shared title continuity between Home chapters and case pages */
+[data-vt-name='work-chanel-title'] {
+  view-transition-name: work-chanel-title;
+  width: fit-content;
+}
+
+[data-vt-name='work-olist-title'] {
+  view-transition-name: work-olist-title;
+  width: fit-content;
+}
+
+[data-vt-name='work-inquiry-title'] {
+  view-transition-name: work-inquiry-title;
+  width: fit-content;
+}
+
+::view-transition-group(work-chanel-title),
+::view-transition-group(work-olist-title),
+::view-transition-group(work-inquiry-title) {
+  animation-duration: 520ms;
+  animation-timing-function: var(--ease-cinematic);
+}
+
+/* 2. Typography Wrapping Polish */
+h1,
+h2,
+h3,
+.report-claim,
+.olist-chapter__question,
+.home-closing__message {
+  text-wrap: balance;
+}
+
+.body-copy,
+.report-section p,
+.inquiry-page p {
+  text-wrap: pretty;
+}
+
+/* 3. Scroll-Driven Reading Progress Bar (Zero JS when supported) */
+.site-progress,
+.report-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 2px;
+  pointer-events: none;
+  background: transparent;
+}
+
+.site-progress > span,
+.report-progress > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg var(--in-oklab), var(--accent), var(--accent-strong));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    @keyframes mwg-grow-progress {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    .site-progress > span,
+    .report-progress > span {
+      animation: mwg-grow-progress auto linear;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+/* 4. Dramatic Scroll-Driven Photographic Parallax, Curtain Reveals & Stage Lift */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes mwg-photo-drift {
+      from {
+        transform: scale(1.14) translateY(-5%);
+      }
+      to {
+        transform: scale(1.02) translateY(5%);
+      }
+    }
+
+    @keyframes mwg-curtain-reveal {
+      from {
+        clip-path: inset(14% 0 0 0);
+        transform: scale(1.08);
+      }
+      to {
+        clip-path: inset(0 0 0 0);
+        transform: scale(1);
+      }
+    }
+
+    @keyframes mwg-float-counter {
+      from {
+        transform: translateY(28px);
+      }
+      to {
+        transform: translateY(-18px);
+      }
+    }
+
+    @keyframes mwg-stage-enter {
+      from {
+        opacity: 0.12;
+        transform: translateY(34px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes mwg-heading-sweep {
+      from {
+        opacity: 0.18;
+        transform: translateY(26px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .photo-interlude,
+    .home-closing,
+    .chanel-chapter__campus,
+    .home-now__photo,
+    .home-now__moment {
+      overflow: clip;
+    }
+
+    .photo-interlude img,
+    .home-closing__backdrop {
+      animation: mwg-photo-drift auto linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+
+    .chanel-chapter__campus img,
+    .home-now__photo:nth-child(2) img,
+    .home-now__moment img {
+      animation: mwg-curtain-reveal auto linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 65%;
+    }
+
+    .chanel-chapter__milan,
+    .home-now__trip .home-now__photo:first-child {
+      animation: mwg-float-counter auto linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+
+    .chanel-chapter__opening h2,
+    .olist-chapter__intro h2,
+    .smaller-companies-chapter__question h2,
+    .olist-decision__title,
+    .inquiry-page__chapter h2 {
+      animation: mwg-heading-sweep auto linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 48%;
+    }
+
+    .inquiry-page__chapter,
+    .inquiry-page__transition,
+    .inquiry-page__systemization {
+      animation: mwg-stage-enter auto linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 36%;
+    }
+  }
+}
+
+/* Sticky topbar scroll-state base (container query rules emitted inline in BaseLayout) */
+.report-topline-wrap,
+.inquiry-header-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 35;
+  container-type: scroll-state;
+  container-name: page-header;
+}
+
+.report-topline-wrap > .report-topline,
+.inquiry-header-wrap > .inquiry-page__header {
+  background: var(--paper);
+  transition:
+    background-color 280ms var(--ease-editorial),
+    box-shadow 280ms var(--ease-editorial),
+    backdrop-filter 280ms var(--ease-editorial);
+}
+
+/* 5. Smooth Intrinsic-Size <details> Disclosure Animation */
+details::details-content {
+  interpolate-size: allow-keywords;
+  overflow: clip;
+  contain: layout;
+}
+
+details:not([open])::details-content {
+  block-size: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  details::details-content {
+    transition: block-size, content-visibility, display;
+    transition-duration: 360ms;
+    transition-timing-function: var(--ease-editorial);
+    transition-behavior: allow-discrete;
+  }
+
+  .olist-decision__all > summary > span,
+  .question-map--progressive .question-map__arrow,
+  .report-details > summary::after {
+    transition: transform 280ms var(--ease-spring-editorial);
+  }
+}
+
+/* Accordion Expand / Collapse All control */
+.accordion-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block: var(--space-6) var(--space-2);
+}
+
+.accordion-toggle-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color var(--motion-fast) var(--ease-editorial),
+    background-color var(--motion-fast) var(--ease-editorial),
+    color var(--motion-fast) var(--ease-editorial);
+}
+
+.accordion-toggle-all:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.accordion-toggle-all[aria-expanded='true'] .toggle-expand,
+.accordion-toggle-all[aria-expanded='false'] .toggle-collapse {
+  display: none;
+}
+
+/* 6. CSS Anchor Positioning Sliding Pill / Underline Indicator */
+.anchor-tabs {
+  position: relative;
+  anchor-scope: --active-tab;
+  isolation: isolate;
+}
+
+.anchor-tabs::before {
+  content: '';
+  position: absolute;
+  position-anchor: --active-tab;
+  inset-block-start: anchor(self-start);
+  inset-block-end: anchor(self-end);
+  inset-inline-start: anchor(self-start);
+  inset-inline-end: anchor(self-end);
+  border: 1px solid color-mix(in oklab, var(--accent) 32%, var(--hairline));
+  border-block-end: 2px solid var(--accent-strong);
+  border-radius: 6px;
+  background: color-mix(in oklab, var(--accent) 8%, var(--paper-raised));
+  box-shadow: 0 2px 10px -4px color-mix(in oklab, var(--ink) 20%, transparent);
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .anchor-tabs::before {
+    transition: inset 300ms var(--ease-spring-editorial);
+  }
+}
+
+.anchor-tabs > :is([aria-pressed='true'], [aria-current='true'], [data-active='true']) {
+  anchor-name: --active-tab;
+}
+
+/* Variant for slim underline-only anchor tabs (e.g., timeline years / legend) */
+.anchor-tabs--line::before {
+  inset-block-start: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-block-end: 2px solid var(--accent-strong);
+}
+
+@supports not ((position-anchor: --active-tab) and (anchor-scope: --active-tab)) {
+  .anchor-tabs::before {
+    content: none;
+  }
+
+  .anchor-tabs > :is([aria-pressed='true'], [aria-current='true'], [data-active='true']) {
+    border-block-end: 2px solid var(--accent-strong);
+    background: color-mix(in oklab, var(--accent) 8%, var(--paper-raised));
+  }
+
+  .anchor-tabs--line > :is([aria-pressed='true'], [aria-current='true'], [data-active='true']) {
+    background: transparent;
+  }
+}
+
+/* 7. Scrollability Affordance Hints (Horizontal Mask Fades via @property) */
+@property --fade-start {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --fade-end {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes mwg-reveal-fade-start {
+  to {
+    --fade-start: var(--fade-size);
+  }
+}
+
+@keyframes mwg-hide-fade-end {
+  from {
+    --fade-end: var(--fade-size);
+  }
+}
+
+.scroll-fade-x {
+  --fade-size: 2.5rem;
+  --fade-dir: right;
+  --fade-start-pos: 0;
+  --fade-end-pos: 100%;
+  overflow-x: auto;
+  scroll-padding-inline: var(--fade-size);
+}
+
+.scroll-fade-x:dir(rtl) {
+  --fade-dir: left;
+  --fade-start-pos: 100%;
+  --fade-end-pos: 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-fade-x {
+    mask:
+      linear-gradient(black, black) no-clip subtract,
+      linear-gradient(to var(--fade-dir), black, transparent) var(--fade-start-pos) 0 /
+        var(--fade-start) 100% no-repeat no-clip,
+      linear-gradient(to var(--fade-dir), transparent, black) var(--fade-end-pos) 0 /
+        var(--fade-end) 100% no-repeat no-clip;
+    animation: mwg-reveal-fade-start linear both, mwg-hide-fade-end linear both;
+    animation-timeline: scroll(self inline);
+    animation-range: 0 var(--fade-size), calc(100% - var(--fade-size)) 100%;
+  }
+}
+
+/* 8. Responsive Sticky Tables + Accessible Sortable Headers */
+.report-table-wrap,
+.olist-table-wrap {
+  container-type: inline-size;
+  max-inline-size: 100%;
+  position: relative;
+}
+
+.report-table-wrap:focus-visible,
+.olist-table-wrap:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.report-table-wrap table,
+.olist-table-wrap table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.report-table-wrap thead th,
+.olist-table-wrap thead th {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  background: var(--paper);
+}
+
+.report-table-wrap tbody th,
+.olist-table-wrap tbody th {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  background: var(--paper);
+}
+
+.report-table-wrap tbody tr:hover th,
+.olist-table-wrap tbody tr:hover th {
+  background: color-mix(in oklab, var(--accent) 8%, var(--paper));
+}
+
+.report-table-wrap tbody tr:hover td,
+.olist-table-wrap tbody tr:hover td {
+  background: color-mix(in oklab, var(--accent) 6%, transparent);
+}
+
+/* Sortable column header button */
+th:has(> button[command='--sort']) {
+  padding: 0;
+}
+
+th > button[command='--sort'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.85rem 0.7rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--motion-fast) var(--ease-editorial),
+    background-color var(--motion-fast) var(--ease-editorial);
+}
+
+th > button[command='--sort']:hover {
+  color: var(--ink);
+  background: var(--surface-soft);
+}
+
+th > button[command='--sort'] .sort-indicator {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 0.9em;
+  opacity: 0.45;
+  text-align: center;
+  transition: opacity var(--motion-fast) var(--ease-editorial),
+    transform var(--motion-fast) var(--ease-spring-editorial);
+}
+
+th > button[command='--sort'] .sort-indicator::before {
+  content: '⇅';
+}
+
+th[aria-sort='ascending'] > button[command='--sort'] {
+  color: var(--accent-strong);
+}
+
+th[aria-sort='ascending'] > button[command='--sort'] .sort-indicator {
+  opacity: 1;
+}
+
+th[aria-sort='ascending'] > button[command='--sort'] .sort-indicator::before {
+  content: '↑';
+}
+
+th[aria-sort='descending'] > button[command='--sort'] {
+  color: var(--accent-strong);
+}
+
+th[aria-sort='descending'] > button[command='--sort'] .sort-indicator {
+  opacity: 1;
+}
+
+th[aria-sort='descending'] > button[command='--sort'] .sort-indicator::before {
+  content: '↓';
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  table[data-sortable-table] tbody tr {
+    view-transition-name: match-element;
+  }
+}
+
+.sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 9. Native Evidence Popovers (Top-Layer + Anchor Positioning + Flippable Arrow) */
+.evidence-popover-trigger {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25em;
+  margin: 0;
+  padding: 0 0.2rem;
+  border: 0;
+  border-bottom: 1px dashed var(--accent);
+  background: transparent;
+  color: var(--accent-strong);
+  font-family: var(--font-reading);
+  font-size: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  transition: color var(--motion-fast) var(--ease-editorial),
+    border-color var(--motion-fast) var(--ease-editorial),
+    background-color var(--motion-fast) var(--ease-editorial);
+}
+
+.evidence-popover-trigger:hover {
+  background: var(--accent-soft);
+  border-bottom-style: solid;
+}
+
+.evidence-popover-trigger__glyph {
+  display: inline-block;
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  color: var(--accent);
+}
+
+.evidence-popover[popover] {
+  max-inline-size: min(26rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  overflow: visible;
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 240ms;
+  transition-timing-function: var(--ease-editorial);
+  transition-behavior: allow-discrete;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .evidence-popover[popover] {
+    transform: translateY(6px) scale(0.98);
+  }
+}
+
+@supports (anchor-name: --my-anchor) {
+  .evidence-popover[popover] {
+    position: fixed;
+    inset: auto;
+    margin: unset;
+    position-area: block-start;
+    position-try-fallbacks: flip-block;
+    container-type: anchored;
+  }
+}
+
+.evidence-popover[popover]:is(:popover-open, .\:popover-open):where(:not([data-closing])) {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(0) scale(1);
+
+    @starting-style {
+      transform: translateY(6px) scale(0.98);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .evidence-popover[popover] {
+    transition-duration: 100ms;
+  }
+}
+
+.evidence-popover__card {
+  position: relative;
+  margin-block-end: 0.65rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid color-mix(in oklab, var(--accent) 42%, var(--hairline));
+  background: var(--paper-raised);
+  box-shadow:
+    0 4px 12px rgb(0 0 0 / 8%),
+    0 18px 40px -16px rgb(0 0 0 / 22%);
+}
+
+@supports (container-type: anchored) {
+  .evidence-popover__card::before {
+    content: '▼' / '';
+    position: absolute;
+    inset-block-end: -0.72rem;
+    inset-inline-start: 1.25rem;
+    color: var(--accent);
+    font-family: var(--font-metadata);
+    font-size: var(--font-size-micro);
+    line-height: 1;
+  }
+}
+
+.evidence-popover__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: 0.5rem;
+}
+
+.evidence-popover__eyebrow {
+  margin: 0;
+  color: var(--accent-strong);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.evidence-popover__close {
+  flex-shrink: 0;
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  padding: 0;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.evidence-popover__close:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.evidence-popover__body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-reading);
+  font-size: var(--font-size-supporting);
+  line-height: 1.52;
+}
+
+.evidence-popover__caveat {
+  margin: 0.6rem 0 0;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--hairline);
+  color: var(--ink-muted);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  line-height: 1.45;
+}
+
+.evidence-popover__link {
+  display: inline-block;
+  margin-top: 0.55rem;
+  color: var(--accent-strong);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  text-underline-offset: 0.2em;
+}
+
+/* 10. Brand-Consistent Custom Range Slider */
+input[type='range'].editorial-slider {
+  --slider-track-size: 3px;
+  --slider-thumb-size: 1.15rem;
+  --slider-track-radius: 999px;
+  --slider-thumb-radius: 50%;
+  --slider-track-color: color-mix(in oklab, var(--ink-muted) 45%, var(--paper));
+  --slider-fill-color: var(--accent-strong);
+  --slider-thumb-color: var(--paper-raised);
+  --slider-thumb-border: var(--accent-strong);
+  --slider-direction: to right;
+  --attr-min: 0;
+  --attr-max: 100;
+  --control-value: 50;
+  --slider-progress: calc(
+    progress(var(--control-value), var(--attr-min), var(--attr-max)) * 100%
+  );
+
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 100%;
+  block-size: 2.75rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type='range'].editorial-slider:dir(rtl) {
+  --slider-direction: to left;
+}
+
+@supports not (opacity: progress(1, 0, 100)) {
+  input[type='range'].editorial-slider {
+    --slider-progress: calc(
+      (var(--control-value) - var(--attr-min)) /
+        max(1, (var(--attr-max) - var(--attr-min))) * 100%
+    );
+  }
+}
+
+input[type='range'].editorial-slider::-webkit-slider-runnable-track {
+  block-size: var(--slider-track-size);
+  border: 0;
+  border-radius: var(--slider-track-radius);
+  background: linear-gradient(
+    var(--slider-direction),
+    var(--slider-fill-color) var(--slider-progress),
+    var(--slider-track-color) var(--slider-progress)
+  );
+}
+
+input[type='range'].editorial-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  inline-size: var(--slider-thumb-size);
+  block-size: var(--slider-thumb-size);
+  margin-block-start: calc((var(--slider-track-size) - var(--slider-thumb-size)) / 2);
+  border: 2px solid var(--slider-thumb-border);
+  border-radius: var(--slider-thumb-radius);
+  background: var(--slider-thumb-color);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+  transition: transform 180ms var(--ease-spring-editorial),
+    background-color var(--motion-fast) var(--ease-editorial);
+}
+
+input[type='range'].editorial-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.16);
+  background: var(--slider-fill-color);
+}
+
+input[type='range'].editorial-slider::-moz-range-track {
+  block-size: var(--slider-track-size);
+  border: 0;
+  border-radius: var(--slider-track-radius);
+  background: var(--slider-track-color);
+}
+
+input[type='range'].editorial-slider::-moz-range-progress {
+  block-size: var(--slider-track-size);
+  border-radius: var(--slider-track-radius);
+  background: var(--slider-fill-color);
+}
+
+input[type='range'].editorial-slider::-moz-range-thumb {
+  inline-size: var(--slider-thumb-size);
+  block-size: var(--slider-thumb-size);
+  border: 2px solid var(--slider-thumb-border);
+  border-radius: var(--slider-thumb-radius);
+  background: var(--slider-thumb-color);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
+  transition: transform 180ms var(--ease-spring-editorial),
+    background-color var(--motion-fast) var(--ease-editorial);
+}
+
+input[type='range'].editorial-slider:hover::-moz-range-thumb {
+  transform: scale(1.16);
+  background: var(--slider-fill-color);
+}
+
+input[type='range'].editorial-slider:focus-visible {
+  outline: 2px solid var(--slider-fill-color);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  input[type='range'].editorial-slider::-webkit-slider-thumb,
+  input[type='range'].editorial-slider::-moz-range-thumb {
+    transition: none;
+  }
+}
+
+/* 11. Scrollspy (fallback attributes here; :target-current emitted verbatim inline in BaseLayout) */
+.report-index ol,
+.inquiry-toc ol {
+  scroll-target-group: auto;
+}
+
+.report-index a:is([data-active='true'], [aria-current='location']),
+.inquiry-toc a:is([data-active='true'], [aria-current='location']) {
+  color: var(--accent-strong);
+  padding-left: 0.7rem;
+  border-left: 2px solid var(--accent);
+}
+
+/* 12. Scroll-Position-Aware Back-to-Top Floating Action */
+.scroll-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 45vh;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.back-to-top {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--hairline);
+  background: color-mix(in oklab, var(--paper-raised) 92%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--ink);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 12px;
+  box-shadow: 0 10px 26px -14px rgb(0 0 0 / 28%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .back-to-top {
+    transition:
+      visibility 240ms,
+      opacity 240ms var(--ease-editorial),
+      translate 280ms var(--ease-spring-editorial),
+      border-color var(--motion-fast) var(--ease-editorial),
+      color var(--motion-fast) var(--ease-editorial);
+  }
+}
+
+.back-to-top:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+html.is-scrolled .back-to-top {
+  visibility: visible;
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* 13. Hidden Until Found: keep layout clean on inner wrappers */
+[hidden='until-found'] {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* 14. Container-query ready chart containers */
+.chanel-viz,
+.olist-chart,
+.recovery-portrait,
+.trajectory-story,
+.market-matrix {
+  container-type: inline-size;
+}

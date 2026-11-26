@@ -1,21 +1,27 @@
-.motion-reveal,
-.motion-assemble,
-.motion-shift,
-.motion-morph {
-  transition:
-    opacity var(--motion-editorial) var(--ease-editorial),
-    transform var(--motion-editorial) var(--ease-editorial),
-    border-radius var(--motion-editorial) var(--ease-editorial);
+@media (prefers-reduced-motion: no-preference) {
+  .motion-reveal,
+  .motion-assemble,
+  .motion-shift,
+  .motion-morph {
+    transition:
+      opacity var(--motion-editorial) var(--ease-editorial),
+      transform var(--motion-editorial) var(--ease-editorial),
+      border-radius var(--motion-editorial) var(--ease-editorial);
+  }
+
+  .motion-assemble .motion-segment {
+    transition: transform var(--motion-editorial) var(--ease-editorial);
+  }
 }
 
 [data-motion-state='pending'].motion-reveal {
   opacity: 0;
-  transform: translateY(0.6rem);
+  transform: translateY(0.75rem);
 }
 
 [data-motion-state='entered'].motion-reveal {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 [data-motion-state='pending'].motion-assemble {
@@ -28,11 +34,11 @@
 }
 
 [data-motion-state='entered'].motion-assemble {
-  transform: scaleX(1);
+  transform: none;
 }
 
 [data-motion-state='entered'].motion-assemble .motion-segment {
-  transform: scaleX(1);
+  transform: none;
 }
 
 [data-motion-state='pending'].motion-shift {
@@ -40,7 +46,7 @@
 }
 
 [data-motion-state='entered'].motion-shift {
-  transform: translateX(0);
+  transform: none;
 }
 
 [data-motion-state='pending'].motion-morph {
@@ -51,7 +57,7 @@
 
 [data-motion-state='entered'].motion-morph {
   border-radius: 0;
-  transform: scaleX(1);
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

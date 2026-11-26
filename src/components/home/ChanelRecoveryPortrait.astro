@@ -17,8 +17,21 @@ const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:
     <svg viewBox="0 0 540 285" role="img" aria-labelledby="recovery-portrait-title recovery-portrait-desc" data-portrait-canvas>
       <title id="recovery-portrait-title">Revenue recovered further than profit or cash flow</title>
       <desc id="recovery-portrait-desc">Reported USD indices, FY2023 = 100. Three annual observations for revenue, operating profit and free cash flow. In FY2025 the indices were 97.6, 73.5 and 70.5. Select a year or measure to inspect its exact value. Connecting lines do not represent observations between years.</desc>
-      <defs><clipPath id="portrait-time-clip"><rect x="0" y="0" width="540" height="285" class="chanel-experience__mask" data-portrait-mask /></clipPath></defs>
+      <defs>
+        <clipPath id="portrait-time-clip"><rect x="0" y="0" width="540" height="285" class="chanel-experience__mask" data-portrait-mask /></clipPath>
+        <linearGradient id="portrait-gap-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--chart-primary)" stop-opacity="0.16" />
+          <stop offset="100%" stop-color="var(--chart-tertiary)" stop-opacity="0.03" />
+        </linearGradient>
+      </defs>
       {[0,50,100].map(v=><g class="recovery-portrait__grid"><line x1="48" x2="464" y1={y(v)} y2={y(v)} /><text x="34" y={y(v)+4} text-anchor="end">{v}</text></g>)}
+      <g clip-path="url(#portrait-time-clip)" aria-hidden="true">
+        <polygon
+          class="chanel-experience__gap-band"
+          points={`${x(0)},${y(series[0].values[0])} ${x(1)},${y(series[0].values[1])} ${x(2)},${y(series[0].values[2])} ${x(2)},${y(series[2].values[2])} ${x(1)},${y(series[2].values[1])} ${x(0)},${y(series[2].values[0])}`}
+          fill="url(#portrait-gap-grad)"
+        />
+      </g>
       <line class="chanel-experience__cursor" x1={x(2)} x2={x(2)} y1="42" y2="246" data-portrait-guide />
       {series.map((s,i)=><g class="recovery-portrait__series" data-portrait-series={i} style={`--series-color:var(--chart-${s.color})`}>
         <g clip-path="url(#portrait-time-clip)">
@@ -31,11 +44,11 @@ const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:
       </g>)}
     </svg>
   </div>
-  <div class="chanel-experience__timeline" aria-label="Explore a year">
+  <div class="chanel-experience__timeline anchor-tabs anchor-tabs--line" aria-label="Explore a year">
     {stages.map((stage,i)=><button type="button" data-portrait-year={i} aria-label={`${stage.year} ${stage.label}`} aria-pressed={i===2}><span>{stage.year}</span><small>{stage.label}</small></button>)}
-    <input class="chanel-experience__scrubber" type="range" min="0" max="2" value="2" step="1" aria-label="Chanel observation year" aria-valuetext="FY2025 · Return" data-portrait-range />
+    <input class="chanel-experience__scrubber editorial-slider" type="range" min="0" max="2" value="2" step="1" aria-label="Chanel observation year" aria-valuetext="FY2025 · Return" data-portrait-range />
   </div>
-  <div class="recovery-portrait__legend" aria-label="Select a measure">
+  <div class="recovery-portrait__legend anchor-tabs anchor-tabs--line" aria-label="Select a measure">
     {series.map((s,i)=><button type="button" data-portrait-select={i} aria-pressed="false" style={`--series-color:var(--chart-${s.color})`}><i aria-hidden="true"></i>{s.label}</button>)}
   </div>
   <div class="chanel-experience__footer"><button class="visual-replay" type="button" data-portrait-replay>Play the recovery ↺</button><a href="/work/luxury-handbag-pricing-architecture/#performance">Values & sources ↗</a></div>

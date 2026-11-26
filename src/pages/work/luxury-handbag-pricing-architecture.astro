@@ -2,6 +2,7 @@
 import FolioNumber from '../../components/editorial/FolioNumber.astro';
 import SectionLabel from '../../components/editorial/SectionLabel.astro';
 import ThemeToggle from '../../components/system/ThemeToggle.astro';
+import EvidencePopover from '../../components/system/EvidencePopover.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import {
   LUXURY_FLAGSHIP,
@@ -39,6 +40,11 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
 }));
 
 
+const parseSignedPercent = (text: string) => {
+  const match = text.replace(/−/g, '-').match(/-?\d+(?:\.\d+)?/);
+  return match ? Number(match[0]) : Number.NaN;
+};
+
 ---
 
 <BaseLayout
@@ -48,16 +54,18 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
   lang="en"
 >
   <main class="report-page chanel-report">
-    <header class="report-topline">
-      <a class="report-topline__identity" href="/">
-        <span>GABRIEL CHEN</span>
-        <span class="data-copy">WORK / RESEARCH</span>
-      </a>
-      <div class="report-topline__tools">
-        <a class="data-copy" href="/#work">← BACK TO WORK</a>
-        <ThemeToggle />
-      </div>
-    </header>
+    <div class="report-topline-wrap">
+      <header class="report-topline">
+        <a class="report-topline__identity" href="/">
+          <span>GABRIEL CHEN</span>
+          <span class="data-copy">WORK / RESEARCH</span>
+        </a>
+        <div class="report-topline__tools">
+          <a class="data-copy" href="/#work">← BACK TO WORK</a>
+          <ThemeToggle />
+        </div>
+      </header>
+    </div>
     <div class="report-progress" aria-hidden="true"><span data-report-progress></span></div>
 
     <section class="report-hero" aria-labelledby="report-title">
@@ -67,7 +75,7 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
       </div>
       <div class="report-hero__main">
         <p class="report-kicker editorial"><em>Chanel Through the Slowdown</em></p>
-        <h1 id="report-title" class="report-title">How Chanel Navigated the Luxury Slowdown</h1>
+        <h1 id="report-title" class="report-title" data-vt-name="work-chanel-title">How Chanel Navigated the Luxury Slowdown</h1>
         <p class="report-lede">Where recovery occurred, and what the public evidence can explain.</p>
         <p class="report-hero__summary">
           Why did Chanel appear to fare differently as luxury slowed? This case starts with its FY2023–FY2025 results, locates the recovery, then examines business scope, product choice, pricing, marketing and client experience.
@@ -96,18 +104,19 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
       </aside>
 
       <article class="report-body">
-        <section id="context" class="report-section report-section--opening">
+        <section id="context" tabindex="-1" class="report-section report-section--opening">
           <p class="report-section__number data-copy">01 / THE STARTING QUESTION</p>
           <h2>Luxury slowed. Did Chanel follow a different path?</h2>
           <p class="report-claim">A slowing market produced very different brand results. Chanel’s return to growth in FY2025 raises a question: what recovered, and what could explain it?</p>
           <p>Bain’s spring 2026 update estimates the FY2025 personal luxury goods market at €358bn, against €364bn in FY2024: down about 2% at current exchange rates, up about 1% at constant exchange rates. That revised estimate describes a market with little underlying growth. It replaces the year-end 2025 estimate of broadly flat constant-currency sales. <a href={LUXURY_FLAGSHIP_SOURCES.industryUpdate} target="_blank" rel="noreferrer">Bain update ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.industryPrevious} target="_blank" rel="noreferrer">Earlier estimate ↗</a></p>
-          <p>The company disclosures show the divergence. Chanel and Gucci both declined in FY2024; in FY2025 Chanel returned to growth while Gucci and LVMH Fashion &amp; Leather Goods continued to contract. Hermès grew in both years.</p>
-          <div class="report-table-wrap">
-            <table class="report-table--wide">
-              <thead><tr><th>Reporting entity</th><th>FY2024 growth</th><th>FY2025 growth</th><th>Disclosure basis</th></tr></thead>
+          <p>The company disclosures show the divergence. Chanel and Gucci both declined in FY2024; in FY2025 Chanel returned to growth while Gucci and LVMH Fashion &amp; Leather Goods continued to contract. Hermès grew in both years. Each company reports under its own <EvidencePopover id="popover-chanel-scope" label="disclosure basis" eyebrow="REPORTING SCOPE" body="Chanel and Hermès are group totals; LVMH Fashion & Leather Goods is a multi-brand business segment; Gucci is a single brand. Comparable, organic, and constant-currency growth definitions are retained as published." caveat="Not a like-for-like ranking across identical category mixes or currencies." href={LUXURY_FLAGSHIP_SOURCES.slowdownPeerReview} linkLabel="Peer definitions & sources ↗" />.</p>
+          <div class="report-table-wrap scroll-fade-x" tabindex="0" role="region" aria-labelledby="chanel-peers-caption">
+            <table id="table-chanel-peers" class="report-table--wide" data-sortable-table>
+              <caption id="chanel-peers-caption" class="sr-status">Disclosed FY2024 and FY2025 growth across luxury peers</caption>
+              <thead><tr><th scope="col" data-type="text"><button type="button" commandfor="table-chanel-peers" command="--sort" data-sort-label="Reporting entity"><span>Reporting entity</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-peers" command="--sort" data-sort-label="FY2024 growth"><span>FY2024 growth</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-peers" command="--sort" data-sort-label="FY2025 growth"><span>FY2025 growth</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col">Disclosure basis</th></tr></thead>
               <tbody>
                 {LUXURY_SLOWDOWN_PEERS.map((peer) => (
-                  <tr><th scope="row">{peer.entity}</th><td>{peer.fy2024}</td><td>{peer.fy2025}</td><td>{peer.basis}</td></tr>
+                  <tr><th scope="row">{peer.entity}</th><td data-value={parseSignedPercent(peer.fy2024)}>{peer.fy2024}</td><td data-value={parseSignedPercent(peer.fy2025)}>{peer.fy2025}</td><td>{peer.basis}</td></tr>
                 ))}
               </tbody>
             </table>
@@ -117,10 +126,10 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <p>Chanel’s relative performance depends on the year and the comparison. This case follows Chanel through FY2023–FY2025, first establishing its results, then examining the businesses, products and customer touchpoints that might help explain them.</p>
         </section>
 
-        <section id="performance" class="report-section">
+        <section id="performance" tabindex="-1" class="report-section">
           <p class="report-section__number data-copy">02 / THE OPERATING RESULTS</p>
           <h2>Revenue recovered further than profit or cash flow</h2>
-          <p>Chanel declined in FY2024 and improved in FY2025 across all three measures. By FY2025, reported revenue stood at 97.6% of FY2023, operating profit at 73.5%, and free cash flow at 70.5%. The return to revenue growth left a substantial earnings and cash gap.</p>
+          <p>Chanel declined in FY2024 and improved in FY2025 across all three measures. By FY2025, reported revenue stood at 97.6% of FY2023, operating profit at 73.5%, and free cash flow at 70.5% on a <EvidencePopover id="popover-chanel-indices" label="reported-dollar basis" eyebrow="REPORTED USD INDICES" body="Revenue and operating profit use consolidated filed-account figures in USD millions; free cash flow retains company-disclosure precision. Indexing to FY2023 = 100 preserves reported FX effects." caveat="Reported-dollar recovery differs slightly from comparable constant-currency growth (+1.8% comparable vs. +3.0% reported in FY2025)." href={LUXURY_FLAGSHIP_SOURCES.slowdownFinancialInputs} linkLabel="Filed-account inputs ↗" />. The return to revenue growth left a substantial earnings and cash gap.</p>
           <ChanelTrajectory id="chanel-performance" eyebrow="FIG. 01 / CHANEL CONSOLIDATED RESULTS" title="A recovery with an earnings gap" years={[2023,2024,2025]} maximum={110} ticks={[0,25,50,75,100]} kind="finance" series={[
             {label:'Revenue',values:slowdownRows.map(r=>r.revenueIndex),actual:slowdownRows.map(r=>r.revenue),unit:'$',precision:1},
             {label:'Operating profit',values:slowdownRows.map(r=>r.operatingProfitIndex),actual:slowdownRows.map(r=>r.operatingProfit),unit:'$',precision:1},
@@ -163,7 +172,7 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <p>The profit bridge locates the gap in the accounts. To understand the revenue recovery, the next step is to examine where sales returned and which businesses those sales cover.</p>
         </section>
 
-        <section id="recovery" class="report-section">
+        <section id="recovery" tabindex="-1" class="report-section">
           <p class="report-section__number data-copy">03 / RECOVERY &amp; BUSINESS SCOPE</p>
           <h2>Europe and the Americas led the reported revenue recovery</h2>
           <p>
@@ -177,17 +186,19 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <ChanelRecovery />
           <details class="report-details" open>
             <summary><span class="data-copy">REGIONAL REVENUE BRIDGE</span><span class="data-copy">REPORTED USD MILLIONS / ROUNDED</span></summary>
-            <div class="report-table-wrap"><table class="report-table--wide">
-              <thead><tr><th>Region</th><th>FY2023</th><th>FY2024</th><th>FY2025</th><th>FY2024 change</th><th>FY2025 change</th></tr></thead>
-              <tbody>{regionalRevenue.map((row) => <tr><th scope="row">{row.name}</th>{row.values.map((v) => <td>{v.toLocaleString('en-US')}</td>)}{[row.values[1]-row.values[0],row.values[2]-row.values[1]].map((v) => <td>{v > 0 ? '+' : '−'}{Math.abs(v).toLocaleString('en-US')}</td>)}</tr>)}</tbody>
+            <div class="report-table-wrap scroll-fade-x" tabindex="0" role="region" aria-labelledby="chanel-regions-caption"><table id="table-chanel-regions" class="report-table--wide" data-sortable-table>
+              <caption id="chanel-regions-caption" class="sr-status">Chanel regional revenue bridge in reported USD millions</caption>
+              <thead><tr><th scope="col" data-type="text"><button type="button" commandfor="table-chanel-regions" command="--sort" data-sort-label="Region"><span>Region</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-regions" command="--sort" data-sort-label="FY2023"><span>FY2023</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-regions" command="--sort" data-sort-label="FY2024"><span>FY2024</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-regions" command="--sort" data-sort-label="FY2025"><span>FY2025</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-regions" command="--sort" data-sort-label="FY2024 change"><span>FY2024 change</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-regions" command="--sort" data-sort-label="FY2025 change"><span>FY2025 change</span><span class="sort-indicator" aria-hidden="true"></span></button></th></tr></thead>
+              <tbody>{regionalRevenue.map((row) => <tr><th scope="row">{row.name}</th>{row.values.map((v) => <td data-value={v}>{v.toLocaleString('en-US')}</td>)}{[row.values[1]-row.values[0],row.values[2]-row.values[1]].map((v) => <td data-value={v}>{v > 0 ? '+' : '−'}{Math.abs(v).toLocaleString('en-US')}</td>)}</tr>)}</tbody>
             </table></div>
             <p class="report-note">Rounded regional totals are $19,744m, $18,699m and $19,269m. Their changes differ slightly from exact filed-account totals. These changes include FX effects. Regions describe sales location, not shopper nationality. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/chanel_regional_panel.csv" target="_blank" rel="noreferrer">Regional inputs ↗</a></p>
           </details>
           <details class="report-details" open>
             <summary><span class="data-copy">CHANNEL REVENUE BRIDGE</span><span class="data-copy">REPORTED USD MILLIONS</span></summary>
-            <div class="report-table-wrap"><table class="report-table--wide">
-              <thead><tr><th>Channel</th><th>FY2023</th><th>FY2024</th><th>FY2025</th><th>FY2024 change</th><th>FY2025 change</th></tr></thead>
-              <tbody>{channelRevenue.map((row) => <tr><th scope="row">{row.name}</th>{row.values.map((v) => <td>{v.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>)}{[row.values[1]-row.values[0],row.values[2]-row.values[1]].map((v) => <td>{v > 0 ? '+' : '−'}{Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>)}</tr>)}</tbody>
+            <div class="report-table-wrap scroll-fade-x" tabindex="0" role="region" aria-labelledby="chanel-channels-caption"><table id="table-chanel-channels" class="report-table--wide" data-sortable-table>
+              <caption id="chanel-channels-caption" class="sr-status">Chanel channel revenue bridge in reported USD millions</caption>
+              <thead><tr><th scope="col" data-type="text"><button type="button" commandfor="table-chanel-channels" command="--sort" data-sort-label="Channel"><span>Channel</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-channels" command="--sort" data-sort-label="FY2023"><span>FY2023</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-channels" command="--sort" data-sort-label="FY2024"><span>FY2024</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-channels" command="--sort" data-sort-label="FY2025"><span>FY2025</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-channels" command="--sort" data-sort-label="FY2024 change"><span>FY2024 change</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-channels" command="--sort" data-sort-label="FY2025 change"><span>FY2025 change</span><span class="sort-indicator" aria-hidden="true"></span></button></th></tr></thead>
+              <tbody>{channelRevenue.map((row) => <tr><th scope="row">{row.name}</th>{row.values.map((v) => <td data-value={v}>{v.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>)}{[row.values[1]-row.values[0],row.values[2]-row.values[1]].map((v) => <td data-value={v}>{v > 0 ? '+' : '−'}{Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>)}</tr>)}</tbody>
             </table></div>
             <p class="report-note">Retail and wholesale cover multiple categories. They cannot be assigned to handbags and beauty respectively. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/chanel_channel_panel.csv" target="_blank" rel="noreferrer">Channel inputs and source pages ↗</a></p>
           </details>
@@ -207,7 +218,7 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <p>The recovery therefore calls for a reading of products across the business. Handbag prices are one part of that explanation to examine.</p>
         </section>
 
-        <section id="products-pricing" class="report-section">
+        <section id="products-pricing" tabindex="-1" class="report-section">
           <p class="report-section__number data-copy">04 / PRODUCTS &amp; PRICING</p>
           <h2>What did Chanel offer customers during the slowdown?</h2>
           <p>The annual disclosures identify updates in handbags, makeup, fragrance and skincare. To assess their relevance to FY2025, the first requirement is timing: the product had to be available in the sales year.</p>
@@ -237,16 +248,31 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <div class="report-visual report-visual--architecture" data-report-motion data-interactive-chart role="group" aria-label="Observed Chanel price endpoints in France and the United States">
             <div class="report-visual__heading">
               <span class="data-copy">FIG. 02 / OBSERVED PRICE ENDPOINTS</span>
-              <span class="data-copy">HOVER OR SELECT A MARKER</span>
+              <span class="data-copy">HOVER OR SELECT A MARKER · SHADED BY ANALYTICAL TIER</span>
             </div>
             <div class="report-price-lanes">
-              {LUXURY_FLAGSHIP.architecture.map((market) => (
+              {LUXURY_FLAGSHIP.architecture.map((market) => {
+                const prePos = architecturePosition(market.preIcon, market);
+                const iconPos = architecturePosition(market.icon, market);
+                const gapAmount = market.icon - market.preIcon;
+                const sym = market.currency === 'EUR' ? '€' : '$';
+                const tierBreakCore = architecturePosition(market.currency === 'EUR' ? 5000 : 6000, market);
+                const tierBreakIcon = architecturePosition(market.currency === 'EUR' ? 10000 : 11000, market);
+                return (
                 <div class="report-price-lane">
                   <div class="report-price-lane__meta">
                     <strong>{market.name}</strong>
                     <span class="data-copy">{market.currency} / {LUXURY_FLAGSHIP.snapshot.capturedAt}</span>
                   </div>
                   <div class="report-price-lane__rail">
+                    <div class="report-price-lane__zones" aria-hidden="true">
+                      <span class="report-price-lane__zone report-price-lane__zone--core" style={`left:0%;width:${tierBreakCore}%;`}><em>CORE</em></span>
+                      <span class="report-price-lane__zone report-price-lane__zone--premium" style={`left:${tierBreakCore}%;width:${tierBreakIcon - tierBreakCore}%;`}><em>PREMIUM</em></span>
+                      <span class="report-price-lane__zone report-price-lane__zone--icon" style={`left:${tierBreakIcon}%;width:${100 - tierBreakIcon}%;`}><em>ICON</em></span>
+                    </div>
+                    <span class="report-price-lane__gap" aria-hidden="true" style={`left:${prePos}%;width:${iconPos - prePos}%;`}>
+                      <span>+{sym}{gapAmount.toLocaleString('en-US')} step</span>
+                    </span>
                     <span class="report-price-lane__line"></span>
                     {[
                       { label: 'ENTRY', key: 'entry', classKey: 'entry', value: market.minimum },
@@ -264,13 +290,14 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
                         aria-pressed="false"
                         style={'--node-position:' + architecturePosition(point.value, market) + '%;'}
                       >
-                        <i></i><b>{point.label}</b><em>{market.currency === 'EUR' ? '€' : '$'}{point.value.toLocaleString('en-US')}</em>
+                        <i></i><b>{point.label}</b><em>{sym}{point.value.toLocaleString('en-US')}</em>
                       </button>
                     ))}
                   </div>
                   <p class="report-price-lane__note data-copy">{market.observationNote}</p>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -280,7 +307,7 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <p class="report-note">The snapshot measures public list prices. A visible gap can reflect sample coverage as well as assortment; it does not measure a customer’s difficulty moving between tiers. Six contact_us rows have no numeric price and remain outside the price calculations.</p>
           <details class="report-details">
             <summary><span class="data-copy">HOW THE PRICE TIERS ARE DEFINED</span><span class="data-copy">FRANCE / UNITED STATES</span></summary>
-            <div class="report-table-wrap"><table>
+            <div class="report-table-wrap scroll-fade-x" tabindex="0" role="region" aria-label="Price tier definitions"><table>
               <thead><tr><th>Analytical tier</th><th>France / EUR</th><th>United States / USD</th><th>Observed Chanel role</th></tr></thead>
               <tbody>
                 <tr><th>Entry / lower</th><td>Below €3,000</td><td>Below $4,000</td><td>No numeric observation in this snapshot</td></tr>
@@ -293,17 +320,24 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           </details>
           <h3>Competitors occupy different parts of the ladder</h3>
           <p>The four-brand panel contains 161 accepted observations, including 147 numeric prices. Louis Vuitton’s sample is concentrated in lower bands; Dior is concentrated in the French core band. Chanel has more observations in premium core and icon bands, while Hermès spans several tiers. This gives the Classic anchor a competitive context.</p>
-          <details class="report-details">
+          <details class="report-details" data-band-browser>
             <summary><span class="data-copy">VIEW COMPETITION BY PRICE BAND</span><span class="data-copy">NUMERIC OBSERVATION COUNTS</span></summary>
+            <div class="report-band-filter anchor-tabs" role="group" aria-label="Highlight a brand column">
+              <button type="button" data-band-filter="all" aria-pressed="true">All brands</button>
+              <button type="button" data-band-filter="1" aria-pressed="false">Chanel</button>
+              <button type="button" data-band-filter="2" aria-pressed="false">Hermès</button>
+              <button type="button" data-band-filter="3" aria-pressed="false">Louis Vuitton</button>
+              <button type="button" data-band-filter="4" aria-pressed="false">Dior</button>
+            </div>
             {priceBands.map((panel) => (
-              <div class="report-table-wrap"><h4>{panel.market}</h4><table class="report-band-table">
-                <thead><tr><th>Market-specific band</th><th>Chanel</th><th>Hermès</th><th>Louis Vuitton</th><th>Dior</th></tr></thead>
-                <tbody>{panel.rows.map((row) => <tr>{row.map((cell, i) => i === 0 ? <th scope="row">{cell}</th> : <td><span class="report-band-count" style={'--band-fill:' + (Number(cell) / 20 * 100) + '%'}>{cell}</span></td>)}</tr>)}</tbody>
+              <div class="report-table-wrap scroll-fade-x" tabindex="0" role="region" aria-label={`Competition by price band — ${panel.market}`}><h4>{panel.market}</h4><table class="report-band-table" data-band-table>
+                <thead><tr><th>Market-specific band</th><th data-brand-col="1">Chanel</th><th data-brand-col="2">Hermès</th><th data-brand-col="3">Louis Vuitton</th><th data-brand-col="4">Dior</th></tr></thead>
+                <tbody>{panel.rows.map((row) => <tr>{row.map((cell, i) => i === 0 ? <th scope="row">{cell}</th> : <td data-brand-col={i}><span class="report-band-count" style={'--band-fill:' + (Number(cell) / 20 * 100) + '%'}>{cell}</span></td>)}</tr>)}</tbody>
               </table></div>
             ))}
             <p class="report-note">Each cell counts observations in the local numeric sample. Zero means no observation captured. EUR and USD bands use different thresholds; these counts are not market shares. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/competitive_pricing_calculations/price_band_summary.csv" target="_blank" rel="noreferrer">Band definitions and calculations ↗</a></p>
           </details>
-          <p class="report-note">Strict R1 matching produced no publishable headline cells. The tier comparison describes positioning; the exploratory tote cells are preserved with their threshold warning in the method appendix.</p>
+          <p class="report-note">Strict <EvidencePopover id="popover-chanel-r1" label="R1 matching" eyebrow="R1 PUBLICATION THRESHOLD" body="Strict like-for-like cross-brand cell matching required sufficient sample counts per silhouette, size, and material cell. Cells with only 1–2 observations did not pass the headline threshold and remain documented only as exploratory method history in the appendix." caveat="Protects against drawing price-advantage claims from tiny sub-samples." href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_r1/report/FINAL_STATUS_CN.md" linkLabel="R1 threshold review ↗" /> produced no publishable headline cells. The tier comparison describes positioning; the exploratory tote cells are preserved with their threshold warning in the method appendix.</p>
           <h3>Selected French price lines also moved</h3>
           <p>
             Across selected continuous France lines in the common observation years 2022, 2023, 2024, and 2026, the Classic median rose 18.1% and the Mini median rose 16.5%. Their relative ratio changed little; the absolute gap widened by €880. Both tiers repriced. Classic retained roughly twice the Mini median as the euro gap widened.
@@ -331,7 +365,7 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <p>Product choice and price positioning lead to the next question: how did Chanel present its products and support the purchase and ownership experience?</p>
         </section>
 
-        <section id="experience" class="report-section">
+        <section id="experience" tabindex="-1" class="report-section">
           <p class="report-section__number data-copy">05 / PRODUCT APPEAL &amp; CLIENT EXPERIENCE</p>
           <h2>Marketing and service provide mechanisms to examine</h2>
           <p>Chanel’s public records show how it presented products, expanded access and supported ownership. These activities could influence product understanding and purchase opportunities. Their presence alone does not measure an effect on sales.</p>
@@ -350,7 +384,7 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <p>The earlier marketing study runs from August 2025 to August 2026. Its later creative work and events belong to a different sales window. Here, marketing enters the explanation through relevant products and customer touchpoints; its contribution to the FY2025 recovery remains untested.</p>
         </section>
 
-        <section id="conclusion" class="report-section">
+        <section id="conclusion" tabindex="-1" class="report-section">
           <p class="report-section__number data-copy">06 / THE ANSWER &amp; ITS LIMITS</p>
           <h2>What this case establishes</h2>
           <p class="report-claim">Chanel experienced the slowdown, then made a partial and uneven recovery in FY2025. Europe and the Americas added reported revenue; both channels improved. Operating profit and free cash flow remained much further below FY2023 than revenue.</p>
@@ -379,16 +413,25 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
 
         </section>
 
-        <section id="appendix" class="report-section">
+        <section id="appendix" tabindex="-1" class="report-section">
           <p class="report-section__number data-copy">07 / EVIDENCE APPENDIX</p>
           <h2>The longer record and the method behind the comparisons</h2>
           <p>The main argument uses the slowdown baseline. The background series below preserve the earlier financial work, cash generation, investment intensity and peer context.</p>
+          <div id="chanel-appendix-group" class="chanel-appendix-group">
+            <div class="accordion-toolbar">
+              <span class="data-copy">4 APPENDIX EVIDENCE PACKS</span>
+              <button type="button" class="accordion-toggle-all" commandfor="chanel-appendix-group" command="--toggle-all" aria-expanded="false">
+                <span class="toggle-expand">Expand all</span>
+                <span class="toggle-collapse">Collapse all</span>
+              </button>
+            </div>
           <details class="report-details">
             <summary><span class="data-copy">PEER REPORTED REVENUE INDICES</span><span class="data-copy">FY2023 = 100</span></summary>
           <h3>The same baseline puts the peer paths in view</h3>
-          <div class="report-table-wrap"><table>
-            <thead><tr><th>Entity / reporting scope / currency</th><th>FY2023</th><th>FY2024 index</th><th>FY2025 index</th></tr></thead>
-            <tbody>{peerRevenue.map((peer) => <tr><th scope="row">{peer.entity}</th><td>100.0</td>{peer.values.slice(1).map((value) => <td>{(value / peer.values[0] * 100).toFixed(1)}</td>)}</tr>)}</tbody>
+          <div class="report-table-wrap scroll-fade-x" tabindex="0" role="region" aria-labelledby="chanel-peer-indices-caption"><table id="table-chanel-peer-indices" data-sortable-table>
+            <caption id="chanel-peer-indices-caption" class="sr-status">Peer reported revenue indices with FY2023 equal to 100</caption>
+            <thead><tr><th scope="col" data-type="text"><button type="button" commandfor="table-chanel-peer-indices" command="--sort" data-sort-label="Entity"><span>Entity / reporting scope / currency</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col">FY2023</th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-peer-indices" command="--sort" data-sort-label="FY2024 index"><span>FY2024 index</span><span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" data-type="number"><button type="button" commandfor="table-chanel-peer-indices" command="--sort" data-sort-label="FY2025 index"><span>FY2025 index</span><span class="sort-indicator" aria-hidden="true"></span></button></th></tr></thead>
+            <tbody>{peerRevenue.map((peer) => <tr><th scope="row">{peer.entity}</th><td>100.0</td>{peer.values.slice(1).map((value) => <td data-value={(value / peer.values[0] * 100).toFixed(4)}>{(value / peer.values[0] * 100).toFixed(1)}</td>)}</tr>)}</tbody>
           </table></div>
           <p class="report-note">Indices use reported revenue in each entity’s own currency, including FX effects. The growth rates above retain comparable, organic or constant-currency definitions. Group, business-group and brand scopes remain distinct. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_slowdown_2023_2025/data/resilience_panel.csv" target="_blank" rel="noreferrer">Peer inputs ↗</a></p>
           </details>
@@ -396,15 +439,16 @@ const slowdownRows = LUXURY_SLOWDOWN_CHANEL.map((row) => ({
           <details class="report-details">
             <summary><span class="data-copy">PRICE HISTORY AND EXPLORATORY TOTE CELLS</span><span class="data-copy">METHOD NOTES</span></summary>
             <p>The historical panel has 77 accepted observations, 76 numeric prices and 13 lineages: seven continuous same-model lines and six successors. The square Mini rose about 44.8% in the longer 2020–2026 window. The main Classic–Mini comparison uses the aligned 2022–2026 window to keep starting points consistent.</p>
-            <div class="report-table-wrap"><table>
+            <div class="report-table-wrap scroll-fade-x" tabindex="0" role="region" aria-label="Exploratory France tote median cells"><table>
               <thead><tr><th>Exploratory France cell</th><th>Chanel median</th><th>Hermès median</th><th>Dior median</th><th>Louis Vuitton median</th></tr></thead>
               <tbody><tr><th>Tote / large / leather</th><td>€6,200</td><td>€6,475</td><td>€3,350</td><td>—</td></tr><tr><th>Tote / standard / leather</th><td>€5,700</td><td>—</td><td>€3,400</td><td>€2,900</td></tr></tbody>
             </table></div>
             <p class="report-note">These earlier descriptive cells include brand cells with only one or two observations. They did not clear the strict R1 publication threshold and are retained solely as exploratory method history. They support no like-for-like price advantage or substitution claim. A dash marks no value reproduced here. <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/research_r1/report/FINAL_STATUS_CN.md" target="_blank" rel="noreferrer">R1 threshold review ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Original price study ↗</a></p>
           </details>
+          </div>
         </section>
 
-        <section id="sources" class="report-section report-section--sources">
+        <section id="sources" tabindex="-1" class="report-section report-section--sources">
           <p class="report-section__number data-copy">08 / SOURCES &amp; REPRODUCIBILITY</p>
           <h2>Sources and reproducibility</h2>
           <p>
