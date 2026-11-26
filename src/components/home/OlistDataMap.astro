@@ -3,60 +3,74 @@ const tables = [
   {
     id: 'orders',
     label: 'orders',
-    x: 240,
-    y: 90,
+    side: 'center' as const,
+    x: 260,
+    y: 104,
     role: 'Central purchase grain — links purchase, approval, estimated delivery, and actual delivery timestamps.',
     core: true,
   },
   {
     id: 'customers',
     label: 'customers',
-    x: 70,
-    y: 35,
+    side: 'left' as const,
+    x: 78,
+    y: 42,
     role: 'Customer state & geography — anchors the state-level on-time decomposition and RJ/SP/MG market cohorts.',
     core: false,
   },
   {
     id: 'order_items',
     label: 'order_items',
-    x: 70,
-    y: 90,
+    side: 'left' as const,
+    x: 68,
+    y: 104,
     role: 'Item prices (excluding freight) & seller links — defines delivered GMV proxy and multi-seller order bridges.',
     core: false,
   },
   {
     id: 'products',
     label: 'products',
-    x: 70,
-    y: 145,
+    side: 'left' as const,
+    x: 78,
+    y: 166,
     role: 'Product categories — maps items into category × customer-state screening markets.',
     core: false,
   },
   {
     id: 'sellers',
     label: 'sellers',
-    x: 410,
-    y: 35,
+    side: 'right' as const,
+    x: 442,
+    y: 42,
     role: 'Seller origin states — defines seller-state → customer-state route intersections such as SP → RJ.',
     core: false,
   },
   {
     id: 'payments',
     label: 'payments',
-    x: 410,
-    y: 90,
+    side: 'right' as const,
+    x: 452,
+    y: 104,
     role: 'Payment records — cross-checked for order completeness alongside item-level merchandise value.',
     core: false,
   },
   {
     id: 'reviews',
     label: 'reviews',
-    x: 410,
-    y: 145,
+    side: 'right' as const,
+    x: 442,
+    y: 166,
     role: 'One selected review per order — comparing answer vs. delivery timestamps revealed 97.39% before-receipt feedback in 8+ day delays.',
     core: false,
   },
 ];
+
+const filamentPath = (t: (typeof tables)[number]) => {
+  if (t.side === 'left') {
+    return `M 260 104 C 190 104, 152 ${t.y}, ${t.x + 52} ${t.y}`;
+  }
+  return `M 260 104 C 330 104, 368 ${t.y}, ${t.x - 52} ${t.y}`;
+};
 ---
 
 <figure
@@ -64,36 +78,71 @@ const tables = [
   data-olist-data-map
   aria-label="Olist data connects orders with customers, order items, products, sellers, payments, and reviews"
 >
-  <svg class="olist-data-map__constellation" viewBox="0 0 480 185" role="img" aria-label="Constellation of seven Olist tables centered on orders">
+  <div class="olist-data-map__head">
+    <span class="data-copy">RELATIONAL SCHEMA / 7 TABLES</span>
+    <span class="data-copy">HOVER OR SELECT A TABLE</span>
+  </div>
+  <svg class="olist-data-map__constellation" viewBox="0 0 520 208" role="img" aria-label="Curved relational schema diagram of seven Olist tables centered on orders">
+    <defs>
+      <radialGradient id="olist-hub-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.2" />
+        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <circle cx="260" cy="104" r="64" fill="url(#olist-hub-glow)" aria-hidden="true" />
+    <circle class="olist-data-map__orbit-outer" cx="260" cy="104" r="56" aria-hidden="true" />
+    <circle class="olist-data-map__orbit" cx="260" cy="104" r="40" aria-hidden="true" />
+
     <g class="olist-data-map__connections">
       {tables.filter((t) => !t.core).map((t) => (
-        <line
+        <path
           class="olist-data-map__edge"
           data-map-edge={t.id}
-          x1="240"
-          y1="90"
-          x2={t.x}
-          y2={t.y}
+          data-active="true"
+          d={filamentPath(t)}
         />
       ))}
     </g>
-    <circle class="olist-data-map__orbit" cx="240" cy="90" r="36" />
-    {tables.map((t) => (
-      <g class:list={['olist-data-map__point', { 'is-core': t.core }]} data-map-node={t.id} data-active={t.core ? 'true' : 'false'}>
-        <circle class="olist-data-map__halo" cx={t.x} cy={t.y} r={t.core ? 16 : 13} />
-        <circle class={t.core ? 'olist-data-map__core' : 'olist-data-map__satellite'} cx={t.x} cy={t.y} r={t.core ? 7 : 5} />
+
+    {tables.filter((t) => !t.core).map((t) => (
+      <g
+        class="olist-data-map__pill-node"
+        data-map-node={t.id}
+        data-active="false"
+      >
+        <rect
+          class="olist-data-map__pill"
+          x={t.x - 52}
+          y={t.y - 15}
+          width="104"
+          height="30"
+          rx="15"
+        />
+        <circle
+          class="olist-data-map__satellite"
+          cx={t.side === 'left' ? t.x + 41 : t.x - 41}
+          cy={t.y}
+          r="3.5"
+        />
+        <text
+          class="olist-data-map__node-text"
+          x={t.side === 'left' ? t.x - 4 : t.x + 4}
+          y={t.y + 3.5}
+          text-anchor="middle"
+        >
+          {t.label}
+        </text>
       </g>
     ))}
-    <g class="olist-data-map__labels">
-      <text x="240" y="151" text-anchor="middle" data-map-label="orders">orders</text>
-      <text x="85" y="39" data-map-label="customers">customers</text>
-      <text x="85" y="94" data-map-label="order_items">order_items</text>
-      <text x="85" y="149" data-map-label="products">products</text>
-      <text x="395" y="39" text-anchor="end" data-map-label="sellers">sellers</text>
-      <text x="395" y="94" text-anchor="end" data-map-label="payments">payments</text>
-      <text x="395" y="149" text-anchor="end" data-map-label="reviews">reviews</text>
+
+    <g class="olist-data-map__hub" data-map-node="orders" data-active="true">
+      <circle class="olist-data-map__hub-ring" cx="260" cy="104" r="29" />
+      <circle class="olist-data-map__core" cx="260" cy="104" r="24" />
+      <text class="olist-data-map__hub-text" x="260" y="107.5" text-anchor="middle">orders</text>
     </g>
   </svg>
+
   <div class="olist-data-map__controls anchor-tabs" role="group" aria-label="Inspect an Olist table">
     {tables.map((t) => (
       <button
@@ -116,7 +165,7 @@ const tables = [
   document.querySelectorAll<HTMLElement>('[data-olist-data-map]').forEach((root) => {
     const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-map-select]')];
     const nodes = [...root.querySelectorAll<SVGGElement>('[data-map-node]')];
-    const edges = [...root.querySelectorAll<SVGLineElement>('[data-map-edge]')];
+    const edges = [...root.querySelectorAll<SVGPathElement>('[data-map-edge]')];
     const readout = root.querySelector<HTMLElement>('[data-map-readout]');
 
     const activate = (id: string) => {
@@ -124,7 +173,7 @@ const tables = [
       if (!btn) return;
       buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
       nodes.forEach((n) => {
-        n.dataset.active = String(n.dataset.mapNode === id || (id === 'orders' && n.dataset.mapNode === 'orders'));
+        n.dataset.active = String(n.dataset.mapNode === id);
       });
       edges.forEach((e) => {
         e.dataset.active = String(id === 'orders' || e.dataset.mapEdge === id);
@@ -138,8 +187,8 @@ const tables = [
     };
 
     buttons.forEach((btn) => {
-      btn.addEventListener('click', () => activate(btn.dataset.mapSelect ?? 'orders'));
-      btn.addEventListener('pointerenter', () => activate(btn.dataset.mapSelect ?? 'orders'));
+      const id = btn.dataset.mapSelect ?? 'orders';
+      btn.addEventListener('click', () => activate(id));
     });
 
     nodes.forEach((node) => {

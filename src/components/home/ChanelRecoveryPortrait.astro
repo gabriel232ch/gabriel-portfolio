@@ -44,11 +44,11 @@ const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:
       </g>)}
     </svg>
   </div>
-  <div class="chanel-experience__timeline anchor-tabs" aria-label="Explore a year">
+  <div class="chanel-experience__timeline anchor-tabs anchor-tabs--line" aria-label="Explore a year">
     {stages.map((stage,i)=><button type="button" data-portrait-year={i} aria-label={`${stage.year} ${stage.label}`} aria-pressed={i===2}><span>{stage.year}</span><small>{stage.label}</small></button>)}
     <input class="chanel-experience__scrubber editorial-slider" type="range" min="0" max="2" value="2" step="1" aria-label="Chanel observation year" aria-valuetext="FY2025 · Return" data-portrait-range />
   </div>
-  <div class="recovery-portrait__legend anchor-tabs" aria-label="Select a measure">
+  <div class="recovery-portrait__legend anchor-tabs anchor-tabs--line" aria-label="Select a measure">
     {series.map((s,i)=><button type="button" data-portrait-select={i} aria-pressed="false" style={`--series-color:var(--chart-${s.color})`}><i aria-hidden="true"></i>{s.label}</button>)}
   </div>
   <div class="chanel-experience__footer"><button class="visual-replay" type="button" data-portrait-replay>Play the recovery ↺</button><a href="/work/luxury-handbag-pricing-architecture/#performance">Values & sources ↗</a></div>

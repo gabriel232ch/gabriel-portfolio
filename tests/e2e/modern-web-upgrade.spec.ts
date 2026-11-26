@@ -37,6 +37,15 @@ test('Chanel case study supports popovers, sortable tables, brand filter, waterf
   await fy25Header.locator('button').click();
   await expect(fy25Header).toHaveAttribute('aria-sort', 'descending');
 
+  // Hovering a trajectory observation column stays stable without oscillating back to FY2025
+  const trajectory = page.locator('[data-chanel-trajectory]').first();
+  await trajectory.scrollIntoViewIfNeeded();
+  const fy23Zone = trajectory.locator('[data-trajectory-observation="0"]');
+  await fy23Zone.hover();
+  await page.waitForTimeout(450);
+  await expect(trajectory.locator('[data-trajectory-year="0"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(trajectory.locator('[data-trajectory-label]')).toHaveText('FY2023');
+
   // Waterfall SVG bar click syncs readout
   const bridge = page.locator('.chanel-bridge');
   await bridge.scrollIntoViewIfNeeded();

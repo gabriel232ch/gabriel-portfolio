@@ -65,9 +65,14 @@ document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((char
   const records = JSON.parse(chart.dataset.records || '[]') as TrajectoryRecord[];
   const years = [...chart.querySelectorAll<HTMLButtonElement>('[data-trajectory-year]')];
   const guide = chart.querySelector<SVGLineElement>('[data-trajectory-guide]');
+  const plot = chart.querySelector<SVGSVGElement>('[data-trajectory-plot]');
+  let activeYear = records.length - 1;
+
   const activate = (index: number) => {
+    if (index === activeYear) return;
     const row = records[index];
     if (!row) return;
+    activeYear = index;
     years.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
     guide?.setAttribute('x1', String(row.x));
     guide?.setAttribute('x2', String(row.x));
@@ -83,8 +88,12 @@ document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((char
       const point = chart.querySelector(`[data-trajectory-focus="${i}"]`);
       point?.setAttribute('cx', String(row.x));
       point?.setAttribute('cy', String(metric.position));
+      const halo = chart.querySelector(`[data-trajectory-halo="${i}"]`);
+      halo?.setAttribute('cx', String(row.x));
+      halo?.setAttribute('cy', String(metric.position));
     });
   };
+
   let selectedYear = records.length - 1;
   years.forEach((button, i) =>
     button.addEventListener('click', () => {
@@ -92,15 +101,19 @@ document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((char
       activate(i);
     }),
   );
-  chart.querySelectorAll<SVGCircleElement>('[data-trajectory-observation]').forEach((point) => {
-    const inspect = () => activate(Number(point.dataset.trajectoryObservation));
-    point.addEventListener('pointermove', inspect);
-    point.addEventListener('pointerleave', () => activate(selectedYear));
-    point.addEventListener('click', () => {
-      selectedYear = Number(point.dataset.trajectoryObservation);
+
+  // Full-column hover zones with pointerleave ONLY on the plot SVG (prevents node-under-cursor oscillation)
+  chart.querySelectorAll<SVGElement>('[data-trajectory-observation]').forEach((zone) => {
+    const idx = Number(zone.dataset.trajectoryObservation);
+    zone.addEventListener('pointerenter', () => activate(idx));
+    zone.addEventListener('click', () => {
+      selectedYear = idx;
       activate(selectedYear);
     });
   });
+
+  plot?.addEventListener('pointerleave', () => activate(selectedYear));
+
   chart.querySelectorAll<HTMLButtonElement>('[data-trajectory-series]').forEach((button) =>
     button.addEventListener('click', () => {
       const selected = button.dataset.trajectorySeries;
@@ -220,14 +233,12 @@ document.querySelectorAll<HTMLElement>('.chanel-bridge').forEach((chart) => {
   all?.addEventListener('click', showAll);
   buttons.forEach((button, i) => button.addEventListener('click', () => selectStep(i)));
 
-  // Direct SVG bar click & hover interaction synced with step buttons
+  // Direct SVG bar click & hover interaction synced with step buttons (plot-level leave prevents inter-bar flicker)
   let lockedIndex: number | null = null;
+  const plotSvg = chart.querySelector<SVGSVGElement>('svg');
   steps.forEach((step, i) => {
     step.addEventListener('pointerenter', () => {
       if (lockedIndex === null) selectStep(i);
-    });
-    step.addEventListener('pointerleave', () => {
-      if (lockedIndex === null) showAll();
     });
     step.addEventListener('click', () => {
       if (lockedIndex === i) {
@@ -238,6 +249,9 @@ document.querySelectorAll<HTMLElement>('.chanel-bridge').forEach((chart) => {
         selectStep(i);
       }
     });
+  });
+  plotSvg?.addEventListener('pointerleave', () => {
+    if (lockedIndex === null) showAll();
   });
 
   all?.addEventListener('click', () => {

@@ -93,8 +93,9 @@ document.querySelectorAll<HTMLElement>('[data-line-chart]').forEach((chart) => {
     const xPos = String(52 + month * 88);
     guide?.setAttribute('x1', xPos);
     guide?.setAttribute('x2', xPos);
-    chart.querySelectorAll<SVGElement>('[data-chart-month]').forEach((point) => {
-      point.dataset.selected = String(Number(point.dataset.chartMonth) === month);
+    chart.querySelectorAll<SVGElement>('[data-chart-month], [data-chart-halo]').forEach((point) => {
+      const targetMonth = Number(point.dataset.chartMonth ?? point.dataset.chartHalo);
+      point.dataset.selected = String(targetMonth === month);
     });
     chart.querySelectorAll<HTMLButtonElement>('[data-chart-tick]').forEach((tick) => {
       tick.setAttribute('aria-pressed', String(Number(tick.dataset.chartTick) === month));

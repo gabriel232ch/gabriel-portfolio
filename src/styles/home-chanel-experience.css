@@ -22,9 +22,9 @@
 .chanel-experience .recovery-portrait__series[data-muted='true'] { opacity:.3; }
 .chanel-experience__mask { transition:width 1100ms cubic-bezier(.16,1,.3,1); }
 .chanel-experience .chanel-experience__line { stroke-width:2.8; }
-.chanel-experience .chanel-experience__dot { fill:var(--paper); stroke-width:1.7; }
-.chanel-experience .chanel-experience__focus { fill:var(--series-color); stroke:var(--paper); stroke-width:3; transition:cx 900ms var(--ease-spring-editorial),cy 900ms var(--ease-spring-editorial); }
-.chanel-experience__cursor { stroke:var(--ink-muted); stroke-dasharray:2 6; opacity:.55; transition:x1 900ms var(--ease-spring-editorial),x2 900ms var(--ease-spring-editorial); }
+.chanel-experience .chanel-experience__dot { fill:var(--paper); stroke-width:1.7; pointer-events:none; }
+.chanel-experience .chanel-experience__focus { fill:var(--series-color); stroke:var(--paper); stroke-width:3; pointer-events:none; transition:cx 720ms var(--ease-cinematic),cy 720ms var(--ease-cinematic); }
+.chanel-experience__cursor { stroke:var(--accent); stroke-dasharray:3 5; opacity:.5; pointer-events:none; transition:x1 720ms var(--ease-cinematic),x2 720ms var(--ease-cinematic); }
 .chanel-experience .chanel-experience__line-hit { stroke:transparent; stroke-width:24; fill:none; cursor:pointer; pointer-events:stroke; }
 .chanel-experience__timeline { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:.5rem; }
 .chanel-experience__timeline button { min-height:58px; display:grid; gap:.35rem; padding:.5rem 0; border:0; background:none; color:var(--ink-muted); font-family:var(--font-metadata); cursor:pointer; text-align:center; transition:color 300ms ease; }
