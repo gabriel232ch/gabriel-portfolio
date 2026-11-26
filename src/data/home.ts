@@ -25,11 +25,11 @@ export const HOME_STATE = {
   },
   photography: {
     milan: {
-      src: '/life/italy/milan-portrait-edited.png',
-      width: 1087,
-      height: 1447,
-      alt: 'Gabriel taking a selfie in front of Milan Cathedral, wearing clear-framed glasses.',
-      caption: 'Milan',
+      src: '/life/italy/bocconi-departments.webp',
+      width: 768,
+      height: 1024,
+      alt: 'Looking up at the concrete canopy of Università Bocconi in Milan, with bold dark lettering reading Università Bocconi and dipartimenti/departments.',
+      caption: 'Università Bocconi',
     },
     campus: {
       src: '/life/italy/bocconi-campus.webp',
