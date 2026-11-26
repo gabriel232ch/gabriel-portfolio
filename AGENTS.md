@@ -1,23 +1,29 @@
 # Repository workflow
 
-The authoritative baseline is the latest `origin/main`. On 2026-10-08 the
-approved baseline was `38bbab7`, containing the published Chanel case and the
-complete Smaller Companies Inquiry. That SHA is a historical reference, not
-a permanently pinned starting point.
+The authoritative baseline is always the latest `origin/main`. Production
+(`https://gabrielchen.me`) is published exclusively by merging reviewed pull
+requests into `main`, which triggers Cloudflare Workers Builds automatically.
 
 For each new change:
 
-1. Fetch the latest `origin/main` and create the modification branch from it.
-2. Preserve other approved, published projects. Check their case pages,
-   supporting data, and homepage content before completing the change.
-3. Produce and verify a concrete preview. Obtain the user's preview
-   confirmation, then merge through a pull request into `main`.
-4. Build the resulting approved `main`, verify that it matches the reviewed
-   preview, publish that main build, and verify the live website.
+1. Fetch the latest `origin/main` and create a short-lived feature branch from
+   it. Never start new work from an old branch or stale worktree.
+2. Preserve all approved, published projects. Keep their case pages, supporting
+   data, Olist research CSVs, and homepage content intact.
+3. Run `npm run verify:ci` (and `npm run test:e2e` on macOS when changing UI or
+   visuals). Produce and verify a concrete preview via branch push (Cloudflare
+   Workers Builds preview) or `npm run deploy:preview`.
+4. Obtain the user's preview confirmation, ensure the PR branch is up to date
+   with `origin/main` and GitHub Actions `verify` CI is green, then merge the PR
+   into `main`.
+5. Never deploy production directly from a local branch or worktree. Wait for
+   Cloudflare Workers Builds to deploy `main`, then verify the live site and
+   confirm `/api/portfolio.json` reports the merged `build.commit`.
 
-Continue an existing change on its associated branch/PR; reconcile with newer
-main changes before merging. Keep historical branches and previews as
-references. Never restore an old branch or preview over the live website.
+Historical references are preserved as immutable Git tags (`release/*`,
+`archive/*`), not lingering branches or worktrees. Delete merged feature
+branches and remove temporary worktrees once work is landed. Never restore an
+old branch, tag, or preview over the live website.
 
 Preserve the existing Olist research files. Source data, arithmetic
 decompositions, observational associations, rule-based candidates, and
