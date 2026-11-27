@@ -335,16 +335,10 @@
   position: relative;
   overflow: hidden;
   margin-block: clamp(3rem, 6vw, 6rem);
-  padding: clamp(1.35rem, 3vw, 2.5rem);
+  padding: clamp(1.35rem, 3vw, 2.25rem);
   border: 1px solid var(--hairline);
-  border-top: 2px solid var(--accent);
-  border-radius: 10px;
-  background:
-    radial-gradient(ellipse at 95% 0%, color-mix(in oklab, var(--accent) 7%, transparent), transparent 55%),
-    linear-gradient(180deg var(--in-oklab), var(--paper-raised), var(--paper));
-  box-shadow:
-    0 1px 2px rgb(0 0 0 / 4%),
-    0 24px 54px -38px color-mix(in oklab, var(--ink) 36%, transparent);
+  border-radius: 12px;
+  background: var(--paper-raised);
   opacity: 1;
   transform: translateY(0);
   transition:
@@ -441,7 +435,7 @@
 }
 
 .report-price-lane__zone--core {
-  background: color-mix(in oklab, var(--metal) 9%, var(--paper));
+  background: color-mix(in oklab, var(--chart-secondary) 11%, var(--paper));
 }
 
 .report-price-lane__zone--premium {
@@ -449,8 +443,8 @@
 }
 
 .report-price-lane__zone--icon {
-  background: color-mix(in oklab, var(--accent) 16%, var(--paper));
-  border-left-color: var(--accent);
+  background: color-mix(in oklab, var(--chart-primary) 14%, var(--paper));
+  border-left-color: var(--chart-primary);
 }
 
 .report-price-lane__zone em {
@@ -465,8 +459,8 @@
   position: absolute;
   top: 3.35rem;
   height: 0.65rem;
-  border-inline: 1px solid var(--accent);
-  border-top: 1px dashed var(--accent);
+  border-inline: 1px solid var(--chart-negative);
+  border-top: 1px dashed var(--chart-negative);
   pointer-events: none;
 }
 
@@ -478,10 +472,11 @@
   padding: 0.12rem 0.55rem;
   border-radius: 999px;
   background: var(--paper-raised);
-  border: 1px solid color-mix(in oklab, var(--accent) 45%, var(--hairline));
-  color: var(--accent-strong);
+  border: 1px solid color-mix(in oklab, var(--chart-negative) 48%, var(--hairline));
+  color: var(--chart-negative);
   font-family: var(--font-metadata);
   font-size: var(--font-size-micro);
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -490,9 +485,9 @@
   top: 5.1rem;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 2.5px;
   border-radius: 999px;
-  background: linear-gradient(90deg var(--in-oklab), color-mix(in oklab, var(--accent) 40%, var(--hairline)), var(--accent-strong));
+  background: linear-gradient(90deg var(--in-oklab), var(--chart-secondary), var(--chart-primary));
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 1.25s var(--ease-cinematic);
@@ -526,13 +521,13 @@
 
 .report-price-lane__node i {
   display: block;
-  width: 0.8rem;
-  height: 0.8rem;
+  width: 0.85rem;
+  height: 0.85rem;
   margin: 2.45rem 0 0.8rem;
-  border: 1px solid var(--accent-strong);
+  border: 2px solid var(--paper-raised);
   border-radius: 50%;
-  background: var(--paper);
-  box-shadow: 0 0 0 0.35rem var(--accent-soft);
+  background: var(--chart-primary);
+  box-shadow: 0 0 0 0.25rem color-mix(in oklab, var(--chart-primary) 18%, transparent);
   transform: scale(0.2);
   transition: transform 700ms var(--ease-cinematic), background-color var(--motion-editorial) var(--ease-editorial), box-shadow 500ms var(--ease-cinematic);
 }
@@ -558,7 +553,7 @@
 }
 
 [data-motion-state='entered'] .report-price-lane__node i {
-  background: var(--accent);
+  background: var(--chart-primary);
   transform: scale(1);
 }
 

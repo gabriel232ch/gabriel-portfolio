@@ -58,14 +58,27 @@ document.querySelectorAll<HTMLElement>('[data-interactive-chart]').forEach((char
 interface TrajectoryRecord {
   year: number;
   x: number;
-  metrics: { label: string; value: string; index: string; position: number }[];
+  gapText?: string;
+  metrics: {
+    label: string;
+    value: string;
+    index: string;
+    deltaText: string;
+    gapPts: string;
+    isDeepLoss: boolean;
+    trackPos: number;
+    position: number;
+  }[];
 }
 
 document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((chart) => {
   const records = JSON.parse(chart.dataset.records || '[]') as TrajectoryRecord[];
+  const isFinance = chart.dataset.kind === 'finance';
   const years = [...chart.querySelectorAll<HTMLButtonElement>('[data-trajectory-year]')];
   const guide = chart.querySelector<SVGLineElement>('[data-trajectory-guide]');
+  const gapLabel = chart.querySelector<SVGTextElement>('[data-slope-gap-label]');
   const plot = chart.querySelector<SVGSVGElement>('[data-trajectory-plot]');
+  const x100 = 136 + ((100 - 40) / 66) * (560 - 136);
   let activeYear = records.length - 1;
 
   const activate = (index: number) => {
@@ -74,23 +87,76 @@ document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((char
     if (!row) return;
     activeYear = index;
     years.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
-    guide?.setAttribute('x1', String(row.x));
-    guide?.setAttribute('x2', String(row.x));
+
     const label = chart.querySelector('[data-trajectory-label]');
     if (label) {
-      label.textContent = (chart.classList.contains('chanel-viz--price') ? '' : 'FY') + row.year;
+      label.textContent = (isFinance ? 'FY' : '') + row.year;
     }
+
+    chart.querySelectorAll<HTMLElement>('[data-kpi-year]').forEach((barBtn) => {
+      barBtn.dataset.active = String(Number(barBtn.dataset.kpiYear) === index);
+    });
+
+    if (!isFinance && guide && row.metrics.length >= 2) {
+      guide.setAttribute('x1', String(row.x));
+      guide.setAttribute('x2', String(row.x));
+      guide.setAttribute('y1', String(row.metrics[0].position + 7));
+      guide.setAttribute('y2', String(row.metrics[row.metrics.length - 1].position - 7));
+      if (gapLabel) {
+        gapLabel.textContent = row.gapText ?? '';
+        gapLabel.setAttribute('x', String(row.x - 10));
+        gapLabel.setAttribute(
+          'y',
+          String((row.metrics[0].position + row.metrics[row.metrics.length - 1].position) / 2 + 4),
+        );
+      }
+    }
+
     row.metrics.forEach((metric, i) => {
       const value = chart.querySelector(`[data-trajectory-value="${i}"]`);
       const indexValue = chart.querySelector(`[data-trajectory-index="${i}"]`);
+      const deltaBadge = chart.querySelector<HTMLElement>(`[data-trajectory-delta="${i}"]`);
       if (value) value.textContent = metric.value;
       if (indexValue) indexValue.textContent = metric.index;
-      const point = chart.querySelector(`[data-trajectory-focus="${i}"]`);
-      point?.setAttribute('cx', String(row.x));
-      point?.setAttribute('cy', String(metric.position));
-      const halo = chart.querySelector(`[data-trajectory-halo="${i}"]`);
-      halo?.setAttribute('cx', String(row.x));
-      halo?.setAttribute('cy', String(metric.position));
+      if (deltaBadge) {
+        deltaBadge.textContent = metric.deltaText;
+        deltaBadge.classList.toggle('is-negative', metric.isDeepLoss);
+      }
+
+      if (isFinance) {
+        const focus = chart.querySelector<SVGCircleElement>(`[data-trajectory-focus="${i}"]`);
+        const gapBar = chart.querySelector<SVGRectElement>(`[data-track-gap="${i}"]`);
+        const reboundBar = chart.querySelector<SVGRectElement>(`[data-track-rebound="${i}"]`);
+        const endText = chart.querySelector<SVGTextElement>(`[data-track-end="${i}"]`);
+        const troughPos = records[1]?.metrics[i]?.trackPos ?? metric.trackPos;
+        const gapLeft = Math.min(metric.trackPos, x100);
+        const gapWidth = Math.max(0, x100 - metric.trackPos);
+
+        focus?.setAttribute('cx', String(metric.trackPos));
+        gapBar?.setAttribute('x', String(gapLeft));
+        gapBar?.setAttribute('width', String(gapWidth));
+        if (gapBar) gapBar.dataset.deep = String(metric.isDeepLoss);
+
+        if (reboundBar) {
+          if (index === 2) {
+            reboundBar.setAttribute('x', String(Math.min(troughPos, metric.trackPos)));
+            reboundBar.setAttribute('width', String(Math.abs(metric.trackPos - troughPos)));
+            reboundBar.style.opacity = '1';
+          } else {
+            reboundBar.style.opacity = '0';
+          }
+        }
+
+        if (endText) {
+          endText.textContent =
+            index === 0 ? `${metric.index} · Baseline` : `${metric.index} · ${metric.gapPts}`;
+          endText.classList.toggle('is-negative', metric.isDeepLoss);
+        }
+      } else {
+        const point = chart.querySelector(`[data-trajectory-focus="${i}"]`);
+        point?.setAttribute('cx', String(row.x));
+        point?.setAttribute('cy', String(metric.position));
+      }
     });
   };
 
@@ -102,29 +168,35 @@ document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((char
     }),
   );
 
-  // Full-column hover zones with pointerleave ONLY on the plot SVG (prevents node-under-cursor oscillation)
+  // Clicking or hovering mini-bars inside KPI cards also selects the year cleanly
+  chart.querySelectorAll<HTMLButtonElement>('[data-kpi-year]').forEach((barBtn) => {
+    const idx = Number(barBtn.dataset.kpiYear);
+    barBtn.addEventListener('click', () => {
+      selectedYear = idx;
+      activate(idx);
+    });
+  });
+
+  // Full-zone hover bands inside SVG with pointerleave ONLY on the plot SVG
   chart.querySelectorAll<SVGElement>('[data-trajectory-observation]').forEach((zone) => {
     const idx = Number(zone.dataset.trajectoryObservation);
     zone.addEventListener('pointerenter', () => activate(idx));
+    zone.addEventListener('pointermove', () => activate(idx));
     zone.addEventListener('click', () => {
       selectedYear = idx;
       activate(selectedYear);
     });
   });
 
-  plot?.addEventListener('pointerleave', () => activate(selectedYear));
-
-  chart.querySelectorAll<HTMLButtonElement>('[data-trajectory-series]').forEach((button) =>
-    button.addEventListener('click', () => {
-      const selected = button.dataset.trajectorySeries;
-      chart
-        .querySelectorAll<HTMLButtonElement>('[data-trajectory-series]')
-        .forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
-      chart.querySelectorAll<SVGGElement>('[data-trajectory-line]').forEach((line) => {
-        line.dataset.muted = String(selected !== 'all' && line.dataset.trajectoryLine !== selected);
-      });
-    }),
-  );
+  plot?.addEventListener('pointerleave', (event) => {
+    const rect = plot.getBoundingClientRect();
+    const stillInside =
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom;
+    if (!stillInside) activate(selectedYear);
+  });
 });
 
 const supportsUntilFound = 'onbeforematch' in HTMLElement.prototype;

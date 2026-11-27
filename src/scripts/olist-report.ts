@@ -77,39 +77,83 @@ stage?.addEventListener('beforematch', (event) => {
   }
 });
 
-// Interactive line charts (range slider + SVG points + clickable month labels)
+// Interactive FT/NYT line charts (live KPI callout strip + full-column hover + month ticks + slider)
+interface OlistChartRecord {
+  month: string;
+  x: number;
+  readout: string;
+  deltaText: string;
+  isNegativeDelta: boolean;
+  series: { val: string; n: string; y: number }[];
+}
+
 document.querySelectorAll<HTMLElement>('[data-line-chart]').forEach((chart) => {
+  const records: OlistChartRecord[] = JSON.parse(chart.dataset.chartRecords ?? '[]');
   const rows: string[] = JSON.parse(chart.dataset.chartRows ?? '[]');
   const range = chart.querySelector<HTMLInputElement>('[data-chart-range]');
   const readout = chart.querySelector<HTMLElement>('[data-chart-readout]');
   const guide = chart.querySelector<SVGLineElement>('[data-chart-guide]');
+  const monthBadge = chart.querySelector<HTMLElement>('[data-chart-month-badge]');
+  const deltaEl = chart.querySelector<HTMLElement>('[data-chart-delta]');
+  const svg = chart.querySelector<SVGSVGElement>('[data-chart-svg]');
+
+  let selectedMonth = 0;
 
   const update = (month: number) => {
-    if (readout && rows[month]) readout.textContent = rows[month];
+    const rec = records[month];
+    if (readout && (rec?.readout || rows[month])) readout.textContent = rec?.readout ?? rows[month];
+    if (monthBadge && rec) monthBadge.textContent = rec.month;
     if (range) {
       range.value = String(month);
-      range.setAttribute('aria-valuetext', rows[month] ?? '');
+      range.setAttribute('aria-valuetext', rec?.readout ?? rows[month] ?? '');
     }
-    const xPos = String(52 + month * 88);
+    const xPos = String(rec ? rec.x : 44 + month * 76);
     guide?.setAttribute('x1', xPos);
     guide?.setAttribute('x2', xPos);
-    chart.querySelectorAll<SVGElement>('[data-chart-month], [data-chart-halo]').forEach((point) => {
-      const targetMonth = Number(point.dataset.chartMonth ?? point.dataset.chartHalo);
-      point.dataset.selected = String(targetMonth === month);
+
+    if (rec) {
+      rec.series.forEach((item, si) => {
+        const valEl = chart.querySelector(`[data-chart-series-val="${si}"]`);
+        const nEl = chart.querySelector(`[data-chart-series-n="${si}"]`);
+        const focusEl = chart.querySelector<SVGCircleElement>(`[data-chart-focus="${si}"]`);
+        if (valEl) valEl.textContent = item.val;
+        if (nEl) nEl.textContent = item.n;
+        focusEl?.setAttribute('cx', xPos);
+        focusEl?.setAttribute('cy', String(item.y));
+      });
+      if (deltaEl) {
+        deltaEl.textContent = rec.deltaText;
+        deltaEl.classList.toggle('is-negative', rec.isNegativeDelta);
+      }
+    }
+
+    chart.querySelectorAll<SVGElement>('[data-chart-month], [data-chart-x-label]').forEach((node) => {
+      const targetMonth = Number(node.dataset.chartMonth ?? node.dataset.chartXLabel);
+      node.dataset.selected = String(targetMonth === month);
     });
     chart.querySelectorAll<HTMLButtonElement>('[data-chart-tick]').forEach((tick) => {
       tick.setAttribute('aria-pressed', String(Number(tick.dataset.chartTick) === month));
     });
   };
 
-  range?.addEventListener('input', () => update(Number(range.value)));
+  range?.addEventListener('input', () => {
+    selectedMonth = Number(range.value);
+    update(selectedMonth);
+  });
   chart.querySelectorAll<SVGElement>('[data-chart-month]').forEach((point) => {
     const idx = Number(point.dataset.chartMonth);
     point.addEventListener('pointerenter', () => update(idx));
-    point.addEventListener('click', () => update(idx));
+    point.addEventListener('click', () => {
+      selectedMonth = idx;
+      update(selectedMonth);
+    });
   });
+  svg?.addEventListener('pointerleave', () => update(selectedMonth));
   chart.querySelectorAll<HTMLButtonElement>('[data-chart-tick]').forEach((tick) => {
-    tick.addEventListener('click', () => update(Number(tick.dataset.chartTick)));
+    tick.addEventListener('click', () => {
+      selectedMonth = Number(tick.dataset.chartTick);
+      update(selectedMonth);
+    });
   });
 
   update(0);

@@ -5,7 +5,7 @@ const tables = [
     label: 'orders',
     side: 'center' as const,
     x: 260,
-    y: 104,
+    y: 98,
     role: 'Central purchase grain — links purchase, approval, estimated delivery, and actual delivery timestamps.',
     core: true,
   },
@@ -13,8 +13,8 @@ const tables = [
     id: 'customers',
     label: 'customers',
     side: 'left' as const,
-    x: 78,
-    y: 42,
+    x: 72,
+    y: 36,
     role: 'Customer state & geography — anchors the state-level on-time decomposition and RJ/SP/MG market cohorts.',
     core: false,
   },
@@ -22,8 +22,8 @@ const tables = [
     id: 'order_items',
     label: 'order_items',
     side: 'left' as const,
-    x: 68,
-    y: 104,
+    x: 72,
+    y: 98,
     role: 'Item prices (excluding freight) & seller links — defines delivered GMV proxy and multi-seller order bridges.',
     core: false,
   },
@@ -31,8 +31,8 @@ const tables = [
     id: 'products',
     label: 'products',
     side: 'left' as const,
-    x: 78,
-    y: 166,
+    x: 72,
+    y: 160,
     role: 'Product categories — maps items into category × customer-state screening markets.',
     core: false,
   },
@@ -40,8 +40,8 @@ const tables = [
     id: 'sellers',
     label: 'sellers',
     side: 'right' as const,
-    x: 442,
-    y: 42,
+    x: 448,
+    y: 36,
     role: 'Seller origin states — defines seller-state → customer-state route intersections such as SP → RJ.',
     core: false,
   },
@@ -49,8 +49,8 @@ const tables = [
     id: 'payments',
     label: 'payments',
     side: 'right' as const,
-    x: 452,
-    y: 104,
+    x: 448,
+    y: 98,
     role: 'Payment records — cross-checked for order completeness alongside item-level merchandise value.',
     core: false,
   },
@@ -58,18 +58,18 @@ const tables = [
     id: 'reviews',
     label: 'reviews',
     side: 'right' as const,
-    x: 442,
-    y: 166,
+    x: 448,
+    y: 160,
     role: 'One selected review per order — comparing answer vs. delivery timestamps revealed 97.39% before-receipt feedback in 8+ day delays.',
     core: false,
   },
 ];
 
-const filamentPath = (t: (typeof tables)[number]) => {
+const connectorPath = (t: (typeof tables)[number]) => {
   if (t.side === 'left') {
-    return `M 260 104 C 190 104, 152 ${t.y}, ${t.x + 52} ${t.y}`;
+    return `M 212 98 C 176 98, 168 ${t.y}, ${t.x + 58} ${t.y}`;
   }
-  return `M 260 104 C 330 104, 368 ${t.y}, ${t.x - 52} ${t.y}`;
+  return `M 308 98 C 344 98, 352 ${t.y}, ${t.x - 58} ${t.y}`;
 };
 ---
 
@@ -80,27 +80,18 @@ const filamentPath = (t: (typeof tables)[number]) => {
 >
   <div class="olist-data-map__head">
     <span class="data-copy">RELATIONAL SCHEMA / 7 TABLES</span>
-    <span class="data-copy">HOVER OR SELECT A TABLE</span>
+    <span class="data-copy">SELECT A TABLE</span>
   </div>
-  <svg class="olist-data-map__constellation" viewBox="0 0 520 208" role="img" aria-label="Curved relational schema diagram of seven Olist tables centered on orders">
-    <defs>
-      <radialGradient id="olist-hub-glow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.2" />
-        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
-      </radialGradient>
-    </defs>
 
-    <circle cx="260" cy="104" r="64" fill="url(#olist-hub-glow)" aria-hidden="true" />
-    <circle class="olist-data-map__orbit-outer" cx="260" cy="104" r="56" aria-hidden="true" />
-    <circle class="olist-data-map__orbit" cx="260" cy="104" r="40" aria-hidden="true" />
-
+  {/* Clean Linear / Stripe Architecture Diagram */}
+  <svg class="olist-data-map__constellation" viewBox="0 0 520 196" role="img" aria-label="Relational schema diagram of seven Olist tables centered on orders">
     <g class="olist-data-map__connections">
       {tables.filter((t) => !t.core).map((t) => (
         <path
           class="olist-data-map__edge"
           data-map-edge={t.id}
           data-active="true"
-          d={filamentPath(t)}
+          d={connectorPath(t)}
         />
       ))}
     </g>
@@ -113,22 +104,22 @@ const filamentPath = (t: (typeof tables)[number]) => {
       >
         <rect
           class="olist-data-map__pill"
-          x={t.x - 52}
-          y={t.y - 15}
-          width="104"
-          height="30"
-          rx="15"
+          x={t.x - 58}
+          y={t.y - 16}
+          width="116"
+          height="32"
+          rx="8"
         />
         <circle
           class="olist-data-map__satellite"
-          cx={t.side === 'left' ? t.x + 41 : t.x - 41}
+          cx={t.side === 'left' ? t.x + 58 : t.x - 58}
           cy={t.y}
-          r="3.5"
+          r="3"
         />
         <text
           class="olist-data-map__node-text"
-          x={t.side === 'left' ? t.x - 4 : t.x + 4}
-          y={t.y + 3.5}
+          x={t.x}
+          y={t.y + 4}
           text-anchor="middle"
         >
           {t.label}
@@ -137,9 +128,8 @@ const filamentPath = (t: (typeof tables)[number]) => {
     ))}
 
     <g class="olist-data-map__hub" data-map-node="orders" data-active="true">
-      <circle class="olist-data-map__hub-ring" cx="260" cy="104" r="29" />
-      <circle class="olist-data-map__core" cx="260" cy="104" r="24" />
-      <text class="olist-data-map__hub-text" x="260" y="107.5" text-anchor="middle">orders</text>
+      <rect class="olist-data-map__core-card" x="212" y="76" width="96" height="44" rx="10" />
+      <text class="olist-data-map__hub-text" x="260" y="102" text-anchor="middle">orders</text>
     </g>
   </svg>
 

@@ -20,7 +20,7 @@ describe('Typography Scale v1 tokens', () => {
     ]);
     expect(tokens).toContain("--font-display: 'Cormorant Garamond Variable'");
     expect(tokens).toContain('--font-reading: Baskerville');
-    expect(tokens).toContain('--font-numeric: Didot');
+    expect(tokens).toContain("--font-numeric: 'DM Sans Variable'");
     expect(tokens).toContain("--font-metadata: 'IBM Plex Mono'");
   });
 

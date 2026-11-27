@@ -1,194 +1,391 @@
 ---
-interface Series { label: string; values: number[]; actual: number[]; unit: string; precision: number }
-interface Props { id: string; eyebrow: string; title: string; years: number[]; series: Series[]; maximum: number; ticks: number[]; kind: 'finance' | 'price'; note: string }
-const { id, eyebrow, title, years, series, maximum, ticks, kind, note } = Astro.props;
+interface Series {
+  label: string;
+  values: number[];
+  actual: number[];
+  unit: string;
+  precision: number;
+}
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+  years: number[];
+  series: Series[];
+  maximum: number;
+  ticks: number[];
+  kind: 'finance' | 'price';
+  note: string;
+}
+
+const { id, eyebrow, title, years, series, kind, note } = Astro.props;
 const selected = years.length - 1;
-const xStart = 52;
-const xEnd = 594;
-const x = (i: number) => xStart + ((years[i] - years[0]) / (years[selected] - years[0])) * (xEnd - xStart);
-const y = (v: number) => 242 - (v / maximum) * 202;
+const isFinance = kind === 'finance';
+
 const formatted = (s: Series, i: number) =>
   s.unit +
-  s.actual[i].toLocaleString('en-US', { minimumFractionDigits: s.precision, maximumFractionDigits: s.precision }) +
-  (kind === 'finance' ? 'm' : '');
-const endTag = (s: Series) =>
-  kind === 'finance'
-    ? s.values[selected].toFixed(1)
-    : s.unit + s.actual[selected].toLocaleString('en-US', { maximumFractionDigits: 0 });
-const record = (i: number) => ({
-  year: years[i],
-  x: x(i),
-  metrics: series.map((s) => ({
-    label: s.label,
-    value: formatted(s, i),
-    index: s.values[i].toFixed(1),
-    position: y(s.values[i]),
-  })),
-});
+  s.actual[i].toLocaleString('en-US', {
+    minimumFractionDigits: s.precision,
+    maximumFractionDigits: s.precision,
+  }) +
+  (isFinance ? 'm' : '');
 
-// Gap ribbon between highest (index 0) and lowest (last index) series
-const topSeries = series[0];
-const bottomSeries = series[series.length - 1];
-const gapPolygon =
-  series.length > 1
-    ? [
-        ...topSeries.values.map((v, i) => `${x(i)},${y(v)}`),
-        ...bottomSeries.values
-          .map((v, i) => `${x(i)},${y(v)}`)
-          .reverse(),
-      ].join(' ')
-    : '';
+const shortDelta = (s: Series, i: number) => {
+  const base = s.values[0];
+  if (i === 0 || !base) return isFinance ? 'Baseline' : 'Base year';
+  const pct = isFinance ? s.values[i] - 100 : ((s.actual[i] - s.actual[0]) / s.actual[0]) * 100;
+  const sign = pct > 0 ? '+' : pct < 0 ? '−' : '';
+  return `${sign}${Math.abs(pct).toFixed(1)}% vs ’${String(years[0]).slice(2)}`;
+};
 
-// Non-overlapping full-column hover bands across the plot
-const columnBands = years.map((_, i) => {
-  const cx = x(i);
-  const left = i === 0 ? xStart - 20 : (x(i - 1) + cx) / 2;
-  const right = i === years.length - 1 ? xEnd + 24 : (cx + x(i + 1)) / 2;
+// Finance mode: Horizontal Recovery Gap Tracks (domain 40..106 -> x 136..560)
+const trackXStart = 136;
+const trackXEnd = 560;
+const trackX = (v: number) => trackXStart + ((Math.max(40, Math.min(106, v)) - 40) / 66) * (trackXEnd - trackXStart);
+const trackX100 = trackX(100);
+const trackRowY = (si: number) => 42 + si * 54;
+
+// Price mode: FT / NYT Cropped Slopegraph (domain €3,000..€11,000 -> y 196..26)
+const slopeXStart = 58;
+const slopeXEnd = 496;
+const slopeX = (i: number) =>
+  slopeXStart + ((years[i] - years[0]) / (years[selected] - years[0])) * (slopeXEnd - slopeXStart);
+const slopeMin = 3000;
+const slopeMax = 11000;
+const slopeY = (v: number) => 196 - ((v - slopeMin) / (slopeMax - slopeMin)) * 170;
+const slopeTicks = [4000, 6000, 8000, 10000];
+
+const priceColumns = years.map((_, i) => {
+  const cx = slopeX(i);
+  const left = i === 0 ? slopeXStart - 24 : (slopeX(i - 1) + cx) / 2;
+  const right = i === years.length - 1 ? slopeXEnd + 24 : (cx + slopeX(i + 1)) / 2;
   return { index: i, x: left, width: right - left };
 });
 
-// Prevent end-of-line label collisions when two endpoints sit close vertically
-const endLabelOffsets = series.map((_, si) => {
-  if (kind === 'finance' && si === 1) return -7;
-  if (kind === 'finance' && si === 2) return 11;
-  return 4;
+// Finance hit bands inside the horizontal track SVG so hovering each year zone maps cleanly 1:1
+const financeZoneX = [
+  { index: 0, x: trackX100 - 24, width: trackXEnd - (trackX100 - 24) + 120 }, // FY2023 baseline anchor zone
+  { index: 1, x: trackXStart - 136, width: trackX(65) - (trackXStart - 136) }, // FY2024 trough zone
+  { index: 2, x: trackX(65), width: (trackX100 - 24) - trackX(65) }, // FY2025 rebound zone
+];
+
+const records = years.map((year, i) => ({
+  year,
+  x: isFinance ? trackX100 : slopeX(i),
+  gapText: !isFinance && series.length >= 2
+    ? `€${(series[0].actual[i] - series[1].actual[i]).toLocaleString('en-US')} gap · ${(series[0].actual[i] / series[1].actual[i]).toFixed(2)}×`
+    : '',
+  metrics: series.map((s) => {
+    const val = s.values[i];
+    const delta = isFinance ? val - 100 : ((s.actual[i] - s.actual[0]) / s.actual[0]) * 100;
+    return {
+      label: s.label,
+      value: formatted(s, i),
+      index: val.toFixed(1),
+      deltaText: shortDelta(s, i),
+      gapPts: isFinance ? (i === 0 ? 'Baseline' : `${delta >= 0 ? '+' : '−'}${Math.abs(delta).toFixed(1)} pts`) : '',
+      isDeepLoss: isFinance && delta <= -10,
+      trackPos: isFinance ? trackX(val) : slopeX(i),
+      position: isFinance ? 0 : slopeY(val),
+    };
+  }),
+}));
+
+const latestGap = !isFinance && series.length >= 2 ? series[0].actual[selected] - series[1].actual[selected] : 0;
+const latestRatio = !isFinance && series.length >= 2 ? (series[0].actual[selected] / series[1].actual[selected]).toFixed(2) : '';
+
+const kpiCards = series.map((s, si) => {
+  const latestVal = s.values[selected];
+  const latestDelta = isFinance ? latestVal - 100 : ((s.actual[selected] - s.actual[0]) / s.actual[0]) * 100;
+  const isDeepLoss = isFinance && latestDelta <= -10;
+  const maxVal = Math.max(...s.values);
+  return {
+    s,
+    si,
+    latestVal,
+    isDeepLoss,
+    maxVal,
+    formattedLatest: formatted(s, selected),
+    deltaText: shortDelta(s, selected),
+  };
+});
+
+const financeTracks = series.map((s, si) => {
+  const cy = trackRowY(si);
+  const x24 = trackX(s.values[1]);
+  const x25 = trackX(s.values[selected]);
+  const gapLeft = Math.min(x25, trackX100);
+  const gapWidth = Math.max(0, trackX100 - x25);
+  const reboundLeft = Math.min(x24, x25);
+  const reboundWidth = Math.abs(x25 - x24);
+  const delta = s.values[selected] - 100;
+  const isDeepLoss = delta <= -10;
+  return { s, si, cy, x24, x25, gapLeft, gapWidth, reboundLeft, reboundWidth, delta, isDeepLoss };
 });
 ---
+
 <figure
-  class:list={['chanel-viz', 'chanel-trajectory', { 'chanel-viz--price': kind === 'price' }]}
+  class:list={['chanel-viz', 'chanel-trajectory', isFinance ? 'chanel-viz--finance' : 'chanel-viz--price']}
   data-chanel-reveal
   data-chanel-trajectory
-  data-records={JSON.stringify(years.map((_, i) => record(i)))}
+  data-kind={kind}
+  data-records={JSON.stringify(records)}
 >
   <figcaption class="chanel-viz__caption">
     <span class="data-copy">{eyebrow}</span>
-    <span class="data-copy">{kind === 'finance' ? 'FY2023 = 100 · REPORTED USD' : 'FRANCE · EUR · OBSERVED YEARS'}</span>
+    <span class="data-copy">
+      {isFinance ? 'FY2023 = 100 · REPORTED USD' : 'FRANCE · EUR · CROPPED €3K–€11K'}
+    </span>
   </figcaption>
-  <div class="chanel-viz__header">
-    <div class="chanel-viz__title">
+
+  <div class="chanel-viz__header chanel-viz__header--inline">
+    <div class="chanel-viz__title-block">
       <h3>{title}</h3>
-      <span class="chanel-viz__edition" aria-hidden="true">{kind === 'finance' ? '01' : '03'}</span>
+      <span class="chanel-viz__active-year data-copy" data-trajectory-label>
+        {isFinance ? 'FY' : ''}{years[selected]}
+      </span>
     </div>
-    <div class="chanel-viz__legend anchor-tabs" aria-label="Highlight a series">
-      <button type="button" data-trajectory-series="all" aria-pressed="true">All</button>
-      {series.map((s, i) => (
-        <button type="button" style={`--series-color:var(--chanel-series-${i})`} data-trajectory-series={i} aria-pressed="false">
-          <i aria-hidden="true"></i>
-          <span>{s.label}</span>
-        </button>
-      ))}
-    </div>
-  </div>
-
-  <div class="chanel-trajectory__stage">
-    <svg
-      class="chanel-trajectory__plot"
-      data-trajectory-plot
-      viewBox="0 0 680 286"
-      role="img"
-      aria-labelledby={`${id}-title ${id}-description`}
-    >
-      <title id={`${id}-title`}>{title}</title>
-      <desc id={`${id}-description`}>{note} Select an observed year below for exact values. Connecting lines join observations; they do not add measurements between years.</desc>
-      <defs>
-        <pattern id={`${id}-hatch`} width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)">
-          <line x1="0" y1="0" x2="0" y2="8" stroke="var(--chanel-series-0)" stroke-opacity="0.13" stroke-width="1.2" />
-        </pattern>
-        <linearGradient id={`${id}-ribbon`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="var(--chanel-series-0)" stop-opacity="0.14" />
-          <stop offset="100%" stop-color="var(--chanel-series-2)" stop-opacity="0.03" />
-        </linearGradient>
-      </defs>
-
-      {ticks.map((t) => (
-        <g class="chanel-viz__grid">
-          <line x1={xStart} x2={xEnd} y1={y(t)} y2={y(t)} class={t === 0 ? 'chanel-viz__axis-zero' : undefined} />
-          <text x={xStart - 12} y={y(t) + 3.5} text-anchor="end">
-            {kind === 'price' ? (t === 0 ? '€0' : `€${t / 1000}k`) : t}
-          </text>
-        </g>
-      ))}
-      {kind === 'finance' && <line class="chanel-trajectory__baseline" x1={xStart} x2={xEnd} y1={y(100)} y2={y(100)} />}
-
-      {gapPolygon && (
-        <g class="chanel-trajectory__gap" aria-hidden="true">
-          <polygon points={gapPolygon} fill={`url(#${id}-ribbon)`} />
-          <polygon points={gapPolygon} fill={`url(#${id}-hatch)`} />
-        </g>
-      )}
-
-      <line class="chanel-trajectory__guide" data-trajectory-guide x1={x(selected)} x2={x(selected)} y1="26" y2="244" />
-
-      {series.map((s, si) => (
-        <g class="chanel-trajectory__series" data-trajectory-line={si} style={`--series-color:var(--chanel-series-${si})`}>
-          <path
-            class="chanel-trajectory__line"
-            pathLength="1"
-            d={s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')}
-          />
-          {s.values.map((v, i) => (
-            <circle class="chanel-trajectory__point" cx={x(i)} cy={y(v)} r="4" />
-          ))}
-          <circle class="chanel-trajectory__halo" data-trajectory-halo={si} cx={x(selected)} cy={y(s.values[selected])} r="12" />
-          <circle class="chanel-trajectory__focus" data-trajectory-focus={si} cx={x(selected)} cy={y(s.values[selected])} r="5.5" />
-          <text
-            class="chanel-trajectory__end-tag"
-            x={xEnd + 14}
-            y={y(s.values[selected]) + endLabelOffsets[si]}
-          >
-            {endTag(s)}
-          </text>
-        </g>
-      ))}
-
-      {years.map((year, i) => (
-        <text class="chanel-trajectory__year" x={x(i)} y="272" text-anchor="middle">
-          {kind === 'finance' ? 'FY' : ''}{year}
-        </text>
-      ))}
-
-      {/* Top-layer full-column hit zones prevent cursor oscillation over moving focus dots */}
-      <g class="chanel-trajectory__zones" aria-hidden="true">
-        {columnBands.map((band) => (
-          <rect
-            class="chanel-trajectory__zone"
-            data-trajectory-observation={band.index}
-            x={band.x}
-            y="20"
-            width={band.width}
-            height="234"
-          />
-        ))}
-      </g>
-    </svg>
-  </div>
-
-  <div class="chanel-viz__toolbar">
-    <span class="data-copy">OBSERVATION · HOVER CHART OR SELECT YEAR</span>
-    <div class="chanel-viz__segments anchor-tabs" aria-label="Select observed year">
+    <div class="chanel-viz__segments anchor-tabs" role="group" aria-label="Select observed year">
       {years.map((year, i) => (
         <button type="button" data-trajectory-year={i} aria-pressed={i === selected ? 'true' : 'false'}>
-          {kind === 'finance' ? 'FY' : ''}{year}
+          {isFinance ? 'FY' : ''}{year}
         </button>
       ))}
     </div>
   </div>
 
-  <div class="chanel-trajectory__readout" aria-live="polite" aria-atomic="true">
-    <p class="data-copy" data-trajectory-label>{kind === 'finance' ? 'FY' : ''}{years[selected]}</p>
-    <div class="chanel-trajectory__metrics">
-      {series.map((s, i) => (
-        <div style={`--series-color:var(--chanel-series-${i})`}>
-          <span>{s.label}</span>
-          <strong data-trajectory-value={i}>{formatted(s, selected)}</strong>
-          {kind === 'finance' && (
+  {/* DeepMind / Stripe KPI Small-Multiples Cards */}
+  <div class="chanel-kpi-strip" aria-live="polite" aria-atomic="true">
+    {kpiCards.map(({ s, si, latestVal, isDeepLoss, maxVal, formattedLatest, deltaText }) => (
+      <div
+        class="chanel-kpi-card"
+        data-kpi-card={si}
+        style={`--series-color:var(--chanel-series-${si})`}
+      >
+        <div class="chanel-kpi-card__top">
+          <span class="chanel-kpi-card__name">
+            <i aria-hidden="true"></i>
+            {s.label}
+          </span>
+          <span
+            class:list={['chanel-kpi-card__badge', { 'is-negative': isDeepLoss }]}
+            data-trajectory-delta={si}
+          >
+            {deltaText}
+          </span>
+        </div>
+        <div class="chanel-kpi-card__value">
+          <strong data-trajectory-value={si}>{formattedLatest}</strong>
+          {isFinance && (
             <small>
-              <b data-trajectory-index={i}>{s.values[selected].toFixed(1)}</b> / FY2023 = 100
+              <b data-trajectory-index={si}>{latestVal.toFixed(1)}</b> / 100
             </small>
           )}
         </div>
-      ))}
-    </div>
+        {isFinance && (
+          <div class="chanel-kpi-card__bars" aria-hidden="true">
+            {s.values.map((v, yi) => (
+              <button
+                type="button"
+                tabindex="-1"
+                class="chanel-kpi-card__bar-col"
+                data-kpi-year={yi}
+                data-active={yi === selected ? 'true' : 'false'}
+              >
+                <span class="chanel-kpi-card__bar-num">{v.toFixed(1)}</span>
+                <span class="chanel-kpi-card__bar-track">
+                  <span
+                    class="chanel-kpi-card__bar-fill"
+                    style={`height:${Math.max(18, Math.round((v / maxVal) * 100))}%`}
+                  ></span>
+                </span>
+                <span class="chanel-kpi-card__bar-yr">’{String(years[yi]).slice(2)}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
   </div>
+
+  {isFinance ? (
+    /* Google / McKinsey Horizontal Recovery Gap Tracks */
+    <div class="chanel-tracks">
+      <div class="chanel-tracks__head">
+        <span class="data-copy">RECOVERY TRACK · FY24 TROUGH → FY25 REBOUND → GAP TO FY23</span>
+        <div class="chanel-tracks__legend data-copy" aria-hidden="true">
+          <span><i class="legend-trough"></i>FY24 low</span>
+          <span><i class="legend-current"></i>Selected</span>
+          <span><i class="legend-gap"></i>Unrecovered gap</span>
+        </div>
+      </div>
+
+      <svg
+        class="chanel-trajectory__plot chanel-tracks__svg"
+        data-trajectory-plot
+        viewBox="0 0 680 212"
+        role="img"
+        aria-labelledby={`${id}-title ${id}-description`}
+      >
+        <title id={`${id}-title`}>{title}</title>
+        <desc id={`${id}-description`}>
+          {note} Horizontal recovery tracks indexed to FY2023 = 100. In FY2025, revenue stood at 97.6, operating profit at 73.5, and free cash flow at 70.5.
+        </desc>
+
+        {/* Scale ticks & FY23=100 baseline anchor */}
+        {[50, 75, 100].map((tick) => (
+          <g class="chanel-tracks__tick">
+            <line
+              x1={trackX(tick)}
+              x2={trackX(tick)}
+              y1="14"
+              y2="182"
+              class={tick === 100 ? 'chanel-tracks__baseline' : 'chanel-tracks__grid'}
+            />
+            <text x={trackX(tick)} y="200" text-anchor="middle">
+              {tick === 100 ? '100 (FY23)' : tick}
+            </text>
+          </g>
+        ))}
+
+        {/* Three Horizontal Recovery Gap Tracks */}
+        {financeTracks.map(({ s, si, cy, x24, x25, gapLeft, gapWidth, reboundLeft, reboundWidth, delta, isDeepLoss }) => (
+          <g class="chanel-tracks__row" data-trajectory-line={si} style={`--series-color:var(--chanel-series-${si})`}>
+            <text class="chanel-tracks__label" x="0" y={cy + 4}>{s.label}</text>
+            {/* Subtle base rail */}
+            <rect class="chanel-tracks__rail" x={trackXStart} y={cy - 4} width={trackXEnd - trackXStart} height="8" rx="4" />
+            {/* Unrecovered gap segment to FY23=100 */}
+            <rect
+              class="chanel-tracks__gap-bar"
+              data-track-gap={si}
+              x={gapLeft}
+              y={cy - 5}
+              width={gapWidth}
+              height="10"
+              rx="3"
+              data-deep={isDeepLoss ? 'true' : 'false'}
+            />
+            {/* Rebound span from FY24 trough to FY25 */}
+            <rect
+              class="chanel-tracks__rebound"
+              data-track-rebound={si}
+              x={reboundLeft}
+              y={cy - 4}
+              width={reboundWidth}
+              height="8"
+              rx="4"
+            />
+            {/* FY24 trough hollow ring */}
+            <circle class="chanel-tracks__trough" cx={x24} cy={cy} r="4.5" />
+            {/* Active year marker */}
+            <circle class="chanel-tracks__focus" data-trajectory-focus={si} cx={x25} cy={cy} r="6.5" />
+            {/* Direct right-aligned index & gap readout */}
+            <text
+              class:list={['chanel-tracks__end', { 'is-negative': isDeepLoss }]}
+              data-track-end={si}
+              x="680"
+              y={cy + 4}
+              text-anchor="end"
+            >
+              {s.values[selected].toFixed(1)} · {delta >= 0 ? '+' : '−'}{Math.abs(delta).toFixed(1)} pts
+            </text>
+          </g>
+        ))}
+
+        {/* Non-overlapping interactive year zones */}
+        <g class="chanel-trajectory__zones" aria-hidden="true">
+          {financeZoneX.map((zone) => (
+            <rect
+              class="chanel-trajectory__zone"
+              data-trajectory-observation={zone.index}
+              x={zone.x}
+              y="8"
+              width={zone.width}
+              height="196"
+            />
+          ))}
+        </g>
+      </svg>
+    </div>
+  ) : (
+    /* FT / NYT Direct-Labeled Cropped Slopegraph (€3k–€11k) */
+    <div class="chanel-trajectory__stage">
+      <svg
+        class="chanel-trajectory__plot chanel-slope__svg"
+        data-trajectory-plot
+        viewBox="0 0 680 232"
+        role="img"
+        aria-labelledby={`${id}-title ${id}-description`}
+      >
+        <title id={`${id}-title`}>{title}</title>
+        <desc id={`${id}-description`}>
+          {note} Select an observed year above for exact values. Connecting lines join observations; they do not add measurements between years.
+        </desc>
+
+        {slopeTicks.map((t) => (
+          <g class="chanel-viz__grid">
+            <line x1={slopeXStart} x2={slopeXEnd} y1={slopeY(t)} y2={slopeY(t)} />
+            <text x={slopeXStart - 12} y={slopeY(t) + 3.5} text-anchor="end">€{t / 1000}k</text>
+          </g>
+        ))}
+
+        {/* Active year vertical guide & gap callout */}
+        <line
+          class="chanel-trajectory__guide"
+          data-trajectory-guide
+          x1={slopeX(selected)}
+          x2={slopeX(selected)}
+          y1={slopeY(series[0].values[selected]) + 7}
+          y2={slopeY(series[series.length - 1].values[selected]) - 7}
+        />
+        <text
+          class="chanel-slope__gap-label"
+          data-slope-gap-label
+          x={slopeX(selected) - 10}
+          y={(slopeY(series[0].values[selected]) + slopeY(series[series.length - 1].values[selected])) / 2 + 4}
+          text-anchor="end"
+        >
+          €{latestGap.toLocaleString('en-US')} gap · {latestRatio}×
+        </text>
+
+        {series.map((s, si) => (
+          <g class="chanel-trajectory__series" data-trajectory-line={si} style={`--series-color:var(--chanel-series-${si})`}>
+            <path
+              class="chanel-trajectory__line"
+              pathLength="1"
+              d={s.values.map((v, i) => `${i ? 'L' : 'M'}${slopeX(i)},${slopeY(v)}`).join(' ')}
+            />
+            {s.values.map((v, i) => (
+              <circle class="chanel-trajectory__point" cx={slopeX(i)} cy={slopeY(v)} r="3.5" />
+            ))}
+            <circle class="chanel-trajectory__focus" data-trajectory-focus={si} cx={slopeX(selected)} cy={slopeY(s.values[selected])} r="5.5" />
+            <text class="chanel-trajectory__end-tag" x={slopeXEnd + 14} y={slopeY(s.values[selected]) + 4}>
+              €{s.actual[selected].toLocaleString('en-US')} · {si === 0 ? 'Classic' : 'Mini'}
+            </text>
+          </g>
+        ))}
+
+        {years.map((year, i) => (
+          <text class="chanel-trajectory__year" x={slopeX(i)} y="220" text-anchor="middle">
+            {year}
+          </text>
+        ))}
+
+        <g class="chanel-trajectory__zones" aria-hidden="true">
+          {priceColumns.map((band) => (
+            <rect
+              class="chanel-trajectory__zone"
+              data-trajectory-observation={band.index}
+              x={band.x}
+              y="14"
+              width={band.width}
+              height="194"
+            />
+          ))}
+        </g>
+      </svg>
+    </div>
+  )}
+
   <p class="chanel-viz__note">{note}</p>
 </figure>

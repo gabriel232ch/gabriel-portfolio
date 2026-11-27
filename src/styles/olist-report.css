@@ -1,62 +1,166 @@
+/* Olist editorial data visualization system: DeepMind / Stripe KPI cards + FT / NYT zero-clutter trend lines. */
 .olist-report { --olist-primary: var(--chart-primary); --olist-comparison: var(--chart-secondary); }
 .olist-report .report-title { max-width: 14ch; font-size: var(--font-size-project-title); text-wrap: balance; }
 .olist-report .report-hero { position: relative; min-height: 38rem; }
-.olist-report .report-hero::after { content: ''; position: absolute; right: 3%; bottom: 10%; width: 12rem; height: 12rem; border: 1px solid var(--hairline); border-radius: 50%; box-shadow: 0 0 0 2rem var(--surface-soft), 0 0 0 4rem color-mix(in srgb, var(--olist-primary) 3%, transparent); pointer-events: none; opacity: .5; z-index: 0; }
+.olist-report .report-hero::after { content: ''; position: absolute; right: 3%; bottom: 10%; width: 12rem; height: 12rem; border: 1px solid var(--hairline); border-radius: 50%; pointer-events: none; opacity: .35; z-index: 0; }
 .olist-report .report-hero > * { position: relative; z-index: 1; }
 .olist-report h2 { text-wrap: balance; }
 .olist-report a { text-underline-offset: .25em; }
 .olist-report .report-index a[aria-current='location'] { color: var(--accent-strong); }
 .olist-eyebrow { font-family: var(--font-metadata); font-size: var(--font-size-micro); letter-spacing: .1em; color: var(--ink-muted); }
-.olist-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-block: 1px solid var(--hairline); margin: 3rem 0; }
-.olist-kpis > div { padding: 1.5rem 1rem 1.5rem 0; }
-.olist-kpis > div + div { border-left: 1px solid var(--hairline); padding-left: 1.5rem; }
-.olist-kpis dt { font-family: var(--font-metadata); color: var(--ink-muted); font-size: var(--font-size-micro); }
-.olist-kpis dd { margin: .75rem 0 0; font-family: var(--font-numeric); font-size: var(--font-size-section-title); letter-spacing: -.04em; }
-.olist-kpis small { display: block; margin-top: .5rem; font-size: var(--font-size-micro); color: var(--ink-muted); }
+
+/* DeepMind / Stripe Bento KPI Cards */
+.olist-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .85rem;
+  margin: 2.5rem 0;
+}
+.olist-kpis > div {
+  padding: 1.15rem 1.2rem;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: var(--paper-raised);
+}
+.olist-kpis dt { font-family: var(--font-metadata); color: var(--ink-muted); font-size: var(--font-size-micro); letter-spacing: .06em; }
+.olist-kpis dd {
+  margin: .65rem 0 0;
+  font-family: var(--font-numeric);
+  font-size: var(--font-size-statement);
+  font-weight: 500;
+  letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1.05;
+}
+.olist-kpis small { display: block; margin-top: .5rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
+
+/* Flat, gallery-grade chart container */
 .olist-chart {
   margin: 2.75rem 0;
-  padding: clamp(1.25rem, 3vw, 2.25rem);
+  padding: clamp(1.25rem, 3vw, 2.15rem);
   border: 1px solid var(--hairline);
-  border-top: 2px solid var(--olist-primary);
-  background:
-    radial-gradient(ellipse at 95% 0%, color-mix(in oklab, var(--olist-primary) 8%, transparent), transparent 60%),
-    linear-gradient(180deg var(--in-oklab), var(--paper-raised), var(--paper));
-  box-shadow:
-    0 1px 2px rgb(0 0 0 / 4%),
-    0 24px 54px -36px color-mix(in oklab, var(--ink) 34%, transparent);
-  border-radius: 10px;
+  border-radius: 12px;
+  background: var(--paper-raised);
+  container-type: inline-size;
 }
-.olist-chart h3 { margin: .5rem 0 1.25rem; font-family: var(--font-display); font-size: var(--font-size-statement); line-height: 1.1; font-weight: 400; }
-.olist-chart svg { display: block; width: 100%; overflow: visible; margin-top: 1.5rem; }
+.olist-chart__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem 1rem;
+}
+.olist-chart h3 { margin: .45rem 0 0; font-family: var(--font-display); font-size: var(--font-size-statement); line-height: 1.08; font-weight: 400; }
+.olist-chart__month-pill {
+  padding: .22rem .65rem;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  font-weight: 600;
+}
+
+/* Top KPI Callout Strip inside each trend chart */
+.olist-chart__kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 1.15rem 0 1rem;
+}
+.olist-chart__kpis--single {
+  grid-template-columns: minmax(0, 18rem);
+}
+.olist-chart__kpi {
+  padding: .75rem .9rem;
+  border: 1px solid var(--hairline);
+  border-radius: 9px;
+  background: var(--paper);
+}
+.olist-chart__kpi-label {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  color: var(--ink-muted);
+}
+.olist-chart__kpi-label i {
+  width: .5rem;
+  height: .5rem;
+  border-radius: 50%;
+  background: var(--olist-primary);
+}
+.olist-chart__kpi--second .olist-chart__kpi-label i {
+  background: var(--olist-comparison);
+}
+.olist-chart__kpi-nums {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-top: .4rem;
+}
+.olist-chart__kpi strong {
+  display: block;
+  font-family: var(--font-numeric);
+  font-size: var(--font-size-lead);
+  font-weight: 500;
+  letter-spacing: -.025em;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.olist-chart__kpi small {
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-micro);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.olist-chart__kpi .olist-chart__delta-val {
+  margin-top: .4rem;
+  font-family: var(--font-metadata);
+  font-size: var(--font-size-supporting);
+  font-weight: 600;
+  color: var(--olist-comparison);
+}
+.olist-chart__kpi .olist-chart__delta-val.is-negative {
+  color: var(--chart-negative);
+}
+
+/* FT / NYT Zero-Clutter SVG */
+.olist-chart svg { display: block; width: 100%; overflow: visible; margin-top: .75rem; }
 .olist-chart svg text { fill: var(--ink-muted); font-family: var(--font-metadata); font-size: var(--font-size-micro); pointer-events: none; }
-.olist-chart__legend { display: flex; flex-wrap: wrap; align-items: baseline; gap: .75rem 1.5rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); }
-.olist-series::before { content: ''; display: inline-block; width: 1rem; height: 2.5px; margin: 0 .5rem .22em 0; border-radius: 999px; background: var(--olist-primary); }
-.olist-series--second::before { background: none; border-top: 2.5px dashed var(--olist-comparison); height: 0; border-radius: 0; }
-.olist-series--after::before { background: var(--chart-secondary); height: 8px; border-radius: 2px; vertical-align: middle; }
-.olist-chart__grid { stroke: color-mix(in oklab, var(--ink) 10%, transparent); stroke-width: 1; }
-.olist-chart__guide { stroke: var(--accent); stroke-width: 1.25; stroke-dasharray: 3 4; opacity: .55; pointer-events: none; transition: x1 240ms var(--ease-editorial), x2 240ms var(--ease-editorial); }
+.olist-chart__window rect { fill: color-mix(in oklab, var(--chart-negative) 8%, transparent); }
+.olist-chart__window text { fill: var(--chart-negative); letter-spacing: .07em; }
+.olist-chart__grid { stroke: color-mix(in oklab, var(--ink) 8%, transparent); stroke-width: 1; }
+.olist-chart__guide { stroke: color-mix(in oklab, var(--ink) 32%, transparent); stroke-width: 1.25; stroke-dasharray: 3 3; pointer-events: none; transition: x1 220ms var(--ease-editorial), x2 220ms var(--ease-editorial); }
 .olist-chart__series { color: var(--olist-primary); pointer-events: none; }
 .olist-chart__series--second { color: var(--olist-comparison); }
-.olist-chart__series--second .olist-chart__line { stroke-dasharray: 7 5; }
-.olist-chart__area { pointer-events: none; }
-.olist-chart__line { fill: none; stroke: currentColor; stroke-width: 2.75; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; pointer-events: none; }
-.olist-chart__point { fill: currentColor; stroke: var(--paper-raised); stroke-width: 2.25; pointer-events: none; }
-.olist-chart__halo { fill: transparent; pointer-events: none; transition: fill 200ms var(--ease-editorial); }
-.olist-chart__halo[data-selected='true'] { fill: color-mix(in oklab, currentColor 22%, transparent); }
+.olist-chart__series--second .olist-chart__line { stroke-width: 2.5; }
+.olist-chart__line { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.olist-chart__series:not(.olist-chart__series--second) .olist-chart__line { opacity: .65; stroke-dasharray: 5 4; }
+.olist-chart__kpis--single ~ svg .olist-chart__series .olist-chart__line { opacity: 1; stroke-dasharray: none; stroke-width: 2.5; }
+.olist-chart__focus { fill: currentColor; stroke: var(--paper-raised); stroke-width: 2.25; pointer-events: none; transition: cx 220ms var(--ease-editorial), cy 220ms var(--ease-editorial); }
+.olist-chart__end-label { fill: currentColor !important; font-weight: 600; }
+.olist-chart__month-text[data-selected='true'] { fill: var(--ink) !important; font-weight: 600; }
 .olist-chart__column-hit { fill: transparent; cursor: crosshair; }
+
+/* Minimal inline month ticks & slider */
 .olist-chart__ticks {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 0.2rem;
-  margin-top: 0.85rem;
-  padding: 0.25rem;
+  gap: .15rem;
+  margin-top: .75rem;
+  padding: .2rem;
   border: 1px solid var(--hairline);
-  border-radius: 9px;
+  border-radius: 8px;
   background: color-mix(in oklab, var(--ink) 3%, var(--paper));
 }
 .olist-chart__tick {
-  min-height: 2.15rem;
-  padding: 0.25rem 0.1rem;
+  min-height: 2rem;
+  padding: .2rem .1rem;
   border: 0;
   border-radius: 6px;
   background: transparent;
@@ -68,18 +172,18 @@
 }
 .olist-chart__tick:hover { color: var(--ink); }
 .olist-chart__tick[aria-pressed='true'] { color: var(--ink); font-weight: 600; }
-.olist-chart__explore { display: flex; align-items: center; gap: 1rem; margin-top: .5rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); }
+.olist-chart__explore { display: flex; align-items: center; gap: .85rem; margin-top: .5rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
 .olist-chart__explore input { flex: 1; min-width: 0; }
 .olist-report .olist-chart__readout {
   font-family: var(--font-metadata);
   font-size: var(--font-size-micro);
-  min-height: 2.75em;
-  padding: 0.7rem 0.9rem;
+  min-height: 2.4em;
+  padding: .65rem .9rem;
   border-left: 2px solid var(--olist-primary);
   border-radius: 0 6px 6px 0;
-  background: color-mix(in oklab, var(--olist-primary) 6%, var(--paper));
+  background: var(--paper);
   color: var(--ink);
-  line-height: 1.55;
+  line-height: 1.5;
   margin-block: .65rem;
   font-variant-numeric: tabular-nums;
 }
@@ -92,21 +196,22 @@
 .olist-report thead th { color: var(--ink-muted); font-weight: 400; }
 .olist-report tbody th { font-weight: 500; }
 .olist-data-details summary { cursor: pointer; padding: .8rem 0; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--accent-strong); min-height: 44px; }
+
 .olist-candidate-controls {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: .3rem;
-  margin-block: 2rem 1.25rem;
-  padding: 0.3rem;
+  gap: .25rem;
+  margin-block: 1.75rem 1.15rem;
+  padding: .25rem;
   border: 1px solid var(--hairline);
-  border-radius: 10px;
+  border-radius: 9px;
   background: color-mix(in oklab, var(--ink) 3%, var(--paper));
 }
 .olist-candidate-controls button {
-  min-height: 40px;
+  min-height: 38px;
   border: 0;
-  border-radius: 7px;
-  padding: .5rem .8rem;
+  border-radius: 6px;
+  padding: .45rem .75rem;
   background: transparent;
   color: var(--ink-muted);
   font-family: var(--font-metadata);
@@ -117,28 +222,37 @@
 }
 .olist-candidate-controls button[aria-pressed='true'] { color: var(--ink); font-weight: 600; }
 .olist-candidate-controls button:hover { color: var(--ink); }
-.olist-candidate-panel__inner { padding-top: 0.5rem; }
-.olist-window { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid var(--hairline); padding-top: 1rem; }
+.olist-candidate-panel__inner { padding-top: .35rem; }
+.olist-window { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; margin-bottom: 1rem; }
+.olist-window > div { padding: 1rem 1.1rem; border: 1px solid var(--hairline); border-radius: 10px; background: var(--paper-raised); }
 .olist-window span { display: block; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
-.olist-window strong { display: block; font-family: var(--font-numeric); font-size: var(--font-size-section-title); font-weight: 400; }
-.olist-window small { font-family: var(--font-metadata); font-size: var(--font-size-micro); }
-.olist-timing-row { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; align-items: center; padding-block: 1rem; border-top: 1px solid var(--hairline); }
+.olist-window strong { display: block; margin-top: .35rem; font-family: var(--font-numeric); font-size: var(--font-size-section-title); font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums lining-nums; }
+.olist-window small { display: block; margin-top: .35rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
+
+/* Review timing 100% stacked editorial bars */
+.olist-chart__legend { display: flex; flex-wrap: wrap; align-items: baseline; gap: .75rem 1.25rem; margin-top: 1rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
+.olist-series::before { content: ''; display: inline-block; width: .75rem; height: .75rem; margin: 0 .45rem -.12em 0; border-radius: 3px; background: var(--chart-negative); }
+.olist-series--after::before { background: color-mix(in oklab, var(--ink) 12%, var(--paper)); border: 1px solid var(--hairline); }
+.olist-timing-list { margin-top: 1rem; }
+.olist-timing-row { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; align-items: center; padding-block: .95rem; border-top: 1px solid var(--hairline); }
 .olist-timing-row:first-child { border-top: 0; }
-.olist-timing-row--peak .olist-timing-row__label { color: var(--accent-strong); font-weight: 600; }
+.olist-timing-row--peak .olist-timing-row__label { color: var(--chart-negative); font-weight: 600; }
 .olist-timing-row > span { font-family: var(--font-metadata); font-size: var(--font-size-micro); }
-.olist-timing-track { height: 2.65rem; display: flex; gap: 3px; padding: 3px; border-radius: 8px; overflow: hidden; background: color-mix(in oklab, var(--ink) 5%, var(--paper)); }
-.olist-timing-fill { display: flex; align-items: center; justify-content: flex-end; padding-inline: 0.65rem; width: var(--timing-width); height: 100%; border-radius: 5px; background: linear-gradient(90deg var(--in-oklab), var(--olist-primary), var(--accent-strong)); color: var(--paper); font-family: var(--font-metadata); font-size: var(--font-size-micro); transform-origin: left; }
-.olist-timing-fill b { font-weight: 600; }
-.olist-timing-after { display: flex; align-items: center; justify-content: center; width: var(--after-width); height: 100%; border-radius: 5px; background: color-mix(in oklab, var(--chart-secondary) 32%, var(--paper-raised)); color: var(--ink); font-family: var(--font-metadata); font-size: var(--font-size-micro); }
-.olist-timing-after em { font-style: normal; }
-.olist-timing-row small { display: block; margin-top: .5rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
-.olist-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-block: 2rem; }
-.olist-actions > div { border-top: 1px solid var(--hairline); padding-block: 1.5rem; }
-.olist-actions h3 { font-family: var(--font-display); font-size: var(--font-size-statement); font-weight: 400; margin: .6rem 0; }
+.olist-timing-track { height: 2.35rem; display: flex; gap: 3px; padding: 3px; border-radius: 8px; overflow: hidden; background: var(--paper); border: 1px solid var(--hairline); }
+.olist-timing-fill { display: flex; align-items: center; justify-content: flex-end; padding-inline: .6rem; width: var(--timing-width); height: 100%; border-radius: 5px; background: color-mix(in oklab, var(--olist-primary) 82%, var(--paper)); color: var(--paper); font-family: var(--font-metadata); font-size: var(--font-size-micro); transform-origin: left; }
+.olist-timing-row--peak .olist-timing-fill { background: var(--chart-negative); }
+.olist-timing-fill b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.olist-timing-after { display: flex; align-items: center; justify-content: center; width: var(--after-width); height: 100%; border-radius: 5px; background: color-mix(in oklab, var(--ink) 8%, var(--paper)); color: var(--ink-muted); font-family: var(--font-metadata); font-size: var(--font-size-micro); }
+.olist-timing-after em { font-style: normal; font-variant-numeric: tabular-nums; }
+.olist-timing-row small { display: block; margin-top: .45rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
+
+.olist-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-block: 2rem; }
+.olist-actions > div { padding: 1.25rem; border: 1px solid var(--hairline); border-radius: 10px; background: var(--paper-raised); }
+.olist-actions h3 { font-family: var(--font-display); font-size: var(--font-size-statement); font-weight: 400; margin: .55rem 0; }
 .olist-actions p { font-size: var(--font-size-secondary-reading); line-height: 1.6; }
+
 .olist-report [data-olist-reveal] { transition: opacity var(--motion-cinematic) var(--ease-cinematic), transform var(--motion-cinematic) var(--ease-cinematic); }
-.olist-report [data-reveal-state='pending'] { opacity: 0; transform: translateY(28px) scale(0.985); }
-/* Reveal the complete stroke without dash lengths that change under SVG scaling. */
+.olist-report [data-reveal-state='pending'] { opacity: 0; transform: translateY(24px); }
 .olist-report [data-reveal-state='pending'] .olist-chart__line { clip-path: inset(0 100% 0 0); }
 .olist-report [data-reveal-state='entered'] .olist-chart__line { clip-path: inset(0 0 0 0); transition: clip-path var(--motion-signature) var(--ease-cinematic); }
 .olist-report [data-reveal-state='pending'] .olist-timing-fill { transform: scaleX(0); }
@@ -147,24 +261,24 @@
   .olist-report [data-reveal-state='entered'] .olist-timing-row .olist-timing-fill { transition-delay: calc((sibling-index() - 1) * 140ms); }
 }
 @container (max-width: 34rem) {
+  .olist-chart__kpis { grid-template-columns: 1fr; }
   .olist-window { grid-template-columns: 1fr; }
   .olist-timing-row { grid-template-columns: 1fr; gap: .5rem; }
 }
 .olist-report :focus-visible { outline: 2px solid var(--olist-primary); outline-offset: 4px; }
 @media (max-width: 760px) {
- .olist-report .report-hero { min-height: auto; }
- .olist-kpis { grid-template-columns: 1fr; }
- .olist-kpis > div + div { border-left: 0; border-top: 1px solid var(--hairline); padding-left: 0; }
- .olist-actions { grid-template-columns: 1fr; }
- .olist-chart { margin-inline: 0; }
- .olist-chart svg text { font-size: calc(var(--font-size-micro) * 2); }
- .olist-report .report-hero::after { display: none; }
- .olist-report .report-title { max-width: 13ch; }
- .olist-timing-row { grid-template-columns: 1fr; gap: .5rem; }
+  .olist-report .report-hero { min-height: auto; }
+  .olist-kpis { grid-template-columns: 1fr; }
+  .olist-actions { grid-template-columns: 1fr; }
+  .olist-chart { margin-inline: 0; }
+  .olist-chart svg text { font-size: calc(var(--font-size-micro) * 1.12); }
+  .olist-report .report-hero::after { display: none; }
+  .olist-report .report-title { max-width: 13ch; }
+  .olist-timing-row { grid-template-columns: 1fr; gap: .5rem; }
 }
 @media (prefers-reduced-motion: reduce) {
- .olist-report [data-olist-reveal], .olist-report .olist-chart__line, .olist-report .olist-timing-fill, .olist-candidate-controls button { transition: none !important; }
- .olist-report [data-reveal-state='pending'] { opacity: 1; transform: none; }
- .olist-report .olist-chart__line { clip-path: none !important; }
- .olist-report [data-reveal-state='pending'] .olist-timing-fill { transform: none; }
+  .olist-report [data-olist-reveal], .olist-report .olist-chart__line, .olist-report .olist-timing-fill, .olist-candidate-controls button { transition: none !important; }
+  .olist-report [data-reveal-state='pending'] { opacity: 1; transform: none; }
+  .olist-report .olist-chart__line { clip-path: none !important; }
+  .olist-report [data-reveal-state='pending'] .olist-timing-fill { transform: none; }
 }

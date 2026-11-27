@@ -14,16 +14,16 @@
   --accent-soft: rgb(73 48 79 / 12%);
   --focus-ring: #49304f;
 
-  /* Chart roles: category colors are distinct; direction colors encode signed changes. */
-  --chart-primary: var(--accent);
-  --chart-secondary: #466b68;
-  --chart-tertiary: #617087;
+  /* Chart roles: FT / Monocle luminous editorial palette (distinct categories + crisp signal red). */
+  --chart-primary: #1d4ed8;
+  --chart-secondary: #059669;
+  --chart-tertiary: #ea580c;
   --chart-positive: var(--chart-secondary);
-  --chart-negative: #92566d;
+  --chart-negative: #be123c;
 
   --font-display: 'Cormorant Garamond Variable', Georgia, serif;
   --font-reading: Baskerville, 'Libre Baskerville', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  --font-numeric: Didot, 'Bodoni 72', 'Bodoni Moda', 'Cormorant Garamond Variable', Georgia, serif;
+  --font-numeric: 'DM Sans Variable', 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-metadata: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-size-micro: 0.875rem;
   --font-size-supporting: 1rem;
@@ -104,7 +104,9 @@
   --accent-soft: rgb(186 160 197 / 16%);
   --focus-ring: #d6bce0;
 
-  --chart-secondary: #91b8b0;
-  --chart-tertiary: #a3b2cc;
-  --chart-negative: #d49aad;
+  --chart-primary: #60a5fa;
+  --chart-secondary: #34d399;
+  --chart-tertiary: #fb923c;
+  --chart-positive: var(--chart-secondary);
+  --chart-negative: #fb7185;
 }

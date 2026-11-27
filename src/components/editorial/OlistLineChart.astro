@@ -1,59 +1,139 @@
 ---
-interface Series { label: string; values: number[]; counts: number[] }
-interface Props { id: string; title: string; series: Series[]; minimum?: number; maximum?: number; note: string }
+interface Series {
+  label: string;
+  values: number[];
+  counts: number[];
+}
+interface Props {
+  id: string;
+  title: string;
+  series: Series[];
+  minimum?: number;
+  maximum?: number;
+  note: string;
+}
+
 const { id, title, series, minimum = 0, maximum = 100, note } = Astro.props;
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
-const x = (index: number) => 52 + index * 88;
-const y = (value: number) => 214 - ((value - minimum) / (maximum - minimum)) * 180;
-const ticks = minimum === 75 ? [75, 80, 85, 90, 95, 100] : maximum === 25 ? [0, 5, 10, 15, 20, 25] : [0, 25, 50, 75, 100];
+const x = (index: number) => 44 + index * 76;
+const y = (value: number) => 196 - ((value - minimum) / (maximum - minimum)) * 168;
+const ticks = minimum === 75 ? [75, 85, 95, 100] : maximum === 25 ? [0, 10, 20, 25] : [0, 50, 100];
 const valueLabel = (value: number) => `${value.toFixed(2)}%`;
+const isComparison = series.length === 2;
+const initialMonth = 0;
+
 const readout = (index: number) =>
   `${months[index]} · ${series.map((s) => `${s.label}: ${valueLabel(s.values[index])} (n=${s.counts[index].toLocaleString('en-US')})`).join(' · ')}`;
-const areaPath = (s: Series) =>
-  `${s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')} L${x(months.length - 1)},214 L${x(0)},214 Z`;
+
+const records = months.map((month, i) => {
+  const diff = isComparison ? series[1].values[i] - series[0].values[i] : null;
+  return {
+    month,
+    x: x(i),
+    readout: readout(i),
+    deltaText: diff === null ? '' : `${diff >= 0 ? '+' : '−'}${Math.abs(diff).toFixed(2)} pp YoY`,
+    isNegativeDelta: diff !== null && (maximum === 25 ? diff > 0 : diff < 0),
+    series: series.map((s) => ({
+      val: valueLabel(s.values[i]),
+      n: `n=${s.counts[i].toLocaleString('en-US')}`,
+      y: y(s.values[i]),
+    })),
+  };
+});
+
+// Direct end-label anti-collision offset when 2 series finish close together
+const endOffsets = series.map((_, si) => {
+  if (!isComparison) return 4;
+  const dy = Math.abs(y(series[0].values[7]) - y(series[1].values[7]));
+  if (dy < 16) {
+    const isUpper = y(series[si].values[7]) <= y(series[1 - si].values[7]);
+    return isUpper ? -6 : 12;
+  }
+  return 4;
+});
 ---
-<figure class="olist-chart" data-olist-reveal data-line-chart data-chart-rows={JSON.stringify(months.map((_, i) => readout(i)))}>
-  <figcaption>
-    <span class="olist-eyebrow">PURCHASE COHORTS / JAN–AUG</span>
-    <h3>{title}</h3>
+<figure
+  class="olist-chart"
+  data-olist-reveal
+  data-line-chart
+  data-chart-records={JSON.stringify(records)}
+  data-chart-rows={JSON.stringify(months.map((_, i) => readout(i)))}
+>
+  <figcaption class="olist-chart__header">
+    <div>
+      <span class="olist-eyebrow">PURCHASE COHORTS / JAN–AUG</span>
+      <h3>{title}</h3>
+    </div>
+    <div class="olist-chart__month-pill data-copy" data-chart-month-badge>{months[initialMonth]}</div>
   </figcaption>
-  <div class="olist-chart__legend">
-    {series.map((s, i) => <span class:list={['olist-series', { 'olist-series--second': i === 1 }]}>{s.label}</span>)}
+
+  {/* DeepMind / Stripe live KPI callout strip */}
+  <div class:list={['olist-chart__kpis', { 'olist-chart__kpis--single': !isComparison }]}>
+    {series.map((s, si) => (
+      <div class:list={['olist-chart__kpi', { 'olist-chart__kpi--second': si === 1 }]}>
+        <span class="olist-chart__kpi-label">
+          <i aria-hidden="true"></i>
+          {s.label}
+        </span>
+        <div class="olist-chart__kpi-nums">
+          <strong data-chart-series-val={si}>{valueLabel(s.values[initialMonth])}</strong>
+          <small data-chart-series-n={si}>n={s.counts[initialMonth].toLocaleString('en-US')}</small>
+        </div>
+      </div>
+    ))}
+    {isComparison && (
+      <div class="olist-chart__kpi olist-chart__kpi--delta">
+        <span class="olist-chart__kpi-label">2018 vs 2017</span>
+        <strong
+          class:list={['olist-chart__delta-val', { 'is-negative': records[initialMonth].isNegativeDelta }]}
+          data-chart-delta
+        >
+          {records[initialMonth].deltaText}
+        </strong>
+      </div>
+    )}
   </div>
-  <svg viewBox="0 0 720 256" role="img" aria-labelledby={`${id}-title ${id}-desc`}>
+
+  {/* FT / NYT Zero-Clutter Continuous Trend SVG */}
+  <svg viewBox="0 0 720 228" role="img" aria-labelledby={`${id}-title ${id}-desc`} data-chart-svg>
     <title id={`${id}-title`}>{title}</title>
     <desc id={`${id}-desc`}>{note} Exact values are available in the data table below.</desc>
-    <defs>
-      <linearGradient id={`${id}-area-0`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--olist-primary)" stop-opacity="0.16" />
-        <stop offset="100%" stop-color="var(--olist-primary)" stop-opacity="0" />
-      </linearGradient>
-      <linearGradient id={`${id}-area-1`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--olist-comparison)" stop-opacity="0.14" />
-        <stop offset="100%" stop-color="var(--olist-comparison)" stop-opacity="0" />
-      </linearGradient>
-    </defs>
+
+    {isComparison && (
+      <g class="olist-chart__window" aria-hidden="true">
+        <rect x={x(1) - 24} y="22" width={x(2) - x(1) + 48} height="174" rx="6" />
+        <text x={(x(1) + x(2)) / 2} y="16" text-anchor="middle">FEB–MAR DIP</text>
+      </g>
+    )}
 
     {ticks.map((tick) => (
       <g>
-        <line x1="52" x2="686" y1={y(tick)} y2={y(tick)} class="olist-chart__grid" />
-        <text x="40" y={y(tick) + 4} text-anchor="end">{tick}%</text>
+        <line x1="44" x2={x(7) + 8} y1={y(tick)} y2={y(tick)} class="olist-chart__grid" />
+        <text x="36" y={y(tick) + 4} text-anchor="end">{tick}%</text>
       </g>
     ))}
-    {months.map((month, i) => <text x={x(i)} y="244" text-anchor="middle">{month}</text>)}
 
-    <line class="olist-chart__guide" x1={x(0)} x2={x(0)} y1="24" y2="218" data-chart-guide />
+    {months.map((month, i) => (
+      <text x={x(i)} y="218" text-anchor="middle" class="olist-chart__month-text" data-chart-x-label={i} data-selected={i === initialMonth ? 'true' : 'false'}>
+        {month}
+      </text>
+    ))}
+
+    <line class="olist-chart__guide" x1={x(initialMonth)} x2={x(initialMonth)} y1="22" y2="198" data-chart-guide />
 
     {series.map((s, si) => (
       <g class:list={['olist-chart__series', { 'olist-chart__series--second': si === 1 }]}>
-        <path class="olist-chart__area" d={areaPath(s)} fill={`url(#${id}-area-${si})`} aria-hidden="true" />
         <path class="olist-chart__line" d={s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')} />
-        {s.values.map((v, i) => (
-          <g class="olist-chart__node-wrap">
-            <circle class="olist-chart__halo" cx={x(i)} cy={y(v)} r="11" data-chart-halo={i} />
-            <circle class="olist-chart__point" cx={x(i)} cy={y(v)} r="4" />
-          </g>
-        ))}
+        <circle
+          class="olist-chart__focus"
+          cx={x(initialMonth)}
+          cy={y(s.values[initialMonth])}
+          r="5"
+          data-chart-focus={si}
+        />
+        <text class="olist-chart__end-label" x={x(7) + 12} y={y(s.values[7]) + endOffsets[si]}>
+          {s.label} · {s.values[7].toFixed(1)}%
+        </text>
       </g>
     ))}
 
@@ -62,10 +142,10 @@ const areaPath = (s: Series) =>
       {months.map((_, i) => (
         <rect
           class="olist-chart__column-hit"
-          x={x(i) - 44}
-          y="20"
-          width="88"
-          height="204"
+          x={x(i) - 38}
+          y="18"
+          width="76"
+          height="188"
           data-chart-month={i}
         />
       ))}
@@ -74,17 +154,20 @@ const areaPath = (s: Series) =>
 
   <div class="olist-chart__ticks anchor-tabs" role="group" aria-label="Jump to purchase month">
     {months.map((month, i) => (
-      <button type="button" class="olist-chart__tick" data-chart-tick={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+      <button type="button" class="olist-chart__tick" data-chart-tick={i} aria-pressed={i === initialMonth ? 'true' : 'false'}>
         {month}
       </button>
     ))}
   </div>
+
   <div class="olist-chart__explore">
-    <label for={`${id}-month`}>Explore month</label>
-    <input id={`${id}-month`} class="editorial-slider" type="range" min="0" max="7" value="0" step="1" aria-valuetext={months[0]} data-chart-range />
+    <label for={`${id}-month`}>Month</label>
+    <input id={`${id}-month`} class="editorial-slider" type="range" min="0" max="7" value={initialMonth} step="1" aria-valuetext={months[initialMonth]} data-chart-range />
   </div>
-  <p class="olist-chart__readout" aria-live="polite" data-chart-readout>{readout(0)}</p>
+
+  <p class="olist-chart__readout" aria-live="polite" data-chart-readout>{readout(initialMonth)}</p>
   <p class="olist-chart__note">{note}</p>
+
   <details class="olist-data-details">
     <summary>Exact values and sample sizes</summary>
     <div class="olist-table-wrap scroll-fade-x" tabindex="0" role="region" aria-labelledby={`${id}-table-caption`}>
