@@ -335,16 +335,10 @@
   position: relative;
   overflow: hidden;
   margin-block: clamp(3rem, 6vw, 6rem);
-  padding: clamp(1.35rem, 3vw, 2.5rem);
+  padding: clamp(1.35rem, 3vw, 2.25rem);
   border: 1px solid var(--hairline);
-  border-top: 2px solid var(--accent);
-  border-radius: 10px;
-  background:
-    radial-gradient(ellipse at 95% 0%, color-mix(in oklab, var(--accent) 7%, transparent), transparent 55%),
-    linear-gradient(180deg var(--in-oklab), var(--paper-raised), var(--paper));
-  box-shadow:
-    0 1px 2px rgb(0 0 0 / 4%),
-    0 24px 54px -38px color-mix(in oklab, var(--ink) 36%, transparent);
+  border-radius: 12px;
+  background: var(--paper-raised);
   opacity: 1;
   transform: translateY(0);
   transition:

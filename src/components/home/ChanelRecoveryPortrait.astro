@@ -1,127 +1,330 @@
 ---
 import { LUXURY_SLOWDOWN_CHANEL as rows } from '../../data/luxury';
-const measures=[{key:'revenue',label:'Revenue',color:'primary'},{key:'operatingProfit',label:'Operating profit',color:'secondary'},{key:'freeCashFlow',label:'Free cash flow',color:'tertiary'}] as const;
-const x=(i:number)=>48+i*208;
-const y=(value:number)=>246-value*1.8;
-const series=measures.map(m=>({...m,values:rows.map(r=>r[m.key]/rows[0][m.key]*100),actual:rows.map(r=>r[m.key])}));
-const stages=[{year:'2023',label:'Baseline',title:'Before the slowdown.'},{year:'2024',label:'Decline',title:'All three measures fell.'},{year:'2025',label:'Return',title:'A partial recovery.'}];
+const measures = [
+  { key: 'revenue', label: 'Revenue', color: 'primary' },
+  { key: 'operatingProfit', label: 'Operating profit', color: 'secondary' },
+  { key: 'freeCashFlow', label: 'Free cash flow', color: 'tertiary' },
+] as const;
+
+const series = measures.map((m) => ({
+  ...m,
+  values: rows.map((r) => (r[m.key] / rows[0][m.key]) * 100),
+  actual: rows.map((r) => r[m.key]),
+}));
+const stages = [
+  { year: '2023', label: 'Baseline', title: 'Before the slowdown.' },
+  { year: '2024', label: 'Decline', title: 'All three measures fell.' },
+  { year: '2025', label: 'Return', title: 'A partial recovery.' },
+];
+
+// Horizontal Recovery Gap Track coordinates (domain 40..105 -> x 16..444; right-aligned numeric readout at 536)
+const xStart = 16;
+const xEnd = 444;
+const xPos = (v: number) => xStart + ((Math.max(40, Math.min(105, v)) - 40) / 65) * (xEnd - xStart);
+const x100 = xPos(100);
+const rowY = (i: number) => 46 + i * 60;
 ---
 <figure class="recovery-portrait chanel-experience" data-recovery-portrait data-home-motion data-year="2" data-active-measure="all">
   <figcaption class="data-copy">CHANEL / THE RECOVERY GAP <span>FY2023 = 100</span></figcaption>
   <div class="chanel-experience__moment">
-    <div><p class="chanel-experience__phase" data-portrait-phase>2025 / RETURN</p><h3 data-portrait-title>A partial recovery.</h3></div>
-    <div class="chanel-experience__reading"><span class="chanel-experience__number"><b data-portrait-index>97.6</b><i>%</i></span><span data-portrait-measure>Revenue / FY2023 baseline</span><small data-portrait-actual>$19,269.1m · FY2025</small></div>
+    <div>
+      <p class="chanel-experience__phase" data-portrait-phase>2025 / RETURN</p>
+      <h3 data-portrait-title>A partial recovery.</h3>
+    </div>
+    <div class="chanel-experience__reading">
+      <span class="chanel-experience__number"><b data-portrait-index>97.6</b><i>%</i></span>
+      <span data-portrait-measure>Revenue / FY2023 baseline</span>
+      <small data-portrait-actual>$19,269.1m · FY2025</small>
+    </div>
   </div>
-  <p class="chanel-experience__insight" data-portrait-explanation aria-live="polite">Revenue nearly returned to its earlier level. Profit and cash flow remained further behind.</p>
+  <p class="chanel-experience__insight" data-portrait-explanation aria-live="polite">
+    Revenue nearly returned to its earlier level. Profit and cash flow remained further behind.
+  </p>
+
   <div class="chanel-experience__plot">
-    <svg viewBox="0 0 540 285" role="img" aria-labelledby="recovery-portrait-title recovery-portrait-desc" data-portrait-canvas>
+    <svg viewBox="0 0 540 226" role="img" aria-labelledby="recovery-portrait-title recovery-portrait-desc" data-portrait-canvas>
       <title id="recovery-portrait-title">Revenue recovered further than profit or cash flow</title>
-      <desc id="recovery-portrait-desc">Reported USD indices, FY2023 = 100. Three annual observations for revenue, operating profit and free cash flow. In FY2025 the indices were 97.6, 73.5 and 70.5. Select a year or measure to inspect its exact value. Connecting lines do not represent observations between years.</desc>
-      <defs>
-        <clipPath id="portrait-time-clip"><rect x="0" y="0" width="540" height="285" class="chanel-experience__mask" data-portrait-mask /></clipPath>
-        <linearGradient id="portrait-gap-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="var(--chart-primary)" stop-opacity="0.16" />
-          <stop offset="100%" stop-color="var(--chart-tertiary)" stop-opacity="0.03" />
-        </linearGradient>
-      </defs>
-      {[0,50,100].map(v=><g class="recovery-portrait__grid"><line x1="48" x2="464" y1={y(v)} y2={y(v)} /><text x="34" y={y(v)+4} text-anchor="end">{v}</text></g>)}
-      <g clip-path="url(#portrait-time-clip)" aria-hidden="true">
-        <polygon
-          class="chanel-experience__gap-band"
-          points={`${x(0)},${y(series[0].values[0])} ${x(1)},${y(series[0].values[1])} ${x(2)},${y(series[0].values[2])} ${x(2)},${y(series[2].values[2])} ${x(1)},${y(series[2].values[1])} ${x(0)},${y(series[2].values[0])}`}
-          fill="url(#portrait-gap-grad)"
-        />
-      </g>
-      <line class="chanel-experience__cursor" x1={x(2)} x2={x(2)} y1="42" y2="246" data-portrait-guide />
-      {series.map((s,i)=><g class="recovery-portrait__series" data-portrait-series={i} style={`--series-color:var(--chart-${s.color})`}>
-        <g clip-path="url(#portrait-time-clip)">
-          <path class="chanel-experience__line" d={s.values.map((v,j)=>`${j?'L':'M'}${x(j)},${y(v)}`).join(' ')} />
-          {s.values.map((v,j)=><circle class="chanel-experience__dot" cx={x(j)} cy={y(v)} r="3" />)}
+      <desc id="recovery-portrait-desc">
+        Reported USD indices, FY2023 = 100. Three annual observations for revenue, operating profit and free cash flow shown as horizontal recovery tracks. In FY2025 the indices were 97.6, 73.5 and 70.5. Select a year or measure to inspect its exact value.
+      </desc>
+
+      {/* Subtle scale guides & FY23 = 100 anchor */}
+      {[50, 75, 100].map((v) => (
+        <g class="recovery-portrait__grid">
+          <line
+            x1={xPos(v)}
+            x2={xPos(v)}
+            y1="14"
+            y2="196"
+            class={v === 100 ? 'recovery-portrait__baseline' : undefined}
+          />
+          <text x={xPos(v)} y="216" text-anchor="middle">
+            {v === 100 ? '100 · FY23' : v}
+          </text>
         </g>
-        <circle class="chanel-experience__focus" cx={x(2)} cy={y(s.values[2])} r="6" data-portrait-focus={i} />
-        <text class="recovery-portrait__value" x="480" y={y(s.values[2])+(i===1?-8:i===2?13:5)} data-portrait-end={i}>{s.values[2].toFixed(1)}</text>
-        <path class="chanel-experience__line-hit" d={s.values.map((v,j)=>`${j?'L':'M'}${x(j)},${y(v)}`).join(' ')} data-portrait-line-hit={i} clip-path="url(#portrait-time-clip)" aria-hidden="true" />
-      </g>)}
+      ))}
+
+      {/* Three Horizontal Recovery Tracks */}
+      {series.map((s, i) => {
+        const cy = rowY(i);
+        const x24 = xPos(s.values[1]);
+        const x25 = xPos(s.values[2]);
+        const gapWidth = Math.max(0, x100 - x25);
+        const isDeep = s.values[2] < 90;
+        return (
+          <g class="recovery-portrait__series" data-portrait-series={i} style={`--series-color:var(--chart-${s.color})`}>
+            <text class="recovery-portrait__track-name" x={xStart} y={cy - 14}>{s.label}</text>
+            {/* Subtle full rail */}
+            <rect class="recovery-portrait__rail" x={xStart} y={cy - 4} width={xEnd - xStart} height="8" rx="4" />
+            {/* Filled progress bar from 40 to current observation */}
+            <rect
+              class="recovery-portrait__fill"
+              data-portrait-fill={i}
+              x={xStart}
+              y={cy - 4}
+              width={Math.max(4, x25 - xStart)}
+              height="8"
+              rx="4"
+            />
+            {/* Unrecovered gap segment to FY23=100 */}
+            <rect
+              class="recovery-portrait__gap"
+              data-portrait-gap={i}
+              data-deep={isDeep ? 'true' : 'false'}
+              x={x25}
+              y={cy - 5}
+              width={gapWidth}
+              height="10"
+              rx="3"
+            />
+            {/* FY24 trough reference dot */}
+            <circle class="chanel-experience__dot" data-portrait-trough={i} cx={x24} cy={cy} r="4" />
+            {/* Active year focus marker */}
+            <circle class="chanel-experience__focus" cx={x25} cy={cy} r="6.5" data-portrait-focus={i} />
+            {/* Crisp right-aligned index value */}
+            <text class="recovery-portrait__value" x="536" y={cy + 6} text-anchor="end" data-portrait-end={i}>
+              {s.values[2].toFixed(1)}
+            </text>
+            {/* Full-row click/hover hit target */}
+            <rect class="chanel-experience__row-hit" x="0" y={cy - 28} width="540" height="54" fill="transparent" data-portrait-line-hit={i} aria-hidden="true" />
+          </g>
+        );
+      })}
     </svg>
   </div>
+
   <div class="chanel-experience__timeline anchor-tabs anchor-tabs--line" aria-label="Explore a year">
-    {stages.map((stage,i)=><button type="button" data-portrait-year={i} aria-label={`${stage.year} ${stage.label}`} aria-pressed={i===2}><span>{stage.year}</span><small>{stage.label}</small></button>)}
+    {stages.map((stage, i) => (
+      <button type="button" data-portrait-year={i} aria-label={`${stage.year} ${stage.label}`} aria-pressed={i === 2}>
+        <span>{stage.year}</span>
+        <small>{stage.label}</small>
+      </button>
+    ))}
     <input class="chanel-experience__scrubber editorial-slider" type="range" min="0" max="2" value="2" step="1" aria-label="Chanel observation year" aria-valuetext="FY2025 · Return" data-portrait-range />
   </div>
-  <div class="recovery-portrait__legend anchor-tabs anchor-tabs--line" aria-label="Select a measure">
-    {series.map((s,i)=><button type="button" data-portrait-select={i} aria-pressed="false" style={`--series-color:var(--chart-${s.color})`}><i aria-hidden="true"></i>{s.label}</button>)}
+
+  <div class="recovery-portrait__legend" aria-label="Select a measure">
+    {series.map((s, i) => {
+      const delta = s.values[2] - 100;
+      return (
+        <button
+          type="button"
+          class="recovery-portrait__card"
+          data-portrait-select={i}
+          aria-label={s.label}
+          aria-pressed="false"
+          style={`--series-color:var(--chart-${s.color})`}
+        >
+          <span class="recovery-portrait__card-head">
+            <i aria-hidden="true"></i>
+            <span>{s.label}</span>
+          </span>
+          <strong data-portrait-card-delta={i}>{delta.toFixed(1)}%</strong>
+        </button>
+      );
+    })}
   </div>
-  <div class="chanel-experience__footer"><button class="visual-replay" type="button" data-portrait-replay>Play the recovery ↺</button><a href="/work/luxury-handbag-pricing-architecture/#performance">Values & sources ↗</a></div>
+
+  <div class="chanel-experience__footer">
+    <button class="visual-replay" type="button" data-portrait-replay>Play the recovery ↺</button>
+    <a href="/work/luxury-handbag-pricing-architecture/#performance">Values & sources ↗</a>
+  </div>
   <p class="visual-note">Reported USD · Chanel group · Three annual observations.</p>
   <script is:inline type="application/json" data-portrait-values set:html={JSON.stringify(series)} />
 </figure>
+
 <script>
-  const stageTitles=['Before the slowdown.','All three measures fell.','A partial recovery.'];
-  const stageLabels=['Baseline','Decline','Return'];
-  const insights=[
-    ['The starting point for the comparison. Each measure is indexed to its own FY2023 value.','Revenue and profit were reported in consolidated accounts. Cash flow retains company-disclosure precision.','The FY2023 cash-flow value is the baseline for the later comparison.'],
-    ['Revenue declined. Comparable revenue growth was −4.3%; the plotted index uses reported USD.','Operating profit fell further than revenue, to 69.9% of its FY2023 level.','Cash generation fell to 49.1% of its FY2023 level.'],
-    ['Revenue nearly returned to its earlier level. Profit and cash flow remained further behind.','Operating profit recovered to 73.5% of FY2023, leaving a larger gap than revenue.','Free cash flow recovered to 70.5% of FY2023, still well below its earlier level.'],
+  const stageTitles = ['Before the slowdown.', 'All three measures fell.', 'A partial recovery.'];
+  const stageLabels = ['Baseline', 'Decline', 'Return'];
+  const insights = [
+    [
+      'The starting point for the comparison. Each measure is indexed to its own FY2023 value.',
+      'Revenue and profit were reported in consolidated accounts. Cash flow retains company-disclosure precision.',
+      'The FY2023 cash-flow value is the baseline for the later comparison.',
+    ],
+    [
+      'Revenue declined. Comparable revenue growth was −4.3%; the plotted index uses reported USD.',
+      'Operating profit fell further than revenue, to 69.9% of its FY2023 level.',
+      'Cash generation fell to 49.1% of its FY2023 level.',
+    ],
+    [
+      'Revenue nearly returned to its earlier level. Profit and cash flow remained further behind.',
+      'Operating profit recovered to 73.5% of FY2023, leaving a larger gap than revenue.',
+      'Free cash flow recovered to 70.5% of FY2023, still well below its earlier level.',
+    ],
   ];
-  document.querySelectorAll<HTMLElement>('[data-recovery-portrait]').forEach(root=>{
-    const values=JSON.parse(root.querySelector('[data-portrait-values]')!.textContent!) as {label:string;color:string;values:number[];actual:number[]}[];
-    const buttons=root.querySelectorAll<HTMLButtonElement>('[data-portrait-select]');
-    const yearButtons=root.querySelectorAll<HTMLButtonElement>('[data-portrait-year]');
-    const range=root.querySelector<HTMLInputElement>('[data-portrait-range]')!;
-    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
-    let year=2,measure=0,locked:string|null=null;
-    let interacted=false;
-    let timers:ReturnType<typeof setTimeout>[]=[];
-    const stop=()=>{timers.forEach(clearTimeout);timers=[];root.dataset.playing='false';};
-    const move=(index:number,automatic=false,force=false)=>{
-      if(!automatic){interacted=true;stop();}
-      const changed=index!==year;year=index;root.dataset.year=String(index);
-      yearButtons.forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.portraitYear)===index)));
-      range.value=String(index);range.setAttribute('aria-valuetext',`FY${2023+index} · ${stageLabels[index]}`);
-      root.querySelector('[data-portrait-phase]')!.textContent=`${2023+index} / ${stageLabels[index].toUpperCase()}`;
-      root.querySelector('[data-portrait-title]')!.textContent=stageTitles[index];
-      root.querySelector('[data-portrait-index]')!.textContent=values[measure].values[index].toFixed(1);
-      root.querySelector('[data-portrait-measure]')!.textContent=values[measure].label+' / FY2023 baseline';
-      root.querySelector('[data-portrait-actual]')!.textContent='$'+values[measure].actual[index].toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})+'m · FY'+(2023+index);
-      root.querySelector('[data-portrait-explanation]')!.textContent=insights[index][measure];
-      const x=48+index*208;
-      const mask=root.querySelector<SVGRectElement>('[data-portrait-mask]')!;mask.style.width=(index===2?540:x+8)+'px';
-      const guide=root.querySelector<SVGLineElement>('[data-portrait-guide]')!;guide.style.setProperty('--cursor-x',String(x));guide.setAttribute('x1',String(x));guide.setAttribute('x2',String(x));
-      values.forEach((s,i)=>{const focus=root.querySelector<SVGCircleElement>(`[data-portrait-focus="${i}"]`)!;focus.setAttribute('cx',String(x));focus.setAttribute('cy',String(246-s.values[index]*1.8));root.querySelector(`[data-portrait-end="${i}"]`)!.textContent=s.values[index].toFixed(1);});
-      if((changed||force)&&!reduced.matches){
-        for(const selector of ['[data-portrait-index]','[data-portrait-title]','[data-portrait-explanation]']){
-          const el=root.querySelector<HTMLElement>(selector)!;el.getAnimations().forEach(a=>a.cancel());
-          el.animate([{opacity:0,transform:'translateY(16px)',filter:'blur(3px)'},{opacity:1,transform:'translateY(0)',filter:'blur(0)'}],{duration:650,easing:'cubic-bezier(.16,1,.3,1)'});
+
+  const xStart = 16;
+  const xEnd = 444;
+  const xPos = (v: number) => xStart + ((Math.max(40, Math.min(105, v)) - 40) / 65) * (xEnd - xStart);
+  const x100 = xPos(100);
+
+  document.querySelectorAll<HTMLElement>('[data-recovery-portrait]').forEach((root) => {
+    const values = JSON.parse(root.querySelector('[data-portrait-values]')!.textContent!) as {
+      label: string;
+      color: string;
+      values: number[];
+      actual: number[];
+    }[];
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-portrait-select]');
+    const yearButtons = root.querySelectorAll<HTMLButtonElement>('[data-portrait-year]');
+    const range = root.querySelector<HTMLInputElement>('[data-portrait-range]')!;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let year = 2;
+    let measure = 0;
+    let locked: string | null = null;
+    let interacted = false;
+    let timers: ReturnType<typeof setTimeout>[] = [];
+
+    const stop = () => {
+      timers.forEach(clearTimeout);
+      timers = [];
+      root.dataset.playing = 'false';
+    };
+
+    const move = (index: number, automatic = false, force = false) => {
+      if (!automatic) {
+        interacted = true;
+        stop();
+      }
+      const changed = index !== year;
+      year = index;
+      root.dataset.year = String(index);
+      yearButtons.forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.portraitYear) === index)));
+      range.value = String(index);
+      range.setAttribute('aria-valuetext', `FY${2023 + index} · ${stageLabels[index]}`);
+      root.querySelector('[data-portrait-phase]')!.textContent = `${2023 + index} / ${stageLabels[index].toUpperCase()}`;
+      root.querySelector('[data-portrait-title]')!.textContent = stageTitles[index];
+      root.querySelector('[data-portrait-index]')!.textContent = values[measure].values[index].toFixed(1);
+      root.querySelector('[data-portrait-measure]')!.textContent = values[measure].label + ' / FY2023 baseline';
+      root.querySelector('[data-portrait-actual]')!.textContent =
+        '$' + values[measure].actual[index].toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + 'm · FY' + (2023 + index);
+      root.querySelector('[data-portrait-explanation]')!.textContent = insights[index][measure];
+
+      values.forEach((s, i) => {
+        const val = s.values[index];
+        const px = xPos(val);
+        const gapWidth = Math.max(0, x100 - px);
+        const focus = root.querySelector<SVGCircleElement>(`[data-portrait-focus="${i}"]`);
+        const fill = root.querySelector<SVGRectElement>(`[data-portrait-fill="${i}"]`);
+        const gap = root.querySelector<SVGRectElement>(`[data-portrait-gap="${i}"]`);
+        const trough = root.querySelector<SVGCircleElement>(`[data-portrait-trough="${i}"]`);
+        const endText = root.querySelector(`[data-portrait-end="${i}"]`);
+        const cardDelta = root.querySelector(`[data-portrait-card-delta="${i}"]`);
+
+        focus?.setAttribute('cx', String(px));
+        fill?.setAttribute('width', String(Math.max(4, px - xStart)));
+        gap?.setAttribute('x', String(px));
+        gap?.setAttribute('width', String(gapWidth));
+        if (gap) gap.dataset.deep = String(val < 90);
+        if (trough) trough.style.opacity = index === 2 ? '1' : '0';
+        if (endText) endText.textContent = val.toFixed(1);
+        if (cardDelta) {
+          const delta = val - 100;
+          cardDelta.textContent = index === 0 ? 'Base' : `${delta >= 0 ? '+' : '−'}${Math.abs(delta).toFixed(1)}%`;
+        }
+      });
+
+      if ((changed || force) && !reduced.matches) {
+        for (const selector of ['[data-portrait-index]', '[data-portrait-title]', '[data-portrait-explanation]']) {
+          const el = root.querySelector<HTMLElement>(selector)!;
+          el.getAnimations().forEach((a) => a.cancel());
+          el.animate(
+            [
+              { opacity: 0, transform: 'translateY(12px)' },
+              { opacity: 1, transform: 'translateY(0)' },
+            ],
+            { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' },
+          );
         }
       }
     };
-    const select=(active:string|null)=>{
-      interacted=true;stop();locked=active;measure=Number(active??0);root.dataset.activeMeasure=active??'all';
-      root.style.setProperty('--active-color',`var(--chart-${values[measure].color})`);
-      buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.portraitSelect===active)));
-      root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted=String(active!==null&&s.dataset.portraitSeries!==active));
-      move(year,false,true);
-    };
-    buttons.forEach(b=>b.addEventListener('click',()=>select(locked===b.dataset.portraitSelect?null:b.dataset.portraitSelect!)));
-    root.querySelectorAll<SVGPathElement>('[data-portrait-line-hit]').forEach(line=>{
-      line.addEventListener('pointerenter',()=>{
-        if(locked!==null)return;
-        root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted=String(s.dataset.portraitSeries!==line.dataset.portraitLineHit));
+
+    const select = (active: string | null) => {
+      interacted = true;
+      stop();
+      locked = active;
+      measure = Number(active ?? 0);
+      root.dataset.activeMeasure = active ?? 'all';
+      root.style.setProperty('--active-color', `var(--chart-${values[measure].color})`);
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.portraitSelect === active)));
+      root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach((s) => {
+        s.dataset.muted = String(active !== null && s.dataset.portraitSeries !== active);
       });
-      line.addEventListener('pointerleave',()=>{if(locked===null)root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted='false');});
-      line.addEventListener('click',()=>select(locked===line.dataset.portraitLineHit?null:line.dataset.portraitLineHit!));
-    });
-    yearButtons.forEach(b=>b.addEventListener('click',()=>move(Number(b.dataset.portraitYear))));
-    range.addEventListener('input',()=>move(Number(range.value)));
-    const play=()=>{
-      stop();if(reduced.matches){move(2);return;}
-      interacted=false;locked=null;measure=0;root.dataset.activeMeasure='all';buttons.forEach(b=>b.setAttribute('aria-pressed','false'));root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach(s=>s.dataset.muted='false');
-      root.style.setProperty('--active-color','var(--chart-primary)');root.dataset.playing='true';move(0,true);
-      timers.push(setTimeout(()=>move(1,true),850),setTimeout(()=>move(2,true),2200),setTimeout(()=>root.dataset.playing='false',3400));
+      move(year, false, true);
     };
-    root.querySelector('[data-portrait-replay]')!.addEventListener('click',play);
-    new MutationObserver(()=>{if(root.dataset.motionState==='entered'&&!interacted)play();}).observe(root,{attributes:true,attributeFilter:['data-motion-state']});
-    if(root.dataset.motionState==='entered'&&!interacted)play();
-    reduced.addEventListener('change',()=>{if(reduced.matches){stop();move(2);}});
+
+    buttons.forEach((b) => b.addEventListener('click', () => select(locked === b.dataset.portraitSelect ? null : b.dataset.portraitSelect!)));
+
+    const canvas = root.querySelector<SVGSVGElement>('[data-portrait-canvas]');
+    root.querySelectorAll<SVGElement>('[data-portrait-line-hit]').forEach((rowHit) => {
+      rowHit.addEventListener('pointerenter', () => {
+        if (locked !== null) return;
+        root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach((s) => {
+          s.dataset.muted = String(s.dataset.portraitSeries !== rowHit.dataset.portraitLineHit);
+        });
+      });
+      rowHit.addEventListener('click', () => select(locked === rowHit.dataset.portraitLineHit ? null : rowHit.dataset.portraitLineHit!));
+    });
+    canvas?.addEventListener('pointerleave', () => {
+      if (locked === null) {
+        root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach((s) => {
+          s.dataset.muted = 'false';
+        });
+      }
+    });
+
+    yearButtons.forEach((b) => b.addEventListener('click', () => move(Number(b.dataset.portraitYear))));
+    range.addEventListener('input', () => move(Number(range.value)));
+
+    const play = () => {
+      stop();
+      if (reduced.matches) {
+        move(2);
+        return;
+      }
+      interacted = false;
+      locked = null;
+      measure = 0;
+      root.dataset.activeMeasure = 'all';
+      buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      root.querySelectorAll<SVGGElement>('[data-portrait-series]').forEach((s) => (s.dataset.muted = 'false'));
+      root.style.setProperty('--active-color', 'var(--chart-primary)');
+      root.dataset.playing = 'true';
+      move(0, true);
+      timers.push(setTimeout(() => move(1, true), 850), setTimeout(() => move(2, true), 2100), setTimeout(() => (root.dataset.playing = 'false'), 3200));
+    };
+
+    root.querySelector('[data-portrait-replay]')!.addEventListener('click', play);
+    new MutationObserver(() => {
+      if (root.dataset.motionState === 'entered' && !interacted) play();
+    }).observe(root, { attributes: true, attributeFilter: ['data-motion-state'] });
+    if (root.dataset.motionState === 'entered' && !interacted) play();
+    reduced.addEventListener('change', () => {
+      if (reduced.matches) {
+        stop();
+        move(2);
+      }
+    });
   });
 </script>

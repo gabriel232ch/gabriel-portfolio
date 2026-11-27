@@ -159,10 +159,12 @@
 .trajectory-story__hit { cursor:crosshair; touch-action:pan-y; }
 .trajectory-story__explore { display:grid; grid-template-columns:1fr auto; gap:.5rem; margin-top:.75rem; font-family:var(--font-metadata); font-size:var(--font-size-micro); }
 .trajectory-story__explore input { grid-column:1 / -1; width:100%; --slider-fill-color:var(--chart-secondary); --slider-thumb-border:var(--chart-secondary); --slider-thumb-color:var(--paper); }
-.trajectory-story__readout { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:.75rem; }
-.trajectory-story__readout > div { border-left:2px solid var(--series-color); padding-left:1rem; }
-.trajectory-story__readout span,.trajectory-story__readout small { display:block; color:var(--ink-muted); font-family:var(--font-metadata); font-size:.75rem; }
-.trajectory-story__readout strong { display:block; margin:.5rem 0; font-family:var(--font-numeric); font-size:clamp(1.7rem,3vw,2.6rem); font-weight:400; }
+.trajectory-story__readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; margin: 0 0 1.25rem; }
+.trajectory-story__card { padding: .85rem 1rem; border: 1px solid var(--hairline); border-radius: 10px; background: var(--paper-raised); }
+.trajectory-story__card-name { display: inline-flex; align-items: center; gap: .45rem; color: var(--ink-muted); font-family: var(--font-metadata); font-size: .72rem; }
+.trajectory-story__card-name i { width: .5rem; height: .5rem; border-radius: 50%; background: var(--series-color); flex-shrink: 0; }
+.trajectory-story__readout small { display: block; color: var(--ink-muted); font-family: var(--font-metadata); font-size: .72rem; font-variant-numeric: tabular-nums; }
+.trajectory-story__readout strong { display: block; margin: .45rem 0 .25rem; font-family: var(--font-numeric); font-size: clamp(1.6rem, 2.8vw, 2.35rem); font-weight: 400; font-variant-numeric: tabular-nums; line-height: 1; }
 .trajectory-story[data-motion-state='pending'] .trajectory-story__line { clip-path:inset(0 100% 0 0); }
 .trajectory-story[data-motion-state='entered'] .trajectory-story__line { animation:portrait-decline 1800ms var(--ease-cinematic) 300ms both; }
 .trajectory-story[data-motion-state='entered'] .trajectory-story__series:nth-of-type(even) .trajectory-story__line { animation-delay:450ms; }
