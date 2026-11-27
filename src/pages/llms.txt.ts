@@ -25,7 +25,9 @@ export function GET(): Response {
 - Email: gabrielchen060@gmail.com
 - LinkedIn: https://www.linkedin.com/in/wentao-chen-476155367
 - GitHub: https://github.com/gabriel232ch
-- Timezone: UTC+8 (async-first, flexible Europe & US overlap; EN/ZH resumes available on request)
+- Resume PDF (EN): https://gabrielchen.me/resume/Gabriel-Chen-Resume-EN.pdf
+- Resume PDF (ZH): https://gabrielchen.me/resume/Gabriel-Chen-Resume-ZH.pdf
+- Timezone: UTC+8 (async-first, flexible Europe & US overlap)
 
 ## Public pages
 

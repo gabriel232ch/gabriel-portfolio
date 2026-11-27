@@ -44,10 +44,14 @@ describe('Home content contract', () => {
     expect(HOME_STATE.capabilities.pillars).toHaveLength(3);
     expect(HOME_STATE.capabilities.experience).toHaveLength(3);
     expect(HOME_STATE.workWithMe.modes).toHaveLength(2);
+    expect(HOME_STATE.profile.resumeEnUrl).toBe('/resume/Gabriel-Chen-Resume-EN.pdf');
+    expect(HOME_STATE.profile.resumeZhUrl).toBe('/resume/Gabriel-Chen-Resume-ZH.pdf');
     expect(HOME_STATE.closing.links).toEqual([
       { label: 'Email', href: 'mailto:gabrielchen060@gmail.com' },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/wentao-chen-476155367' },
       { label: 'GitHub', href: 'https://github.com/gabriel232ch' },
+      { label: 'Resume (EN)', href: '/resume/Gabriel-Chen-Resume-EN.pdf' },
+      { label: 'Resume (ZH)', href: '/resume/Gabriel-Chen-Resume-ZH.pdf' },
     ]);
   });
 

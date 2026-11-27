@@ -49,9 +49,10 @@ const { workWithMe, profile } = Astro.props;
     </div>
 
     <nav class="home-contact__links data-copy" aria-label="Contact and profile links">
+      <a href={profile.resumeEnUrl} target="_blank" rel="noreferrer">Resume PDF (EN) ↓</a>
+      <a href={profile.resumeZhUrl} target="_blank" rel="noreferrer">Resume PDF (ZH) ↓</a>
       <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
       <a href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a>
-      <a href={profile.resumeMailto}>Request Resume PDF (EN / ZH) ↗</a>
       <a href="/llms.txt">llms.txt ↗</a>
     </nav>
   </div>
