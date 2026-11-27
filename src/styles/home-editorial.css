@@ -29,8 +29,8 @@
 .olist-decision {
   --paper:#211727; --paper-raised:#2a2030; --surface:#2a2030; --ink:#f2eef5;
   --ink-muted:#bdb0c4; --hairline:rgb(242 238 245 / 18%); --accent:#baa0c5;
-  --accent-strong:#d6bce0; --chart-primary:#baa0c5; --chart-secondary:#91b8b0;
-  --chart-tertiary:#a3b2cc; --chart-negative:#d49aad;
+  --accent-strong:#d6bce0; --chart-primary:#60a5fa; --chart-secondary:#34d399;
+  --chart-tertiary:#fb923c; --chart-negative:#fb7185;
   min-width:0; margin-inline:calc(-1 * var(--gutter)); padding:clamp(2.5rem,6vw,6rem) var(--gutter);
   background:var(--paper); color:var(--ink); row-gap:clamp(2.5rem,4vw,4rem);
 }

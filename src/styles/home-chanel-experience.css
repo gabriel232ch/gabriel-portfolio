@@ -23,7 +23,7 @@
 .chanel-experience .recovery-portrait__grid .recovery-portrait__baseline { stroke: var(--ink-muted); stroke-dasharray: 4 4; opacity: .75; }
 .chanel-experience .recovery-portrait__series :is(path, circle, rect, text) { animation: none !important; clip-path: none !important; }
 .chanel-experience .recovery-portrait__series { transition: opacity 280ms ease; }
-.chanel-experience .recovery-portrait__series[data-muted='true'] { opacity: .24; }
+.chanel-experience .recovery-portrait__series[data-muted='true'] { opacity: .34; }
 .recovery-portrait__track-name { fill: var(--ink); font-family: var(--font-reading); font-size: 13.5px; pointer-events: none; }
 .recovery-portrait__rail { fill: color-mix(in oklab, var(--ink) 8%, transparent); pointer-events: none; }
 .recovery-portrait__fill { fill: var(--series-color); opacity: .88; pointer-events: none; transition: width 620ms var(--ease-cinematic); }

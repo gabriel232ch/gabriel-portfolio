@@ -41,7 +41,7 @@
   transition: stroke 220ms var(--ease-editorial), stroke-width 220ms var(--ease-editorial), opacity 220ms var(--ease-editorial);
 }
 .olist-data-map__edge[data-active='false'] { opacity: 0.2; }
-.olist-data-map__edge[data-active='true'] { stroke: var(--accent); stroke-width: 1.75; }
+.olist-data-map__edge[data-active='true'] { stroke: var(--chart-primary); stroke-width: 1.85; }
 
 .olist-data-map__pill-node,
 .olist-data-map__hub { cursor: pointer; }
@@ -53,11 +53,11 @@
 }
 .olist-data-map__pill-node:hover .olist-data-map__pill,
 .olist-data-map__pill-node[data-active='true'] .olist-data-map__pill {
-  fill: color-mix(in oklab, var(--accent) 10%, var(--paper));
-  stroke: var(--accent-strong);
+  fill: color-mix(in oklab, var(--chart-primary) 10%, var(--paper));
+  stroke: var(--chart-primary);
 }
-.olist-data-map__satellite { fill: var(--accent); pointer-events: none; }
-.olist-data-map__pill-node[data-active='true'] .olist-data-map__satellite { fill: var(--accent-strong); }
+.olist-data-map__satellite { fill: var(--chart-primary); pointer-events: none; }
+.olist-data-map__pill-node[data-active='true'] .olist-data-map__satellite { fill: var(--chart-primary); }
 .olist-data-map__node-text {
   fill: var(--ink);
   font-family: var(--font-metadata);
