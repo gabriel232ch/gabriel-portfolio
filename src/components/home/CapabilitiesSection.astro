@@ -1,0 +1,83 @@
+---
+import type { HOME_STATE } from '../../data/home';
+
+interface Props {
+  capabilities: typeof HOME_STATE.capabilities;
+}
+
+const { capabilities } = Astro.props;
+---
+
+<section
+  id="capabilities"
+  class="home-capabilities editorial-grid"
+  aria-labelledby="capabilities-title"
+  data-home-capabilities
+>
+  <div class="home-capabilities__header">
+    <p class="data-copy">{capabilities.kicker}</p>
+    <h2 id="capabilities-title" class="display">{capabilities.heading}</h2>
+    <p class="body-copy home-capabilities__lede">{capabilities.lede}</p>
+  </div>
+
+  <div class="home-capabilities__pillars">
+    {capabilities.pillars.map((pillar) => (
+      <article class="home-capabilities__card motion-reveal" data-home-motion>
+        <p class="data-copy home-capabilities__meta">
+          <span>{pillar.index}</span>
+          <span>/</span>
+          <span>{pillar.label}</span>
+        </p>
+        <h3 class="editorial">{pillar.title}</h3>
+        <p class="home-capabilities__summary">{pillar.summary}</p>
+        <a class="data-copy home-capabilities__proof" href={pillar.proofHref}>{pillar.proofLabel}</a>
+      </article>
+    ))}
+  </div>
+
+  <div class="home-capabilities__ledger">
+    <div class="home-capabilities__subhead">
+      <p class="data-copy">SELECTED OPERATING EXPERIENCE</p>
+    </div>
+    <div class="home-capabilities__rows">
+      {capabilities.experience.map((item) => (
+        <article class="home-capabilities__row">
+          <div class="home-capabilities__org">
+            <h3 class="editorial">{item.org}</h3>
+            <p class="data-copy">{item.role} · {item.period}</p>
+          </div>
+          <p class="home-capabilities__impact">{item.impact}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <div class="home-capabilities__systems">
+    <div class="home-capabilities__subhead">
+      <p class="data-copy">SHIPPED SYSTEMS &amp; ADDITIONAL WORK</p>
+    </div>
+    <div class="home-capabilities__systems-grid">
+      {capabilities.alsoBuilt.map((project) => (
+        <article class="home-capabilities__system-item">
+          <h3 class="editorial">
+            {project.href ? (
+              <a href={project.href} target="_blank" rel="noreferrer">{project.name} ↗</a>
+            ) : (
+              project.name
+            )}
+          </h3>
+          <p>{project.detail}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <dl class="home-capabilities__stack">
+    {capabilities.stack.map((group) => (
+      <div>
+        <dt class="data-copy">{group.label}</dt>
+        <dd>{group.value}</dd>
+      </div>
+    ))}
+  </dl>
+</section>

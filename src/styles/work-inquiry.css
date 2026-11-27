@@ -555,3 +555,38 @@
     padding-left: 1rem;
   }
 }
+
+/* Executive Brief & AI Systems Summary */
+.inquiry-brief {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin: var(--space-8) 0 0;
+  padding: clamp(1.15rem, 2.5vw, 1.65rem);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--paper-raised);
+}
+
+.inquiry-brief > div {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.inquiry-brief dt {
+  color: var(--accent-strong);
+}
+
+.inquiry-brief dd {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-reading);
+  font-size: var(--font-size-supporting);
+  line-height: 1.55;
+}
+
+.inquiry-page__footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-8);
+}

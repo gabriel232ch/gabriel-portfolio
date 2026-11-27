@@ -2,9 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomeNavigation from '../components/home/HomeNavigation.astro';
 import HomeHero from '../components/home/HomeHero.astro';
-import ChanelChapter from '../components/home/ChanelChapter.astro';
+import CapabilitiesSection from '../components/home/CapabilitiesSection.astro';
 import OlistChapter from '../components/home/OlistChapter.astro';
+import ChanelChapter from '../components/home/ChanelChapter.astro';
 import SmallerCompaniesChapter from '../components/home/SmallerCompaniesChapter.astro';
+import WorkWithMeSection from '../components/home/WorkWithMeSection.astro';
 import NowSection from '../components/home/NowSection.astro';
 import HomeClosing from '../components/home/HomeClosing.astro';
 import HomeMotionController from '../components/home/HomeMotionController.astro';
@@ -17,19 +19,23 @@ import '../styles/home-editorial.css';
 import '../styles/home-chanel-experience.css';
 import '../styles/home-spacing.css';
 import '../styles/home-photographic.css';
+import '../styles/home-positioning.css';
 ---
 
 <BaseLayout
   title="Gabriel Chen"
-  description="Gabriel Chen’s portfolio of research and strategy work, including studies of Chanel, Olist, and why people choose smaller companies."
+  description="Gabriel Chen — bilingual (EN/ZH) data & commercial analyst and AI workflow builder. Marketplace analytics (PostgreSQL, Python, Tableau, Power BI), luxury pricing & financial research, and repeatable AI research systems."
   noindex={false}
 >
   <main>
     <div class="site-progress" aria-hidden="true"><span data-scroll-progress></span></div>
     <HomeNavigation />
     <HomeHero state={HOME_STATE} />
-    <ChanelChapter copy={HOME_STATE.projects.chanel} />
+    <CapabilitiesSection capabilities={HOME_STATE.capabilities} />
     <OlistChapter copy={HOME_STATE.projects.olist} />
+    <ChanelChapter copy={HOME_STATE.projects.chanel} />
+    <SmallerCompaniesChapter copy={HOME_STATE.projects.smallerCompanies} />
+    <WorkWithMeSection workWithMe={HOME_STATE.workWithMe} profile={HOME_STATE.profile} />
     <figure class="photo-interlude" data-photo-placement="venice">
       <img
         src={HOME_STATE.photography.venice.src}
@@ -41,7 +47,6 @@ import '../styles/home-photographic.css';
       />
       <figcaption>{HOME_STATE.photography.venice.caption}</figcaption>
     </figure>
-    <SmallerCompaniesChapter copy={HOME_STATE.projects.smallerCompanies} />
     <NowSection now={HOME_STATE.now} />
     <HomeClosing closing={HOME_STATE.closing} />
     <HomeMotionController />

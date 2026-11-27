@@ -1,0 +1,77 @@
+---
+import type { HOME_STATE } from '../../data/home';
+
+interface Props {
+  workWithMe: typeof HOME_STATE.workWithMe;
+  profile: typeof HOME_STATE.profile;
+}
+
+const { workWithMe, profile } = Astro.props;
+---
+
+<section
+  id="contact"
+  class="home-contact editorial-grid"
+  aria-labelledby="contact-title"
+  data-home-contact
+>
+  <div class="home-contact__header">
+    <p class="data-copy">{workWithMe.kicker}</p>
+    <h2 id="contact-title" class="display">{workWithMe.heading}</h2>
+    <p class="body-copy home-contact__lede">{workWithMe.lede}</p>
+  </div>
+
+  <div class="home-contact__modes">
+    {workWithMe.modes.map((mode) => (
+      <article class="home-contact__mode">
+        <p class="data-copy">{mode.label}</p>
+        <h3 class="editorial">{mode.title}</h3>
+        <p>{mode.description}</p>
+      </article>
+    ))}
+  </div>
+
+  <div class="home-contact__actions-panel">
+    <div class="home-contact__direct">
+      <p class="data-copy">DIRECT CONTACT</p>
+      <div class="home-contact__email-row">
+        <a class="home-contact__email editorial" href={`mailto:${profile.email}`}>{profile.email}</a>
+        <button
+          type="button"
+          class="home-contact__copy data-copy"
+          data-copy-email={profile.email}
+          aria-live="polite"
+        >
+          Copy email
+        </button>
+      </div>
+      <p class="home-contact__meta data-copy">{profile.timezone} · {workWithMe.responseNote}</p>
+    </div>
+
+    <nav class="home-contact__links data-copy" aria-label="Contact and profile links">
+      <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+      <a href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+      <a href={profile.resumeMailto}>Request Resume PDF (EN / ZH) ↗</a>
+      <a href="/llms.txt">llms.txt ↗</a>
+    </nav>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-email]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const email = button.dataset.copyEmail;
+      if (!email) return;
+      try {
+        await navigator.clipboard.writeText(email);
+        const original = button.textContent;
+        button.textContent = 'Copied';
+        window.setTimeout(() => {
+          button.textContent = original;
+        }, 2000);
+      } catch {
+        window.location.href = `mailto:${email}`;
+      }
+    });
+  });
+</script>

@@ -78,8 +78,14 @@ const parseSignedPercent = (text: string) => {
         <h1 id="report-title" class="report-title" data-vt-name="work-chanel-title">How Chanel Navigated the Luxury Slowdown</h1>
         <p class="report-lede">Where recovery occurred, and what the public evidence can explain.</p>
         <p class="report-hero__summary">
-          Why did Chanel appear to fare differently as luxury slowed? This case starts with its FY2023–FY2025 results, locates the recovery, then examines business scope, product choice, pricing, marketing and client experience.
+          Why did Chanel appear to fare differently as luxury slowed? This case reconciles FY2023–FY2025 consolidated filings, peer disclosures, and a 161-observation France/US handbag price panel to separate verified performance from brand narrative.
         </p>
+        <dl class="report-brief" aria-label="Executive brief">
+          <div><dt>BUSINESS QUESTION</dt><dd>Did Chanel genuinely outperform peers in FY2024–FY2025, where did revenue return, and how much can handbag pricing explain?</dd></div>
+          <div><dt>KEY FINDING</dt><dd>Revenue recovered to 97.6% of FY2023 (+1.8% comparable) led by Europe &amp; Americas while APAC kept falling, but operating profit (73.5%) and FCF (70.5%) trailed on −$773.0m gross profit and +$984.8m SG&amp;A.</dd></div>
+          <div><dt>DECISION IMPLICATION</dt><dd>With Beauty estimated at ~$8.54bn (~46% cross-source scale ratio), strategy teams cannot attribute group rebound to handbag pricing alone without division-level PVM and margin bridges.</dd></div>
+          <div><dt>STACK &amp; DELIVERABLES</dt><dd>Filed-account financial reconciliation · 161-row 4-brand FR/US price panel · Bilingual (EN/ZH) source audit · Interactive SVG exhibits.</dd></div>
+        </dl>
         <p class="report-meta data-copy">
           OPERATING WINDOW: FY2023–FY2025 <span aria-hidden="true">/</span>
           PRICE HISTORY: 2022–2026 <span aria-hidden="true">/</span>
@@ -411,6 +417,16 @@ const parseSignedPercent = (text: string) => {
             </div>
           </div>
 
+          <div class="report-protocol">
+            <p class="data-copy report-protocol__kicker">DECISION PROTOCOL / WEEK-1 INTERNAL ANALYSIS PLAN</p>
+            <h3>What I would run first inside a strategy, FP&amp;A, or buy-side team</h3>
+            <ul class="report-bullets">
+              <li><strong>Division-level Price–Volume–Mix (PVM) bridge:</strong> Separate Fashion &amp; Leather Goods from Fragrance &amp; Beauty and Watches &amp; Fine Jewellery to quantify whether FY2025’s +1.8% comparable growth came from beauty scale, leather-goods pricing, or unit recovery.</li>
+              <li><strong>SG&amp;A &amp; boutique-cohort productivity audit:</strong> Decompose the +$984.8m SG&amp;A increase between new-boutique ramp (40+ openings), clienteling spend, and fixed overhead to test when operating margin can re-expand toward FY2023 levels.</li>
+              <li><strong>CHANEL 25 cohort incrementality vs. cannibalization check:</strong> Match transaction histories to measure whether everyday-bag buyers were new-to-brand, incremental repeat clients, or shifting spend away from higher-margin Classic Flap lines.</li>
+            </ul>
+          </div>
+
         </section>
 
         <section id="appendix" tabindex="-1" class="report-section">
@@ -452,33 +468,33 @@ const parseSignedPercent = (text: string) => {
           <p class="report-section__number data-copy">08 / SOURCES &amp; REPRODUCIBILITY</p>
           <h2>Sources and reproducibility</h2>
           <p>
-            The links below lead to the underlying project, price evidence, slowdown diagnostics, calculation inputs, methodology, and company disclosures. Peer metrics retain the definitions used in the source reports.
+            The links below lead to the underlying project, price evidence, slowdown diagnostics, calculation inputs, methodology, and company disclosures. Peer metrics retain the definitions used in the source reports. Working papers authored in Chinese during bilingual research are marked <code>(ZH)</code>; all data panels and company releases are in English.
           </p>
           <div class="report-sources">
             <div>
               <h3>Project and price evidence</h3>
               <a href={LUXURY_FLAGSHIP_SOURCES.readme} target="_blank" rel="noreferrer">Project repository ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.websiteHandoff} target="_blank" rel="noreferrer">Website handoff ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Price-architecture study ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Price-architecture study (ZH) ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">Current France / U.S. price panel ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.methodology} target="_blank" rel="noreferrer">Methodology ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.methodology} target="_blank" rel="noreferrer">Methodology (ZH) ↗</a>
               <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/website_handoff/content.json" target="_blank" rel="noreferrer">Integrated claim and evidence map ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.financialPanel} target="_blank" rel="noreferrer">Longer financial panel and calculations ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.validation} target="_blank" rel="noreferrer">Validation ↗</a>
             </div>
             <div>
               <h3>Slowdown analyses and data</h3>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownPeerReview} target="_blank" rel="noreferrer">Peer comparison ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownRegionReview} target="_blank" rel="noreferrer">Regional revenue bridge ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownChannelReview} target="_blank" rel="noreferrer">Channel and product timing ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownProfitReview} target="_blank" rel="noreferrer">Operating-profit reconciliation ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownCustomerReview} target="_blank" rel="noreferrer">Customer and beauty evidence ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownFinancialInputs} target="_blank" rel="noreferrer">Filed-account inputs ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownPeerReview} target="_blank" rel="noreferrer">Peer comparison (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownRegionReview} target="_blank" rel="noreferrer">Regional revenue bridge (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownChannelReview} target="_blank" rel="noreferrer">Channel and product timing (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownProfitReview} target="_blank" rel="noreferrer">Operating-profit reconciliation (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownCustomerReview} target="_blank" rel="noreferrer">Customer and beauty evidence (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownFinancialInputs} target="_blank" rel="noreferrer">Filed-account inputs (CSV) ↗</a>
             </div>
             <div>
               <h3>Industry and company disclosures</h3>
-              <a href={LUXURY_FLAGSHIP_SOURCES.industryUpdate} target="_blank" rel="noreferrer">Bain FY2025 market estimate, spring 2026 revision ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.industryPrevious} target="_blank" rel="noreferrer">Bain year-end 2025 estimate ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.industryUpdate} target="_blank" rel="noreferrer">Bain FY2025 market estimate, spring 2026 revision (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.industryPrevious} target="_blank" rel="noreferrer">Bain year-end 2025 estimate (ZH) ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.chanel2023} target="_blank" rel="noreferrer">Chanel FY2023 release ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.chanel2024} target="_blank" rel="noreferrer">Chanel FY2024 release ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.chanel2025} target="_blank" rel="noreferrer">Chanel FY2025 release ↗</a>
@@ -488,7 +504,7 @@ const parseSignedPercent = (text: string) => {
             </div>
           </div>
           <p class="report-final">
-            The case begins with a difference in brand performance and ends with a more precise question: which changes in products, customers and channels produced the recovery visible in the accounts?
+            The case begins with a difference in brand performance and ends with a bounded external read plus a concrete Week-1 internal analysis plan.
           </p>
         </section>
       </article>
@@ -496,7 +512,10 @@ const parseSignedPercent = (text: string) => {
 
     <footer class="report-footer">
       <span class="data-copy">GABRIEL CHEN / CHANEL THROUGH THE LUXURY SLOWDOWN</span>
-      <span class="data-copy">UPDATED 2026-10-04 / PRICE SNAPSHOT 2026-08-15</span>
+      <div class="report-footer__links">
+        <a class="data-copy" href="/#contact">WORK WITH ME →</a>
+        <a class="data-copy" href="/#chanel">BACK TO WORK ↑</a>
+      </div>
     </footer>
   </main>
 </BaseLayout>
