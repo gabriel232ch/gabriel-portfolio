@@ -37,7 +37,13 @@ const { state } = Astro.props;
   </div>
 
   <div class="home-hero__context">
+    <p class="home-hero__eyebrow data-copy">{state.profile.eyebrow}</p>
     <p class="home-hero__intro editorial">{state.intro.statement}</p>
+    <p class="home-hero__role">{state.profile.roleNote}</p>
+    <nav class="home-hero__actions data-copy" aria-label="Primary actions">
+      <a class="home-hero__cta home-hero__cta--primary" href="#work">Explore work ↓</a>
+      <a class="home-hero__cta" href="#contact">Work with me →</a>
+    </nav>
   </div>
 
   <figure class="home-hero__portrait">

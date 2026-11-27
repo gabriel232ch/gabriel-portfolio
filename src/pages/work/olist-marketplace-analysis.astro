@@ -24,8 +24,20 @@ const sections = [['performance','Scale and service'],['markets','Markets over t
   </div>
   <div class="report-progress" aria-hidden="true"><span data-olist-progress></span></div>
   <section class="report-hero" aria-labelledby="olist-title">
-    <div class="report-hero__label"><p class="olist-eyebrow">02 / MARKETPLACE ANALYTICS</p><p class="editorial">Olist<br />Brazil</p></div>
-    <div class="report-hero__main"><p class="report-kicker editorial"><em>From unfamiliar data to a business question</em></p><h1 id="olist-title" class="report-title" data-vt-name="work-olist-title">Growth, delivery &amp; marketplace priorities</h1><p class="report-lede">Which markets deserve attention, and what should be checked before further growth?</p><p class="report-hero__summary">I started with Olist to learn how to find a question in unfamiliar data. The analysis led from rising transaction volume to uneven delivery performance—and then to the importance of when a problem, or a customer review, occurred.</p><p class="report-meta data-copy">PROJECT / 2026 · OBSERVATION / JAN–AUG 2017 &amp; 2018</p></div>
+    <div class="report-hero__label"><p class="olist-eyebrow">01 / MARKETPLACE ANALYTICS</p><p class="editorial">Olist<br />Brazil</p></div>
+    <div class="report-hero__main">
+      <p class="report-kicker editorial"><em>Decision science &amp; fulfillment diagnostics</em></p>
+      <h1 id="olist-title" class="report-title" data-vt-name="work-olist-title">Growth, delivery &amp; marketplace priorities</h1>
+      <p class="report-lede">Which markets still need operational intervention, and what should be tested before further growth?</p>
+      <p class="report-hero__summary">Built across 1.55M raw records and 19 reproducible PostgreSQL scripts, this study traces rising order volume, diverging monthly delivery trajectories, and review-answer timestamps into a conditional operational triage and experiment plan.</p>
+      <dl class="report-brief" aria-label="Executive brief">
+        <div><dt>BUSINESS QUESTION</dt><dd>Across 104 qualified category × state markets, where should operations fix fulfillment first versus test controlled growth?</dd></div>
+        <div><dt>KEY FINDING</dt><dd>99.40% of +141.13% GMV growth came from order volume; monthly paths diverged across the six historical Fix markets; 97.39% of 8+ day late reviews were written before delivery arrived.</dd></div>
+        <div><dt>DECISION IMPLICATION</dt><dd>Replace static cumulative labels with a 3-tier monthly triage and A/B test proactive delay alerts plus post-delivery review timing before scaling.</dd></div>
+        <div><dt>STACK &amp; DELIVERABLES</dt><dd>PostgreSQL 18.4 (19 SQL scripts) · Python independent validation · Tableau workbook · Power BI assets · Reproducible CSV exports.</dd></div>
+      </dl>
+      <p class="report-meta data-copy">POSTGRESQL · PYTHON · TABLEAU · POWER BI <span aria-hidden="true">/</span> OBSERVATION: JAN–AUG 2017 &amp; 2018</p>
+    </div>
   </section>
   <div class="report-layout">
     <aside class="report-index" aria-label="Report contents"><p class="data-copy">THE INVESTIGATION</p><ol>{sections.map(([id,label],i) => <li><a href={`#${id}`}>{String(i+1).padStart(2,'0')} / {label}</a></li>)}</ol></aside>
@@ -115,13 +127,35 @@ const sections = [['performance','Scale and service'],['markets','Markets over t
         <p class="report-claim">Scale and service identify candidates. Recent performance and mechanism evidence determine what should be tested next.</p>
         <div class="olist-actions" data-olist-reveal><div><span class="olist-eyebrow">01 / RECOVERY</span><h3>Check whether recovery holds.</h3><p>For historically weak markets with later improvement, inspect recurring risk, seller and route mix, and promise-date changes before deciding whether expansion needs restrictions.</p></div><div><span class="olist-eyebrow">02 / RECENT RISK</span><h3>Diagnose the specific exposure.</h3><p>For renewed delivery or review signals, establish adequate sample size and investigate the relevant month, seller and route. Keep delivery and review mechanisms distinct.</p></div><div><span class="olist-eyebrow">03 / PROTECTION</span><h3>Monitor the larger engines.</h3><p>Track recent service, supply capacity and concentration alongside scale. A strong historical execution label still needs an operating check.</p></div><div><span class="olist-eyebrow">04 / LIMITED GROWTH</span><h3>Test under explicit conditions.</h3><p>For qualified growth candidates, verify recent execution and supply, then define a limited treatment, comparison group, observation window and stopping conditions.</p></div></div>
         <p>The exact shortlist depends on the screening rule. Moving the commercial-scale threshold from P75 to P70 expands Fix from six to eight and moves both Grow candidates into Defend; moving it to P80 leaves three Fix candidates. Small, separate changes to delivery and review percentiles preserved the original Fix and Grow members in the checks performed. Changing a scale label does not remove an underlying service problem.</p>
+        <div class="report-protocol">
+          <p class="data-copy report-protocol__kicker">DECISION PROTOCOL / IF I WERE RUNNING OPERATIONS</p>
+          <h3>Proposed 3-tier triage and validation experiment</h3>
+          <div class="report-protocol__grid">
+            <div>
+              <p class="data-copy">OPERATIONAL TRIAGE</p>
+              <ul class="report-bullets">
+                <li><strong>Verify recovery before lifting caps:</strong> <code>watches_gifts × RJ</code> (65.54% → 95.88%) and <code>computers_accessories × RJ</code> (73.57% → 99.05%) stabilized in Apr–Aug; confirm carrier/promise changes rather than spending fix capacity on solved issues.</li>
+                <li><strong>Audit corridor &amp; promise logic:</strong> <code>bed_bath_table × RJ/MG</code> and <code>sports_leisure × RJ</code> overlap heavily with SP→RJ; separate seller handling delays from optimistic promise windows.</li>
+                <li><strong>Escalate recent deterioration:</strong> <code>office_furniture × SP</code> slipped from 94.78% to 91.45%, and August dipped in <code>health_beauty × SP</code> (87.84%) and <code>stationery × SP</code> (87.21%) — prioritize seller capacity and SLA checks now.</li>
+              </ul>
+            </div>
+            <div>
+              <p class="data-copy">PROPOSED A/B EXPERIMENT (REVIEW TIMING)</p>
+              <ul class="report-bullets">
+                <li><strong>Hypothesis:</strong> Because 97.39% of 8+ day late reviews were submitted before receipt, pairing proactive delay alerts with a review prompt deferred to 24h post-delivery may separate waiting anxiety from post-receipt satisfaction.</li>
+                <li><strong>Metrics:</strong> Primary = <code>low_review_rate</code> on 3+ day late orders; Guardrails = <code>review_coverage</code>, customer-support ticket rate, and 90-day repeat orders.</li>
+                <li><strong>Stopping rule:</strong> Run across a randomized 4-week cohort; pause immediately if review coverage drops &gt;15pp or inbound support contacts rise significantly.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <p>These are proposed diagnostic and test priorities. Cost, capacity, inventory and treatment records are needed to evaluate net returns and choose a real resource allocation.</p>
       </section>
       <section id="answer" tabindex="-1" class="report-section">
         <p class="report-section__number data-copy">05 / THE RESEARCH ANSWER</p><h2>Priorities change when the timeline is visible.</h2>
-        <p class="report-claim">The data supports a market-level screening process followed by recent-performance and mechanism checks.</p>
-        <p>Some historical risk markets recovered; some growth and protection candidates showed later warning signals. Linking markets to routes helped locate exposure, while checking review timestamps changed what the severe-delay figures meant. That is the basis for differentiated monitoring, diagnosis and controlled tests.</p>
-        <p>The analysis identifies what deserves investigation and what should be verified before growth. Carrier identity, promise logic, supply capacity, costs and post-action cohorts are the next evidence needed to assess causes and outcomes.</p>
+        <p class="report-claim">Static screening rules misallocate effort; combining monthly trajectories with review timestamps yields an actionable 3-tier sequence.</p>
+        <p>Several historical Fix markets had already stabilized by spring, while newer deterioration appeared inside SP segments. Linking markets to seller-origin corridors narrowed where delays cluster, and checking review timestamps reframed 8+ day late low scores as pre-delivery anxiety rather than post-receipt dissatisfaction.</p>
+        <p>That turns a generic risk shortlist into three immediate operating moves—verify recovered RJ corridors before lifting growth caps, escalate deteriorating SP segments, and run the controlled review-timing A/B test—while specifying the internal carrier, promise-logic, and unit-cost records needed to size net ROI.</p>
       </section>
       <section id="appendix" tabindex="-1" class="report-section">
         <p class="report-section__number data-copy">06 / EVIDENCE AND METHODS</p><h2>Trace the observations.</h2>
@@ -139,7 +173,7 @@ const sections = [['performance','Scale and service'],['markets','Markets over t
           <details class="olist-data-details"><summary>Source, reproduction and evidence status</summary><p>The source is the Brazilian E-Commerce Public Dataset by Olist. Nine supplied raw-file hashes matched the original project manifest. An independent Python validation followed the existing SQL measurement rules and exactly reproduced the matched-period headline counts and merchandise value, five delay-band counts, and selected candidate aggregates. This was a targeted validation, not an audit of every SQL script.</p><p>Supplemental aggregate evidence and its reproducible validation are preserved with this website's source. No raw orders, identifiers or review text are redistributed here. The dataset lacks complete costs, inventory, capacity, carrier identity and experiment assignment. Recommendations have no implemented outcome evidence.</p><p><a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce">Original dataset ↗</a> · <a href="https://github.com/gabriel232ch/olist-marketplace-analytics/tree/84819c37b79ab7fcf7982e2f7063124432fee0cc">Original research snapshot ↗</a> · <a href="https://github.com/gabriel232ch/gabriel-portfolio/tree/main/docs/research/olist">Supplemental research and validation ↗</a></p></details>
         </div>
       </section>
-      <footer class="report-footer"><span>GABRIEL CHEN / OLIST RESEARCH</span><a href="/#olist">BACK TO WORK ↑</a></footer>
+      <footer class="report-footer"><span>GABRIEL CHEN / OLIST RESEARCH</span><div class="report-footer__links"><a href="/#contact">WORK WITH ME →</a><a href="/#olist">BACK TO WORK ↑</a></div></footer>
     </article>
   </div>
 </main>

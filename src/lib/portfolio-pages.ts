@@ -5,7 +5,7 @@ export const PORTFOLIO_PAGES = [
     slug: 'home',
     title: 'Gabriel Chen — Portfolio',
     summary:
-      'Gabriel Chen’s portfolio of research and strategy work, including studies of Chanel, Olist, and why people choose smaller companies.',
+      'Bilingual (EN/ZH) data & commercial analyst and AI workflow builder: Olist marketplace analytics, Chanel slowdown & pricing research, AI research workflows, and remote collaboration.',
     path: '/',
   },
   {

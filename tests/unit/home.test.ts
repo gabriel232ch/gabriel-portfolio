@@ -3,49 +3,52 @@ import { HOME_STATE, HOME_WORK_SLUGS } from '../../src/data/home';
 import { LUXURY_FLAGSHIP } from '../../src/data/luxury';
 
 describe('Home content contract', () => {
-  it('keeps the approved project order', () => {
+  it('keeps the analytics-first project order', () => {
     expect(HOME_WORK_SLUGS).toEqual([
-      'luxury-handbag-pricing-architecture',
       'olist-marketplace-analysis',
+      'luxury-handbag-pricing-architecture',
       'competitive-positioning-against-giants',
     ]);
   });
 
-  it('locks the identity-first Hero copy', () => {
+  it('preserves the Hero identity statement alongside remote positioning', () => {
     expect(HOME_STATE.intro.statement).toBe(
       'I like following questions until they become clearer — and building things that help me think better.',
     );
+    expect(HOME_STATE.profile.email).toBe('gabrielchen060@gmail.com');
+    expect(HOME_STATE.profile.linkedin).toBe('https://www.linkedin.com/in/wentao-chen-476155367');
   });
 
   it('locks the three public project identities', () => {
-    expect(HOME_STATE.projects.chanel.title).toBe(
-      'Luxury Was Slowing. Why Did Chanel Look Different?',
-    );
     expect(HOME_STATE.projects.olist.title).toBe(
       'SQL Wasn’t the Hard Part. Knowing What to Ask Was.',
+    );
+    expect(HOME_STATE.projects.chanel.title).toBe(
+      'Luxury Was Slowing. Why Did Chanel Look Different?',
     );
     expect(HOME_STATE.projects.smallerCompanies.title).toBe(
       'Why Do Some People Choose Smaller Companies?',
     );
   });
 
-  it('keeps the active-employer inquiry anonymized', () => {
-    const publicCopy = JSON.stringify(HOME_STATE.projects.smallerCompanies);
+  it('keeps the active-employer inquiry and experience ledger anonymized', () => {
+    const publicCopy = JSON.stringify(HOME_STATE);
     expect(publicCopy).toContain('a quantitative investment firm');
     expect(publicCopy).not.toContain('JoinQuant');
     expect(publicCopy).not.toContain('聚宽');
+    expect(publicCopy).not.toContain('19857170382');
+    expect(publicCopy).not.toContain('gabriel-finance');
   });
 
-  it('keeps the inquiry concise while hinting at the expanded candidate question', () => {
-    const inquiry = HOME_STATE.projects.smallerCompanies;
-
-    expect(inquiry.status).toBe('I’m still trying to understand this.');
-    expect(inquiry.href).toBe('/work/why-some-people-choose-smaller-companies/');
-    expect(inquiry.research).toContain(
-      'what information helps someone decide whether a smaller company is right for them',
-    );
-    expect(inquiry.research.length).toBeLessThan(190);
-    expect(JSON.stringify(inquiry)).not.toMatch(/7 of 30|13 of 60|40 of 60|Golden Samples|crossroads prototype/i);
+  it('exposes capabilities, AI workflows, and real contact links', () => {
+    expect(HOME_STATE.capabilities.pillars).toHaveLength(3);
+    expect(HOME_STATE.capabilities.experience).toHaveLength(3);
+    expect(HOME_STATE.workWithMe.modes).toHaveLength(2);
+    expect(HOME_STATE.closing.links).toEqual([
+      { label: 'Email', href: 'mailto:gabrielchen060@gmail.com' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/wentao-chen-476155367' },
+      { label: 'GitHub', href: 'https://github.com/gabriel232ch' },
+    ]);
   });
 
   it('exposes four human Now items', () => {
@@ -57,11 +60,8 @@ describe('Home content contract', () => {
     ]);
   });
 
-  it('locks the warm unfinished ending', () => {
+  it('keeps the warm closing message', () => {
     expect(HOME_STATE.closing.message).toBe('I’ll keep adding things here as I go.');
-    expect(HOME_STATE.closing.links).toEqual([
-      { label: 'GitHub', href: 'https://github.com/gabriel232ch' },
-    ]);
   });
 
   it('keeps the flagship evidence facts source-backed', () => {

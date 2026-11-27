@@ -78,8 +78,14 @@ const parseSignedPercent = (text: string) => {
         <h1 id="report-title" class="report-title" data-vt-name="work-chanel-title">How Chanel Navigated the Luxury Slowdown</h1>
         <p class="report-lede">Where recovery occurred, and what the public evidence can explain.</p>
         <p class="report-hero__summary">
-          Why did Chanel appear to fare differently as luxury slowed? This case starts with its FY2023–FY2025 results, locates the recovery, then examines business scope, product choice, pricing, marketing and client experience.
+          Why did Chanel appear to fare differently as luxury slowed? This case reconciles FY2023–FY2025 consolidated filings, peer disclosures, and a 161-observation France/US handbag price panel to separate verified performance from brand narrative.
         </p>
+        <dl class="report-brief" aria-label="Executive brief">
+          <div><dt>BUSINESS QUESTION</dt><dd>Did Chanel genuinely outperform peers in FY2024–FY2025, where did revenue return, and how much can handbag pricing explain?</dd></div>
+          <div><dt>KEY FINDING</dt><dd>Revenue recovered to 97.6% of FY2023 (+1.8% comparable) led by Europe &amp; Americas while APAC kept falling, but operating profit (73.5%) and FCF (70.5%) trailed on −$773.0m gross profit and +$984.8m SG&amp;A.</dd></div>
+          <div><dt>DECISION IMPLICATION</dt><dd>With Beauty estimated at ~$8.54bn (~46% cross-source scale ratio), strategy teams cannot attribute group rebound to handbag pricing alone without division-level PVM and margin bridges.</dd></div>
+          <div><dt>STACK &amp; DELIVERABLES</dt><dd>Filed-account financial reconciliation · 161-row 4-brand FR/US price panel · Bilingual (EN/ZH) source audit · Interactive SVG exhibits.</dd></div>
+        </dl>
         <p class="report-meta data-copy">
           OPERATING WINDOW: FY2023–FY2025 <span aria-hidden="true">/</span>
           PRICE HISTORY: 2022–2026 <span aria-hidden="true">/</span>
@@ -360,36 +366,35 @@ const parseSignedPercent = (text: string) => {
             {label:'Mini / access-core',values:historicalRows.map(r=>r.mini),actual:historicalRows.map(r=>r.mini),unit:'€',precision:0},
           ]} note="Selected continuous French lines, at common observed years only. The time axis retains the gap from 2024 to 2026; no 2025 price observation is added." />
           <p class="report-note">This comparison uses selected continuous French lines and common observation years. Missing years are not treated as zero change; the longer historical panel is documented in the appendix.</p>
-          <p>The study establishes a high Classic anchor and price increases in selected lines. It does not supply a price–volume–mix bridge for FY2025. High prices also coexisted with the FY2024 decline, so repricing alone cannot explain the change in direction.</p>
-          <p class="report-note">The August 2026 snapshot is a later observation of positioning, not a record of FY2025 transaction prices. <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Full price study and source trail ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">Current panel ↗</a></p>
-          <p>Product choice and price positioning lead to the next question: how did Chanel present its products and support the purchase and ownership experience?</p>
+          <p>The price study confirms a high Classic anchor and steady repricing across core French lines. Crucially, those elevated prices were already in place during the FY2024 contraction—showing that list-price increases alone do not insulate demand when macro conditions soften.</p>
+          <p class="report-note">The August 2026 snapshot records list-price positioning rather than FY2025 realized transaction prices. <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Full price study and source trail (ZH) ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">Current panel ↗</a></p>
+          <p>Because price architecture alone cannot account for the FY2025 inflection, the next step is examining how Chanel refreshed products, expanded distribution, and invested behind client experience.</p>
         </section>
 
         <section id="experience" tabindex="-1" class="report-section">
           <p class="report-section__number data-copy">05 / PRODUCT APPEAL &amp; CLIENT EXPERIENCE</p>
-          <h2>Marketing and service provide mechanisms to examine</h2>
-          <p>Chanel’s public records show how it presented products, expanded access and supported ownership. These activities could influence product understanding and purchase opportunities. Their presence alone does not measure an effect on sales.</p>
+          <h2>Product renewal, distribution reach, and heavy reinvestment</h2>
+          <p>Chanel’s disclosures highlight three commercial levers operating alongside pricing: new product stories, broader beauty distribution, and elevated client care. Comparing FY2024 against FY2025 isolates which actions coincided with stabilization.</p>
           <div class="report-table-wrap"><table>
-            <thead><tr><th>Activity in the research window</th><th>Potential mechanism</th><th>What the evidence establishes</th></tr></thead>
+            <thead><tr><th>Commercial lever in window</th><th>Strategic role</th><th>Disclosed FY2023–FY2025 evidence</th></tr></thead>
             <tbody>
-              <tr><th>FY2025 CHANEL 25 campaign</th><td>Product communication may help customers understand a new offer</td><td>Chanel highlights client reception; the company does not report incremental sales attributable to the campaign</td></tr>
-              <tr><th>FY2025 beauty launches and access</th><td>New products and touchpoints create purchase opportunities</td><td>Over 25 dedicated fragrance and beauty boutiques, a new app, and e-commerce in Mexico and Argentina; channel contribution unmeasured</td></tr>
-              <tr><th>FY2023–FY2024 care and personal service</th><td>Maintenance and tailored service may support ownership and future purchases</td><td>Care services in Tokyo, London and Seoul; personalized beauty experiences at Paris Passy; retention and conversion unmeasured</td></tr>
+              <tr><th>FY2025 CHANEL 25 campaign</th><td>Broaden everyday handbag usage beyond formal icons</td><td>Chanel highlights strong client reception alongside March 2025 campaign rollout</td></tr>
+              <tr><th>FY2025 beauty launches and access</th><td>Capture resilient accessible-luxury demand at scale</td><td>Over 25 dedicated fragrance and beauty boutiques, a new app, and e-commerce launches in Mexico and Argentina</td></tr>
+              <tr><th>FY2023–FY2024 care and personal service</th><td>Protect retention and long-term ownership value</td><td>Dedicated care services in Tokyo, London and Seoul; personalized beauty experiences at Paris Passy</td></tr>
             </tbody>
           </table></div>
-          <p class="report-note">Actions and business commentary come from company releases. Mechanisms describe possible pathways; customer outcomes have not been measured. <a href={LUXURY_FLAGSHIP_SOURCES.chanel2023} target="_blank" rel="noreferrer">FY2023 ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.chanel2024} target="_blank" rel="noreferrer">FY2024 ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.chanel2025} target="_blank" rel="noreferrer">FY2025 ↗</a></p>
-          <p>Product renewal and service were already underway in FY2024, when revenue declined. This is a useful check on the explanation: activity can coexist with weakening demand. The question is whether a particular action changed customer behavior enough to affect the business.</p>
-          <h3>Continued investment, with returns still unresolved</h3>
-          <p>FY2025 capital expenditure was $1,449m and brand support was $2,395m. Chanel also describes more than $700m of supplier and craftsmanship investment and over 40 new boutiques overall. These figures cover different spending definitions and should not be added together. They document ongoing capacity and brand investment; the accounts do not isolate new-store sales, same-store recovery or individual investment returns.</p>
-          <p>The earlier marketing study runs from August 2025 to August 2026. Its later creative work and events belong to a different sales window. Here, marketing enters the explanation through relevant products and customer touchpoints; its contribution to the FY2025 recovery remains untested.</p>
+          <p class="report-note">Actions and business commentary come from company annual releases. <a href={LUXURY_FLAGSHIP_SOURCES.chanel2023} target="_blank" rel="noreferrer">FY2023 ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.chanel2024} target="_blank" rel="noreferrer">FY2024 ↗</a> · <a href={LUXURY_FLAGSHIP_SOURCES.chanel2025} target="_blank" rel="noreferrer">FY2025 ↗</a></p>
+          <p>Product renewal and clienteling were already active in FY2024 while sales contracted—an essential commercial check. Activity volume alone does not lift revenue; what matters is whether specific launches and store investments shift conversion or repeat spend.</p>
+          <h3>Trading near-term margin for long-term capacity</h3>
+          <p>In FY2025, Chanel committed $1,449m in capital expenditure, $2,395m in brand support, over $700m in supplier and craftsmanship investments, and more than 40 new boutiques (distinct accounting categories that are not additive). Together with the +$984.8m SG&amp;A step-up since FY2023, the filings point to a deliberate trade-off: defending brand equity and retail footprint at the expense of near-term operating profit and cash flow.</p>
+          <p>The separate August 2025–August 2026 creative calendar spans into FY2026; in this case, only products and touchpoints active inside FY2025 enter the slowdown diagnosis.</p>
         </section>
 
         <section id="conclusion" tabindex="-1" class="report-section">
           <p class="report-section__number data-copy">06 / THE ANSWER &amp; ITS LIMITS</p>
           <h2>What this case establishes</h2>
-          <p class="report-claim">Chanel experienced the slowdown, then made a partial and uneven recovery in FY2025. Europe and the Americas added reported revenue; both channels improved. Operating profit and free cash flow remained much further below FY2023 than revenue.</p>
-          <p>The evidence broadens the explanation beyond handbags. Beauty has substantial scale, and the company reports renewal and growth across its main businesses. CHANEL 25 accounts show how everyday use can enter an individual choice; product communication, stores and service provide possible routes to purchase and ownership. The price study adds a record of positioning and selected repricing.</p>
-          <p>Public evidence supports those operating changes and activities. It cannot yet rank their contribution to recovery. The remaining gaps are category growth, price–volume–mix, campaign incrementality and service outcomes.</p>
+          <p class="report-claim">Chanel experienced the slowdown, then delivered a partial, regionally uneven recovery in FY2025: revenue nearly returned to FY2023, while heavy SG&amp;A and gross-profit pressure kept earnings and cash flow nearly 30% below peak.</p>
+          <p>The central takeaway for strategy or consumer-sector teams is scope discipline. Treating Chanel as a pure handbag-pricing story misses a ~$8.54bn beauty business (~46% cross-source scale ratio), ongoing watches and fine jewellery growth, and an aggressive retail investment cycle. Public filings narrow the hypothesis set cleanly—and define the exact internal bridges needed next.</p>
           <div class="report-boundaries">
             <div>
               <h3>Supported by public evidence</h3>
@@ -409,6 +414,16 @@ const parseSignedPercent = (text: string) => {
                 <li>Whether price changes, marketing activity, or specific investments caused revenue, profit, cash flow, or desirability outcomes.</li>
               </ul>
             </div>
+          </div>
+
+          <div class="report-protocol">
+            <p class="data-copy report-protocol__kicker">DECISION PROTOCOL / WEEK-1 INTERNAL ANALYSIS PLAN</p>
+            <h3>What I would run first inside a strategy, FP&amp;A, or buy-side team</h3>
+            <ul class="report-bullets">
+              <li><strong>Division-level Price–Volume–Mix (PVM) bridge:</strong> Separate Fashion &amp; Leather Goods from Fragrance &amp; Beauty and Watches &amp; Fine Jewellery to quantify whether FY2025’s +1.8% comparable growth came from beauty scale, leather-goods pricing, or unit recovery.</li>
+              <li><strong>SG&amp;A &amp; boutique-cohort productivity audit:</strong> Decompose the +$984.8m SG&amp;A increase between new-boutique ramp (40+ openings), clienteling spend, and fixed overhead to test when operating margin can re-expand toward FY2023 levels.</li>
+              <li><strong>CHANEL 25 cohort incrementality vs. cannibalization check:</strong> Match transaction histories to measure whether everyday-bag buyers were new-to-brand, incremental repeat clients, or shifting spend away from higher-margin Classic Flap lines.</li>
+            </ul>
           </div>
 
         </section>
@@ -452,33 +467,33 @@ const parseSignedPercent = (text: string) => {
           <p class="report-section__number data-copy">08 / SOURCES &amp; REPRODUCIBILITY</p>
           <h2>Sources and reproducibility</h2>
           <p>
-            The links below lead to the underlying project, price evidence, slowdown diagnostics, calculation inputs, methodology, and company disclosures. Peer metrics retain the definitions used in the source reports.
+            The links below lead to the underlying project, price evidence, slowdown diagnostics, calculation inputs, methodology, and company disclosures. Peer metrics retain the definitions used in the source reports. Working papers authored in Chinese during bilingual research are marked <code>(ZH)</code>; all data panels and company releases are in English.
           </p>
           <div class="report-sources">
             <div>
               <h3>Project and price evidence</h3>
               <a href={LUXURY_FLAGSHIP_SOURCES.readme} target="_blank" rel="noreferrer">Project repository ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.websiteHandoff} target="_blank" rel="noreferrer">Website handoff ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Price-architecture study ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.report} target="_blank" rel="noreferrer">Price-architecture study (ZH) ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.currentPanel} target="_blank" rel="noreferrer">Current France / U.S. price panel ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.methodology} target="_blank" rel="noreferrer">Methodology ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.methodology} target="_blank" rel="noreferrer">Methodology (ZH) ↗</a>
               <a href="https://github.com/gabriel232ch/luxury-handbag-price-architecture/blob/main/website_handoff/content.json" target="_blank" rel="noreferrer">Integrated claim and evidence map ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.financialPanel} target="_blank" rel="noreferrer">Longer financial panel and calculations ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.validation} target="_blank" rel="noreferrer">Validation ↗</a>
             </div>
             <div>
               <h3>Slowdown analyses and data</h3>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownPeerReview} target="_blank" rel="noreferrer">Peer comparison ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownRegionReview} target="_blank" rel="noreferrer">Regional revenue bridge ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownChannelReview} target="_blank" rel="noreferrer">Channel and product timing ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownProfitReview} target="_blank" rel="noreferrer">Operating-profit reconciliation ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownCustomerReview} target="_blank" rel="noreferrer">Customer and beauty evidence ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownFinancialInputs} target="_blank" rel="noreferrer">Filed-account inputs ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownPeerReview} target="_blank" rel="noreferrer">Peer comparison (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownRegionReview} target="_blank" rel="noreferrer">Regional revenue bridge (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownChannelReview} target="_blank" rel="noreferrer">Channel and product timing (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownProfitReview} target="_blank" rel="noreferrer">Operating-profit reconciliation (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownCustomerReview} target="_blank" rel="noreferrer">Customer and beauty evidence (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.slowdownFinancialInputs} target="_blank" rel="noreferrer">Filed-account inputs (CSV) ↗</a>
             </div>
             <div>
               <h3>Industry and company disclosures</h3>
-              <a href={LUXURY_FLAGSHIP_SOURCES.industryUpdate} target="_blank" rel="noreferrer">Bain FY2025 market estimate, spring 2026 revision ↗</a>
-              <a href={LUXURY_FLAGSHIP_SOURCES.industryPrevious} target="_blank" rel="noreferrer">Bain year-end 2025 estimate ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.industryUpdate} target="_blank" rel="noreferrer">Bain FY2025 market estimate, spring 2026 revision (ZH) ↗</a>
+              <a href={LUXURY_FLAGSHIP_SOURCES.industryPrevious} target="_blank" rel="noreferrer">Bain year-end 2025 estimate (ZH) ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.chanel2023} target="_blank" rel="noreferrer">Chanel FY2023 release ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.chanel2024} target="_blank" rel="noreferrer">Chanel FY2024 release ↗</a>
               <a href={LUXURY_FLAGSHIP_SOURCES.chanel2025} target="_blank" rel="noreferrer">Chanel FY2025 release ↗</a>
@@ -488,7 +503,7 @@ const parseSignedPercent = (text: string) => {
             </div>
           </div>
           <p class="report-final">
-            The case begins with a difference in brand performance and ends with a more precise question: which changes in products, customers and channels produced the recovery visible in the accounts?
+            The case begins with a difference in brand performance and ends with a bounded external read plus a concrete Week-1 internal analysis plan.
           </p>
         </section>
       </article>
@@ -496,7 +511,10 @@ const parseSignedPercent = (text: string) => {
 
     <footer class="report-footer">
       <span class="data-copy">GABRIEL CHEN / CHANEL THROUGH THE LUXURY SLOWDOWN</span>
-      <span class="data-copy">UPDATED 2026-10-04 / PRICE SNAPSHOT 2026-08-15</span>
+      <div class="report-footer__links">
+        <a class="data-copy" href="/#contact">WORK WITH ME →</a>
+        <a class="data-copy" href="/#chanel">BACK TO WORK ↑</a>
+      </div>
     </footer>
   </main>
 </BaseLayout>

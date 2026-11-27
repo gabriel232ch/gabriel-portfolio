@@ -86,10 +86,25 @@ const arcSummaries = inquiry.chapters.map((chapter, index) => ({
 
       <article class="inquiry-page__article">
         <header class="inquiry-page__hero">
-          <p class="inquiry-page__kicker">AN OPEN INQUIRY · FIELD NOTES</p>
+          <p class="inquiry-page__kicker">APPLIED RESEARCH &amp; AI WORKFLOWS · FIELD NOTES</p>
           <h1 data-vt-name="work-inquiry-title">{inquiry.title}</h1>
           <p class="inquiry-page__dek">{inquiry.dek}</p>
           <p class="inquiry-page__opening">{inquiry.opening}</p>
+
+          <dl class="inquiry-brief" aria-label="Executive brief and AI workflows">
+            <div>
+              <dt class="data-copy">ENGAGEMENT CONTEXT</dt>
+              <dd>Six-week applied strategy and AI-visibility research project at a quantitative investment firm (details anonymized).</dd>
+            </div>
+            <div>
+              <dt class="data-copy">EVALUATION &amp; AI SYSTEMS BUILT</dt>
+              <dd>60-observation multi-platform LLM evaluation matrix (12 prompts × 5 platforms), Golden-Sample writing workflow (2–3h → ~20–30m/article), and a multi-agent parallel case-research harness (~1 day → ~1h+/case).</dd>
+            </div>
+            <div>
+              <dt class="data-copy">DECISION REFRAMING</dt>
+              <dd>Moved from slogan-level persuasion to inspectable decision support—aligning upstream source-of-truth facts with candidate queries and an interactive crossroads prototype.</dd>
+            </div>
+          </dl>
 
           <figure
             class="inquiry-arc"
@@ -274,16 +289,40 @@ const arcSummaries = inquiry.chapters.map((chapter, index) => ({
           ))}
         </div>
 
+        <section class="inquiry-protocol" aria-labelledby="inquiry-protocol-title">
+          <p class="data-copy inquiry-protocol__kicker">APPLIED PLAYBOOK / DEPLOYING THIS WORKFLOW FOR CLIENT TEAMS</p>
+          <h2 id="inquiry-protocol-title">How I turn ambiguous research into a repeatable AI system</h2>
+          <ol class="inquiry-protocol__steps">
+            <li>
+              <p class="data-copy">01 / BASELINE &amp; SOURCE-OF-TRUTH AUDIT</p>
+              <p class="body-copy">Start with a structured multi-platform prompt matrix (12–20 real buyer or candidate queries across major models) to diagnose what is omitted, stale, or inconsistent upstream—before spending budget on surface copy.</p>
+            </li>
+            <li>
+              <p class="data-copy">02 / GOLDEN SAMPLES TO REUSABLE WORKFLOW</p>
+              <p class="body-copy">Produce 2–3 high-judgment reference outputs manually, codify the evidence standards and structure into reusable prompts and checklists, and keep human review gates where nuance matters.</p>
+            </li>
+            <li>
+              <p class="data-copy">03 / PARALLEL RESEARCH HARNESS &amp; RE-EVALUATION</p>
+              <p class="body-copy">Run parallel agent pipelines for comparative competitor or market synthesis (compressing day-long manual case builds into ~1-hour windows), then re-score live model outputs against the original baseline.</p>
+            </li>
+          </ol>
+        </section>
+
         <footer class="inquiry-page__footer">
           <p class="inquiry-page__status">{inquiry.closing}</p>
-          <a
-            class="inquiry-page__archive-link data-copy"
-            href={PUBLIC_RESEARCH_ARCHIVE_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Open the public research archive <span aria-hidden="true">↗</span>
-          </a>
+          <div class="inquiry-page__footer-links">
+            <a
+              class="inquiry-page__archive-link data-copy"
+              href={PUBLIC_RESEARCH_ARCHIVE_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open the public research archive <span aria-hidden="true">↗</span>
+            </a>
+            <a class="inquiry-page__archive-link data-copy" href="/#contact">
+              Build an AI research workflow together <span aria-hidden="true">→</span>
+            </a>
+          </div>
         </footer>
       </article>
     </div>
