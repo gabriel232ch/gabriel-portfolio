@@ -24,6 +24,8 @@ const requiredRoutes = [
   'api/portfolio.json',
   'llms.txt',
   'robots.txt',
+  'resume/Gabriel-Chen-Resume-EN.pdf',
+  'resume/Gabriel-Chen-Resume-ZH.pdf',
   'work/luxury-handbag-pricing-architecture/index.html',
   'work/olist-marketplace-analysis/index.html',
   'work/why-some-people-choose-smaller-companies/index.html',

@@ -24,8 +24,8 @@ const { closing } = Astro.props;
       {closing.links.map((link) => (
         <a
           href={link.href}
-          target={link.href.startsWith('http') ? '_blank' : undefined}
-          rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+          target={link.href.startsWith('http') || link.href.endsWith('.pdf') ? '_blank' : undefined}
+          rel={link.href.startsWith('http') || link.href.endsWith('.pdf') ? 'noreferrer' : undefined}
         >
           {link.label}
         </a>

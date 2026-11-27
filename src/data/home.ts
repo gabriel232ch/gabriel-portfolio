@@ -19,8 +19,8 @@ export const HOME_STATE = {
     email: 'gabrielchen060@gmail.com',
     linkedin: 'https://www.linkedin.com/in/wentao-chen-476155367',
     github: 'https://github.com/gabriel232ch',
-    resumeMailto:
-      'mailto:gabrielchen060@gmail.com?subject=Resume%20Request%20%28EN%2FZH%29%20%E2%80%94%20Gabriel%20Chen&body=Hi%20Gabriel%2C%0A%0AI%E2%80%99d%20like%20to%20request%20your%20English%20or%20Chinese%20resume%20PDF%20for%20a%20role%20or%20project.',
+    resumeEnUrl: '/resume/Gabriel-Chen-Resume-EN.pdf',
+    resumeZhUrl: '/resume/Gabriel-Chen-Resume-ZH.pdf',
     timezone: 'UTC+8 · Async-first, flexible EU & US overlap',
   },
   intro: {
@@ -231,7 +231,7 @@ export const HOME_STATE = {
           'Scoped 1–4 week engagements: SQL/KPI diagnostics, competitive pricing & financial deep-dives (EN/ZH), Tableau/Power BI reporting cleanup, or custom AI research & evaluation harnesses.',
       },
     ],
-    responseNote: 'Typically reply within 24 hours · English & Chinese resumes available on request.',
+    responseNote: 'Typically reply within 24 hours · Web-safe EN & ZH resumes below (full copy on request).',
   },
   now: {
     kicker: 'THE PERSON BEHIND THE WORK',
@@ -308,6 +308,8 @@ export const HOME_STATE = {
       { label: 'Email', href: 'mailto:gabrielchen060@gmail.com' },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/wentao-chen-476155367' },
       { label: 'GitHub', href: 'https://github.com/gabriel232ch' },
+      { label: 'Resume (EN)', href: '/resume/Gabriel-Chen-Resume-EN.pdf' },
+      { label: 'Resume (ZH)', href: '/resume/Gabriel-Chen-Resume-ZH.pdf' },
     ],
   },
 } as const;

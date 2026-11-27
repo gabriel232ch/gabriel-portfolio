@@ -17,7 +17,7 @@ test('Home opens with Gabriel identity and remote analytics positioning', async 
   await expect(page.locator('.folio-number')).toHaveCount(0);
 });
 
-test('Capabilities and Contact sections surface stack, experience, and direct links', async ({ page }) => {
+test('Capabilities and Contact sections surface stack, experience, and direct links', async ({ page, request }) => {
   await page.goto('/');
 
   const capabilities = page.locator('[data-home-capabilities]');
@@ -36,6 +36,14 @@ test('Capabilities and Contact sections surface stack, experience, and direct li
     'href',
     'mailto:gabrielchen060@gmail.com',
   );
+  await expect(contact.getByRole('link', { name: 'Resume PDF (EN) ↓' })).toHaveAttribute(
+    'href',
+    '/resume/Gabriel-Chen-Resume-EN.pdf',
+  );
+  await expect(contact.getByRole('link', { name: 'Resume PDF (ZH) ↓' })).toHaveAttribute(
+    'href',
+    '/resume/Gabriel-Chen-Resume-ZH.pdf',
+  );
   await expect(contact.getByRole('link', { name: 'LinkedIn ↗' })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/wentao-chen-476155367',
@@ -44,6 +52,12 @@ test('Capabilities and Contact sections surface stack, experience, and direct li
     'href',
     'https://github.com/gabriel232ch',
   );
+
+  for (const pdfPath of ['/resume/Gabriel-Chen-Resume-EN.pdf', '/resume/Gabriel-Chen-Resume-ZH.pdf']) {
+    const res = await request.get(pdfPath);
+    expect(res.status(), pdfPath).toBe(200);
+    expect(res.headers()['content-type']).toContain('application/pdf');
+  }
 });
 
 test('Chanel preserves the operating-recovery narrative and evidence boundaries', async ({ page }) => {
