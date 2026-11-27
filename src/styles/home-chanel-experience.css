@@ -10,7 +10,7 @@
 .chanel-experience__moment h3 { max-width: 12ch; margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 3.5vw, 3.5rem); font-weight: 300; line-height: .98; letter-spacing: -.035em; }
 .chanel-experience__reading { min-width: 0; }
 .chanel-experience__number { display: flex; align-items: baseline; color: var(--active-color); font-family: var(--font-numeric); font-variant-numeric: lining-nums; }
-.chanel-experience__number b { display: block; font-weight: 400; font-size: clamp(3.5rem, 6.4vw, 6.5rem); line-height: .85; letter-spacing: -.05em; }
+.chanel-experience__number b { display: block; font-weight: 500; font-size: clamp(3.5rem, 6.4vw, 6.5rem); line-height: .88; letter-spacing: -.04em; font-variant-numeric: tabular-nums lining-nums; }
 .chanel-experience__number i { font-size: clamp(1.5rem, 2vw, 2rem); font-style: normal; margin-left: .2rem; }
 .chanel-experience__reading > span:not(.chanel-experience__number), .chanel-experience__reading small { display: block; color: var(--ink-muted); font-family: var(--font-metadata); font-size: .75rem; line-height: 1.6; }
 .chanel-experience__reading > span:not(.chanel-experience__number) { margin-top: 1.25rem; }
@@ -56,7 +56,8 @@
 .chanel-experience .recovery-portrait__value {
   fill: var(--series-color);
   font-family: var(--font-numeric);
-  font-size: 21px;
+  font-size: 20px;
+  font-weight: 500;
   opacity: 1;
   pointer-events: none;
 }

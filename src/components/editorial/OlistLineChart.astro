@@ -15,7 +15,7 @@ interface Props {
 
 const { id, title, series, minimum = 0, maximum = 100, note } = Astro.props;
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
-const x = (index: number) => 48 + index * 82;
+const x = (index: number) => 44 + index * 76;
 const y = (value: number) => 196 - ((value - minimum) / (maximum - minimum)) * 168;
 const ticks = minimum === 75 ? [75, 85, 95, 100] : maximum === 25 ? [0, 10, 20, 25] : [0, 50, 100];
 const valueLabel = (value: number) => `${value.toFixed(2)}%`;
@@ -108,8 +108,8 @@ const endOffsets = series.map((_, si) => {
 
     {ticks.map((tick) => (
       <g>
-        <line x1="48" x2={x(7) + 8} y1={y(tick)} y2={y(tick)} class="olist-chart__grid" />
-        <text x="38" y={y(tick) + 4} text-anchor="end">{tick}%</text>
+        <line x1="44" x2={x(7) + 8} y1={y(tick)} y2={y(tick)} class="olist-chart__grid" />
+        <text x="36" y={y(tick) + 4} text-anchor="end">{tick}%</text>
       </g>
     ))}
 
@@ -131,7 +131,7 @@ const endOffsets = series.map((_, si) => {
           r="5"
           data-chart-focus={si}
         />
-        <text class="olist-chart__end-label" x={x(7) + 16} y={y(s.values[7]) + endOffsets[si]}>
+        <text class="olist-chart__end-label" x={x(7) + 12} y={y(s.values[7]) + endOffsets[si]}>
           {s.label} · {s.values[7].toFixed(1)}%
         </text>
       </g>
@@ -142,9 +142,9 @@ const endOffsets = series.map((_, si) => {
       {months.map((_, i) => (
         <rect
           class="olist-chart__column-hit"
-          x={x(i) - 41}
+          x={x(i) - 38}
           y="18"
-          width="82"
+          width="76"
           height="188"
           data-chart-month={i}
         />

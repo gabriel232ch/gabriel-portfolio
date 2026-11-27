@@ -23,7 +23,7 @@
 
   --font-display: 'Cormorant Garamond Variable', Georgia, serif;
   --font-reading: Baskerville, 'Libre Baskerville', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  --font-numeric: Didot, 'Bodoni 72', 'Bodoni Moda', 'Cormorant Garamond Variable', Georgia, serif;
+  --font-numeric: 'DM Sans Variable', 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-metadata: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-size-micro: 0.875rem;
   --font-size-supporting: 1rem;

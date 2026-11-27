@@ -75,7 +75,7 @@ test('Chanel preserves the approved operating-recovery narrative', async ({ page
   }
 });
 
-test('Home typography uses Baskerville body, Didot metrics, and editorial display', async ({ page }) => {
+test('Home typography uses Baskerville body, DM Sans metrics, and editorial display', async ({ page }) => {
   await page.goto('/');
 
   const narrativeStyles = await page.locator('.body-copy:not(.chanel-chapter__return .body-copy)').evaluateAll((nodes) =>
@@ -125,7 +125,7 @@ test('Home typography uses Baskerville body, Didot metrics, and editorial displa
   }));
 
   expect(majorMetrics.length).toBeGreaterThan(0);
-  expect(majorMetrics.every((style) => style.family.includes('Didot'))).toBe(true);
+  expect(majorMetrics.every((style) => style.family.includes('DM Sans Variable'))).toBe(true);
   expect(majorMetrics.every((style) => style.weight === '400')).toBe(true);
   expect(majorMetrics.every((style) => style.featureSettings.includes('lnum'))).toBe(true);
   expect(majorMetrics.every((style) => style.variant.includes('lining-nums'))).toBe(true);

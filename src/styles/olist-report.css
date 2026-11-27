@@ -27,8 +27,9 @@
   margin: .65rem 0 0;
   font-family: var(--font-numeric);
   font-size: var(--font-size-statement);
-  letter-spacing: -.035em;
-  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums lining-nums;
   line-height: 1.05;
 }
 .olist-kpis small { display: block; margin-top: .5rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
@@ -105,9 +106,9 @@
   display: block;
   font-family: var(--font-numeric);
   font-size: var(--font-size-lead);
-  font-weight: 400;
-  letter-spacing: -.03em;
-  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -.025em;
+  font-variant-numeric: tabular-nums lining-nums;
   line-height: 1.05;
   color: var(--ink);
 }
@@ -225,7 +226,7 @@
 .olist-window { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; margin-bottom: 1rem; }
 .olist-window > div { padding: 1rem 1.1rem; border: 1px solid var(--hairline); border-radius: 10px; background: var(--paper-raised); }
 .olist-window span { display: block; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
-.olist-window strong { display: block; margin-top: .35rem; font-family: var(--font-numeric); font-size: var(--font-size-section-title); font-weight: 400; font-variant-numeric: tabular-nums; }
+.olist-window strong { display: block; margin-top: .35rem; font-family: var(--font-numeric); font-size: var(--font-size-section-title); font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums lining-nums; }
 .olist-window small { display: block; margin-top: .35rem; font-family: var(--font-metadata); font-size: var(--font-size-micro); color: var(--ink-muted); }
 
 /* Review timing 100% stacked editorial bars */
@@ -270,7 +271,7 @@
   .olist-kpis { grid-template-columns: 1fr; }
   .olist-actions { grid-template-columns: 1fr; }
   .olist-chart { margin-inline: 0; }
-  .olist-chart svg text { font-size: calc(var(--font-size-micro) * 1.75); }
+  .olist-chart svg text { font-size: calc(var(--font-size-micro) * 1.12); }
   .olist-report .report-hero::after { display: none; }
   .olist-report .report-title { max-width: 13ch; }
   .olist-timing-row { grid-template-columns: 1fr; gap: .5rem; }

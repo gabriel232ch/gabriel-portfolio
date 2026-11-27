@@ -181,6 +181,7 @@ document.querySelectorAll<HTMLElement>('[data-chanel-trajectory]').forEach((char
   chart.querySelectorAll<SVGElement>('[data-trajectory-observation]').forEach((zone) => {
     const idx = Number(zone.dataset.trajectoryObservation);
     zone.addEventListener('pointerenter', () => activate(idx));
+    zone.addEventListener('pointermove', () => activate(idx));
     zone.addEventListener('click', () => {
       selectedYear = idx;
       activate(selectedYear);

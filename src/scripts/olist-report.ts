@@ -107,7 +107,7 @@ document.querySelectorAll<HTMLElement>('[data-line-chart]').forEach((chart) => {
       range.value = String(month);
       range.setAttribute('aria-valuetext', rec?.readout ?? rows[month] ?? '');
     }
-    const xPos = String(rec ? rec.x : 48 + month * 82);
+    const xPos = String(rec ? rec.x : 44 + month * 76);
     guide?.setAttribute('x1', xPos);
     guide?.setAttribute('x2', xPos);
 

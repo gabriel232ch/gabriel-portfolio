@@ -177,10 +177,10 @@
 .chanel-kpi-card__value strong {
   font-family: var(--font-numeric);
   font-size: clamp(1.35rem, 2.2vw, 1.75rem);
-  font-weight: 400;
-  letter-spacing: -.035em;
+  font-weight: 500;
+  letter-spacing: -.03em;
   line-height: 1;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums lining-nums;
   white-space: nowrap;
   color: var(--ink);
 }
